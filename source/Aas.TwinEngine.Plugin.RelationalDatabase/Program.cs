@@ -1,5 +1,6 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
 
@@ -45,6 +46,12 @@ public class Program
         .AddMvc();
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var initializer = scope.ServiceProvider.GetRequiredService<MappingDataInitializer>();
+            initializer.Initialize();
+        }
 
         _ = app.UseExceptionHandler();
         _ = app.UseHttpsRedirection();
