@@ -1,5 +1,8 @@
 ﻿using System.Text.Json.Nodes;
 
+using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
+
 using Asp.Versioning;
 
 using Json.Schema;
@@ -11,15 +14,22 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 [ApiController]
 [Route("")]
 [ApiVersion(1)]
-public class SubmodelDataController : ControllerBase
+public class SubmodelDataController(
+    ILogger<SubmodelDataController> logger, ISubmodelDataHandler submodelDataHandler) : ControllerBase
 {
     [HttpPost("data/{submodelId}")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JsonObject>> RetrieveDataAsync([FromBody] JsonSchema? dataQuery, [FromRoute] string submodelId, CancellationToken cancellationToken)
+    public async Task<ActionResult<JsonObject>> RetrieveDataAsync([FromBody] JsonSchema dataQuery, [FromRoute] string submodelId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException("Feature not available: implementation is in progress.");
+        logger.LogInformation("Received request to get AAS data by submodel ID. submodelId: {SubmodelId}", submodelId);
+
+        var request = new GetSubmodelDataRequest(submodelId, dataQuery);
+
+        var aasData = await submodelDataHandler.GetSubmodelData(request, cancellationToken).ConfigureAwait(false);
+
+        return Ok(aasData);
     }
 }
