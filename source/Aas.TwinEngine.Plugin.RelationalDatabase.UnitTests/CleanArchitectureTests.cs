@@ -14,21 +14,11 @@ public class CleanArchitectureTests
 {
     private const string BaseNamespace = "Aas.TwinEngine.Plugin.RelationalDatabase";
 
-    private readonly Architecture _architecture;
-    private readonly IObjectProvider<IType> _apiLayer;
-    private readonly IObjectProvider<IType> _applicationLogicLayer;
-    private readonly IObjectProvider<IType> _domainModelLayer;
-    private readonly IObjectProvider<IType> _infrastructureLayer;
-
-    public CleanArchitectureTests()
-    {
-        _architecture = new ArchLoader().LoadAssemblies(System.Reflection.Assembly.Load(BaseNamespace)).Build();
-
-        _apiLayer = Types().That().ResideInNamespace($"{BaseNamespace}.Api.*", true).As("Api");
-        _applicationLogicLayer = Types().That().ResideInNamespace($"{BaseNamespace}.ApplicationLogic.*", true).As("ApplicationLogic");
-        _domainModelLayer = Types().That().ResideInNamespace($"{BaseNamespace}.DomainModel*", true).As("DomainModel");
-        _infrastructureLayer = Types().That().ResideInNamespace($"{BaseNamespace}.Infrastructure.*", true).As("Infrastructure");
-    }
+    private readonly Architecture _architecture = new ArchLoader().LoadAssemblies(System.Reflection.Assembly.Load(BaseNamespace)).Build();
+    private readonly IObjectProvider<IType> _apiLayer = Types().That().ResideInNamespace($"{BaseNamespace}.Api.*", true).As("Api");
+    private readonly IObjectProvider<IType> _applicationLogicLayer = Types().That().ResideInNamespace($"{BaseNamespace}.ApplicationLogic.*", true).As("ApplicationLogic");
+    private readonly IObjectProvider<IType> _domainModelLayer = Types().That().ResideInNamespace($"{BaseNamespace}.DomainModel*", true).As("DomainModel");
+    private readonly IObjectProvider<IType> _infrastructureLayer = Types().That().ResideInNamespace($"{BaseNamespace}.Infrastructure.*", true).As("Infrastructure");
 
     [Fact]
     public void DomainModelShallNotHaveExternalDependencies()

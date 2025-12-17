@@ -4,5 +4,5 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shar
 
 public record MappingData
 {
-    public static JsonDocument MappingJson { get; set; }
+    public static JsonDocument MappingJson { get; set; } = null!;
 }

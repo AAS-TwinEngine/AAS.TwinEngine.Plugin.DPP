@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;

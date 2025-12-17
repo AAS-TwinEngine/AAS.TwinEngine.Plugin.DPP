@@ -26,7 +26,10 @@ public class MappingDataInitializerTests
         Directory.CreateDirectory(testFolder);
 
         var filePath = Path.Combine(testFolder, "mapping.json");
-        if (File.Exists(filePath)) File.Delete(filePath);
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
 
         var sut = new MappingDataInitializer(_env, _logger);
 

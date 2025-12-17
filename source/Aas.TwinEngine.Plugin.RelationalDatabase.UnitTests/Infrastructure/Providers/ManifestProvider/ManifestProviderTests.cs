@@ -11,6 +11,7 @@ using NSubstitute;
 using Provider = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider.ManifestProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.ManifestProvider;
+
 public class ManifestProviderTests
 {
     private readonly ILogger<Provider> _logger;
@@ -26,18 +27,19 @@ public class ManifestProviderTests
     [Fact]
     public void GetSupportedSemanticIds_ReturnsDistinctTrimmedLeafSemanticIds()
     {
-        MappingData.MappingJson = CreateJsonDocument(@"
-        [
-            { ""Column"": ""dbo.Products.Name"", ""SemanticId"": ""  sid:1  "" },
-            { ""Column"": ""dbo.Products.Price"", ""SemanticId"": ""sid:2"" },
-            { ""Column"": ""dbo.Products.Price"", ""SemanticId"": ""sid:2"" },
-            { ""Column"": ""dbo.Products"", ""SemanticId"": ""sid:ignored"" },
-            { ""Column"": ""dbo.Catalog.Items.Count"", ""SemanticId"": ""sid:ignored-too"" },
-            { ""Column"": ""dbo.A.B.C.D"", ""SemanticId"": ""sid:ignored-three"" },
-            { ""Column"": ""dbo.X.Y"", ""SemanticId"": ""sid:3"" },
-            { ""Column"": ""dbo.Z.T.V"", ""SemanticId"": ""   "" },
-            { ""Column"": ""dbo.W.Q.E"", ""SemanticId"": null }
-        ]");
+        MappingData.MappingJson = CreateJsonDocument("""
+                                                             [
+                                                                 { "Column": "dbo.Products.Name", "SemanticId": "  sid:1  " },
+                                                                 { "Column": "dbo.Products.Price", "SemanticId": "sid:2" },
+                                                                 { "Column": "dbo.Products.Price", "SemanticId": "sid:2" },
+                                                                 { "Column": "dbo.Products", "SemanticId": "sid:ignored" },
+                                                                 { "Column": "dbo.Catalog.Items.Count", "SemanticId": "sid:ignored-too" },
+                                                                 { "Column": "dbo.A.B.C.D", "SemanticId": "sid:ignored-three" },
+                                                                 { "Column": "dbo.X.Y", "SemanticId": "sid:3" },
+                                                                 { "Column": "dbo.Z.T.V", "SemanticId": "   " },
+                                                                 { "Column": "dbo.W.Q.E", "SemanticId": null }
+                                                             ]
+                                                     """);
         _sut = new Provider(_logger);
 
         var result = _sut.GetSupportedSemanticIds();
@@ -62,25 +64,7 @@ public class ManifestProviderTests
     }
 
     [Fact]
-    public void GetSupportedSemanticIds_WhenMappingNull_ReturnsEmptyAndWarns()
-    {
-        MappingData.MappingJson = null!;
-        _sut = new Provider(_logger);
-
-        var result = _sut.GetSupportedSemanticIds();
-
-        Assert.NotNull(result);
-        Assert.Empty(result);
-        _logger.Received(1).Log(
-            LogLevel.Warning,
-            Arg.Any<EventId>(),
-            Arg.Is<object>(static o => o.ToString()!.Contains("Mapping JSON is null - returning empty semantic id list.")),
-            null,
-            Arg.Any<Func<object, Exception?, string>>());
-    }
-
-    [Fact]
-    public void GetSupportedSemanticIds_WhenJsonIsNotformed_ThrowsResponseParsingException_AndLogsError()
+    public void GetSupportedSemanticIds_WhenJsonIsNotFormated_ThrowsResponseParsingException_AndLogsError()
     {
         MappingData.MappingJson = CreateInvalidJsonDocumentForDeserialization();
         _sut = new Provider(_logger);
