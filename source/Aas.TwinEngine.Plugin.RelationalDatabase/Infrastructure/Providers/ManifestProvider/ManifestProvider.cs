@@ -30,10 +30,15 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
             }
 
             return [.. mapping
-                       .Where(m => m is not null && IsLeafColumnIdentifier(m!.Column))
-                       .Select(m => m!.SemanticId?.Trim())
-                       .Where(sid => !string.IsNullOrWhiteSpace(sid))
-                       .Distinct()!];
+                        .Where(m => m is not null
+                        && IsLeafColumnIdentifier(m!.Column)
+                        && m!.SemanticId is not null
+                        && m!.SemanticId.Count > 0)
+                        .SelectMany(m => m!.SemanticId)
+                        .Select(sid => sid?.Trim())
+                        .Where(sid => !string.IsNullOrWhiteSpace(sid))
+                        .Distinct(StringComparer.Ordinal)];
+
         }
         catch (JsonException jex)
         {

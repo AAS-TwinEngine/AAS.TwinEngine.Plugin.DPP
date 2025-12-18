@@ -29,14 +29,14 @@ public class ManifestProviderTests
     {
         MappingData.MappingJson = CreateJsonDocument("""
                                                              [
-                                                                 { "Column": "dbo.Products.Name", "SemanticId": "  sid:1  " },
-                                                                 { "Column": "dbo.Products.Price", "SemanticId": "sid:2" },
-                                                                 { "Column": "dbo.Products.Price", "SemanticId": "sid:2" },
-                                                                 { "Column": "dbo.Products", "SemanticId": "sid:ignored" },
-                                                                 { "Column": "dbo.Catalog.Items.Count", "SemanticId": "sid:ignored-too" },
-                                                                 { "Column": "dbo.A.B.C.D", "SemanticId": "sid:ignored-three" },
-                                                                 { "Column": "dbo.X.Y", "SemanticId": "sid:3" },
-                                                                 { "Column": "dbo.Z.T.V", "SemanticId": "   " },
+                                                                 { "Column": "dbo.Products.Name", "SemanticId": [ "  sid:1  " , "sid:1.0"]},
+                                                                 { "Column": "dbo.Products.Price", "SemanticId": [ "sid:2" ]},
+                                                                 { "Column": "dbo.Products.Price", "SemanticId": [ "sid:2"] },
+                                                                 { "Column": "dbo.Products", "SemanticId": ["sid:ignored"] },
+                                                                 { "Column": "dbo.Catalog.Items.Count", "SemanticId": ["sid:ignored-too" ]},
+                                                                 { "Column": "dbo.A.B.C.D", "SemanticId": ["sid:ignored-three"] },
+                                                                 { "Column": "dbo.X.Y", "SemanticId": ["sid:3" ]},
+                                                                 { "Column": "dbo.Z.T.V", "SemanticId": [ "   " ]},
                                                                  { "Column": "dbo.W.Q.E", "SemanticId": null }
                                                              ]
                                                      """);
@@ -45,7 +45,8 @@ public class ManifestProviderTests
         var result = _sut.GetSupportedSemanticIds();
 
         Assert.NotNull(result);
-        Assert.Equal(3, result.Count);
+        Assert.Equal(4, result.Count);
+        Assert.Contains("sid:1.0", result);
         Assert.Contains("sid:1", result);
         Assert.Contains("sid:2", result);
         Assert.Contains("sid:3", result);
