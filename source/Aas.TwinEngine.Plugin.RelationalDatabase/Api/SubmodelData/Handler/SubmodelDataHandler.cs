@@ -2,6 +2,7 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
@@ -14,13 +15,13 @@ public class SubmodelDataHandler(
 {
     public async Task<JsonObject> GetSubmodelData(GetSubmodelDataRequest request, CancellationToken cancellationToken)
     {
-        logger.LogDebug("Start executing get request for product data");
-
         logger.LogInformation("Processing request for submodel ID: {SubmodelId}", request?.submodelId);
+
+        var decodedSubmodelId = request?.submodelId.DecodeBase64(logger);
 
         var semanticIds = jsonSchemaParser.ParseJsonSchema(request!.dataQuery);
 
-        var filledSemanticIds = await submodelDataService.GetValuesBySemanticIds(semanticIds, request.submodelId).ConfigureAwait(false);
+        var filledSemanticIds = await submodelDataService.GetValuesBySemanticIds(semanticIds, decodedSubmodelId!, cancellationToken).ConfigureAwait(false);
 
         var result = semanticTreeHandler.GetJson(filledSemanticIds, request.dataQuery);
 

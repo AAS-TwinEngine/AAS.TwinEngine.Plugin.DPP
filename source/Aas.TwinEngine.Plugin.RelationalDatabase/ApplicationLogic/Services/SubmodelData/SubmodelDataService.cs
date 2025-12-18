@@ -17,27 +17,29 @@ public class SubmodelDataService(IOptions<ExtractionRules> options,
 {
     private readonly IList<ProductIdExtractionRules> _productIdExtractionRules = options.Value.ProductIdExtractionRules;
     private readonly IList<SubmodelNameExtractionRules> _submodelNameExtractionRules = options.Value.SubmodelNameExtractionRules;
-    public async Task<SemanticTreeNode> GetValuesBySemanticIds(SemanticTreeNode semanticIds, string submodelId)
+    public async Task<SemanticTreeNode> GetValuesBySemanticIds(SemanticTreeNode semanticIds, string submodelId, CancellationToken cancellationToken)
     {
         var productId = GetProductIdFromRule(submodelId);
+
         var submodel = GetSubmodelNameFromRule(submodelId);
 
-        if (!Enum.TryParse<SubmodelName>(submodel, ignoreCase: true, out var submodelName))
+        if (!Enum.TryParse<SubmodelName>(submodel, ignoreCase: true, result: out var submodelName))
         {
             _logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodel);
             throw new NotFoundException($"Submodel name '{submodel}' is not recognized.");
         }
 
-        var sqlQuery = queryProvider.GetQuery(nameof(submodelName));
+        var sqlQuery = queryProvider.GetQuery(submodelName.ToString());
         if (string.IsNullOrWhiteSpace(sqlQuery))
         {
             throw new InvalidOperationException($"SQL query not found for: shells");
         }
 
-        var result = await submodelDataProvider.GetValuesBySemanticIds(sqlQuery, semanticIds, productId).ConfigureAwait(false);
+        var responseSemanticTreeNode = await submodelDataProvider.GetSubmodelValuesAsync(sqlQuery, productId, cancellationToken).ConfigureAwait(false);
 
-        return result;
+        return responseSemanticTreeNode;
     }
+
     public string GetProductIdFromRule(string submodelId)
     {
         var productId = _productIdExtractionRules

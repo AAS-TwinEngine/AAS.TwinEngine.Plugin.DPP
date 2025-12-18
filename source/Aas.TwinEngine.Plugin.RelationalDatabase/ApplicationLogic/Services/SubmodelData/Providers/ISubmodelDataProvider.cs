@@ -4,5 +4,5 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public interface ISubmodelDataProvider
 {
-    Task<SemanticTreeNode> GetValuesBySemanticIds(string sqlQuery, SemanticTreeNode semanticIds, string submodelId);
+    Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken);
 }
