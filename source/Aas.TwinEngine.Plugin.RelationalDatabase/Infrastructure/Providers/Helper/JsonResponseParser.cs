@@ -99,7 +99,7 @@ public static class JsonResponseParser
     {
         var arryLength = arrayElement.GetArrayLength();
         var semanticIdBase = baseSemanticId ?? parentBranch.SemanticId;
-        var elementDataType = GetDataType(arrayElement.ValueKind)
+        var elementDataType = GetDataType(arrayElement.ValueKind);
 
         if (arryLength > 1)
         {

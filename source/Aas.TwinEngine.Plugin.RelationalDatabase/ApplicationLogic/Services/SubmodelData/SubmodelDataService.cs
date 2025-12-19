@@ -1,4 +1,6 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+﻿using System.Text.RegularExpressions;
+
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
@@ -17,6 +19,7 @@ public class SubmodelDataService(IOptions<ExtractionRules> options,
 {
     private readonly IList<ProductIdExtractionRules> _productIdExtractionRules = options.Value.ProductIdExtractionRules;
     private readonly IList<SubmodelNameExtractionRules> _submodelNameExtractionRules = options.Value.SubmodelNameExtractionRules;
+    private readonly TimeSpan _regexTimeout = TimeSpan.FromSeconds(2);
     public async Task<SemanticTreeNode> GetValuesBySemanticIds(SemanticTreeNode semanticIds, string submodelId, CancellationToken cancellationToken)
     {
         var productId = GetProductIdFromRule(submodelId);
@@ -64,14 +67,10 @@ public class SubmodelDataService(IOptions<ExtractionRules> options,
     private string GetSubmodelNameFromRule(string submodelId)
     {
         var SubmodelName = _submodelNameExtractionRules
-           .Select(rule => new
-           {
-               Rule = rule,
-               Parts = submodelId?.Split(rule.Separator)
-           })
-           .Where(x => x.Parts is { Length: >= 1 } && x.Rule.Index > 0 && x.Parts.Length >= x.Rule.Index)
-           .Select(x => x.Parts![x.Rule.Index - 1])
-           .FirstOrDefault();
+                         .Where(pattern => pattern.Pattern
+                          .Any(pattern => Regex.IsMatch(submodelId, pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled, _regexTimeout)))
+                         .Select(templatePattern => templatePattern.SubmodelName)
+                         .FirstOrDefault();
 
         if (!string.IsNullOrEmpty(SubmodelName))
         {
