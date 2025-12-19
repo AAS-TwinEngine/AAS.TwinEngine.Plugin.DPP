@@ -1,0 +1,351 @@
+[
+  {
+    "column": "dbo.ContactInformation.RoleOfContactPerson",
+    "semanticId": [ "0173-1#02-AAO204#003" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Language",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language" ]
+  },
+  {
+    "column": "dbo.ContactInformation.TimeZone",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/TimeZone" ]
+  },
+  {
+    "column": "dbo.ContactInformation.AddressOfAdditionalLink",
+    "semanticId": [ "0173-1#02-AAQ326#002" ]
+  },
+  {
+    "column": "dbo.ContactInformation.NationalCode_en",
+    "semanticId": [ "0173-1#02-AAO134#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.NationalCode_de",
+    "semanticId": [ "0173-1#02-AAO134#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.CityTown_en",
+    "semanticId": [ "0173-1#02-AAO132#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.CityTown_de",
+    "semanticId": [ "0173-1#02-AAO132#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Company_en",
+    "semanticId": [ "0173-1#02-AAW001#001_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Company_de",
+    "semanticId": [ "0173-1#02-AAW001#001_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Department_en",
+    "semanticId": [ "0173-1#02-AAO127#003_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Department_de",
+    "semanticId": [ "0173-1#02-AAO127#003_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Street_en",
+    "semanticId": [ "0173-1#02-AAO128#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Street_de",
+    "semanticId": [ "0173-1#02-AAO128#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Zipcode_en",
+    "semanticId": [ "0173-1#02-AAO129#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Zipcode_de",
+    "semanticId": [ "0173-1#02-AAO129#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.POBox_en",
+    "semanticId": [ "0173-1#02-AAO130#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.POBox_de",
+    "semanticId": [ "0173-1#02-AAO130#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.ZipCodeOfPOBox_en",
+    "semanticId": [ "0173-1#02-AAO131#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.ZipCodeOfPOBox_de",
+    "semanticId": [ "0173-1#02-AAO131#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.StateCounty_en",
+    "semanticId": [ "0173-1#02-AAO133#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.StateCounty_de",
+    "semanticId": [ "0173-1#02-AAO133#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.NameOfContact_en",
+    "semanticId": [ "0173-1#02-AAO205#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.NameOfContact_de",
+    "semanticId": [ "0173-1#02-AAO205#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.FirstName_en",
+    "semanticId": [ "0173-1#02-AAO206#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.FirstName_de",
+    "semanticId": [ "0173-1#02-AAO206#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.MiddleNames_en",
+    "semanticId": [ "0173-1#02-AAO207#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.MiddleNames_de",
+    "semanticId": [ "0173-1#02-AAO207#002_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Title_en",
+    "semanticId": [ "0173-1#02-AAO208#003_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.Title_de",
+    "semanticId": [ "0173-1#02-AAO208#003_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.AcademicTitle_en",
+    "semanticId": [ "0173-1#02-AAO209#003_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.AcademicTitle_de",
+    "semanticId": [ "0173-1#02-AAO209#003_de" ]
+  },
+  {
+    "column": "dbo.ContactInformation.FurtherDetailsOfContact_en",
+    "semanticId": [ "0173-1#02-AAO210#002_en" ]
+  },
+  {
+    "column": "dbo.ContactInformation.FurtherDetailsOfContact_de",
+    "semanticId": [ "0173-1#02-AAO210#002_de" ]
+  },
+  {
+    "column": "dbo.Phone.TelephoneNumber_en",
+    "semanticId": [ "0173-1#02-AAO136#002_en" ]
+  },
+  {
+    "column": "dbo.Phone.TelephoneNumber_de",
+    "semanticId": [ "0173-1#02-AAO136#002_de" ]
+  },
+  {
+    "column": "dbo.Phone.AvailableTime_en",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en" ]
+  },
+  {
+    "column": "dbo.Phone.AvailableTime_de",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_de" ]
+  },
+  {
+    "column": "dbo.Phone.TypeOfTelephone",
+    "semanticId": [ "0173-1#02-AAO137#003" ]
+  },
+  {
+    "column": "dbo.Fax.FaxNumber_en",
+    "semanticId": [ "0173-1#02-AAO195#002_en" ]
+  },
+  {
+    "column": "dbo.Fax.FaxNumber_de",
+    "semanticId": [ "0173-1#02-AAO195#002_de" ]
+  },
+  {
+    "column": "dbo.Fax.TypeOfFaxNumber",
+    "semanticId": [ "0173-1#02-AAO196#003" ]
+  },
+  {
+    "column": "dbo.Email.EmailAddress",
+    "semanticId": [ "0173-1#02-AAO198#002" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfEmailAddress",
+    "semanticId": [ "0173-1#02-AAO199#003" ]
+  },
+  {
+    "column": "dbo.Email.PublicKey_en",
+    "semanticId": [ "0173-1#02-AAO200#002_en" ]
+  },
+  {
+    "column": "dbo.Email.PublicKey_de",
+    "semanticId": [ "0173-1#02-AAO200#002_de" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfPublicKey_en",
+    "semanticId": [ "0173-1#02-AAO201#002_en" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfPublicKey_de",
+    "semanticId": [ "0173-1#02-AAO201#002_de" ]
+  },
+  {
+    "column": "dbo.IPCommunication.AddressOfAdditionalLink",
+    "semanticId": [ "0173-1#02-AAQ326#002" ]
+  },
+  {
+    "column": "dbo.IPCommunication.TypeOfCommunication",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
+  },
+  {
+    "column": "dbo.IPCommunication.AvailableTime_en",
+    "semanticId": ["https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en"
+]
+  },
+  {
+    "column": "dbo.IPCommunication.AvailableTime_de",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_de" ]
+  },
+  {
+    "column": "dbo.Asset.URIOfTheProduct",
+    "semanticId": [ "0112/2///61987#ABN590#002" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductType",
+    "semanticId": [ "0112/2///61987#ABA300#008" ]
+  },
+  {
+    "column": "dbo.Asset.OrderCodeOfManufacturer",
+    "semanticId": [ "0112/2///61987#ABA950#008" ]
+  },
+  {
+    "column": "dbo.Asset.ProductArticleNumberOfManufacturer",
+    "semanticId": [ "0173-1#02-AAO676#005" ]
+  },
+  {
+    "column": "dbo.Asset.SerialNumber",
+    "semanticId": [ "0173-1#02-AAM556#004" ]
+  },
+  {
+    "column": "dbo.Asset.YearOfConstruction",
+    "semanticId": [ "0173-1#02-AAP906#003" ]
+  },
+  {
+    "column": "dbo.Asset.DateOfManufacture",
+    "semanticId": [ "0173-1#02-AAR972#004" ]
+  },
+  {
+    "column": "dbo.Asset.HardwareVersion",
+    "semanticId": [ "0112/2///61987#ABA926#008" ]
+  },
+  {
+    "column": "dbo.Asset.FirmwareVersion",
+    "semanticId": [ "0112/2///61987#ABA302#006" ]
+  },
+  {
+    "column": "dbo.Asset.SoftwareVersion",
+    "semanticId": [ "0112/2///61987#ABA601#008" ]
+  },
+  {
+    "column": "dbo.Asset.CountryOfOrigin",
+    "semanticId": [ "0112/2///61987#ABP462#001" ]
+  },
+  {
+    "column": "dbo.Asset.UniqueFacilityIdentifier",
+    "semanticId": [ "https://admin-shell.io/idta/nameplate/3/0/UniqueFacilityIdentifier" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerName_en",
+    "semanticId": [ "0112/2///61987#ABA565#009_en" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerName_de",
+    "semanticId": [ "0112/2///61987#ABA565#009_de" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductDesignation_en",
+    "semanticId": [ "0112/2///61987#ABA567#009_en" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductDesignation_de",
+    "semanticId": [ "0112/2///61987#ABA567#009_de" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductRoot_en",
+    "semanticId": [ "0112/2///61360_7#AAS011#001_en" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductRoot_de",
+    "semanticId": [ "0112/2///61987#ABP464#002_de" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductFamily_en",
+    "semanticId": [ "0112/2///61987#ABP464#002_en" ]
+  },
+  {
+    "column": "dbo.Asset.ManufacturerProductFamily_de",
+    "semanticId": [ "0112/2///61360_7#AAS011#001_de" ]
+  },
+  {
+    "column": "dbo.Asset.CompanyLogo",
+    "semanticId": [ "0112/2///61987#ABP463#001" ]
+  },
+  {
+    "column": "dbo.Marking.MarkingName",
+    "semanticId": [ "0112/2///61987#ABA231#009" ]
+  },
+  {
+    "column": "dbo.Marking.DesignationOfCertificateOrApproval",
+    "semanticId": [ "0112/2///61987#ABH783#003" ]
+  },
+  {
+    "column": "dbo.Marking.IssueDate",
+    "semanticId": [ "0112/2///61987#ABO097#001" ]
+  },
+  {
+    "column": "dbo.Marking.ExpiryDate",
+    "semanticId": [ "0112/2///61987#ABH830#002" ]
+  },
+  {
+    "column": "dbo.Marking.MarkingAdditionalText",
+    "semanticId": [ "0112/2///61987#ABB146#007" ]
+  },
+  {
+    "column": "dbo.Marking.MarkingFile",
+    "semanticId": [ "0112/2///61987#ABO100#002" ]
+  },
+  {
+    "column": "dbo.ContactInformations",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations" ]
+  },
+  {
+    "column": "dbo.ContactInformation",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation" ]
+  },
+  {
+    "column": "dbo.Phone",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Phone" ]
+  },
+  {
+    "column": "dbo.Fax",
+    "semanticId": [ "0173-1#02-AAQ834#005" ]
+  },
+  {
+    "column": "dbo.Email",
+    "semanticId": [ "0173-1#02-AAQ836#005" ]
+  },
+  {
+    "column": "dbo.IPCommunication",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/" ]
+  },
+  {
+    "column": "dbo.Markings",
+    "semanticId": [ "0112/2///61360_7#AAS006#001" ]
+  },
+  {
+    "column": "dbo.Marking",
+    "semanticId": [ "0112/2///61360_7#AAS009#001" ]
+  }
+]

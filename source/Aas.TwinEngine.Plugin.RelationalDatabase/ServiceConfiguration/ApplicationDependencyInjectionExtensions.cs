@@ -20,5 +20,8 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<ISemanticTreeHandler, SemanticTreeHandler>();
         _ = services.AddScoped<IJsonSchemaValidator, JsonSchemaValidator>();
         _ = services.AddScoped<ISubmodelDataService, SubmodelDataService>();
+
+        _ = services.AddScoped<IManifestService, ManifestService>();
+        _ = services.AddScoped<IManifestHandler, ManifestHandler>();
     }
 }
