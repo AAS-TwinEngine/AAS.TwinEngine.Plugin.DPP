@@ -6,7 +6,6 @@ public class Semantics
 {
     public const string Section = "Semantics";
 
-    [Required]
-    public string IndexContextPrefix { get; set; }
+    public required string IndexContextPrefix { get; set; }
 }
 

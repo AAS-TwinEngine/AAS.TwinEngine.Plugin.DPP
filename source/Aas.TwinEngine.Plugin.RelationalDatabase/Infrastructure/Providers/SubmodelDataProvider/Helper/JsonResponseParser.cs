@@ -2,7 +2,7 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Helper;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
 
 public static class JsonResponseParser
 {

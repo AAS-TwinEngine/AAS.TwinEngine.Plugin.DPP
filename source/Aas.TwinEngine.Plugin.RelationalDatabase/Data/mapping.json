@@ -197,12 +197,13 @@
   },
   {
     "column": "dbo.IPCommunication.TypeOfCommunication",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
   },
   {
     "column": "dbo.IPCommunication.AvailableTime_en",
-    "semanticId": ["https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en"
-]
+    "semanticId": [
+      "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en"
+    ]
   },
   {
     "column": "dbo.IPCommunication.AvailableTime_de",
@@ -222,19 +223,19 @@
   },
   {
     "column": "dbo.Asset.ProductArticleNumberOfManufacturer",
-    "semanticId": [ "0173-1#02-AAO676#005" ]
+    "semanticId": [ "0112/2///61987#ABA581#007" ]
   },
   {
     "column": "dbo.Asset.SerialNumber",
-    "semanticId": [ "0173-1#02-AAM556#004" ]
+    "semanticId": [ "0112/2///61987#ABA951#009" ]
   },
   {
     "column": "dbo.Asset.YearOfConstruction",
-    "semanticId": [ "0173-1#02-AAP906#003" ]
+    "semanticId": [ "0112/2///61987#ABP000#002" ]
   },
   {
     "column": "dbo.Asset.DateOfManufacture",
-    "semanticId": [ "0173-1#02-AAR972#004" ]
+    "semanticId": [ "0112/2///61987#ABB757#007" ]
   },
   {
     "column": "dbo.Asset.HardwareVersion",
@@ -278,7 +279,7 @@
   },
   {
     "column": "dbo.Asset.ManufacturerProductRoot_de",
-    "semanticId": [ "0112/2///61987#ABP464#002_de" ]
+    "semanticId": [ "0112/2///61360_7#AAS011#001_de" ]
   },
   {
     "column": "dbo.Asset.ManufacturerProductFamily_en",
@@ -286,7 +287,7 @@
   },
   {
     "column": "dbo.Asset.ManufacturerProductFamily_de",
-    "semanticId": [ "0112/2///61360_7#AAS011#001_de" ]
+    "semanticId": [ "0112/2///61987#ABP464#002_de" ]
   },
   {
     "column": "dbo.Asset.CompanyLogo",
@@ -323,6 +324,10 @@
   {
     "column": "dbo.ContactInformation",
     "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation" ]
+  },
+  {
+    "column": "dbo.Nameplate",
+    "semanticId": [ "https://admin-shell.io/idta/nameplate/3/0/Nameplate" ]
   },
   {
     "column": "dbo.Phone",

@@ -5,12 +5,12 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infra
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Helper;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
 
 using Microsoft.AspNetCore.Connections;
 using Microsoft.Data.SqlClient;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider;
 
 public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
     IDbConnectionFactory connectionFactory) : ISubmodelDataProvider

@@ -30,22 +30,29 @@ SELECT
                         a.ManufacturerProductRoot_de,
                         a.ManufacturerProductFamily_en,
                         a.ManufacturerProductFamily_de,
+                        a.CompanyLogo,
                         JSON_QUERY(
                             (
-                                SELECT 
-                                    m.MarkingID,
-                                    m.DesignationOfCertificateOrApproval,
-                                    m.IssueDate,
-                                    m.ExpiryDate,
-                                    m.MarkingAdditionalText,
-                                    m.MarkingFile
-                                FROM AssetMarking am
-                                JOIN Marking m ON m.MarkingID = am.MarkingID
-                                WHERE am.AssetID = a.AssetID
-                                FOR JSON PATH
+                                SELECT
+                                    JSON_QUERY(
+                                        (
+                                            SELECT
+                                                m.MarkingID,
+                                                m.DesignationOfCertificateOrApproval,
+                                                m.IssueDate,
+                                                m.ExpiryDate,
+                                                m.MarkingAdditionalText,
+                                                m.MarkingFile
+                                            FROM AssetMarking am
+                                            JOIN Marking m
+                                              ON m.MarkingID = am.MarkingID
+                                            WHERE am.AssetID = a.AssetID
+                                            FOR JSON PATH
+                                        )
+                                    ) AS Marking
+                                FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
                             )
-                        ) AS Markings,
-                        a.CompanyLogo
+                        ) AS Markings
                     FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
                 )
             ) AS nameplate
