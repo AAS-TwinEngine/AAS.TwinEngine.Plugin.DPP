@@ -17,6 +17,9 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddExceptionHandler<GlobalExceptionHandler>();
         _ = services.AddProblemDetails();
 
+        _ = services.AddScoped<ISemanticIdToColumnMapper, SemanticIdToColumnMapper>();
+        _ = services.AddScoped<ISemanticTreeResponseBuilder, SemanticTreeResponseBuilder>();
+        _ = services.AddScoped<ISubmodelMetadataExtractor, SubmodelMetadataExtractor>();
         _ = services.AddScoped<ISubmodelDataHandler, SubmodelDataHandler>();
         _ = services.AddScoped<IJsonSchemaParser, JsonSchemaParser>();
         _ = services.AddScoped<ISemanticTreeHandler, SemanticTreeHandler>();

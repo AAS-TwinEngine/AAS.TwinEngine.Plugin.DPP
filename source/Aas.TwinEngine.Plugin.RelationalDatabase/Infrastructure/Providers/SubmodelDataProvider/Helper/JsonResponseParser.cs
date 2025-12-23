@@ -1,15 +1,18 @@
 ﻿using System.Text.Json;
 
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
+
+using Microsoft.Extensions.Options;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
 
-public static class JsonResponseParser
+public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonResponseParser
 {
-    // remove it and get it form IOptions
-    private static readonly string SubmodelElementIndexContextPrefix = "_aastwinengineindex_";
+    private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
-    public static SemanticTreeNode ParseJson(string content)
+    public SemanticTreeNode ParseJson(string content)
     {
         using var doc = JsonDocument.Parse(content);
         var root = doc.RootElement;
@@ -24,7 +27,7 @@ public static class JsonResponseParser
         return ConvertJsonElement(nestedDoc.RootElement);
     }
 
-    private static SemanticTreeNode ConvertJsonElement(JsonElement element)
+    private SemanticTreeNode ConvertJsonElement(JsonElement element)
     {
         var properties = element.EnumerateObject().ToList();
 
@@ -47,7 +50,7 @@ public static class JsonResponseParser
         return rootBranch;
     }
 
-    private static void ProcessJsonValue(JsonElement valueElement, SemanticBranchNode parentBranch)
+    private void ProcessJsonValue(JsonElement valueElement, SemanticBranchNode parentBranch)
     {
         switch (valueElement.ValueKind)
         {
@@ -69,7 +72,7 @@ public static class JsonResponseParser
         }
     }
 
-    private static void ProcessJsonObject(JsonElement objectElement, SemanticBranchNode parentBranch)
+    private void ProcessJsonObject(JsonElement objectElement, SemanticBranchNode parentBranch)
     {
         foreach (var property in objectElement.EnumerateObject())
         {
@@ -95,7 +98,7 @@ public static class JsonResponseParser
         }
     }
 
-    private static void ProcessJsonArray(JsonElement arrayElement, SemanticBranchNode parentBranch, string? baseSemanticId = null)
+    private void ProcessJsonArray(JsonElement arrayElement, SemanticBranchNode parentBranch, string? baseSemanticId = null)
     {
         var arryLength = arrayElement.GetArrayLength();
         var semanticIdBase = baseSemanticId ?? parentBranch.SemanticId;
@@ -105,7 +108,7 @@ public static class JsonResponseParser
         {
             for (var i = 0; i < arryLength; i++)
             {
-                var indexedSemanticId = $"{semanticIdBase}{SubmodelElementIndexContextPrefix}{i:D2}";
+                var indexedSemanticId = $"{semanticIdBase}{_indexPrefix}{i:D2}";
                 var arrayItemBranch = new SemanticBranchNode(indexedSemanticId, elementDataType);
                 ProcessJsonValue(arrayElement[i], arrayItemBranch);
                 parentBranch.AddChild(arrayItemBranch);

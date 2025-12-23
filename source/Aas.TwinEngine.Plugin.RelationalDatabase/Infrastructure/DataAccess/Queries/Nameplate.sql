@@ -39,6 +39,7 @@ SELECT
                                             SELECT
                                                 m.MarkingID,
                                                 m.DesignationOfCertificateOrApproval,
+                                                m.MarketingName,
                                                 m.IssueDate,
                                                 m.ExpiryDate,
                                                 m.MarkingAdditionalText,

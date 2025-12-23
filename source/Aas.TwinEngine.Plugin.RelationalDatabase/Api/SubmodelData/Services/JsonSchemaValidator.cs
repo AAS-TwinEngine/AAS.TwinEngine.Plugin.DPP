@@ -16,7 +16,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
     private const string DefinitionsPrefix = "#/definitions/";
 
-    private static readonly JsonSerializerOptions Serialization= new()
+    private static readonly JsonSerializerOptions Serialization = new()
     {
         WriteIndented = false,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,

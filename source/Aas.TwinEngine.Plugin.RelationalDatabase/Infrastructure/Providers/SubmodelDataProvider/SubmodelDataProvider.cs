@@ -2,6 +2,7 @@
 using System.Threading;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
@@ -13,6 +14,7 @@ using Microsoft.Data.SqlClient;
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider;
 
 public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
+    IJsonResponseParser jsonResponseParser,
     IDbConnectionFactory connectionFactory) : ISubmodelDataProvider
 {
     public async Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken)
@@ -27,7 +29,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
             throw new ResponseNotFoundException();
         }
 
-        var resultSemanticTreeNode = JsonResponseParser.ParseJson(jsonResult);
+        var resultSemanticTreeNode = jsonResponseParser.ParseJson(jsonResult);
 
         return resultSemanticTreeNode;
     }

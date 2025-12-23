@@ -1,6 +1,7 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
@@ -8,6 +9,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
 
 using Microsoft.Extensions.Options;
 
@@ -27,6 +29,7 @@ public static class InfrastructureDependencyInjectionExtensions
 
         _ = services.AddOptions<ExtractionRules>().Bind(configuration.GetSection(ExtractionRules.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<Semantics>().Bind(configuration.GetSection(Semantics.Section)).ValidateDataAnnotations().ValidateOnStart();
+        _ = services.AddScoped<IJsonResponseParser, JsonResponseParser>();
         _ = services.AddScoped<ISubmodelDataProvider, SubmodelDataProvider>();
 
         _ = services.AddScoped<MappingDataInitializer>();
