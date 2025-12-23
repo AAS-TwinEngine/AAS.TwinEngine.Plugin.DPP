@@ -8,7 +8,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
 using Microsoft.Extensions.Options;
 
-using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad.IQueryProvider;
+using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 

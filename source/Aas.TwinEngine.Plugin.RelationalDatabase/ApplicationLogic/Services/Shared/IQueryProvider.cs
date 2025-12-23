@@ -1,4 +1,4 @@
-﻿namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad;
+﻿namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
 public interface IQueryProvider
 {

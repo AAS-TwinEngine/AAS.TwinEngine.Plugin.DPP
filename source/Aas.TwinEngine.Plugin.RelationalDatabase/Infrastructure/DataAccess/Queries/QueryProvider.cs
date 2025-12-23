@@ -1,4 +1,4 @@
-﻿using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad.IQueryProvider;
+﻿using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
 public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment env) : IQueryProvider
