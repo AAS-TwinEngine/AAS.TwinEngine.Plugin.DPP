@@ -91,9 +91,9 @@ public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonRes
             }
             else
             {
-                var branch = new SemanticBranchNode(property.Name, GetDataType(property.Value.ValueKind));
-                ProcessJsonValue(property.Value, branch);
-                parentBranch.AddChild(branch);
+                var branchNode = new SemanticBranchNode(property.Name, GetDataType(property.Value.ValueKind));
+                ProcessJsonValue(property.Value, branchNode);
+                parentBranch.AddChild(branchNode);
             }
         }
     }

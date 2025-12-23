@@ -5,12 +5,14 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
+using NJsonSchema.Validation;
+
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 
 public class SubmodelDataHandler(
     ILogger<SubmodelDataHandler> logger,
     ISubmodelDataService submodelDataService,
-    IJsonSchemaParser jsonSchemaParser,
+    IJsonSchemaValidator jsonSchemaValidator,
     ISemanticTreeHandler semanticTreeHandler) : ISubmodelDataHandler
 {
     public async Task<JsonObject> GetSubmodelData(GetSubmodelDataRequest request, CancellationToken cancellationToken)
@@ -19,9 +21,9 @@ public class SubmodelDataHandler(
 
         var decodedSubmodelId = request?.submodelId.DecodeBase64(logger);
 
-        var semanticIds = jsonSchemaParser.ParseJsonSchema(request!.dataQuery);
+        jsonSchemaValidator.ValidateRequestSchema(request!.dataQuery);
 
-        var filledSemanticIds = await submodelDataService.GetValuesBySemanticIds(semanticIds, decodedSubmodelId!, cancellationToken).ConfigureAwait(false);
+        var filledSemanticIds = await submodelDataService.GetValuesBySemanticIds(request.dataQuery, decodedSubmodelId!, cancellationToken).ConfigureAwait(false);
 
         var result = semanticTreeHandler.GetJson(filledSemanticIds, request.dataQuery);
 

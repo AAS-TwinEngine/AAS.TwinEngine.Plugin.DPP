@@ -34,9 +34,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
             treeNode.SemanticId = treeNode.SemanticId[..prefixIndex];
         }
 
-        if (treeNode is SemanticBranchNode branch)
+        if (treeNode is SemanticBranchNode branchNode)
         {
-            foreach (var child in branch.Children)
+            foreach (var child in branchNode.Children)
             {
                 RemoveIndexPrefix(child);
             }
@@ -50,8 +50,8 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
         return request switch
         {
-            SemanticLeafNode leaf => MapLeafNode(leaf, response, columnName),
-            SemanticBranchNode branch => MapBranchNode(branch, response, columnName),
+            SemanticLeafNode leafNode => MapLeafNode(leafNode, response, columnName),
+            SemanticBranchNode branchNode => MapBranchNode(branchNode, response, columnName),
             _ => request
         };
     }
@@ -157,15 +157,15 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
     {
         var matches = new List<SemanticBranchNode>();
 
-        if (root is SemanticBranchNode branch)
+        if (root is SemanticBranchNode branchNode)
         {
-            var branchId = StripIndexPrefix(branch.SemanticId);
+            var branchId = StripIndexPrefix(branchNode.SemanticId);
             if (branchId.Equals(columnName, StringComparison.OrdinalIgnoreCase))
             {
-                matches.Add(branch);
+                matches.Add(branchNode);
             }
 
-            foreach (var child in branch.Children)
+            foreach (var child in branchNode.Children)
             {
                 matches.AddRange(FindMatchingBranchNodes(child, columnName));
             }
@@ -182,15 +182,15 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private static SemanticTreeNode CreateEmptyBranchNode(SemanticTreeNode source)
     {
-        if (source is SemanticLeafNode leaf)
+        if (source is SemanticLeafNode leafNode)
         {
-            return new SemanticLeafNode(leaf.SemanticId, leaf.DataType, string.Empty);
+            return new SemanticLeafNode(leafNode.SemanticId, leafNode.DataType, string.Empty);
         }
 
-        var branch = (SemanticBranchNode)source;
-        var emptyBranch = new SemanticBranchNode(branch.SemanticId, branch.DataType);
+        var branchNode = (SemanticBranchNode)source;
+        var emptyBranch = new SemanticBranchNode(branchNode.SemanticId, branchNode.DataType);
 
-        foreach (var child in branch.Children)
+        foreach (var child in branchNode.Children)
         {
             emptyBranch.AddChild(CreateEmptyBranchNode(child));
         }
@@ -207,9 +207,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
             matches.Add(root);
         }
 
-        if (root is SemanticBranchNode branch)
+        if (root is SemanticBranchNode branchNode)
         {
-            foreach (var child in branch.Children)
+            foreach (var child in branchNode.Children)
             {
                 matches.AddRange(FindMatchingLeafNodes(child, semanticId));
             }

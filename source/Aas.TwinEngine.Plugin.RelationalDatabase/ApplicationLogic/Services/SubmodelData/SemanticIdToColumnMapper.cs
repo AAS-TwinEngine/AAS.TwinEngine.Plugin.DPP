@@ -62,9 +62,9 @@ public class SemanticIdToColumnMapper(
 
             result[node.SemanticId] = columnName;
 
-            if (node is SemanticBranchNode branch && branch.Children.Count > 0)
+            if (node is SemanticBranchNode branchNode && branchNode.Children.Count > 0)
             {
-                foreach (var child in branch.Children)
+                foreach (var child in branchNode.Children)
                 {
                     queue.Enqueue(child);
                 }

@@ -9,6 +9,10 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Submode
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
+using Azure.Core;
+
+using Json.Schema;
+
 using Microsoft.Extensions.Options;
 
 using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad.IQueryProvider;
@@ -23,17 +27,19 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
     ILogger<SubmodelDataService> logger) : ISubmodelDataService
 {
 
-    public async Task<SemanticTreeNode> GetValuesBySemanticIds(SemanticTreeNode semanticIds, string submodelId, CancellationToken cancellationToken)
+    public async Task<SemanticTreeNode> GetValuesBySemanticIds(JsonSchema jsonSchema, string submodelId, CancellationToken cancellationToken)
     {
+        var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
+
         var extractionResult = submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId);
 
-        var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(semanticIds);
+        var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(requestSemanticTreeNode);
 
         var sqlQuery = GetSqlQueryForSubmodel(extractionResult.SubmodelName.ToString());
 
         var responseSemanticTreeNode = await submodelDataProvider.GetSubmodelValuesAsync(sqlQuery, extractionResult.ProductId, cancellationToken).ConfigureAwait(false);
 
-        var result = semanticTreeResponseBuilder.BuildResponse(semanticIds, responseSemanticTreeNode, semanticIdToColumnMapping);
+        var result = semanticTreeResponseBuilder.BuildResponse(requestSemanticTreeNode, responseSemanticTreeNode, semanticIdToColumnMapping);
 
         return result;
     }
