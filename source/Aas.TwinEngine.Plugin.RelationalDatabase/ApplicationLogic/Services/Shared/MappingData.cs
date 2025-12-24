@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
 public record MappingData
 {

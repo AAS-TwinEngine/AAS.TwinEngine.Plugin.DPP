@@ -34,11 +34,11 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
             .Select(rule => new
             {
                 Rule = rule,
-                Parts = submodelId?.Split(rule.Separator)
+                Parts = submodelId?.Split(rule.Separator),
             })
             .Where(x => x.Parts is { Length: >= 1 } && x.Rule.Index > 0 && x.Parts.Length >= x.Rule.Index)
             .Select(x => x.Parts![x.Rule.Index - 1])
-            .FirstOrDefault();
+            .FirstOrDefault(extractedId => !string.Equals(extractedId, submodelId, StringComparison.Ordinal));
 
         if (!string.IsNullOrEmpty(productId))
         {

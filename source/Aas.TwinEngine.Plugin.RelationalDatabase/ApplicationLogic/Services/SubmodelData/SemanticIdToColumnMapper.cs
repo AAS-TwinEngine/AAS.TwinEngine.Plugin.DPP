@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
 using Microsoft.Extensions.Options;
 

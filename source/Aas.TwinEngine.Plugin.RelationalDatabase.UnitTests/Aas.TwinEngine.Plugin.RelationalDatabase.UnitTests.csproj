@@ -30,4 +30,10 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Api\SubmodelData\Handler\" />
+    <Folder Include="ApplicationLogic\Services\SubmodelData\Helper\" />
+    <Folder Include="Infrastructure\Providers\SubmodelDataProvider\Helper\" />
+  </ItemGroup>
+
 </Project>

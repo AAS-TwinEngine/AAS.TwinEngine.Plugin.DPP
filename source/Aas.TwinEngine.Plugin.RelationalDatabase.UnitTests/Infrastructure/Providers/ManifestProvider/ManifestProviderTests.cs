@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
 using Microsoft.Extensions.Logging;
 
