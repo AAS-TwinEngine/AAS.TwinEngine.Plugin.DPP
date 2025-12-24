@@ -18,28 +18,19 @@ public class MetaDataController : ControllerBase
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JsonObject>> GetShellDescriptorsAsync([FromQuery] int? limit, [FromQuery] string? cursor, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException("Feature not available: implementation is in progress.");
-    }
+    public async Task<ActionResult<JsonObject>> GetShellDescriptorsAsync([FromQuery] int? limit, [FromQuery] string? cursor, CancellationToken cancellationToken) => throw new NotImplementedException("Feature not available: implementation is in progress.");
 
     [HttpGet("shells/{AasIdentifier}")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JsonObject>> GetShellDescriptorAsync([FromRoute] string aasIdentifier, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException("Feature not available: implementation is in progress.");
-    }
+    public async Task<ActionResult<JsonObject>> GetShellDescriptorAsync([FromRoute] string aasIdentifier, CancellationToken cancellationToken) => throw new NotImplementedException("Feature not available: implementation is in progress.");
 
     [HttpGet("assets/{shellIdentifier}")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ServiceErrorResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JsonObject>> GetAssetAsync([FromRoute] string shellIdentifier, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException("Feature not available: implementation is in progress.");
-    }
+    public async Task<ActionResult<JsonObject>> GetAssetAsync([FromRoute] string shellIdentifier, CancellationToken cancellationToken) => throw new NotImplementedException("Feature not available: implementation is in progress.");
 }

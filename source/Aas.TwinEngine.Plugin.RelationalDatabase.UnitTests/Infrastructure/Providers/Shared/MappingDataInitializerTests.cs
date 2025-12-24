@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.Shared;
+
 public class MappingDataInitializerTests
 {
     private readonly IHostEnvironment _env;
@@ -33,7 +34,7 @@ public class MappingDataInitializerTests
 
         var sut = new MappingDataInitializer(_env, _logger);
 
-        Assert.Throws<ResourceNotFoundException>(() => sut.Initialize());
+        Assert.Throws<ResourceNotFoundException>(sut.Initialize);
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class MappingDataInitializerTests
 
         var sut = new MappingDataInitializer(_env, _logger);
 
-        Assert.Throws<ResourceNotValidException>(() => sut.Initialize());
+        Assert.Throws<ResourceNotValidException>(sut.Initialize);
     }
 
     [Fact]

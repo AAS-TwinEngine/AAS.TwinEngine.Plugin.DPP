@@ -9,4 +9,12 @@ public class ValidationFailedException : InternalServerException
     public ValidationFailedException() : base(DefaultMessage) { }
 
     public ValidationFailedException(Exception ex) : base(DefaultMessage, ex) { }
+
+    public ValidationFailedException(string message) : base(message)
+    {
+    }
+
+    public ValidationFailedException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

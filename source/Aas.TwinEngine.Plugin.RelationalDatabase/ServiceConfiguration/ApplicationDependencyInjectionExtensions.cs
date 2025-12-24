@@ -9,7 +9,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 [ExcludeFromCodeCoverage]
 public static class ApplicationDependencyInjectionExtensions
 {
-    public static void ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureApplication(this IServiceCollection services)
     {
         _ = services.AddExceptionHandler<GlobalExceptionHandler>();
         _ = services.AddProblemDetails();

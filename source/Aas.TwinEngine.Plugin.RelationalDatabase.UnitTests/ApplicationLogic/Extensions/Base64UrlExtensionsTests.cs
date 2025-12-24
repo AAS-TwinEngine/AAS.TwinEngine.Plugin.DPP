@@ -25,9 +25,9 @@ public class Base64UrlExtensionsTests
     {
         var logger = Substitute.For<ILogger>();
 
-        var act = () => Base64UrlExtensions.DecodeBase64(input!, logger);
+        string act() => Base64UrlExtensions.DecodeBase64(input!, logger);
 
-        Assert.Throws<InvalidUserInputException>(act);
+        Assert.Throws<InvalidUserInputException>((Func<string>)act);
         AssertLogErrorCalled(logger, expectedMessageContains: "Identifier cannot be null or empty.");
     }
 
@@ -52,9 +52,9 @@ public class Base64UrlExtensionsTests
     {
         var logger = Substitute.For<ILogger>();
 
-        var act = () => Base64UrlExtensions.DecodeBase64(encoded, logger);
+        string act() => Base64UrlExtensions.DecodeBase64(encoded, logger);
 
-        Assert.Throws<InvalidUserInputException>(act);
+        Assert.Throws<InvalidUserInputException>((Func<string>)act);
         AssertLogErrorCalled(logger, expectedMessageContains: "Failed to decode Base64 URL string");
     }
 
