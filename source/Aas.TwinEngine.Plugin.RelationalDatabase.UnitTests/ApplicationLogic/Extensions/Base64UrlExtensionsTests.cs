@@ -117,12 +117,12 @@ public class Base64UrlExtensionsTests
 
     private static void AssertLogErrorNotCalled(ILogger logger)
     {
-        logger.DidNotReceiveWithAnyArgs().Log(
+        logger.DidNotReceive().Log(
             LogLevel.Error,
-            default,
-            default!,
-            default!,
-            default!);
+            Arg.Any<EventId>(),
+            Arg.Any<object>(),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
     }
 
     private static string ToStringState(object state) => state?.ToString() ?? string.Empty;

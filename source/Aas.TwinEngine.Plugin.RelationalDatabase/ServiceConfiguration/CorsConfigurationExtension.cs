@@ -10,11 +10,9 @@ internal static class CorsConfigurationExtension
         _ = builder.Services.AddCors(options =>
         {
             options.AddPolicy("CorsPolicy", corsPolicyBuilder => corsPolicyBuilder
-                                                                 .WithOrigins("http://localhost:4200", "http://localhost:4280")
+                                                                 .AllowAnyOrigin()
                                                                  .AllowAnyHeader()
-                                                                 .AllowAnyMethod()
-                                                                 .AllowCredentials()
-                                                                 .SetIsOriginAllowed((host) => true));
+                                                                 .AllowAnyMethod());
         });
     }
 

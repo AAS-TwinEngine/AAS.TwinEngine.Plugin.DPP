@@ -8,18 +8,28 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 
 public static class Base64UrlExtensions
 {
+    private const int MaxBase64UrlLength = 256;
+
     /// <summary>
     /// Decodes a Base64 URL encoded string to its original UTF-8 representation.
     /// </summary>
     /// <param name="encoded">The Base64 URL encoded string.</param>
     /// <param name="logger"></param>
     /// <returns>The decoded UTF-8 string, or empty if input is null or whitespace.</returns>
-    /// <exception cref="InvalidUserInputException">Thrown when the string cannot be decoded.</exception>
+    /// <exception cref="InvalidUserInputException">
+    /// Thrown when the input is invalid, too large, or cannot be decoded.
+    /// </exception>
     public static string DecodeBase64(this string encoded, ILogger? logger = null)
     {
         if (string.IsNullOrWhiteSpace(encoded))
         {
             logger?.LogError("Identifier cannot be null or empty.");
+            throw new InvalidUserInputException();
+        }
+
+        if (encoded.Length > MaxBase64UrlLength)
+        {
+            logger?.LogError("Base64 URL input exceeds maximum allowed length ({MaxLength}). Actual length: {ActualLength}", MaxBase64UrlLength, encoded.Length);
             throw new InvalidUserInputException();
         }
 
