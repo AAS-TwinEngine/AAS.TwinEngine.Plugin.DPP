@@ -11,8 +11,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest;
 [ApiController]
 [Route("")]
 [ApiVersion(1)]
-public class ManifestController(ILogger<ManifestController> logger,
-                                IManifestHandler manifestHandler) : ControllerBase
+public class ManifestController(IManifestHandler manifestHandler) : ControllerBase
 {
     [HttpGet("manifest")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
@@ -21,8 +20,6 @@ public class ManifestController(ILogger<ManifestController> logger,
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<JsonObject>> RetrieveManifestDataAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("Getting manifest data");
-
         var manifestData = await manifestHandler.GetManifestData(cancellationToken).ConfigureAwait(false);
 
         return Ok(manifestData);

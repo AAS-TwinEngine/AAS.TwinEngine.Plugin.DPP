@@ -3,7 +3,6 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Responses;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
@@ -11,11 +10,10 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Api.Manifest;
 
 public class ManifestControllerTests
 {
-    private readonly ILogger<ManifestController> _logger = Substitute.For<ILogger<ManifestController>>();
     private readonly IManifestHandler _manifestHandler = Substitute.For<IManifestHandler>();
     private readonly ManifestController _sut;
     private readonly ManifestDto ManifestDtoValue = new() { Capabilities = new CapabilitiesDto(), SupportedSemanticIds = ["abc"] };
-    public ManifestControllerTests() => _sut = new ManifestController(_logger, _manifestHandler);
+    public ManifestControllerTests() => _sut = new ManifestController(_manifestHandler);
 
     [Fact]
     public async Task RetrieveManifestDataAsync_ShouldReturnOk_WhenDataIsAvailable()

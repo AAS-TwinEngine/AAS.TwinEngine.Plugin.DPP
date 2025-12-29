@@ -5,7 +5,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.Manifest;
 public class ManifestData
 {
     [JsonPropertyName("supportedSemanticIds")]
-    public required IList<string> SupportedSemanticIds { get; set; }
+    public required IList<string> SupportedSemanticIds { get; init; }
 
     [JsonPropertyName("capabilities")]
     public required CapabilitiesData Capabilities { get; set; }

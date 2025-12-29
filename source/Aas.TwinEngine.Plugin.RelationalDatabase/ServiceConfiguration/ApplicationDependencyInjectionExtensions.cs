@@ -3,17 +3,19 @@
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 [ExcludeFromCodeCoverage]
 public static class ApplicationDependencyInjectionExtensions
 {
-    public static void ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureApplication(this IServiceCollection services)
     {
         _ = services.AddExceptionHandler<GlobalExceptionHandler>();
         _ = services.AddProblemDetails();
@@ -29,5 +31,8 @@ public static class ApplicationDependencyInjectionExtensions
 
         _ = services.AddScoped<IManifestService, ManifestService>();
         _ = services.AddScoped<IManifestHandler, ManifestHandler>();
+
+        _ = services.AddScoped<IMetaDataHandler, MetaDataHandler>();
+        _ = services.AddScoped<IMetaDataService, MetaDataService>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
@@ -8,7 +7,7 @@ using Serilog;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase;
 
-public class Program
+public static class Program
 {
     private static readonly Version ApiVersion = new(1, 0);
     private const string ApiTitle = "RelationalDatabase API";
@@ -23,7 +22,7 @@ public class Program
 
         _ = builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureInfrastructure(builder.Configuration);
-        builder.Services.ConfigureApplication(builder.Configuration);
+        builder.Services.ConfigureApplication();
 
         _ = builder.Services.AddAuthorization();
 
