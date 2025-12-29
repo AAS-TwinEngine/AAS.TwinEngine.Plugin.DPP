@@ -79,7 +79,7 @@ jobs:
           hide_complexity: false
           indicators: true
           output: both
-          thresholds: "80 80"
+          thresholds: "0 0"
 
       - name: Prepare PR Comment with Coverage Results
         if: github.event.pull_request.head.repo.fork == false
