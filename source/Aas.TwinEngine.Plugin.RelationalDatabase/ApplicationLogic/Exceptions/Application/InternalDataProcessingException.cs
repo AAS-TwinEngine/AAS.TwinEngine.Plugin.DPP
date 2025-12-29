@@ -9,4 +9,12 @@ public class InternalDataProcessingException : InternalServerException
     public InternalDataProcessingException() : base(DefaultMessage) { }
 
     public InternalDataProcessingException(Exception ex) : base(DefaultMessage, ex) { }
+
+    public InternalDataProcessingException(string message) : base(message)
+    {
+    }
+
+    public InternalDataProcessingException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

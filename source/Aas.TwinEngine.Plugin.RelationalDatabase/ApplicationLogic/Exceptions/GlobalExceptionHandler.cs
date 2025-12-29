@@ -13,6 +13,9 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
                                                 Exception exception,
                                                 CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(httpContext);
+        ArgumentNullException.ThrowIfNull(exception);
+
         logger.LogError(exception, "An unhandled exception occurred.");
 
         var statusCode = exception switch

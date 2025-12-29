@@ -27,5 +27,9 @@ RUN useradd -m appuser \
 
 USER appuser
 WORKDIR /app
+
+ENV DATA_DIR=/app/Data
+RUN mkdir -p $DATA_DIR
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Aas.TwinEngine.Plugin.RelationalDatabase.dll"]

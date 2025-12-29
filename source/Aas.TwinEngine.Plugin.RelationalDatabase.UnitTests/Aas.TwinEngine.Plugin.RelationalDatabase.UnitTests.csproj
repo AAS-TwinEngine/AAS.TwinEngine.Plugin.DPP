@@ -7,10 +7,11 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <NoWarn>IDE1006, IDE0058, CA2007</NoWarn>
+    <NoWarn>IDE1006, IDE0058, CA2007, CA2201</NoWarn>
     <!--IDE1006 - Naming rule violation: Missing suffix: 'Async'-->
     <!--CA2007 - Do not directly await a Task-->
     <!--IDE0058 - Expression value is never used-->
+    <!--CA2201 - Exception type can be specific-->
   </PropertyGroup>
 
   <ItemGroup>
