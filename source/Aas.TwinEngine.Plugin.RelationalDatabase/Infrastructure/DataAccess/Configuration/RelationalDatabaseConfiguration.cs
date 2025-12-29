@@ -1,8 +1,8 @@
 ﻿namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
 
-public class SqlServerConfiguration
+public class RelationalDatabaseConfiguration
 {
-    public const string Section = "SqlServer";
+    public const string Section = "RelationalDatabaseConfiguration";
 
     public string ConnectionString { get; set; } = null!;
 }

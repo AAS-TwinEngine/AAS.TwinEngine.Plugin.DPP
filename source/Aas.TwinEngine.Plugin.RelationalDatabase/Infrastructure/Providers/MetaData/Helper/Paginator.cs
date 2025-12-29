@@ -3,7 +3,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
-public class Paginator
+public static class Paginator
 {
     public static (IList<T> Items, PagingMetaData PagingMetaData) GetPagedResult<T>(
         IList<T> allItems,

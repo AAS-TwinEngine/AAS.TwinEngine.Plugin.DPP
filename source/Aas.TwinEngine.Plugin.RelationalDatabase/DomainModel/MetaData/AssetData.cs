@@ -4,7 +4,7 @@ public class AssetData
 {
     public string? GlobalAssetId { get; set; }
 
-    public List<SpecificAssetIdsData>? SpecificAssetIds { get; set; } = [];
+    public IList<SpecificAssetIdsData>? SpecificAssetIds { get; init; } = [];
 
     public DefaultThumbnailData? DefaultThumbnail { get; set; }
 }

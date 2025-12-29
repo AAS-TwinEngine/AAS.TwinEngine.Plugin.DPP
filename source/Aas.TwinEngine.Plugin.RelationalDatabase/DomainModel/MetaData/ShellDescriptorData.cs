@@ -5,7 +5,7 @@ public class ShellDescriptorData
     public string GlobalAssetId { get; set; } = null!;
     public string IdShort { get; set; } = null!;
     public string Id { get; set; } = null!;
-    public List<SpecificAssetIdsData>? SpecificAssetIds { get; set; } = [];
+    public IList<SpecificAssetIdsData>? SpecificAssetIds { get; init; } = [];
 }
 
 public class SpecificAssetIdsData

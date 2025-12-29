@@ -6,7 +6,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Connect
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlCommandExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
 using Microsoft.Extensions.Options;
@@ -19,13 +19,9 @@ public static class InfrastructureDependencyInjectionExtensions
 {
     public static void ConfigureInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        ArgumentNullException.ThrowIfNull(configuration);
-
-        _ = services.Configure<SqlServerConfiguration>(configuration.GetSection(SqlServerConfiguration.Section));
-        _ = services.AddSingleton(sp => sp.GetRequiredService<IOptions<SqlServerConfiguration>>().Value);
-        _ = services.AddOptions<Capabilities>().Bind(configuration.GetSection(Capabilities.Section)).ValidateDataAnnotations().ValidateOnStart();
-        _ = services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
-        _ = services.AddSingleton<IDbConnectionFactory, PostgresSqlConnectionFactory>();
+        _ = services.Configure<RelationalDatabaseConfiguration>(configuration.GetSection(RelationalDatabaseConfiguration.Section));
+        _ = services.AddSingleton(sp => sp.GetRequiredService<IOptions<RelationalDatabaseConfiguration>>().Value);
+        _ = services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();
 
         _ = services.AddScoped<MappingDataInitializer>();

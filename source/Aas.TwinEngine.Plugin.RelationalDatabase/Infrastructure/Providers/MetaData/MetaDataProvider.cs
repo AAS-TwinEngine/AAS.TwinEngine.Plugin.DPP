@@ -3,7 +3,7 @@ using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlCommandExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
 using Npgsql;

@@ -1,8 +1,9 @@
 ﻿using System.Data.Common;
 
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlCommandExecutor;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 
 public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectionFactory connectionFactory) : ISqlCommandExecutor
 {
@@ -39,7 +40,7 @@ public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectio
             {
                 foreach (var parameter in parameters)
                 {
-                    command.Parameters.Add(parameter);
+                    _ = command.Parameters.Add(parameter);
                 }
             }
 
@@ -48,7 +49,7 @@ public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectio
             if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 logger.LogDebug("Query returned no rows");
-                return null;
+                throw new ResourceNotFoundException();
             }
 
             return await reader.IsDBNullAsync(0, cancellationToken).ConfigureAwait(false)
@@ -58,7 +59,7 @@ public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectio
         catch (Exception ex)
         {
             logger.LogError(ex, "Error executing SQL query");
-            throw;
+            throw new ResourceNotFoundException();
         }
     }
 }
