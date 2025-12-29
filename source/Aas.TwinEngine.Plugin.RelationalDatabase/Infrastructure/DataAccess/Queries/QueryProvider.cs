@@ -1,7 +1,10 @@
-﻿using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
 
+[ExcludeFromCodeCoverage]
 public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment env) : IQueryProvider
 {
     private readonly string _basePath = Path.Combine(env.ContentRootPath, "Infrastructure", "DataAccess", "Queries");
