@@ -48,13 +48,31 @@ jobs:
         run: dotnet test ${{ env.TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --logger "trx;LogFileName=unit_test_results.trx" --collect:"XPlat Code Coverage" --settings source/coverlet.runsettings
 
       - name: Publish Test Results
-        uses: dorny/test-reporter@ee446707ff3bdadb3c039ff1af4286a09acb79c6 # v2.3.0
+        uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
         id: test-results
         if: github.event.pull_request.head.repo.fork == false
         with:
           name: Test Results (Unit & Module)
           path: "**/*_test_results.trx"
           reporter: dotnet-trx
+
+      - name: Generate Test Results Summary
+        if: github.event.pull_request.head.repo.fork == false
+        run: |
+          echo "# Test & Coverage Report" > results.md
+          echo "" >> results.md
+          echo "## Test Results Summary" >> results.md
+          echo "" >> results.md
+          echo "| Metric | Count |" >> results.md
+          echo "|--------|-------|" >> results.md
+          echo "| ✅ Passed | ${{ steps.test-results.outputs.passed }} |" >> results.md
+          echo "| ❌ Failed | ${{ steps.test-results.outputs.failed }} |" >> results.md
+          echo "| ⏭️ Skipped | ${{ steps.test-results.outputs.skipped }} |" >> results.md
+          echo "" >> results.md
+          echo "[View Detailed Test Results](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> results.md
+          echo "" >> results.md
+          echo "---" >> results.md
+          echo "" >> results.md
 
       - name: Generate Detailed Code Coverage HTML Report
         uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
