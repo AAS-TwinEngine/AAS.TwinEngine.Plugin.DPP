@@ -1,21 +1,10 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
-
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
-
-using Azure.Core;
 
 using Json.Schema;
 
-using Microsoft.Extensions.Options;
-
-using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad.IQueryProvider;
+using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 

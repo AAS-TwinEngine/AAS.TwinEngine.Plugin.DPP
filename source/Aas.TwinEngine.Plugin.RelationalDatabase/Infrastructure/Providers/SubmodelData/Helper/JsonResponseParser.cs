@@ -6,7 +6,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Microsoft.Extensions.Options;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
 public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonResponseParser
 {

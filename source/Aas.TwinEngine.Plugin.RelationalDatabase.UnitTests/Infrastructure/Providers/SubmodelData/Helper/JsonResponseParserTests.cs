@@ -1,12 +1,12 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
 using Microsoft.Extensions.Options;
 
 using NSubstitute;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.SubmodelDataProvider.Helper;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.SubmodelData.Helper;
 
 public class JsonResponseParserTests
 {

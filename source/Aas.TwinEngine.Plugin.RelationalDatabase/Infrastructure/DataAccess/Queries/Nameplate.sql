@@ -1,63 +1,61 @@
-DECLARE @AssetId INT;
-
-SELECT @AssetId = AssetId
-FROM Asset
-WHERE ProductId = @ProductId;
-
+WITH asset_cte AS (
+    SELECT "Id"
+    FROM "Asset"
+    WHERE "ProductId" = @ProductId
+)
 SELECT
-    (
-        SELECT
-            JSON_QUERY(
-                (
-                    SELECT
-                        a.UriOfTheProduct,
-                        a.ManufacturerProductType,
-                        a.OrderCodeOfManufacturer,
-                        a.ProductArticleNumberOfManufacturer,
-                        a.SerialNumber,
-                        a.YearOfConstruction,
-                        a.DateOfManufacture,
-                        a.HardwareVersion,
-                        a.FirmwareVersion,
-                        a.SoftwareVersion,
-                        a.CountryOfOrigin,
-                        a.UniqueFacilityIdentifier,
-                        a.ManufacturerName_en,
-                        a.ManufacturerName_de,
-                        a.ManufacturerProductDesignation_en,
-                        a.ManufacturerProductDesignation_de,
-                        a.ManufacturerProductRoot_en,
-                        a.ManufacturerProductRoot_de,
-                        a.ManufacturerProductFamily_en,
-                        a.ManufacturerProductFamily_de,
-                        a.CompanyLogo,
-                        JSON_QUERY(
-                            (
-                                SELECT
-                                    JSON_QUERY(
-                                        (
-                                            SELECT
-                                                m.MarkingID,
-                                                m.DesignationOfCertificateOrApproval,
-                                                m.MarkingName,
-                                                m.IssueDate,
-                                                m.ExpiryDate,
-                                                m.MarkingAdditionalText,
-                                                m.MarkingFile
-                                            FROM AssetMarking am
-                                            JOIN Marking m
-                                              ON m.MarkingID = am.MarkingID
-                                            WHERE am.AssetID = a.AssetID
-                                            FOR JSON PATH
-                                        )
-                                    ) AS Marking
-                                FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+COALESCE(
+(
+    SELECT json_build_object(
+        'nameplate',
+        json_build_object(
+            'UriOfTheProduct', a."UriOfTheProduct",
+            'ManufacturerProductType', a."ManufacturerProductType",
+            'OrderCodeOfManufacturer', a."OrderCodeOfManufacturer",
+            'ProductArticleNumberOfManufacturer', a."ProductArticleNumberOfManufacturer",
+            'SerialNumber', a."SerialNumber",
+            'YearOfConstruction', a."YearOfConstruction",
+            'DateOfManufacture', a."DateOfManufacture",
+            'HardwareVersion', a."HardwareVersion",
+            'FirmwareVersion', a."FirmwareVersion",
+            'SoftwareVersion', a."SoftwareVersion",
+            'CountryOfOrigin', a."CountryOfOrigin",
+            'UniqueFacilityIdentifier', a."UniqueFacilityIdentifier",
+            'ManufacturerName', a."ManufacturerName",
+            'ManufacturerProductDesignation_en', a."ManufacturerProductDesignation_en",
+            'ManufacturerProductDesignation_de', a."ManufacturerProductDesignation_de",
+            'ManufacturerProductRoot_en', a."ManufacturerProductRoot_en",
+            'ManufacturerProductRoot_de', a."ManufacturerProductRoot_de",
+            'ManufacturerProductFamily_en', a."ManufacturerProductFamily_en",
+            'ManufacturerProductFamily_de', a."ManufacturerProductFamily_de",
+   'CompanyLogo', a."CompanyLogo",
+            'Markings',
+            json_build_object(
+                'Marking',
+                COALESCE(
+                    (
+                        SELECT json_agg(
+                            json_build_object(
+                                'DesignationOfCertificateOrApproval', m."DesignationOfCertificateOrApproval",
+                                'IssueDate', m."IssueDate",
+                                'ExpiryDate', m."ExpiryDate",
+                                'MarkingAdditionalText', m."MarkingAdditionalText",
+                                'MarkingFile', m."MarkingFile"
                             )
-                        ) AS Markings
-                    FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                        )
+                        FROM "AssetMarking" am
+                        JOIN "Marking" m
+                          ON m."Id" = am."MarkingId"
+                        WHERE am."AssetId" = a."Id"
+                    ),
+                    '[]'::json
                 )
-            ) AS nameplate
-        FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
-    ) AS Result
-FROM Asset a
-WHERE a.AssetID = @AssetId;
+                
+            )
+        )
+    )
+    FROM "Asset" a
+    WHERE a."Id" = (SELECT "Id" FROM asset_cte)
+),
+'{}'::json
+) AS "Result"; 

@@ -1,133 +1,127 @@
-DECLARE @AssetId INT;
-
-SELECT @AssetId = AssetID
-FROM Asset
-WHERE ProductId = @ProductId;
-
-IF @AssetId IS NULL
-BEGIN
-    SELECT '{}' AS Result;
-    RETURN;
-END;
-
+WITH asset_cte AS (
+    SELECT "Id"
+    FROM "Asset"
+    WHERE "ProductId" = @ProductId
+)
 SELECT
+COALESCE(
 (
-    SELECT
-        JSON_QUERY
-        (
-            (
-                SELECT
-                    JSON_QUERY
-                    (
-                        (
-                            SELECT
-                                ci.RoleOfContactPerson,
-                                ci.[Language],
-                                ci.TimeZone,
-                                ci.AddressOfAdditionalLink,
-                                ci.NationalCode_en,
-                                ci.NationalCode_de,
-                                ci.CityTown_en,
-                                ci.CityTown_de,
-                                ci.Company_en,
-                                ci.Company_de,
-                                ci.Department_en,
-                                ci.Department_de,
-                                ci.Street_en,
-                                ci.Street_de,
-                                ci.Zipcode_en,
-                                ci.Zipcode_de,
-                                ci.POBox_en,
-                                ci.POBox_de,
-                                ci.ZipCodeOfPOBox_en,
-                                ci.ZipCodeOfPOBox_de,
-                                ci.StateCounty_en,
-                                ci.StateCounty_de,
-                                ci.NameOfContact_en,
-                                ci.NameOfContact_de,
-                                ci.FirstName_en,
-                                ci.FirstName_de,
-                                ci.MiddleNames_en,
-                                ci.MiddleNames_de,
-                                ci.Title_en,
-                                ci.Title_de,
-                                ci.AcademicTitle_en,
-                                ci.AcademicTitle_de,
-                                ci.FurtherDetailsOfContact_en,
-                                ci.FurtherDetailsOfContact_de,
-
-                                JSON_QUERY
-                                (
-                                    (
-                                        SELECT
-                                            p.TelephoneNumber_en,
-                                            p.TelephoneNumber_de,
-                                            p.AvailableTime_en,
-                                            p.AvailableTime_de,
-                                            p.TypeOfTelephone
-                                        FROM ContactInformationPhone cip
-                                        JOIN Phone p ON p.PhoneID = cip.PhoneID
-                                        WHERE cip.ContactInformationID = ci.ContactInformationID
-                                        FOR JSON PATH
+    SELECT json_build_object(
+        'ContactInformations',
+        json_build_object(
+            'ContactInformation',
+            COALESCE(
+                json_agg(
+                    json_build_object(
+                        'RoleOfContactPerson', ci."RoleOfContactPerson",
+                        'Language', ci."Language",
+                        'TimeZone', ci."TimeZone",
+                        'AddressOfAdditionalLink', ci."AddressOfAdditionalLink",
+                        'NationalCode_en', ci."NationalCode_en",
+                        'NationalCode_de', ci."NationalCode_de",
+                        'CityTown_en', ci."CityTown_en",
+                        'CityTown_de', ci."CityTown_de",
+                        'Company_en', ci."Company_en",
+                        'Company_de', ci."Company_de",
+                        'Department_en', ci."Department_en",
+                        'Department_de', ci."Department_de",
+                        'Street_en', ci."Street_en",
+                        'Street_de', ci."Street_de",
+                        'Zipcode_en', ci."Zipcode_en",
+                        'Zipcode_de', ci."Zipcode_de",
+                        'POBox_en', ci."POBox_en",
+                        'POBox_de', ci."POBox_de",
+                        'ZipCodeOfPOBox_en', ci."ZipCodeOfPOBox_en",
+                        'ZipCodeOfPOBox_de', ci."ZipCodeOfPOBox_de",
+                        'StateCounty_en', ci."StateCounty_en",
+                        'StateCounty_de', ci."StateCounty_de",
+                        'NameOfContact_en', ci."NameOfContact_en",
+                        'NameOfContact_de', ci."NameOfContact_de",
+                        'FirstName_en', ci."FirstName_en",
+                        'FirstName_de', ci."FirstName_de",
+                        'MiddleNames_en', ci."MiddleNames_en",
+                        'MiddleNames_de', ci."MiddleNames_de",
+                        'Title_en', ci."Title_en",
+                        'Title_de', ci."Title_de",
+                        'AcademicTitle_en', ci."AcademicTitle_en",
+                        'AcademicTitle_de', ci."AcademicTitle_de",
+                        'FurtherDetailsOfContact_en', ci."FurtherDetailsOfContact_en",
+                        'FurtherDetailsOfContact_de', ci."FurtherDetailsOfContact_de",
+                        'Phone',
+                        COALESCE(
+                            (
+                                SELECT json_build_object(
+                                    'TelephoneNumber_en', p."TelephoneNumber_en",
+                                    'TelephoneNumber_de', p."TelephoneNumber_de",
+                                    'AvailableTime_en', p."AvailableTime_en",
+                                    'AvailableTime_de', p."AvailableTime_de",
+                                    'TypeOfTelephone', p."TypeOfTelephone"
+                                )
+                                FROM "Phone" p
+                                WHERE p."ContactInformationId" = ci."Id"
+                                LIMIT 1
+                            ),
+                            '{}'::json
+                        ),
+                        'Fax',
+                        COALESCE(
+                            (
+                                SELECT json_build_object(
+                                    'FaxNumber_en', f."FaxNumber_en",
+                                    'FaxNumber_de', f."FaxNumber_de",
+                                    'TypeOfFaxNumber', f."TypeOfFaxNumber"
+                                )
+                                FROM "Fax" f
+                                WHERE f."ContactInformationId" = ci."Id"
+                                LIMIT 1
+                            ),
+                            '{}'::json
+                        ),
+                        'Email',
+                        COALESCE(
+                            (
+                                SELECT json_build_object(
+                                    'EmailAddress', e."EmailAddress",
+                                    'TypeOfEmailAddress', e."TypeOfEmailAddress",
+                                    'PublicKey_en', e."PublicKey_en",
+                                    'PublicKey_de', e."PublicKey_de",
+                                    'TypeOfPublicKey_en', e."TypeOfPublicKey_en",
+                                    'TypeOfPublicKey_de', e."TypeOfPublicKey_de"
+                                )
+                                FROM "Email" e
+                                WHERE e."ContactInformationId" = ci."Id"
+                                LIMIT 1
+                            ),
+                            '{}'::json
+                        ),
+                        'IPCommunication',
+                        COALESCE(
+                            (
+                                SELECT json_agg(
+                                    json_build_object(
+                                        'AddressOfAdditionalLink', ip."AddressOfAdditionalLink",
+                                        'TypeOfCommunication', ip."TypeOfCommunication",
+                                        'AvailableTime_en', ip."AvailableTime_en",
+                                        'AvailableTime_de', ip."AvailableTime_de"
                                     )
-                                ) AS Phone,
-
-                                JSON_QUERY
-                                (
-                                    (
-                                        SELECT
-                                            f.FaxNumber_en,
-                                            f.FaxNumber_de,
-                                            f.TypeOfFaxNumber
-                                        FROM ContactInformationFax cif
-                                        JOIN Fax f ON f.FaxID = cif.FaxID
-                                        WHERE cif.ContactInformationID = ci.ContactInformationID
-                                        FOR JSON PATH
-                                    )
-                                ) AS Fax,
-
-                                JSON_QUERY
-                                (
-                                    (
-                                        SELECT
-                                            e.EmailAddress,
-                                            e.TypeOfEmailAddress,
-                                            e.PublicKey_en,
-                                            e.PublicKey_de,
-                                            e.TypeOfPublicKey_en,
-                                            e.TypeOfPublicKey_de
-                                        FROM ContactInformationEmail cie
-                                        JOIN Email e ON e.EmailID = cie.EmailID
-                                        WHERE cie.ContactInformationID = ci.ContactInformationID
-                                        FOR JSON PATH
-                                    )
-                                ) AS Email,
-
-                                JSON_QUERY
-                                (
-                                    (
-                                        SELECT
-                                            ip.AddressOfAdditionalLink,
-                                            ip.TypeOfCommunication,
-                                            ip.AvailableTime_en,
-                                            ip.AvailableTime_de
-                                        FROM ContactInformationIPCommunication ciip
-                                        JOIN IPCommunication ip
-                                            ON ip.IPCommunicationID = ciip.IPCommunicationID
-                                        WHERE ciip.ContactInformationID = ci.ContactInformationID
-                                        FOR JSON PATH
-                                    )
-                                ) AS IPCommunication
-
-                            FROM AssetContactInformation aci
-                            JOIN ContactInformation ci
-                                ON ci.ContactInformationID = aci.ContactInformationID
-                            WHERE aci.AssetID = @AssetId
-                            FOR JSON PATH
+                                )
+                                FROM "ContactInformationIPCommunication" ciip
+                                JOIN "IPCommunication" ip
+                                  ON ip."Id" = ciip."IPCommunicationId"
+                                WHERE ciip."ContactInformationId" = ci."Id"
+                            ),
+                            '[]'::json
                         )
-                    ) AS ContactInformation
-                FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                    )
+                ),
+                '[]'::json
             )
-        ) AS ContactInformations
-    FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
-) AS Result;
+        )
+    )
+    FROM "AssetContactInformation" aci
+    JOIN "ContactInformation" ci
+      ON ci."Id" = aci."ContactInformationId"
+    WHERE aci."AssetId" = (SELECT "Id" FROM asset_cte)
+),
+'{}'::json
+) AS "Result";

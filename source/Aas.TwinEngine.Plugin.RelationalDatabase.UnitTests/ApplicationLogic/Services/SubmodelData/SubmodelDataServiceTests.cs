@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sharad.IQueryProvider;
+using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.SubmodelData;
 
@@ -44,7 +44,6 @@ public class SubmodelDataServiceTests
         const string productId = "product-123";
         const string sqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult(productId, SubmodelName.NamePlate);
-        var requestNode = new SemanticLeafNode("requestSemanticId", DataType.String, string.Empty);
         var responseNode = new SemanticLeafNode("responseSemanticId", DataType.String, "responseValue");
         var expectedResult = new SemanticLeafNode("resultSemanticId", DataType.String, "finalValue");
         var columnMapping = new Dictionary<string, string> { ["requestSemanticId"] = "columnName" };

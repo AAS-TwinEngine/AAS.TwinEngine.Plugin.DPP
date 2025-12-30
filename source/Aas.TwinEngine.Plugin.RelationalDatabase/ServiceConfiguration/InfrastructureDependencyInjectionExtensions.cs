@@ -11,12 +11,12 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelDataProvider.Helper;
 
 using Microsoft.Extensions.Options;
 
 using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
