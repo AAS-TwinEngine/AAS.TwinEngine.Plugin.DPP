@@ -33,11 +33,12 @@ public class SemanticIdToColumnMapperTests
     }
 
     [Fact]
-    public void GetSemanticIdToColumnMapping_NullRequestNode_ReturnsEmptyDictionary()
+    public void GetSemanticIdToColumnMapping_NullRequestNode_ThrowsInternalDataProcessingException()
     {
-        var result = _sut.GetSemanticIdToColumnMapping(null!);
-
-        Assert.Empty(result);
+        var exception = Assert.Throws<InternalDataProcessingException>(() => _sut.GetSemanticIdToColumnMapping(null!));
+        
+        Assert.NotNull(exception);
+        Assert.Equal("Internal Server Error.", exception.Message);
     }
 
     [Fact]

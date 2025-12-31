@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
-using Provider = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider.ManifestProvider;
+using Provider = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest.ManifestProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.ManifestProvider;
 

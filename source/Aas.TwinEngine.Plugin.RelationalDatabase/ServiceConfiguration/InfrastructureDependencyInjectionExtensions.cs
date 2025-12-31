@@ -7,7 +7,6 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Submode
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
@@ -17,6 +16,7 @@ using Microsoft.Extensions.Options;
 using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
@@ -29,6 +29,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();
 
+        _ = services.AddOptions<Capabilities>().Bind(configuration.GetSection(Capabilities.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<ExtractionRules>().Bind(configuration.GetSection(ExtractionRules.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<Semantics>().Bind(configuration.GetSection(Semantics.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddScoped<IJsonResponseParser, JsonResponseParser>();

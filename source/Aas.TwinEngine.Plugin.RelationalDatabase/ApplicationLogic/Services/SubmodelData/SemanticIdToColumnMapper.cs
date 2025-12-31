@@ -18,11 +18,6 @@ public class SemanticIdToColumnMapper(
 
     public Dictionary<string, string> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
-        if (requestNode == null)
-        {
-            return [];
-        }
-
         try
         {
             var mappingData = DeserializeMappingData();
@@ -40,13 +35,13 @@ public class SemanticIdToColumnMapper(
         var mappingJson = MappingData.MappingJson;
         var mappingData = mappingJson.RootElement.Deserialize<List<MappingItem?>>(_jsonOptions) ?? [];
 
-        if (mappingData.Count == 0)
+        if (mappingData.Count != 0)
         {
-            logger.LogError("Mapping configuration is empty");
-            throw new InternalDataProcessingException();
+            return mappingData;
         }
 
-        return mappingData;
+        logger.LogError("Mapping configuration is empty");
+        throw new InternalDataProcessingException();
     }
 
     private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, List<MappingItem?> mappingData)
@@ -62,12 +57,14 @@ public class SemanticIdToColumnMapper(
 
             result[node.SemanticId] = columnName;
 
-            if (node is SemanticBranchNode branchNode && branchNode.Children.Count > 0)
+            if (node is not SemanticBranchNode { Children.Count: > 0 } branchNode)
             {
-                foreach (var child in branchNode.Children)
-                {
-                    queue.Enqueue(child);
-                }
+                continue;
+            }
+
+            foreach (var child in branchNode.Children)
+            {
+                queue.Enqueue(child);
             }
         }
 
@@ -97,12 +94,7 @@ public class SemanticIdToColumnMapper(
     {
         var index = semanticId.IndexOf(_indexPrefix, StringComparison.OrdinalIgnoreCase);
 
-        if (index < 0)
-        {
-            return (semanticId, null);
-        }
-
-        return (semanticId[..index], semanticId[index..]);
+        return index < 0 ? (semanticId, null) : (semanticId[..index], semanticId[index..]);
     }
 
     private static MappingItem? FindMapping(string semanticId, List<MappingItem?> mappingData)

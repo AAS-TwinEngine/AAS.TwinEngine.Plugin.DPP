@@ -10,154 +10,163 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 
 public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISemanticTreeHandler
 {
+    private static readonly Dictionary<DataType, Func<string, JsonValue>> TypeConverters = new()
+    {
+        [DataType.Boolean] = ParseAsBooleanOrString,
+        [DataType.Integer] = ParseAsIntegerOrString,
+        [DataType.Number] = ParseAsNumberOrString,
+        [DataType.String] = value => JsonValue.Create(value)!
+    };
+
     public JsonObject GetJson(SemanticTreeNode semanticTreeNodeWithValues, JsonSchema dataQuery)
     {
-        var jsonNode = ConvertTreeNodeToJson(semanticTreeNodeWithValues);
+        ArgumentNullException.ThrowIfNull(semanticTreeNodeWithValues);
+        ArgumentNullException.ThrowIfNull(dataQuery);
 
-        var wrappedJsonObject = new JsonObject { [semanticTreeNodeWithValues?.SemanticId!] = jsonNode };
+        try
+        {
+            var jsonNode = ConvertTreeNodeToJson(semanticTreeNodeWithValues);
+            var wrappedJsonObject = WrapInJsonObject(semanticTreeNodeWithValues.SemanticId, jsonNode);
+            var serializedJson = JsonSerializer.Serialize(wrappedJsonObject);
 
-        var serializedJson = JsonSerializer.Serialize(wrappedJsonObject);
+            jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
 
-        jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
-
-        return wrappedJsonObject;
+            return wrappedJsonObject;
+        }
+        catch (Exception ex) when (ex is not ArgumentNullException)
+        {
+            throw new InvalidOperationException($"Failed to convert semantic tree node '{semanticTreeNodeWithValues.SemanticId}' to JSON.", ex);
+        }
     }
+
+    private static JsonObject WrapInJsonObject(string semanticId, JsonNode jsonNode) => new() { [semanticId] = jsonNode };
 
     private static JsonNode ConvertTreeNodeToJson(SemanticTreeNode treeNode)
     {
+        ArgumentNullException.ThrowIfNull(treeNode);
+
         return treeNode switch
         {
             SemanticLeafNode leafNode => ConvertLeafToJsonValue(leafNode),
             SemanticBranchNode branchNode => ConvertBranchToJsonStructure(branchNode),
-            _ => throw new NotImplementedException($"Unsupported node type: {treeNode.GetType()}")
+            _ => throw new NotSupportedException($"Unsupported node type: {treeNode.GetType().Name}")
         };
     }
 
     private static JsonValue ConvertLeafToJsonValue(SemanticLeafNode leafNode)
     {
-        return leafNode.DataType switch
-        {
-            DataType.Boolean => ParseAsBooleanOrString(leafNode.Value),
-            DataType.Integer => ParseAsIntegerOrString(leafNode.Value),
-            DataType.Number => ParseAsNumberOrString(leafNode.Value),
-            DataType.String => JsonValue.Create(leafNode.Value),
-            _ => JsonValue.Create(leafNode.Value)
-        };
+        ArgumentNullException.ThrowIfNull(leafNode);
+
+        return TypeConverters.TryGetValue(leafNode.DataType, out var converter)
+            ? converter(leafNode.Value)
+            : JsonValue.Create(leafNode.Value)!;
     }
 
-    private static JsonValue ParseAsBooleanOrString(string textValue)
-    {
-        return bool.TryParse(textValue, out var booleanValue)
-            ? JsonValue.Create(booleanValue)
-            : JsonValue.Create(textValue);
-    }
+    private static JsonValue ParseAsBooleanOrString(string textValue) => bool.TryParse(textValue, out var boolValue)
+                                                                             ? JsonValue.Create(boolValue)!
+                                                                             : JsonValue.Create(textValue)!;
 
-    private static JsonValue ParseAsIntegerOrString(string textValue)
-    {
-        return int.TryParse(textValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var integerValue)
-            ? JsonValue.Create(integerValue)
-            : JsonValue.Create(textValue);
-    }
+    private static JsonValue ParseAsIntegerOrString(string textValue) => int.TryParse(textValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out var intValue)
+                                                                             ? JsonValue.Create(intValue)!
+                                                                             : JsonValue.Create(textValue)!;
 
-    private static JsonValue ParseAsNumberOrString(string textValue)
-    {
-        return double.TryParse(textValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var numberValue)
-            ? JsonValue.Create(numberValue)
-            : JsonValue.Create(textValue);
-    }
+    private static JsonValue ParseAsNumberOrString(string textValue) => double.TryParse(textValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var doubleValue)
+                                                                            ? JsonValue.Create(doubleValue)!
+                                                                            : JsonValue.Create(textValue)!;
 
     private static JsonNode ConvertBranchToJsonStructure(SemanticBranchNode branchNode)
     {
-        var isArrayType = branchNode.DataType == DataType.Array;
-        var hasOnlyBranchChildren = branchNode.Children.All(child => child is SemanticBranchNode);
-        var hasOnlyLeafChildren = branchNode.Children.All(child => child is SemanticLeafNode);
-        var childrenShareSameSemanticId = branchNode.Children.Select(child => child.SemanticId).Distinct().Count() == 1;
-        var childrenMatchParentSemanticId = branchNode.Children.All(child => child is SemanticLeafNode && child.SemanticId == branchNode.SemanticId);
-        var hasSingleChild = branchNode.Children.Count == 1;
+        ArgumentNullException.ThrowIfNull(branchNode);
 
-        if (isArrayType)
+        var analysis = AnalyzeBranchNode(branchNode);
+
+        return branchNode.DataType == DataType.Array
+            ? ConvertToJsonArray(branchNode, analysis)
+            : CreateJsonObjectFromChildren(branchNode.Children);
+    }
+
+    private static BranchAnalysis AnalyzeBranchNode(SemanticBranchNode branchNode)
+    {
+        var children = branchNode.Children.ToList();
+        
+        return new BranchAnalysis(
+            HasOnlyBranchChildren: children.All(c => c is SemanticBranchNode),
+            HasOnlyLeafChildren: children.All(c => c is SemanticLeafNode),
+            ChildrenShareSameSemanticId: children.Select(c => c.SemanticId).Distinct().Count() == 1,
+            HasSingleChild: children.Count == 1
+        );
+    }
+
+    private static JsonArray ConvertToJsonArray(SemanticBranchNode branchNode, BranchAnalysis analysis)
+    {
+        var jsonArray = new JsonArray();
+
+        if (ShouldCreateArrayOfBranchObjects(analysis))
         {
-            var jsonArray = new JsonArray();
-
-            if (ShouldCreateArrayOfBranchObjects(hasOnlyBranchChildren, childrenShareSameSemanticId, hasSingleChild))
-            {
-                foreach (var childBranch in branchNode.Children.Cast<SemanticBranchNode>())
-                {
-                    jsonArray.Add(ConvertTreeNodeToJson(childBranch));
-                }
-                return jsonArray;
-            }
-
-            if (ShouldCreateArrayOfLeafObjects(hasOnlyLeafChildren, childrenShareSameSemanticId, hasSingleChild))
-            {
-                foreach (var leafChild in branchNode.Children.Cast<SemanticLeafNode>())
-                {
-                    jsonArray.Add(CreateJsonObjectFromLeaf(leafChild));
-                }
-                return jsonArray;
-            }
-
-            var singleJsonObject = CreateJsonObjectFromChildren(branchNode.Children);
-            jsonArray.Add(singleJsonObject);
+            branchNode.Children
+                .Cast<SemanticBranchNode>()
+                .Select(ConvertTreeNodeToJson)
+                .ToList()
+                .ForEach(jsonArray.Add);
+            
             return jsonArray;
         }
 
-        return CreateJsonObjectFromChildren(branchNode.Children);
-    }
-
-    private static bool ShouldCreateArrayOfBranchObjects(bool hasOnlyBranches, bool sharesSameId, bool isSingle) => hasOnlyBranches && sharesSameId && !isSingle;
-
-    private static bool ShouldCreateArrayOfLeafObjects(bool hasOnlyLeaves, bool sharesSameId, bool isSingle) => hasOnlyLeaves && sharesSameId && !isSingle;
-
-    private static JsonObject CreateJsonObjectFromLeaf(SemanticLeafNode leafNode)
-    {
-        return new JsonObject
+        if (ShouldCreateArrayOfLeafObjects(analysis))
         {
-            [leafNode.SemanticId] = ConvertLeafToJsonValue(leafNode)
-        };
+            branchNode.Children
+                .Cast<SemanticLeafNode>()
+                .Select(CreateJsonObjectFromLeaf)
+                .ToList()
+                .ForEach(jsonArray.Add);
+            
+            return jsonArray;
+        }
+
+        jsonArray.Add(CreateJsonObjectFromChildren(branchNode.Children));
+        return jsonArray;
     }
+
+    private static bool ShouldCreateArrayOfBranchObjects(BranchAnalysis analysis) => analysis is { HasOnlyBranchChildren: true, ChildrenShareSameSemanticId: true, HasSingleChild: false };
+
+    private static bool ShouldCreateArrayOfLeafObjects(BranchAnalysis analysis) => analysis is { HasOnlyLeafChildren: true, ChildrenShareSameSemanticId: true, HasSingleChild: false };
+
+    private static JsonObject CreateJsonObjectFromLeaf(SemanticLeafNode leafNode) => new() { [leafNode.SemanticId] = ConvertLeafToJsonValue(leafNode) };
 
     private static JsonObject CreateJsonObjectFromChildren(IEnumerable<SemanticTreeNode> children)
     {
         var jsonObject = new JsonObject();
+        var groupedChildren = children.GroupBy(c => c.SemanticId);
 
-        var groupedBySemanticId = children.GroupBy(child => child.SemanticId);
-
-        foreach (var group in groupedBySemanticId)
+        foreach (var group in groupedChildren)
         {
             var convertedNodes = group.Select(ConvertTreeNodeToJson).ToList();
-            var nodeCount = convertedNodes.Count;
-            var allNodesAreArrays = convertedNodes.All(node => node is JsonArray);
-            var hasSingleNode = nodeCount == 1;
-
-            if (hasSingleNode)
-            {
-                jsonObject[group.Key] = convertedNodes[0];
-            }
-            else if (allNodesAreArrays)
-            {
-                jsonObject[group.Key] = MergeJsonArrays(convertedNodes);
-            }
-            else
-            {
-                jsonObject[group.Key] = WrapNodesInArray(convertedNodes);
-            }
+            jsonObject[group.Key] = DetermineJsonNodeStructure(convertedNodes);
         }
 
         return jsonObject;
     }
 
+    private static JsonNode DetermineJsonNodeStructure(List<JsonNode> convertedNodes)
+    {
+        return convertedNodes switch
+        {
+            { Count: 1 } => convertedNodes[0],
+            _ when convertedNodes.All(n => n is JsonArray) => MergeJsonArrays(convertedNodes),
+            _ => WrapNodesInArray(convertedNodes)
+        };
+    }
+
     private static JsonArray MergeJsonArrays(IEnumerable<JsonNode> arrayNodes)
     {
         var mergedArray = new JsonArray();
-
-        foreach (var arrayNode in arrayNodes.Cast<JsonArray>())
-        {
-            foreach (var element in arrayNode)
-            {
-                mergedArray.Add(element?.DeepClone());
-            }
-        }
+        
+        arrayNodes
+            .Cast<JsonArray>()
+            .SelectMany(arr => arr)
+            .Select(element => element?.DeepClone())
+            .ToList()
+            .ForEach(mergedArray.Add);
 
         return mergedArray;
     }
@@ -165,13 +174,20 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
     private static JsonArray WrapNodesInArray(IEnumerable<JsonNode> nodes)
     {
         var wrapperArray = new JsonArray();
-
-        foreach (var node in nodes)
-        {
-            wrapperArray.Add(node?.DeepClone());
-        }
+        
+        nodes
+            .Select(n => n?.DeepClone())
+            .ToList()
+            .ForEach(wrapperArray.Add);
 
         return wrapperArray;
     }
+
+    private record BranchAnalysis(
+        bool HasOnlyBranchChildren,
+        bool HasOnlyLeafChildren,
+        bool ChildrenShareSameSemanticId,
+        bool HasSingleChild
+    );
 }
 

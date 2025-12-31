@@ -55,7 +55,7 @@ COALESCE(
                                     (
                                         SELECT json_agg(
                                             json_build_object(
-                                                'Language', dv."Language",
+                                                'en', dv."en",
                                                 'DigitalFile', dv."DigitalFile",
                                                 'Version', dv."Version",
                                                 'StatusSetDate', dv."StatusSetDate",

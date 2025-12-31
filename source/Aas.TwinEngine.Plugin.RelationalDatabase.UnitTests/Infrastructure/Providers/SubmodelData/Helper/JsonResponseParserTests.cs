@@ -233,10 +233,10 @@ public class JsonResponseParserTests
         Assert.Equal(2, rootBranch.Children.Count);
 
         var firstItem = Assert.IsType<SemanticBranchNode>(rootBranch.Children[0]);
-        Assert.Equal($"items{IndexPrefix}00", firstItem.SemanticId);
+        Assert.Equal($"items{IndexPrefix}0", firstItem.SemanticId);
 
         var secondItem = Assert.IsType<SemanticBranchNode>(rootBranch.Children[1]);
-        Assert.Equal($"items{IndexPrefix}01", secondItem.SemanticId);
+        Assert.Equal($"items{IndexPrefix}1", secondItem.SemanticId);
     }
 
     [Fact]
@@ -258,9 +258,9 @@ public class JsonResponseParserTests
 
         var rootBranch = Assert.IsType<SemanticBranchNode>(result);
         Assert.Equal(3, rootBranch.Children.Count);
-        Assert.Equal($"items{IndexPrefix}00", rootBranch.Children[0].SemanticId);
-        Assert.Equal($"items{IndexPrefix}01", rootBranch.Children[1].SemanticId);
-        Assert.Equal($"items{IndexPrefix}02", rootBranch.Children[2].SemanticId);
+        Assert.Equal($"items{IndexPrefix}0", rootBranch.Children[0].SemanticId);
+        Assert.Equal($"items{IndexPrefix}1", rootBranch.Children[1].SemanticId);
+        Assert.Equal($"items{IndexPrefix}2", rootBranch.Children[2].SemanticId);
     }
 
     [Fact]
@@ -507,7 +507,7 @@ public class JsonResponseParserTests
         var result = parser.ParseJson(json);
 
         var rootBranch = Assert.IsType<SemanticBranchNode>(result);
-        Assert.Equal($"items{customPrefix}00", rootBranch.Children[0].SemanticId);
-        Assert.Equal($"items{customPrefix}01", rootBranch.Children[1].SemanticId);
+        Assert.Equal($"items{customPrefix}0", rootBranch.Children[0].SemanticId);
+        Assert.Equal($"items{customPrefix}1", rootBranch.Children[1].SemanticId);
     }
 }

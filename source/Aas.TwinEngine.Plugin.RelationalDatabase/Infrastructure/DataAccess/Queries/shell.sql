@@ -7,15 +7,15 @@ SELECT json_build_object(
             (
                 SELECT json_agg(
                     json_build_object(
-                        'Name', sai."KeyName",
-                        'Value', sai."KeyValue"
+                        'Name', sai."Name",
+                        'Value', sai."Value"
                     )
                 )
                 FROM "SpecificAssetIds" sai
-                WHERE sai."AssetID" = A."AssetID"
+                WHERE sai."AssetId" = A."Id"
             ),
             '[]'::json
         )
 )
 FROM "Asset" A
-WHERE A."AasId" = @aasId;
+WHERE A."AasId" = @AasId;

@@ -4,7 +4,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infra
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest;
 
 public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvider
 {
@@ -38,7 +38,6 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
                         .Select(sid => sid?.Trim())
                         .Where(sid => !string.IsNullOrWhiteSpace(sid))
                         .Distinct(StringComparer.Ordinal)];
-
         }
         catch (JsonException jex)
         {

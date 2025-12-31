@@ -100,15 +100,15 @@ public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonRes
 
     private void ProcessJsonArray(JsonElement arrayElement, SemanticBranchNode parentBranch, string? baseSemanticId = null)
     {
-        var arryLength = arrayElement.GetArrayLength();
+        var arrayLength = arrayElement.GetArrayLength();
         var semanticIdBase = baseSemanticId ?? parentBranch.SemanticId;
         var elementDataType = GetDataType(arrayElement.ValueKind);
 
-        if (arryLength > 1)
+        if (arrayLength > 1)
         {
-            for (var i = 0; i < arryLength; i++)
+            for (var i = 0; i < arrayLength; i++)
             {
-                var indexedSemanticId = $"{semanticIdBase}{_indexPrefix}{i:D2}";
+                var indexedSemanticId = $"{semanticIdBase}{_indexPrefix}{i}";
                 var arrayItemBranch = new SemanticBranchNode(indexedSemanticId, elementDataType);
                 ProcessJsonValue(arrayElement[i], arrayItemBranch);
                 parentBranch.AddChild(arrayItemBranch);
@@ -116,6 +116,7 @@ public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonRes
 
             return;
         }
+
         foreach (var item in arrayElement.EnumerateArray())
         {
             var arrayItemBranch = new SemanticBranchNode(semanticIdBase, elementDataType);

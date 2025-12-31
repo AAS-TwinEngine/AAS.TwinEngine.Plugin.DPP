@@ -15,7 +15,6 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
     ISubmodelDataProvider submodelDataProvider,
     ILogger<SubmodelDataService> logger) : ISubmodelDataService
 {
-
     public async Task<SemanticTreeNode> GetValuesBySemanticIds(JsonSchema jsonSchema, string submodelId, CancellationToken cancellationToken)
     {
         var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);

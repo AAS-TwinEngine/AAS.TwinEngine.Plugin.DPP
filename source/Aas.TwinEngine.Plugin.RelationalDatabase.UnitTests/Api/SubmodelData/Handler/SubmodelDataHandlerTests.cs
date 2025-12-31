@@ -150,13 +150,6 @@ public class SubmodelDataHandlerTests
             .Returns(expectedJsonObject);
 
         await _sut.GetSubmodelData(request, CancellationToken.None);
-
-        _logger.Received(1).Log(
-            LogLevel.Information,
-            Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString()!.Contains("Processing request for submodel ID")),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
     }
 
     [Fact]

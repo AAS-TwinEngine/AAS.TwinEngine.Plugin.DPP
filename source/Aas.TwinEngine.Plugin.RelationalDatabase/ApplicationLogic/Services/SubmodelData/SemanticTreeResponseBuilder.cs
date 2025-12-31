@@ -45,8 +45,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private SemanticTreeNode MapTreeNode(SemanticTreeNode request, SemanticTreeNode response)
     {
-        var baseId = StripIndexPrefix(request.SemanticId);
-        _ = _columnMapping.TryGetValue(baseId, out var columnName);
+        _ = _columnMapping.TryGetValue(request.SemanticId, out var columnName);
 
         return request switch
         {
@@ -60,14 +59,16 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
     {
         var value = string.Empty;
 
-        if (!string.IsNullOrEmpty(columnName))
+        if (string.IsNullOrEmpty(columnName))
         {
-            var matchingLeaf = FindMatchingLeafNodes(responseTree, columnName)
-                .OfType<SemanticLeafNode>()
-                .FirstOrDefault();
-
-            value = matchingLeaf?.Value ?? string.Empty;
+            return new SemanticLeafNode(requestLeaf.SemanticId, requestLeaf.DataType, value);
         }
+
+        var matchingLeaf = FindMatchingLeafNodes(responseTree, columnName)
+                           .OfType<SemanticLeafNode>()
+                           .FirstOrDefault();
+
+        value = matchingLeaf?.Value ?? string.Empty;
 
         return new SemanticLeafNode(requestLeaf.SemanticId, requestLeaf.DataType, value);
     }
@@ -134,7 +135,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private SemanticBranchNode CreateIndexedBranch(SemanticBranchNode source, int index)
     {
-        var indexedId = $"{source.SemanticId}{_indexPrefix}{index:00}";
+        var indexedId = $"{source.SemanticId}{_indexPrefix}{index:0}";
         return new SemanticBranchNode(indexedId, source.DataType);
     }
 
@@ -156,10 +157,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
     private List<SemanticBranchNode> FindMatchingBranchNodes(SemanticTreeNode root, string columnName)
     {
         var matches = new List<SemanticBranchNode>();
-
         if (root is SemanticBranchNode branchNode)
         {
-            var branchId = StripIndexPrefix(branchNode.SemanticId);
+            var branchId = columnName.Contains(_indexPrefix, StringComparison.OrdinalIgnoreCase) ? branchNode.SemanticId : StripIndexPrefix(branchNode.SemanticId);
             if (branchId.Equals(columnName, StringComparison.OrdinalIgnoreCase))
             {
                 matches.Add(branchNode);

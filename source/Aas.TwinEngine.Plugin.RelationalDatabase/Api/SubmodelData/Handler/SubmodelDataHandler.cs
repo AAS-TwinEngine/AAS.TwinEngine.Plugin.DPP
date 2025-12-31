@@ -2,10 +2,10 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
-
-using NJsonSchema.Validation;
+using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 
@@ -15,18 +15,51 @@ public class SubmodelDataHandler(
     IJsonSchemaValidator jsonSchemaValidator,
     ISemanticTreeHandler semanticTreeHandler) : ISubmodelDataHandler
 {
-    public async Task<JsonObject> GetSubmodelData(GetSubmodelDataRequest request, CancellationToken cancellationToken)
+    public Task<JsonObject> GetSubmodelData(GetSubmodelDataRequest request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Processing request for submodel ID: {SubmodelId}", request?.submodelId);
+        ArgumentNullException.ThrowIfNull(request);
 
-        var decodedSubmodelId = request?.submodelId.DecodeBase64(logger);
+        jsonSchemaValidator.ValidateRequestSchema(request.dataQuery);
 
-        jsonSchemaValidator.ValidateRequestSchema(request!.dataQuery);
+        return GetResourceByIdAsync(
+            request.submodelId,
+            "submodel-data",
+            async (decodedId) =>
+            {
+                var semanticTree = await submodelDataService.GetValuesBySemanticIds(
+                    request.dataQuery,
+                    decodedId,
+                    cancellationToken).ConfigureAwait(false);
 
-        var filledSemanticIds = await submodelDataService.GetValuesBySemanticIds(request.dataQuery, decodedSubmodelId!, cancellationToken).ConfigureAwait(false);
+                return semanticTree;
+            },
+            (semanticTree) => semanticTreeHandler.GetJson(semanticTree, request.dataQuery)
+        );
+    }
 
-        var result = semanticTreeHandler.GetJson(filledSemanticIds, request.dataQuery);
+    private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(
+        string? encodedId,
+        string resourceName,
+        Func<string, Task<TModel?>> fetchFunc,
+        Func<TModel, TDto> mapFunc)
+    {
+        var decodedId = encodedId?.DecodeBase64(logger);
+        logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, decodedId);
 
-        return result;
+        var result = await fetchFunc(decodedId!).ConfigureAwait(false);
+        ValidateResourceExists(result, resourceName, decodedId!);
+
+        return mapFunc(result!);
+    }
+
+    private void ValidateResourceExists<T>(T? result, string resourceName, string decodedId)
+    {
+        if (result is not null)
+        {
+            return;
+        }
+
+        logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
+        throw new NotFoundException();
     }
 }

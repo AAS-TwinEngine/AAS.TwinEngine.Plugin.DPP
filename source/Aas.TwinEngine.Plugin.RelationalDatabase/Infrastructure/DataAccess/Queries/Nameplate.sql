@@ -36,6 +36,7 @@ COALESCE(
                     (
                         SELECT json_agg(
                             json_build_object(
+                                'MarkingName', m."MarkingName",
                                 'DesignationOfCertificateOrApproval', m."DesignationOfCertificateOrApproval",
                                 'IssueDate', m."IssueDate",
                                 'ExpiryDate', m."ExpiryDate",
