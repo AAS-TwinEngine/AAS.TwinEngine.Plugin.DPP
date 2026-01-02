@@ -312,10 +312,6 @@
     "semanticId": [ "0112/2///61987#ABO100#002" ]
   },
   {
-    "column": "dbo.ContactInformations",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations" ]
-  },
-  {
     "column": "dbo.ContactInformation",
     "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation" ]
   },
@@ -338,10 +334,6 @@
   {
     "column": "dbo.IPCommunication",
     "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/" ]
-  },
-  {
-    "column": "dbo.Markings",
-    "semanticId": [ "0112/2///61360_7#AAS006#001" ]
   },
   {
     "column": "dbo.Marking",

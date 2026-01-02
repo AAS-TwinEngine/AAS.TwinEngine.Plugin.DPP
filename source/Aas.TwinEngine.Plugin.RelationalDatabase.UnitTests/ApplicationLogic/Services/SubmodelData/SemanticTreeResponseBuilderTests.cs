@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 
 using NSubstitute;
 
+using OpenTelemetry;
+
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.SubmodelData;
 
 public class SemanticTreeResponseBuilderTests
@@ -376,5 +378,181 @@ public class SemanticTreeResponseBuilderTests
 
         var branchResult = Assert.IsType<SemanticBranchNode>(result);
         Assert.Equal(DataType.Array, branchResult.DataType);
+    }
+
+    [Fact]
+    public void BuildResponse_WithNestedBRanchNode_Having_MultipleValues()
+    {
+        var rootBranch = new SemanticBranchNode("root", DataType.Object);
+        var requestBranch = new SemanticBranchNode("branch", DataType.Array);
+        var leaf1 = new SemanticLeafNode("leaf1", DataType.String, "value1");
+        var leaf2 = new SemanticLeafNode("leaf2", DataType.String, "value2");
+        var nestedBranch = new SemanticBranchNode("nestedBranch", DataType.Array);
+        nestedBranch.AddChild(leaf1);
+        requestBranch.AddChild(nestedBranch);
+        requestBranch.AddChild(leaf2);
+        rootBranch.AddChild(requestBranch);
+
+        var responseRootBranch = new SemanticBranchNode("root", DataType.Object);
+        var responseBranch1 = new SemanticBranchNode("branchCol_aastwinengine_0", DataType.Array);
+        var responseBranch2 = new SemanticBranchNode("branchCol_aastwinengine_1", DataType.Array);
+        var responseNestedBranch1 = new SemanticBranchNode("nestedBranchCol_aastwinengine_0", DataType.Array);
+        var responseNestedBranch2 = new SemanticBranchNode("nestedBranchCol_aastwinengine_1", DataType.Array);
+        var responseNestedBranch3 = new SemanticBranchNode("nestedBranchCol", DataType.Array);
+        var responseLeaf1 = new SemanticLeafNode("leaf1Col", DataType.String, "responseValue1");
+        var responseLeaf2 = new SemanticLeafNode("leaf2Col", DataType.String, "responseValue2");
+        
+        responseNestedBranch1.AddChild(responseLeaf1);
+        responseNestedBranch2.AddChild(responseLeaf1);
+        responseNestedBranch3.AddChild(responseLeaf1);
+        responseBranch1.AddChild(responseNestedBranch1);
+        responseBranch1.AddChild(responseNestedBranch2);
+        responseBranch2.AddChild(responseNestedBranch3);
+        responseBranch1.AddChild(responseLeaf2);
+        responseBranch2.AddChild(responseLeaf2);
+        responseRootBranch.AddChild(responseBranch1);
+        responseRootBranch.AddChild(responseBranch2);
+
+        var mapping = new Dictionary<string, string>
+        {
+            ["branch"] = "branchCol",
+            ["nestedBranch"] = "nestedBranchCol",
+            ["leaf1"] = "leaf1Col",
+            ["leaf2"] = "leaf2Col"
+        };
+
+        var result = _sut.BuildResponse(rootBranch, responseRootBranch, mapping);
+
+        var resultRoot = Assert.IsType<SemanticBranchNode>(result);
+        Assert.Equal("root", resultRoot.SemanticId);
+        Assert.Equal(2, resultRoot.Children.Count);
+        var branches = resultRoot.Children.Cast<SemanticBranchNode>().ToList();
+        Assert.Equal(2, branches.Count);
+        Assert.All(branches, b => Assert.Equal("branch", b.SemanticId));
+        var firstBranch = branches[0];
+        Assert.Equal(DataType.Array, firstBranch.DataType);
+        Assert.Equal(3, firstBranch.Children.Count); // leaf2 + 2 nestedBranches
+        var firstBranchLeaf2 = firstBranch.Children.OfType<SemanticLeafNode>().FirstOrDefault(l => l.SemanticId == "leaf2");
+        Assert.NotNull(firstBranchLeaf2);
+        Assert.Equal("responseValue2", firstBranchLeaf2.Value);
+        var firstBranchNestedBranches = firstBranch.Children.OfType<SemanticBranchNode>()
+            .Where(b => b.SemanticId == "nestedBranch").ToList();
+        Assert.Equal(2, firstBranchNestedBranches.Count);
+        var firstNestedBranch1 = firstBranchNestedBranches[0];
+        Assert.Equal(DataType.Array, firstNestedBranch1.DataType);
+        Assert.Single(firstNestedBranch1.Children);
+        var firstNestedBranch1Leaf = Assert.IsType<SemanticLeafNode>(firstNestedBranch1.Children.First());
+        Assert.Equal("leaf1", firstNestedBranch1Leaf.SemanticId);
+        Assert.Equal("responseValue1", firstNestedBranch1Leaf.Value);
+        var firstNestedBranch2 = firstBranchNestedBranches[1];
+        Assert.Equal(DataType.Array, firstNestedBranch2.DataType);
+        Assert.Single(firstNestedBranch2.Children);
+        var firstNestedBranch2Leaf = Assert.IsType<SemanticLeafNode>(firstNestedBranch2.Children.First());
+        Assert.Equal("leaf1", firstNestedBranch2Leaf.SemanticId);
+        Assert.Equal("responseValue1", firstNestedBranch2Leaf.Value);
+        var secondBranch = branches[1];
+        Assert.Equal(DataType.Array, secondBranch.DataType);
+        Assert.Equal(2, secondBranch.Children.Count); // leaf2 + 1 nestedBranch
+        var secondBranchLeaf2 = secondBranch.Children.OfType<SemanticLeafNode>().FirstOrDefault(l => l.SemanticId == "leaf2");
+        Assert.NotNull(secondBranchLeaf2);
+        Assert.Equal("responseValue2", secondBranchLeaf2.Value);
+
+        var secondBranchNestedBranches = secondBranch.Children.OfType<SemanticBranchNode>()
+            .Where(b => b.SemanticId == "nestedBranch").ToList();
+        Assert.Single(secondBranchNestedBranches);
+        var secondNestedBranch = secondBranchNestedBranches[0];
+        Assert.Equal(DataType.Array, secondNestedBranch.DataType);
+        Assert.Single(secondNestedBranch.Children);
+        var secondNestedBranchLeaf = Assert.IsType<SemanticLeafNode>(secondNestedBranch.Children.First());
+        Assert.Equal("leaf1", secondNestedBranchLeaf.SemanticId);
+        Assert.Equal("responseValue1", secondNestedBranchLeaf.Value);
+    }
+
+    [Fact]
+    public void BuildResponse_WithThreeLevelsOfNestedBranches_HandlesCorrectly()
+    {
+        // Request Structure:
+        // Root
+        //   └─ Products (Array)
+        //        └─ Categories (Array)
+        //             └─ Tags (Array)
+        //                  └─ Name (Leaf)
+        
+        var root = new SemanticBranchNode("root", DataType.Object);
+        var products = new SemanticBranchNode("products", DataType.Array);
+        var categories = new SemanticBranchNode("categories", DataType.Array);
+        var tags = new SemanticBranchNode("tags", DataType.Array);
+        var tagName = new SemanticLeafNode("tagName", DataType.String, "");
+        
+        tags.AddChild(tagName);
+        categories.AddChild(tags);
+        products.AddChild(categories);
+        root.AddChild(products);
+
+        // Response Structure:
+        // Root
+        //   ├─ Products[0]
+        //   │    ├─ Categories[0]
+        //   │    │    ├─ Tags[0] { Name: "Tag1-1-1" }
+        //   │    │    └─ Tags[1] { Name: "Tag1-1-2" }
+        //   │    └─ Categories[1]
+        //   │         └─ Tags[0] { Name: "Tag1-2-1" }
+        //   └─ Products[1]
+        //        └─ Categories[0]
+        //             └─ Tags[0] { Name: "Tag2-1-1" }
+        
+        var responseRoot = new SemanticBranchNode("root", DataType.Object);
+        
+        // Product 0
+        var responseProd0 = new SemanticBranchNode("productsCol_aastwinengine_0", DataType.Array);
+        var responseCat0_0 = new SemanticBranchNode("categoriesCol_aastwinengine_0", DataType.Array);
+        var responseTag0_0_0 = new SemanticBranchNode("tagsCol_aastwinengine_0", DataType.Array);
+        var responseTag0_0_1 = new SemanticBranchNode("tagsCol_aastwinengine_1", DataType.Array);
+        responseTag0_0_0.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag1-1-1"));
+        responseTag0_0_1.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag1-1-2"));
+        responseCat0_0.AddChild(responseTag0_0_0);
+        responseCat0_0.AddChild(responseTag0_0_1);
+        
+        var responseCat0_1 = new SemanticBranchNode("categoriesCol_aastwinengine_1", DataType.Array);
+        var responseTag0_1_0 = new SemanticBranchNode("tagsCol_aastwinengine_0", DataType.Array);
+        responseTag0_1_0.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag1-2-1"));
+        responseCat0_1.AddChild(responseTag0_1_0);
+        
+        responseProd0.AddChild(responseCat0_0);
+        responseProd0.AddChild(responseCat0_1);
+        
+        // Product 1
+        var responseProd1 = new SemanticBranchNode("productsCol_aastwinengine_1", DataType.Array);
+        var responseCat1_0 = new SemanticBranchNode("categoriesCol_aastwinengine_0", DataType.Array);
+        var responseTag1_0_0 = new SemanticBranchNode("tagsCol_aastwinengine_0", DataType.Array);
+        responseTag1_0_0.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag2-1-1"));
+        responseCat1_0.AddChild(responseTag1_0_0);
+        responseProd1.AddChild(responseCat1_0);
+        
+        responseRoot.AddChild(responseProd0);
+        responseRoot.AddChild(responseProd1);
+
+        var mapping = new Dictionary<string, string>
+        {
+            ["products"] = "productsCol",
+            ["categories"] = "categoriesCol",
+            ["tags"] = "tagsCol",
+            ["tagName"] = "tagNameCol"
+        };
+
+        var result = _sut.BuildResponse(root, responseRoot, mapping);
+
+        var resultRoot = Assert.IsType<SemanticBranchNode>(result);
+        Assert.Equal(2, resultRoot.Children.Count); // 2 Products
+        var product0 = resultRoot.Children.Cast<SemanticBranchNode>().ElementAt(0);
+        Assert.Equal(2, product0.Children.Count); // 2 Categories in Product 0
+        var category0_0 = product0.Children.Cast<SemanticBranchNode>().ElementAt(0);
+        Assert.Equal(2, category0_0.Children.Count); // 2 Tags in Category 0 of Product 0
+        var tag0_0_0 = category0_0.Children.Cast<SemanticBranchNode>().ElementAt(0);
+        var leafValue0_0_0 = Assert.IsType<SemanticLeafNode>(tag0_0_0.Children.First());
+        Assert.Equal("Tag1-1-1", leafValue0_0_0.Value);
+        var tag0_0_1 = category0_0.Children.Cast<SemanticBranchNode>().ElementAt(1);
+        var leafValue0_0_1 = Assert.IsType<SemanticLeafNode>(tag0_0_1.Children.First());
+        Assert.Equal("Tag1-1-2", leafValue0_0_1.Value);
     }
 }

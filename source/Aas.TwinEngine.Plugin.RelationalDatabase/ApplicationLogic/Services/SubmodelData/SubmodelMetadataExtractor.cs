@@ -19,13 +19,13 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         var productId = ExtractProductId(submodelId);
         var submodelName = ExtractSubmodelName(submodelId);
 
-        if (!Enum.TryParse<SubmodelName>(submodelName, ignoreCase: true, result: out var parsedSubmodelName))
+        if (Enum.TryParse<SubmodelName>(submodelName, ignoreCase: true, result: out var parsedSubmodelName))
         {
-            logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
-            throw new NotFoundException($"Submodel name '{submodelName}' is not recognized.");
+            return new SubmodelIdExtractionResult(productId, parsedSubmodelName);
         }
 
-        return new SubmodelIdExtractionResult(productId, parsedSubmodelName);
+        logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
+        throw new NotFoundException($"Submodel name '{submodelName}' is not recognized.");
     }
 
     private string ExtractProductId(string submodelId)
