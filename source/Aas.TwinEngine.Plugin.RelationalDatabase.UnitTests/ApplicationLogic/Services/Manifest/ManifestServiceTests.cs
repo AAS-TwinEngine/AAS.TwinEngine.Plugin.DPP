@@ -28,7 +28,7 @@ public class ManifestServiceTests
     [Fact]
     public void GetManifestData_ReturnsSemanticIds_And_MappedCapabilities()
     {
-        var result = _sut.GetManifestData(CancellationToken.None);
+        var result = _sut.GetManifestData();
 
         Assert.NotNull(result);
         Assert.NotNull(result.SupportedSemanticIds);
@@ -51,7 +51,7 @@ public class ManifestServiceTests
         _options.Value.Returns(new Capabilities { HasShellDescriptor = hasShellDescriptor, HasAssetInformation = hasAssetInformation });
         _sut = new ManifestService(_manifestProvider, _options);
 
-        var result = _sut.GetManifestData(CancellationToken.None);
+        var result = _sut.GetManifestData();
 
         Assert.NotNull(result);
         Assert.NotNull(result.Capabilities);
@@ -67,7 +67,7 @@ public class ManifestServiceTests
         _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false });
         _sut = new ManifestService(_manifestProvider, _options);
 
-        var result = _sut.GetManifestData(CancellationToken.None);
+        var result = _sut.GetManifestData();
 
         Assert.NotNull(result);
         Assert.Empty(result.SupportedSemanticIds);
@@ -82,7 +82,7 @@ public class ManifestServiceTests
         _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = false });
         _sut = new ManifestService(_manifestProvider, _options);
 
-        var ex = Assert.Throws<InternalDataProcessingException>(() => _sut.GetManifestData(CancellationToken.None));
+        var ex = Assert.Throws<InternalDataProcessingException>(() => _sut.GetManifestData());
         Assert.IsType<ResponseParsingException>(ex.InnerException);
     }
 
@@ -94,7 +94,7 @@ public class ManifestServiceTests
 
         _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false });
 
-        var result = _sut.GetManifestData(CancellationToken.None);
+        var result = _sut.GetManifestData();
 
         Assert.True(result.Capabilities.HasShellDescriptor);
         Assert.True(result.Capabilities.HasAssetInformation);
