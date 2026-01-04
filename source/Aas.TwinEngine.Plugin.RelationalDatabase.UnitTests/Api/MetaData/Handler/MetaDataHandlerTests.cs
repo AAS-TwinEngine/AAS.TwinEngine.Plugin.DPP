@@ -77,7 +77,7 @@ public class MetaDataHandlerTests
             .GetShellDescriptorsAsync(null, null, Arg.Any<CancellationToken>())
             .Returns(shellDescriptorsData);
 
-        var result = await _sut.GetShellDescriptors(null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptors(null!, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Single(result.Result!);
@@ -155,12 +155,12 @@ public class MetaDataHandlerTests
     [Fact]
     public async Task GetShellDescriptor_ThrowsNotFound_WhenIdentifierIsNull()
     {
-        var request = new GetShellDescriptorRequest(null);
+        var request = new GetShellDescriptorRequest(null!);
         _metaDataService
             .GetShellDescriptorAsync(null!, Arg.Any<CancellationToken>())
             .Returns((ShellDescriptorData)null!);
 
-        await Assert.ThrowsAsync<NotFoundException>(() =>
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sut.GetShellDescriptor(request, CancellationToken.None));
     }
 

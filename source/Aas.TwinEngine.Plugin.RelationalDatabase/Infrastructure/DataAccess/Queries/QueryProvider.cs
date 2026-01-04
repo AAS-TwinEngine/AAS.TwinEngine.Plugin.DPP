@@ -1,4 +1,6 @@
-﻿using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+
+using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
 
@@ -33,7 +35,7 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
         {
             logger.LogWarning("Invalid service name provided: {ServiceName}", serviceName);
 
-            throw new ArgumentException($"Invalid service name: {serviceName}", nameof(serviceName));
+            throw new InvalidUserInputException();
         }
     }
 }

@@ -13,15 +13,8 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = queryProvider.GetQuery("shells");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: shells");
-                throw new SqlQueryNotFoundException();
-            }
-
+            var sqlQuery = GetValidatedQuery("shells");
             var result = await metaDataProvider.GetShellDescriptorsAsync(sqlQuery, limit, cursor, cancellationToken).ConfigureAwait(false);
-
             return result!;
         }
         catch (ResourceNotFoundException)
@@ -34,12 +27,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = queryProvider.GetQuery("shell");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: shell");
-                throw new SqlQueryNotFoundException();
-            }
+            var sqlQuery = GetValidatedQuery("shell");
             var result = await metaDataProvider.GetShellDescriptorAsync(sqlQuery, aasIdentifier, cancellationToken).ConfigureAwait(false);
             return result!;
         }
@@ -53,12 +41,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = queryProvider.GetQuery("asset");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: asset");
-                throw new SqlQueryNotFoundException();
-            }
+            var sqlQuery = GetValidatedQuery("asset");
             var result = await metaDataProvider.GetAssetAsync(sqlQuery, assetIdentifier, cancellationToken).ConfigureAwait(false);
             return result!;
         }
@@ -66,5 +49,16 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
         {
             throw new MetaDataNotFoundException();
         }
+    }
+
+    private string GetValidatedQuery(string queryType)
+    {
+        var sqlQuery = queryProvider.GetQuery(queryType);
+        if (string.IsNullOrWhiteSpace(sqlQuery))
+        {
+            logger.LogError("SQL query not found for: {QueryType}", queryType);
+            throw new SqlQueryNotFoundException();
+        }
+        return sqlQuery;
     }
 }

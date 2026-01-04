@@ -1,8 +1,6 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
-using AAS.TwinEngine.DataEngine.ServiceConfiguration;
-
 using Asp.Versioning;
 
 using Serilog;

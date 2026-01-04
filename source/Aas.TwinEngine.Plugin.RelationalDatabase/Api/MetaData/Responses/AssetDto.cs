@@ -8,7 +8,7 @@ public class AssetDto
     public string? GlobalAssetId { get; set; }
 
     [JsonPropertyName("specificAssetIds")]
-    public List<SpecificAssetIdsDto>? SpecificAssetIds { get; set; }
+    public IList<SpecificAssetIdsDto>? SpecificAssetIds { get; init; }
 
     [JsonPropertyName("defaultThumbnail")]
     public DefaultThumbnailDto? DefaultThumbnail { get; set; }

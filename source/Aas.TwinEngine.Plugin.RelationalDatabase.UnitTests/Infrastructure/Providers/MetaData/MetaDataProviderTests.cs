@@ -7,7 +7,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.MetaData;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.MetaData;
 
 public class MetaDataProviderTests
 {
@@ -49,7 +49,7 @@ public class MetaDataProviderTests
             new()
             {
                 GlobalAssetId = "asset-1",
-                Id = null,
+                Id = null!,
                 IdShort = "Shell1",
                 SpecificAssetIds =
                 [
@@ -120,7 +120,7 @@ public class MetaDataProviderTests
         var item = new ShellDescriptorData
         {
             GlobalAssetId = "asset-1",
-            Id = null,
+            Id = null!,
             IdShort = "Shell1",
             SpecificAssetIds =
             [

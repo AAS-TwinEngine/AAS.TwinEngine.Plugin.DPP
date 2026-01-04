@@ -13,6 +13,8 @@ public static class ApplicationDependencyInjectionExtensions
 {
     public static void ConfigureApplication(this IServiceCollection services)
     {
+        ArgumentNullException.ThrowIfNull(services);
+
         _ = services.AddExceptionHandler<GlobalExceptionHandler>();
         _ = services.AddProblemDetails();
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.Queries;
 
@@ -84,8 +85,7 @@ public class QueryProviderTests : IDisposable
     public void GetQuery_WhenServiceNameIsInvalid_ThrowsArgumentException(string? serviceName)
     {
         // Act & Assert
-        var ex = Assert.Throws<ArgumentException>(() => _sut.GetQuery(serviceName!));
-        Assert.Equal("serviceName", ex.ParamName);
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.GetQuery(serviceName!));
     }
 
     #endregion

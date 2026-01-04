@@ -2,26 +2,25 @@
 using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
 using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
-using Provider = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider.ManifestProvider;
-
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.ManifestProvider;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.Manifest;
 
 public class ManifestProviderTests
 {
-    private readonly ILogger<Provider> _logger;
-    private Provider _sut;
+    private readonly ILogger<ManifestProvider> _logger;
+    private ManifestProvider _sut;
 
     public ManifestProviderTests()
     {
-        _logger = Substitute.For<ILogger<Provider>>();
+        _logger = Substitute.For<ILogger<ManifestProvider>>();
         MappingData.MappingJson = CreateJsonDocument("[]");
-        _sut = new Provider(_logger);
+        _sut = new ManifestProvider(_logger);
     }
 
     [Fact]
@@ -40,7 +39,7 @@ public class ManifestProviderTests
                                                                  { "Column": "dbo.W.Q.E", "SemanticId": null }
                                                              ]
                                                      """);
-        _sut = new Provider(_logger);
+        _sut = new ManifestProvider(_logger);
 
         var result = _sut.GetSupportedSemanticIds();
 
@@ -56,7 +55,7 @@ public class ManifestProviderTests
     public void GetSupportedSemanticIds_WhenMappingEmpty_ReturnsEmpty()
     {
         MappingData.MappingJson = CreateJsonDocument("[]");
-        _sut = new Provider(_logger);
+        _sut = new ManifestProvider(_logger);
 
         var result = _sut.GetSupportedSemanticIds();
 
@@ -68,7 +67,7 @@ public class ManifestProviderTests
     public void GetSupportedSemanticIds_WhenJsonIsNotFormated_ThrowsResponseParsingException_AndLogsError()
     {
         MappingData.MappingJson = CreateInvalidJsonDocumentForDeserialization();
-        _sut = new Provider(_logger);
+        _sut = new ManifestProvider(_logger);
 
         Assert.Throws<ResponseParsingException>(() => _sut.GetSupportedSemanticIds());
         _logger.Received(1).Log(
@@ -90,8 +89,7 @@ public class ManifestProviderTests
     [InlineData("one.two.three", true)]
     public void IsLeafColumnIdentifier_Method_Gives_ResponseCorrectly(string value, bool expected)
     {
-        var method = typeof(Provider)
-            .GetMethod("IsLeafColumnIdentifier", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        var method = typeof(ManifestProvider).GetMethod("IsLeafColumnIdentifier", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
 
         var actual = (bool)method!.Invoke(null, [value])!;
 

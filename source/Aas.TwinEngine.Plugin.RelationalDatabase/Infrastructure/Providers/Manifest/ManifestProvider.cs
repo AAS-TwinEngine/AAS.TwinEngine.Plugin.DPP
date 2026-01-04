@@ -4,7 +4,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infra
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.ManifestProvider;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest;
 
 public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvider
 {
@@ -35,8 +35,8 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
                         && m!.SemanticId is not null
                         && m!.SemanticId.Count > 0)
                         .SelectMany(m => m!.SemanticId)
-                        .Select(sid => sid?.Trim())
                         .Where(sid => !string.IsNullOrWhiteSpace(sid))
+                        .Select(sid => sid!.Trim())
                         .Distinct(StringComparer.Ordinal)];
 
         }

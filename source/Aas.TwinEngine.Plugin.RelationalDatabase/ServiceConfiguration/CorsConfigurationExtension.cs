@@ -2,7 +2,7 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
-namespace AAS.TwinEngine.DataEngine.ServiceConfiguration;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 [ExcludeFromCodeCoverage]
 internal static class CorsConfigurationExtension

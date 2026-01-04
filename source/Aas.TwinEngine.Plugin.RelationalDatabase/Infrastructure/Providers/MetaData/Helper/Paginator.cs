@@ -15,7 +15,8 @@ public static class Paginator
         if (!string.IsNullOrEmpty(cursor))
         {
             var lastId = cursor.DecodeBase64();
-            startIndex = allItems.ToList().FindIndex(item => getId(item) == lastId) + 1;
+            var foundIndex = allItems.ToList().FindIndex(item => getId(item) == lastId);
+            startIndex = foundIndex >= 0 ? foundIndex + 1 : 0;
         }
 
         var pageSize = limit ?? 100;
