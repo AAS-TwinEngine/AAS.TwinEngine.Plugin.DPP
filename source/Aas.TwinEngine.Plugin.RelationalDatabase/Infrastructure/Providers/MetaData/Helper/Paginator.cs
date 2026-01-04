@@ -24,7 +24,8 @@ public static class Paginator
 
         string? nextCursor = null;
 
-        if (limit == null && cursor == null && pagedItems.Count < pageSize)
+        var isFirstPageWithNoMoreResults = limit == null && cursor == null && pagedItems.Count < pageSize;
+        if (isFirstPageWithNoMoreResults)
         {
             return (pagedItems, new PagingMetaData { Cursor = nextCursor });
         }

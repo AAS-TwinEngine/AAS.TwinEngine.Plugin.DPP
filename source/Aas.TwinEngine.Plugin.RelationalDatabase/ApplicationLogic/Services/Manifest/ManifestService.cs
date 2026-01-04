@@ -13,7 +13,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
     private readonly bool _hasShellDescriptor = capabilities.Value.HasShellDescriptor;
     private readonly bool _hasAssetInformation = capabilities.Value.HasAssetInformation;
 
-    public ManifestData GetManifestData(CancellationToken cancellationToken)
+    public ManifestData GetManifestData()
     {
         try
         {

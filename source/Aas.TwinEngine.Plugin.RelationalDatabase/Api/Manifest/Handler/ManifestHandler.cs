@@ -8,10 +8,10 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 public class ManifestHandler(ILogger<ManifestHandler> logger,
                              IManifestService manifestService) : IManifestHandler
 {
-    public Task<ManifestDto> GetManifestData(CancellationToken cancellationToken)
+    public Task<ManifestDto> GetManifestData()
         => GetResource(
                             "manifest",
-                            () => manifestService.GetManifestData(cancellationToken)!,
+                            () => manifestService.GetManifestData()!,
                             manifest => manifest.ToDto()
                            );
 

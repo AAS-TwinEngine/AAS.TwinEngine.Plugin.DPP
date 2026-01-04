@@ -2,6 +2,6 @@
 
 public class MappingItem
 {
-    public string Column { get; set; } = null!;
+    public string Column { get; init; } = null!;
     public IList<string> SemanticId { get; init; } = null!;
 }

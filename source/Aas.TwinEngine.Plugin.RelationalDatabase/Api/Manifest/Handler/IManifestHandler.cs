@@ -4,5 +4,5 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 
 public interface IManifestHandler
 {
-    Task<ManifestDto> GetManifestData(CancellationToken cancellationToken);
+    Task<ManifestDto> GetManifestData();
 }

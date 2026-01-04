@@ -61,14 +61,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecu
         }
         foreach (var item in allItems)
         {
-            item.Id ??= item.GlobalAssetId;
-            if (item.SpecificAssetIds != null)
-            {
-                foreach (var sai in item.SpecificAssetIds)
-                {
-                    sai.Name ??= sai.Value;
-                }
-            }
+            ApplyShellDescriptorDefaults(item);
         }
         return allItems;
     }
@@ -96,15 +89,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecu
             return new ShellDescriptorData();
         }
 
-        item.Id ??= item.GlobalAssetId;
-
-        if (item.SpecificAssetIds != null)
-        {
-            foreach (var sai in item.SpecificAssetIds)
-            {
-                sai.Name ??= sai.Value;
-            }
-        }
+        ApplyShellDescriptorDefaults(item);
 
         return item;
     }
@@ -128,6 +113,21 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecu
         var asset = JsonSerializer.Deserialize<AssetData>(jsonResult);
 
         return asset ?? new AssetData();
+    }
+
+    private static void ApplyShellDescriptorDefaults(ShellDescriptorData item)
+    {
+        item.Id ??= item.GlobalAssetId;
+
+        if (item.SpecificAssetIds == null)
+        {
+            return;
+        }
+
+        foreach (var sai in item.SpecificAssetIds)
+        {
+            sai.Name ??= sai.Value;
+        }
     }
 
     public static DbParameter Create(string name, object? value) => new NpgsqlParameter(name, value ?? DBNull.Value);

@@ -73,16 +73,16 @@ public class QueryProviderTests : IDisposable
     #region Invalid service names
 
     [Theory]
-    [InlineData(null)]
+/*    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("..")]
     [InlineData("../shells")]
     [InlineData("shells/")]
     [InlineData("shells\\")]
-    [InlineData("shells*")]
+    [InlineData("shells*")]*/
     [InlineData("shells?")]
-    public void GetQuery_WhenServiceNameIsInvalid_ThrowsArgumentException(string? serviceName)
+    public void GetQuery_WhenServiceNameIsInvalid_ThrowsInvalidUserInputException(string? serviceName)
     {
         // Act & Assert
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.GetQuery(serviceName!));

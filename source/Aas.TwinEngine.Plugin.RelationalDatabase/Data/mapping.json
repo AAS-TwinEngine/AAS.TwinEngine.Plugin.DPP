@@ -197,7 +197,7 @@
   },
   {
     "column": "dbo.IPCommunication.TypeOfCommunication",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
   },
   {
     "column": "dbo.IPCommunication.AvailableTime_en",
