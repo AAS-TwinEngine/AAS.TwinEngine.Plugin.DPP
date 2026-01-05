@@ -8,6 +8,8 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
 {
     private readonly string _basePath = Path.Combine(env.ContentRootPath, "Infrastructure", "DataAccess", "Queries");
 
+    private const int MaxServiceNameLength = 100;
+
     public string? GetQuery(string serviceName)
     {
         ValidateServiceName(serviceName);
@@ -28,14 +30,32 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
     private void ValidateServiceName(string serviceName)
     {
         if (string.IsNullOrWhiteSpace(serviceName) ||
+            serviceName.Length > MaxServiceNameLength ||
             serviceName.Contains("..", StringComparison.Ordinal) ||
             serviceName.Contains('/', StringComparison.Ordinal) ||
             serviceName.Contains('\\', StringComparison.Ordinal) ||
-            serviceName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            ContainsInvalidServiceNameCharacters(serviceName))
         {
             logger.LogWarning("Invalid service name provided: {ServiceName}", serviceName);
 
             throw new InvalidUserInputException();
         }
+    }
+
+    private static bool ContainsInvalidServiceNameCharacters(string serviceName)
+    {
+        // Explicit, cross-platform whitelist so behavior is consistent across Windows and Linux runners.
+        // Allowed: letters, digits, underscore, hyphen.
+        foreach (var c in serviceName)
+        {
+            if (char.IsLetterOrDigit(c) || c is '_' or '-')
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

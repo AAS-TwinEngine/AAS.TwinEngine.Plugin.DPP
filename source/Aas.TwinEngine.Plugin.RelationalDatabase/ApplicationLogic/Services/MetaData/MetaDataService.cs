@@ -1,5 +1,6 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Enums;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
@@ -13,7 +14,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = GetValidatedQuery("shells");
+            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shells);
             var result = await metaDataProvider.GetShellDescriptorsAsync(sqlQuery, limit, cursor, cancellationToken).ConfigureAwait(false);
             return result!;
         }
@@ -27,7 +28,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = GetValidatedQuery("shell");
+            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shell);
             var result = await metaDataProvider.GetShellDescriptorAsync(sqlQuery, aasIdentifier, cancellationToken).ConfigureAwait(false);
             return result!;
         }
@@ -41,7 +42,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         try
         {
-            var sqlQuery = GetValidatedQuery("asset");
+            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Asset);
             var result = await metaDataProvider.GetAssetAsync(sqlQuery, assetIdentifier, cancellationToken).ConfigureAwait(false);
             return result!;
         }
