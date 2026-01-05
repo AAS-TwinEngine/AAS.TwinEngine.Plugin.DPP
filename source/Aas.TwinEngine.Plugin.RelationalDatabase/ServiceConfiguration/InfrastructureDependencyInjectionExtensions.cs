@@ -31,7 +31,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddScoped<MappingDataInitializer>();
 
         _ = services.AddScoped<IManifestProvider, ManifestProvider>();
-        _ = services.AddScoped<ISqlCommandExecutor, SqlCommandExecutor>();
+        _ = services.AddScoped<IQueryExecutorr, QueryExecutor>();
         _ = services.AddScoped<IMetaDataProvider, MetaDataProvider>();
     }
 }

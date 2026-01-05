@@ -13,13 +13,13 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Prov
 
 public class MetaDataProviderTests
 {
-    private readonly ISqlCommandExecutor _sqlExecutor;
+    private readonly IQueryExecutorr _sqlExecutor;
     private readonly ILogger<MetaDataProvider> _logger;
     private readonly MetaDataProvider _sut;
 
     public MetaDataProviderTests()
     {
-        _sqlExecutor = Substitute.For<ISqlCommandExecutor>();
+        _sqlExecutor = Substitute.For<IQueryExecutorr>();
         _logger = Substitute.For<ILogger<MetaDataProvider>>();
 
         _sut = new MetaDataProvider(_logger, _sqlExecutor);

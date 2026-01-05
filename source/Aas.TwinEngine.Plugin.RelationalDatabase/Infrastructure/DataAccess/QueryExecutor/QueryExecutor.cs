@@ -5,7 +5,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Connect
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 
-public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectionFactory connectionFactory) : ISqlCommandExecutor
+public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory connectionFactory) : IQueryExecutorr
 {
     private const int DefaultCommandTimeout = 30;
 

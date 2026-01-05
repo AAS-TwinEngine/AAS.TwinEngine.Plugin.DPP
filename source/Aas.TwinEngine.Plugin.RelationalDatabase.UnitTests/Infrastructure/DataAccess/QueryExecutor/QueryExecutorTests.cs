@@ -11,29 +11,29 @@ using NSubstitute.ExceptionExtensions;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.SqlExecutor;
 
-public class SqlCommandExecutorTests
+public class QueryExecutorTests
 {
     private readonly IDbConnectionFactory _connectionFactory;
     private readonly DbConnection _connection;
     private readonly DbCommand _command;
     private readonly DbDataReader _reader;
-    private readonly ILogger<SqlCommandExecutor> _logger;
-    private readonly SqlCommandExecutor _sut;
+    private readonly ILogger<QueryExecutor> _logger;
+    private readonly QueryExecutor _sut;
 
-    public SqlCommandExecutorTests()
+    public QueryExecutorTests()
     {
         _connectionFactory = Substitute.For<IDbConnectionFactory>();
         _connection = Substitute.For<DbConnection>();
         _command = Substitute.For<DbCommand>();
         _reader = Substitute.For<DbDataReader>();
-        _logger = Substitute.For<ILogger<SqlCommandExecutor>>();
+        _logger = Substitute.For<ILogger<QueryExecutor>>();
 
         _connectionFactory.CreateConnection().Returns(_connection);
         _connection.CreateCommand().Returns(_command);
         _command.ExecuteReaderAsync(Arg.Any<CancellationToken>())
                 .Returns(_reader);
 
-        _sut = new SqlCommandExecutor(_logger, _connectionFactory);
+        _sut = new QueryExecutor(_logger, _connectionFactory);
     }
 
     #region ExecuteQueryAsync (no parameters)

@@ -10,11 +10,11 @@ using Npgsql;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
-public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecutor sqlCommandExecutor) : IMetaDataProvider
+public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutorr queryExecutor) : IMetaDataProvider
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(string query, int? limit, string? cursor, CancellationToken cancellationToken)
     {
-        var jsonResult = await sqlCommandExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        var jsonResult = await queryExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
@@ -73,7 +73,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecu
             Create("@aasId", aasIdentifier)
         };
 
-        var jsonResult = await sqlCommandExecutor.ExecuteQueryAsync(query, parameters, cancellationToken).ConfigureAwait(false);
+        var jsonResult = await queryExecutor.ExecuteQueryAsync(query, parameters, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
@@ -101,7 +101,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, ISqlCommandExecu
             Create("@aasId", assetIdentifier)
         };
 
-        var jsonResult = await sqlCommandExecutor.ExecuteQueryAsync(query, parameters, cancellationToken).ConfigureAwait(false);
+        var jsonResult = await queryExecutor.ExecuteQueryAsync(query, parameters, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {

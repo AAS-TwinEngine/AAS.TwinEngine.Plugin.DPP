@@ -2,7 +2,7 @@
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 
-public interface ISqlCommandExecutor
+public interface IQueryExecutorr
 {
     Task<string?> ExecuteQueryAsync(string query, CancellationToken cancellationToken);
 
