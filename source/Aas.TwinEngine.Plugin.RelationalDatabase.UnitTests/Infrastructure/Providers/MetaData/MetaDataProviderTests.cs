@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
 using Microsoft.Extensions.Logging;
@@ -13,13 +13,13 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Prov
 
 public class MetaDataProviderTests
 {
-    private readonly IQueryExecutorr _sqlExecutor;
+    private readonly IQueryExecutor _sqlExecutor;
     private readonly ILogger<MetaDataProvider> _logger;
     private readonly MetaDataProvider _sut;
 
     public MetaDataProviderTests()
     {
-        _sqlExecutor = Substitute.For<IQueryExecutorr>();
+        _sqlExecutor = Substitute.For<IQueryExecutor>();
         _logger = Substitute.For<ILogger<MetaDataProvider>>();
 
         _sut = new MetaDataProvider(_logger, _sqlExecutor);

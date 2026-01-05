@@ -3,23 +3,21 @@ using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
 using Npgsql;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
-public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutorr queryExecutor) : IMetaDataProvider
+public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
-    public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(string query, int? limit, string? cursor, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, CancellationToken cancellationToken)
     {
         var jsonResult = await queryExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogWarning("Query returned empty result: {QueryName}", query);
-
             return new ShellDescriptorsData
             {
                 PagingMetaData = new PagingMetaData { Cursor = null },
@@ -59,14 +57,16 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutorr 
         {
             return null;
         }
+
         foreach (var item in allItems)
         {
             ApplyShellDescriptorDefaults(item);
         }
+
         return allItems;
     }
 
-    public async Task<ShellDescriptorData> GetShellDescriptorAsync(string query, string aasIdentifier, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorData?> GetShellDescriptorAsync(string query, string aasIdentifier, CancellationToken cancellationToken)
     {
         var parameters = new List<DbParameter>
         {
@@ -94,7 +94,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutorr 
         return item;
     }
 
-    public async Task<AssetData> GetAssetAsync(string query, string assetIdentifier, CancellationToken cancellationToken)
+    public async Task<AssetData?> GetAssetAsync(string query, string assetIdentifier, CancellationToken cancellationToken)
     {
         var parameters = new List<DbParameter>
         {

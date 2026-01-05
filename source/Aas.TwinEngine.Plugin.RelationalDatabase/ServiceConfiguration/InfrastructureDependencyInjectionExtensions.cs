@@ -4,7 +4,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaDat
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Manifest;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
@@ -31,7 +31,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddScoped<MappingDataInitializer>();
 
         _ = services.AddScoped<IManifestProvider, ManifestProvider>();
-        _ = services.AddScoped<IQueryExecutorr, QueryExecutor>();
+        _ = services.AddScoped<IQueryExecutor, QueryExecutor>();
         _ = services.AddScoped<IMetaDataProvider, MetaDataProvider>();
     }
 }

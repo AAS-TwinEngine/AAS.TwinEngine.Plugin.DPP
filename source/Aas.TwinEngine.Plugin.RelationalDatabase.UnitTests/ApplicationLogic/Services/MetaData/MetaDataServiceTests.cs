@@ -1,5 +1,4 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
@@ -7,11 +6,10 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using Microsoft.Extensions.Logging;
 
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 using IQueryProvider = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 
-namespace AAS.TwinEngine.DataEngine.UnitTests.ApplicationLogic.Services.MetaData;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.MetaData;
 
 public class MetaDataServiceTests
 {
@@ -67,7 +65,7 @@ public class MetaDataServiceTests
     }
 
     [Fact]
-    public async Task GetShellDescriptorsAsync_WhenResourceNotFound_ThrowsShellMetaDataNotFoundException()
+    public async Task GetShellDescriptorsAsync_ShellDescriptorsIsNull_ThrowsShellMetaDataNotFoundException()
     {
         // Arrange
         var sql = "SELECT * FROM shells";
@@ -75,7 +73,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("shells").Returns(sql);
         _metaDataProvider
             .GetShellDescriptorsAsync(sql, null, null, Arg.Any<CancellationToken>())
-            .Throws(new ResourceNotFoundException());
+            .Returns(Task.FromResult<ShellDescriptorsData?>(null));
 
         // Act & Assert
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
@@ -123,7 +121,7 @@ public class MetaDataServiceTests
     }
 
     [Fact]
-    public async Task GetShellDescriptorAsync_WhenResourceNotFound_ThrowsShellMetaDataNotFoundException()
+    public async Task GetShellDescriptorAsync_WhenShellDescriptorDataIsNull_ThrowsShellMetaDataNotFoundException()
     {
         // Arrange
         var sql = "SELECT * FROM shell";
@@ -131,7 +129,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("shell").Returns(sql);
         _metaDataProvider
             .GetShellDescriptorAsync(sql, "aas-1", Arg.Any<CancellationToken>())
-            .Throws(new ResourceNotFoundException());
+            .Returns(Task.FromResult<ShellDescriptorData?>(null));
 
         // Act & Assert
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
@@ -177,7 +175,7 @@ public class MetaDataServiceTests
     }
 
     [Fact]
-    public async Task GetAssetAsync_WhenResourceNotFound_ThrowsMetaDataNotFoundException()
+    public async Task GetAssetAsync_WhenAssetDataIsNull_ThrowsMetaDataNotFoundException()
     {
         // Arrange
         var sql = "SELECT * FROM asset";
@@ -185,7 +183,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("asset").Returns(sql);
         _metaDataProvider
             .GetAssetAsync(sql, "asset-1", Arg.Any<CancellationToken>())
-            .Throws(new ResourceNotFoundException());
+            .Returns((AssetData?)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<AssetMetaDataNotFoundException>(() =>

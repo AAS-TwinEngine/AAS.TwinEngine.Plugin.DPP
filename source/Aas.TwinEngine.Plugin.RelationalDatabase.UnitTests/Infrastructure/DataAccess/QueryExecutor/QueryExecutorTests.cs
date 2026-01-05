@@ -2,14 +2,15 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
 
 using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.SqlExecutor;
+using Executor = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor.QueryExecutor;
+
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.QueryExecutor;
 
 public class QueryExecutorTests
 {
@@ -17,8 +18,8 @@ public class QueryExecutorTests
     private readonly DbConnection _connection;
     private readonly DbCommand _command;
     private readonly DbDataReader _reader;
-    private readonly ILogger<QueryExecutor> _logger;
-    private readonly QueryExecutor _sut;
+    private readonly ILogger<Executor> _logger;
+    private readonly RelationalDatabase.Infrastructure.DataAccess.QueryExecutor.QueryExecutor _sut;
 
     public QueryExecutorTests()
     {
@@ -26,14 +27,14 @@ public class QueryExecutorTests
         _connection = Substitute.For<DbConnection>();
         _command = Substitute.For<DbCommand>();
         _reader = Substitute.For<DbDataReader>();
-        _logger = Substitute.For<ILogger<QueryExecutor>>();
+        _logger = Substitute.For<ILogger<Executor>>();
 
         _connectionFactory.CreateConnection().Returns(_connection);
         _connection.CreateCommand().Returns(_command);
         _command.ExecuteReaderAsync(Arg.Any<CancellationToken>())
                 .Returns(_reader);
 
-        _sut = new QueryExecutor(_logger, _connectionFactory);
+        _sut = new Executor(_logger, _connectionFactory);
     }
 
     #region ExecuteQueryAsync (no parameters)

@@ -29,15 +29,9 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
 
     private void ValidateServiceName(string serviceName)
     {
-        if (string.IsNullOrWhiteSpace(serviceName) ||
-            serviceName.Length > MaxServiceNameLength ||
-            serviceName.Contains("..", StringComparison.Ordinal) ||
-            serviceName.Contains('/', StringComparison.Ordinal) ||
-            serviceName.Contains('\\', StringComparison.Ordinal) ||
-            ContainsInvalidServiceNameCharacters(serviceName))
+        if (string.IsNullOrWhiteSpace(serviceName) || serviceName.Length > MaxServiceNameLength || ContainsInvalidServiceNameCharacters(serviceName))
         {
             logger.LogWarning("Invalid service name provided: {ServiceName}", serviceName);
-
             throw new InvalidUserInputException();
         }
     }

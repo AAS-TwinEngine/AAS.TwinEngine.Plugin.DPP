@@ -12,44 +12,41 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, CancellationToken cancellationToken)
     {
-        try
+        var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shells);
+        var result = await metaDataProvider.GetShellDescriptorsAsync(sqlQuery, limit, cursor, cancellationToken).ConfigureAwait(false);
+        if (result?.Result != null)
         {
-            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shells);
-            var result = await metaDataProvider.GetShellDescriptorsAsync(sqlQuery, limit, cursor, cancellationToken).ConfigureAwait(false);
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
-        {
-            throw new ShellMetaDataNotFoundException();
-        }
+
+        logger.LogError("Shell descriptors not found for limit: {Limit}, cursor: {Cursor}", limit, cursor);
+        throw new ShellMetaDataNotFoundException();
     }
 
     public async Task<ShellDescriptorData> GetShellDescriptorAsync(string aasIdentifier, CancellationToken cancellationToken)
     {
-        try
+        var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shell);
+        var result = await metaDataProvider.GetShellDescriptorAsync(sqlQuery, aasIdentifier, cancellationToken).ConfigureAwait(false);
+        if (result != null)
         {
-            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shell);
-            var result = await metaDataProvider.GetShellDescriptorAsync(sqlQuery, aasIdentifier, cancellationToken).ConfigureAwait(false);
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
-        {
-            throw new ShellMetaDataNotFoundException();
-        }
+
+        logger.LogError("Shell descriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
+        throw new ShellMetaDataNotFoundException();
     }
 
     public async Task<AssetData> GetAssetAsync(string assetIdentifier, CancellationToken cancellationToken)
     {
-        try
+        var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Asset);
+        var result = await metaDataProvider.GetAssetAsync(sqlQuery, assetIdentifier, cancellationToken).ConfigureAwait(false);
+        if (result != null)
         {
-            var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Asset);
-            var result = await metaDataProvider.GetAssetAsync(sqlQuery, assetIdentifier, cancellationToken).ConfigureAwait(false);
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
-        {
-            throw new AssetMetaDataNotFoundException();
-        }
+
+        logger.LogError("Asset not found for Asset Identifier: {AssetIdentifier}", assetIdentifier);
+        throw new AssetMetaDataNotFoundException();
     }
 
     private string GetValidatedQuery(string queryType)
@@ -60,6 +57,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
             logger.LogError("SQL query not found for: {QueryType}", queryType);
             throw new SqlQueryNotAvailableException();
         }
+
         return sqlQuery;
     }
 }

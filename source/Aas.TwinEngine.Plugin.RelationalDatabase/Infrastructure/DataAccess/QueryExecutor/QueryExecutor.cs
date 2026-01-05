@@ -3,9 +3,9 @@
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
-public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory connectionFactory) : IQueryExecutorr
+public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory connectionFactory) : IQueryExecutor
 {
     private const int DefaultCommandTimeout = 30;
 
