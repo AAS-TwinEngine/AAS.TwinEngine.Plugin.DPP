@@ -12,7 +12,6 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, CancellationToken cancellationToken)
     {
-        throw new MetaDataNotFoundException();
         try
         {
             var sqlQuery = GetValidatedQuery(MetaDataEndpoints.Shells);
