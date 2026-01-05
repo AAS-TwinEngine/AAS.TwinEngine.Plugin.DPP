@@ -62,12 +62,12 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("shells").Returns((string?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<SqlQueryNotFoundException>(() =>
+        await Assert.ThrowsAsync<SqlQueryNotAvailableException>(() =>
             _sut.GetShellDescriptorsAsync(null, null, CancellationToken.None));
     }
 
     [Fact]
-    public async Task GetShellDescriptorsAsync_WhenResourceNotFound_ThrowsMetaDataNotFoundException()
+    public async Task GetShellDescriptorsAsync_WhenResourceNotFound_ThrowsShellMetaDataNotFoundException()
     {
         // Arrange
         var sql = "SELECT * FROM shells";
@@ -78,7 +78,7 @@ public class MetaDataServiceTests
             .Throws(new ResourceNotFoundException());
 
         // Act & Assert
-        await Assert.ThrowsAsync<MetaDataNotFoundException>(() =>
+        await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
             _sut.GetShellDescriptorsAsync(null, null, CancellationToken.None));
     }
 
@@ -118,12 +118,12 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("shell").Returns((string?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<SqlQueryNotFoundException>(() =>
+        await Assert.ThrowsAsync<SqlQueryNotAvailableException>(() =>
             _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None));
     }
 
     [Fact]
-    public async Task GetShellDescriptorAsync_WhenResourceNotFound_ThrowsMetaDataNotFoundException()
+    public async Task GetShellDescriptorAsync_WhenResourceNotFound_ThrowsShellMetaDataNotFoundException()
     {
         // Arrange
         var sql = "SELECT * FROM shell";
@@ -134,7 +134,7 @@ public class MetaDataServiceTests
             .Throws(new ResourceNotFoundException());
 
         // Act & Assert
-        await Assert.ThrowsAsync<MetaDataNotFoundException>(() =>
+        await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
             _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None));
     }
 
@@ -172,7 +172,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("asset").Returns((string?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<SqlQueryNotFoundException>(() =>
+        await Assert.ThrowsAsync<SqlQueryNotAvailableException>(() =>
             _sut.GetAssetAsync("asset-1", CancellationToken.None));
     }
 
@@ -188,7 +188,7 @@ public class MetaDataServiceTests
             .Throws(new ResourceNotFoundException());
 
         // Act & Assert
-        await Assert.ThrowsAsync<MetaDataNotFoundException>(() =>
+        await Assert.ThrowsAsync<AssetMetaDataNotFoundException>(() =>
             _sut.GetAssetAsync("asset-1", CancellationToken.None));
     }
 

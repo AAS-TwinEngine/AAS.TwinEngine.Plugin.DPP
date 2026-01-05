@@ -20,7 +20,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
         }
         catch (ResourceNotFoundException)
         {
-            throw new MetaDataNotFoundException();
+            throw new ShellMetaDataNotFoundException();
         }
     }
 
@@ -34,7 +34,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
         }
         catch (ResourceNotFoundException)
         {
-            throw new MetaDataNotFoundException();
+            throw new ShellMetaDataNotFoundException();
         }
     }
 
@@ -48,7 +48,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
         }
         catch (ResourceNotFoundException)
         {
-            throw new MetaDataNotFoundException();
+            throw new AssetMetaDataNotFoundException();
         }
     }
 
@@ -58,7 +58,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
         if (string.IsNullOrWhiteSpace(sqlQuery))
         {
             logger.LogError("SQL query not found for: {QueryType}", queryType);
-            throw new SqlQueryNotFoundException();
+            throw new SqlQueryNotAvailableException();
         }
         return sqlQuery;
     }
