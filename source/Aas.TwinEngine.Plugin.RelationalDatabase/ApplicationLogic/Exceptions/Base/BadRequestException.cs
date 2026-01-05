@@ -1,4 +1,4 @@
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+﻿namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 
 public class BadRequestException : Exception
 {
@@ -11,23 +11,9 @@ public class BadRequestException : Exception
     {
     }
 
-    public BadRequestException(int? errorCode, string message)
-        : base(message)
-    {
-        ErrorCode = errorCode;
-    }
-
     public BadRequestException(string message, Exception innerException)
         : base(message, innerException)
     {
     }
-
-    public BadRequestException(string message, string title)
-        : base(message)
-    {
-        Title = title;
-    }
-
-    public string? Title { get; }
-    public int? ErrorCode { get; }
 }
+

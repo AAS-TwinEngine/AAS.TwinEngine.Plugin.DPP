@@ -6,7 +6,7 @@ public class MetaDataNotFoundException : NotFoundException
 {
     public const string ServiceName = "MetaData";
 
-    public MetaDataNotFoundException() { }
+    public MetaDataNotFoundException() : base(ServiceName) { }
 
     public MetaDataNotFoundException(Exception ex) : base(ServiceName, ex) { }
 

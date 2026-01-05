@@ -6,7 +6,7 @@ public class DataNotFoundException : NotFoundException
 {
     public const string ServiceName = "Data";
 
-    public DataNotFoundException() { }
+    public DataNotFoundException() : base(ServiceName) { }
 
     public DataNotFoundException(Exception ex) : base(ServiceName, ex) { }
 

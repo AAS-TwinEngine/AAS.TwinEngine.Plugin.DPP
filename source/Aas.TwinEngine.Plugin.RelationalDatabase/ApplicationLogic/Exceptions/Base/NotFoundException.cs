@@ -3,24 +3,27 @@
 public class NotFoundException : Exception
 {
     public NotFoundException()
+        : base("Requested item is not found.")
     {
     }
 
-    public NotFoundException(string message)
-        : base(message)
+    public NotFoundException(string serviceName)
+        : base($"{serviceName} not found.")
     {
     }
 
-    public NotFoundException(string message, Exception innerException)
-        : base(message, innerException)
+    public NotFoundException(string serviceName, string id)
+        : base($"{serviceName} not found. ID : {id}")
     {
     }
 
-    public NotFoundException(string message, string title)
-        : base(message)
+    public NotFoundException(string serviceName, Exception innerException)
+        : base($"{serviceName} not found.", innerException)
     {
-        Title = title;
     }
 
-    public string? Title { get; }
+    public NotFoundException(string serviceName, string id, Exception innerException)
+        : base($"{serviceName} not found. ID : {id}", innerException)
+    {
+    }
 }

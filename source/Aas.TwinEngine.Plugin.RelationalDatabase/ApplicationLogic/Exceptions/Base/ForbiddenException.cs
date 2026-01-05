@@ -15,12 +15,4 @@ public class ForbiddenException : Exception
         : base(message, innerException)
     {
     }
-
-    public ForbiddenException(string message, string title)
-        : base(message)
-    {
-        Title = title;
-    }
-
-    public string? Title { get; }
 }
