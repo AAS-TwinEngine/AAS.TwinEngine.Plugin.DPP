@@ -25,7 +25,7 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
         IEnumerable<DbParameter>? parameters,
         CancellationToken cancellationToken)
     {
-        logger.LogDebug("Executing SQL query");
+        logger.LogDebug("Executing query");
 
         try
         {
@@ -58,7 +58,7 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error executing SQL query");
+            logger.LogError(ex, "Error executing query");
             throw new ResourceNotFoundException();
         }
     }
