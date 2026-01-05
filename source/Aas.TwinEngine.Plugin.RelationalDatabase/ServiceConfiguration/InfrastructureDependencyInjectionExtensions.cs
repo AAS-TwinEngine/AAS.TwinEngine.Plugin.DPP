@@ -24,6 +24,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.Configure<RelationalDatabaseConfiguration>(configuration.GetSection(RelationalDatabaseConfiguration.Section));
         _ = services.AddSingleton(sp => sp.GetRequiredService<IOptions<RelationalDatabaseConfiguration>>().Value);
         _ = services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>();
+        _ = services.AddOptions<Capabilities>().Bind(configuration.GetSection(Capabilities.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();
 
         _ = services.AddScoped<MappingDataInitializer>();

@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
@@ -7,6 +11,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Extensions;
 public class Base64UrlExtensionsTests

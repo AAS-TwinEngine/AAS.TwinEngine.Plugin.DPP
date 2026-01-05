@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 
 using Asp.Versioning;
 
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 
+[ExcludeFromCodeCoverage]
 [ApiController]
 [Route("")]
 [ApiVersion(1)]

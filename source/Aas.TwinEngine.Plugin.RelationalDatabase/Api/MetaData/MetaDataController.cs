@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.MetaData;
 
+[ExcludeFromCodeCoverage]
 [ApiController]
 [Route("metadata")]
 [ApiVersion(1)]
