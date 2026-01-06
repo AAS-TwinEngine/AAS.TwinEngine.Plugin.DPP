@@ -35,7 +35,6 @@ public class QueryProviderTests : IDisposable
     [Fact]
     public void GetQuery_WhenSqlFileExists_ReturnsFileContent()
     {
-        // Arrange
         var serviceName = "shells";
         var expectedSql = "SELECT * FROM shells;";
 
@@ -48,10 +47,8 @@ public class QueryProviderTests : IDisposable
 
         File.WriteAllText(queryPath, expectedSql);
 
-        // Act
         var result = _sut.GetQuery(serviceName);
 
-        // Assert
         Assert.Equal(expectedSql, result);
     }
 
@@ -62,10 +59,8 @@ public class QueryProviderTests : IDisposable
     [Fact]
     public void GetQuery_WhenFileDoesNotExist_ReturnsNull()
     {
-        // Act
         var result = _sut.GetQuery("missing-query");
 
-        // Assert
         Assert.Null(result);
     }
 

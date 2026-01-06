@@ -35,27 +35,19 @@ public class SubmodelDataProviderTests
     [Fact]
     public async Task GetSubmodelValuesAsync_WhenValidJsonReturned_ShouldReturnSemanticTreeNode()
     {
-        // Arrange
-        var sql = "SELECT * FROM table";
-        var productId = "PROD-001";
-        var json = "{ \"key\": \"value\" }";
-
+        const string Sql = "SELECT * FROM table";
+        const string ProductId = "PROD-001";
+        const string Json = "{ \"key\": \"value\" }";
         var expectedNode = new SemanticLeafNode("semanticId", DataType.String, "value");
+        _queryExecutor.ExecuteQueryAsync(Sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(Json);
+        _jsonResponseParser.ParseJson(Json).Returns(expectedNode);
 
-        _queryExecutor.ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        var result = await _sut.GetSubmodelValuesAsync(Sql, ProductId, CancellationToken.None);
 
-        _jsonResponseParser.ParseJson(json).Returns(expectedNode);
-
-        // Act
-        var result = await _sut.GetSubmodelValuesAsync(sql, productId, CancellationToken.None);
-
-        // Assert
         Assert.NotNull(result);
         Assert.Equal(expectedNode, result);
-
-        await _queryExecutor.Received(1).ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>());
-
-        _jsonResponseParser.Received(1).ParseJson(json);
+        await _queryExecutor.Received(1).ExecuteQueryAsync(Sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>());
+        _jsonResponseParser.Received(1).ParseJson(Json);
     }
 
     [Theory]
@@ -64,46 +56,35 @@ public class SubmodelDataProviderTests
     [InlineData("   ")]
     public async Task GetSubmodelValuesAsync_WhenJsonIsEmpty_ShouldThrowResponseNotFoundException(string json)
     {
-        // Arrange
         _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
 
-        // Act & Assert
         await Assert.ThrowsAsync<ResponseNotFoundException>(() => _sut.GetSubmodelValuesAsync("sql", "productId", CancellationToken.None));
     }
 
     [Fact]
     public async Task GetSubmodelValuesAsync_ShouldPassProductIdAsSqlParameter()
     {
-        // Arrange
-        var productId = "PROD-XYZ";
-        var json = "{ }";
+        const string ProductId = "PROD-XYZ";
+        const string Json = "{ }";
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(Json);
+        _jsonResponseParser.ParseJson(Json).Returns(new SemanticLeafNode("id", DataType.String, "value"));
 
-        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        await _sut.GetSubmodelValuesAsync("sql", ProductId, CancellationToken.None);
 
-        _jsonResponseParser.ParseJson(json).Returns(new SemanticLeafNode("id", DataType.String, "value"));
-
-        // Act
-        await _sut.GetSubmodelValuesAsync("sql", productId, CancellationToken.None);
-
-        // Assert
         await _queryExecutor.Received(1).ExecuteQueryAsync(Arg.Any<string>(), Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Any(p =>
-                        p.ParameterName == "@ProductId" && (string?)p.Value == productId)), Arg.Any<CancellationToken>());
+                        p.ParameterName == "@ProductId" && (string?)p.Value == ProductId)), Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public void SemanticBranchNode_ShouldAddAndReplaceChildrenCorrectly()
     {
-        // Arrange
         var branch = new SemanticBranchNode("branch", DataType.Object);
-
         var child1 = new SemanticLeafNode("c1", DataType.String, "v1");
         var child2 = new SemanticLeafNode("c2", DataType.String, "v2");
 
-        // Act
         branch.AddChild(child1);
         branch.ReplaceChildren([child2]);
 
-        // Assert
         Assert.Single(branch.Children);
         Assert.Equal(child2, branch.Children.First());
     }
@@ -111,10 +92,8 @@ public class SubmodelDataProviderTests
     [Fact]
     public void SemanticLeafNode_ShouldStoreValueCorrectly()
     {
-        // Arrange
         var leaf = new SemanticLeafNode("leaf", DataType.String, "test-value");
 
-        // Assert
         Assert.Equal("leaf", leaf.SemanticId);
         Assert.Equal(DataType.String, leaf.DataType);
         Assert.Equal("test-value", leaf.Value);
