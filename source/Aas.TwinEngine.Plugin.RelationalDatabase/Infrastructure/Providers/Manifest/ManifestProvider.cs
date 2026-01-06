@@ -37,7 +37,9 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
                         .SelectMany(m => m!.SemanticId)
                         .Select(sid => sid?.Trim())
                         .Where(sid => !string.IsNullOrWhiteSpace(sid))
+                        .Select(sid => sid!.Trim())
                         .Distinct(StringComparer.Ordinal)];
+
         }
         catch (JsonException jex)
         {
@@ -47,12 +49,12 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
     }
 
     /// <summary>
-    /// Determines whether the provided database column identifier represents a leafNode/value node
+    /// Determines whether the provided database column identifier represents a leaf/value node
     /// </summary>
     /// <remarks>
     /// Expected formats:
-    /// - "<dbo>.<TableName>.<ColumnName>" =  leafNode/value node (returns true).
-    /// - "<dbo>.<TableName>" =  branchNode/table node (returns false).
+    /// - "<dbo>.<TableName>.<ColumnName>" =  leaf/value node (returns true).
+    /// - "<dbo>.<TableName>" =  branch/table node (returns false).
     /// Null or whitespace inputs are treated as non-matching and return false
     /// </remarks>
     private static bool IsLeafColumnIdentifier(string? value) => !string.IsNullOrWhiteSpace(value) && value.Count(c => c == '.') == 2;

@@ -9,5 +9,5 @@ public interface IMetaDataHandler
 
     Task<ShellDescriptorDto> GetShellDescriptor(GetShellDescriptorRequest request, CancellationToken cancellationToken);
 
-    Task<AssetDto> GetAsset(GetAssetRequest  request, CancellationToken cancellationToken);
+    Task<AssetDto> GetAsset(GetAssetRequest request, CancellationToken cancellationToken);
 }

@@ -3,9 +3,9 @@
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
-public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectionFactory connectionFactory) : ISqlCommandExecutor
+public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory connectionFactory) : IQueryExecutor
 {
     private const int DefaultCommandTimeout = 30;
 
@@ -25,7 +25,7 @@ public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectio
         IEnumerable<DbParameter>? parameters,
         CancellationToken cancellationToken)
     {
-        logger.LogDebug("Executing SQL query");
+        logger.LogDebug("Executing query");
 
         try
         {
@@ -58,7 +58,7 @@ public class SqlCommandExecutor(ILogger<SqlCommandExecutor> logger, IDbConnectio
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error executing SQL query");
+            logger.LogError(ex, "Error executing query");
             throw new ResourceNotFoundException();
         }
     }

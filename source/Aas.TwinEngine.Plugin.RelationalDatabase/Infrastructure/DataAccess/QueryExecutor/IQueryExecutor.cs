@@ -1,8 +1,8 @@
 ﻿using System.Data.Common;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
-public interface ISqlCommandExecutor
+public interface IQueryExecutor
 {
     Task<string?> ExecuteQueryAsync(string query, CancellationToken cancellationToken);
 

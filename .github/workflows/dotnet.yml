@@ -45,7 +45,7 @@ jobs:
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test ${{ env.TEST_PROJECT }} --configuration Release --no-build --logger "trx;LogFileName=unit_test_results.trx" --collect:"XPlat Code Coverage" --settings source/coverlet.runsettings
+        run: dotnet test ${{ env.TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --logger "trx;LogFileName=unit_test_results.trx" --collect:"XPlat Code Coverage" --settings source/coverlet.runsettings
 
       - name: Publish Test Results
         uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
@@ -56,7 +56,7 @@ jobs:
           path: "**/*_test_results.trx"
           reporter: dotnet-trx
 
-      - name: Combine Reports (Test Results)
+      - name: Generate Test Results Summary
         if: github.event.pull_request.head.repo.fork == false
         run: |
           echo "# Test & Coverage Report" > results.md
@@ -73,7 +73,19 @@ jobs:
           echo "" >> results.md
           echo "---" >> results.md
           echo "" >> results.md
-      - name: Code Coverage Report - Unit Tests
+
+      - name: Generate Detailed Code Coverage HTML Report
+        uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
+        with:
+          reports: 'source/**/TestResults/**/coverage.cobertura.xml'
+          targetdir: 'coverlet/reports'
+          reporttypes: 'Html;HtmlSummary;Cobertura;MarkdownSummaryGithub;JsonSummary'
+
+      - name: Publish Code Coverage Summary
+        if: success() || failure()
+        run: cat coverlet/reports/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate Coverage Summary with Threshold Check
         if: github.event.pull_request.head.repo.fork == false
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
@@ -87,7 +99,7 @@ jobs:
           output: both
           thresholds: "80 80"
 
-      - name: Unit Test Reports
+      - name: Prepare PR Comment with Coverage Results
         if: github.event.pull_request.head.repo.fork == false
         run: |
           echo "## Code Coverage" >> results.md
@@ -96,7 +108,7 @@ jobs:
           cat code-coverage-results.md >> results.md
           echo "" >> results.md
           
-      - name: Add PR Comment
+      - name: Post Coverage Report to PR
         if: github.event.pull_request.head.repo.fork == false
         uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 # v2.9.0
         with:
@@ -109,3 +121,10 @@ jobs:
         with:
           name: test-results
           path: "**/*_test_results.trx"
+
+      - name: Upload Code Coverage Report
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: code-coverage-report
+          path: coverlet/reports
+

@@ -4,7 +4,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infra
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
 using Npgsql;
 
@@ -12,7 +12,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Subm
 
 public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
     IJsonResponseParser jsonResponseParser
-    , ISqlCommandExecutor sqlCommandExecutor) : ISubmodelDataProvider
+    , IQueryExecutor queryExecutor) : ISubmodelDataProvider
 {
     public async Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken)
     {
@@ -21,7 +21,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
             Create(productId)
         };
 
-        var jsonResult = await sqlCommandExecutor.ExecuteQueryAsync(sqlQuery, parameters, cancellationToken).ConfigureAwait(false);
+        var jsonResult = await queryExecutor.ExecuteQueryAsync(sqlQuery, parameters, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {

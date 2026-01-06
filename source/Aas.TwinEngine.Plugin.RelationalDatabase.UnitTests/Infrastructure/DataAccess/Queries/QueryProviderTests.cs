@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Queries;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+
+using NSubstitute;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.Queries;
 
@@ -81,11 +83,9 @@ public class QueryProviderTests : IDisposable
     [InlineData("shells\\")]
     [InlineData("shells*")]
     [InlineData("shells?")]
-    public void GetQuery_WhenServiceNameIsInvalid_ThrowsArgumentException(string? serviceName)
+    public void GetQuery_WhenServiceNameIsInvalid_ThrowsInvalidUserInputException(string? serviceName)
     {
-        // Act & Assert
-        var ex = Assert.Throws<ArgumentException>(() => _sut.GetQuery(serviceName!));
-        Assert.Equal("serviceName", ex.ParamName);
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.GetQuery(serviceName!));
     }
 
     #endregion

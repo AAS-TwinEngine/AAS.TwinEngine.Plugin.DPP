@@ -4,5 +4,5 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Man
 
 public interface IManifestService
 {
-    ManifestData GetManifestData(CancellationToken cancellationToken);
+    ManifestData GetManifestData();
 }

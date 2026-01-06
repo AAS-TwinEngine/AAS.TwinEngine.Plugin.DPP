@@ -1,10 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 
+[ExcludeFromCodeCoverage]
 public class MappingDataInitializer(IHostEnvironment env, ILogger<MappingDataInitializer> logger)
 {
     public void Initialize()
@@ -18,15 +20,13 @@ public class MappingDataInitializer(IHostEnvironment env, ILogger<MappingDataIni
     {
         if (!File.Exists(filePath))
         {
-            logger.LogCritical("data file not found at {FilePath}", filePath);
+            logger.LogCritical("Data file not found at {FilePath}", filePath);
             throw new ResourceNotFoundException();
         }
 
         try
         {
-            using var fileStream = File.OpenRead(filePath);
-            using var streamReader = new StreamReader(fileStream);
-            var jsonContent = streamReader.ReadToEnd();
+            var jsonContent = File.ReadAllText(filePath);
             return JsonDocument.Parse(jsonContent);
         }
         catch (JsonException jex)

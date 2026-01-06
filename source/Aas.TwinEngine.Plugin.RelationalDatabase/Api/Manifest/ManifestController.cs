@@ -18,9 +18,9 @@ public class ManifestController(IManifestHandler manifestHandler) : ControllerBa
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JsonObject>> RetrieveManifestDataAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<JsonObject>> RetrieveManifestDataAsync()
     {
-        var manifestData = await manifestHandler.GetManifestData(cancellationToken).ConfigureAwait(false);
+        var manifestData = await manifestHandler.GetManifestData().ConfigureAwait(false);
 
         return Ok(manifestData);
     }

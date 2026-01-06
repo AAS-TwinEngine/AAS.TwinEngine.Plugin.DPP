@@ -1,37 +1,40 @@
 ﻿using System.Data.Common;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+
+using Microsoft.Extensions.Logging;
+
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.SqlExecutor;
+using Executor = Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor.QueryExecutor;
 
-public class SqlCommandExecutorTests
+namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.DataAccess.QueryExecutor;
+
+public class QueryExecutorTests
 {
     private readonly IDbConnectionFactory _connectionFactory;
     private readonly DbConnection _connection;
     private readonly DbCommand _command;
     private readonly DbDataReader _reader;
-    private readonly ILogger<SqlCommandExecutor> _logger;
-    private readonly SqlCommandExecutor _sut;
+    private readonly ILogger<Executor> _logger;
+    private readonly RelationalDatabase.Infrastructure.DataAccess.QueryExecutor.QueryExecutor _sut;
 
-    public SqlCommandExecutorTests()
+    public QueryExecutorTests()
     {
         _connectionFactory = Substitute.For<IDbConnectionFactory>();
         _connection = Substitute.For<DbConnection>();
         _command = Substitute.For<DbCommand>();
         _reader = Substitute.For<DbDataReader>();
-        _logger = Substitute.For<ILogger<SqlCommandExecutor>>();
+        _logger = Substitute.For<ILogger<Executor>>();
 
         _connectionFactory.CreateConnection().Returns(_connection);
         _connection.CreateCommand().Returns(_command);
         _command.ExecuteReaderAsync(Arg.Any<CancellationToken>())
                 .Returns(_reader);
 
-        _sut = new SqlCommandExecutor(_logger, _connectionFactory);
+        _sut = new Executor(_logger, _connectionFactory);
     }
 
     #region ExecuteQueryAsync (no parameters)

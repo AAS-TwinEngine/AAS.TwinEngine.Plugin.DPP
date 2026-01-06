@@ -1,5 +1,5 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Enums;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
@@ -11,60 +11,52 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, CancellationToken cancellationToken)
     {
-        try
+        var query = GetValidatedQuery(MetaDataEndpoints.Shells);
+        var result = await metaDataProvider.GetShellDescriptorsAsync(query, limit, cursor, cancellationToken).ConfigureAwait(false);
+        if (result?.Result != null)
         {
-            var sqlQuery = queryProvider.GetQuery("shells");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: shells");
-                throw new SqlQueryNotFoundException();
-            }
-
-            var result = await metaDataProvider.GetShellDescriptorsAsync(sqlQuery, limit, cursor, cancellationToken).ConfigureAwait(false);
-
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
-        {
-            throw new MetaDataNotFoundException();
-        }
+
+        logger.LogError("Shell descriptors not found for limit: {Limit}, cursor: {Cursor}", limit, cursor);
+        throw new ShellMetaDataNotFoundException();
     }
 
     public async Task<ShellDescriptorData> GetShellDescriptorAsync(string aasIdentifier, CancellationToken cancellationToken)
     {
-        try
+        var query = GetValidatedQuery(MetaDataEndpoints.Shell);
+        var result = await metaDataProvider.GetShellDescriptorAsync(query, aasIdentifier, cancellationToken).ConfigureAwait(false);
+        if (result != null)
         {
-            var sqlQuery = queryProvider.GetQuery("shell");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: shell");
-                throw new SqlQueryNotFoundException();
-            }
-            var result = await metaDataProvider.GetShellDescriptorAsync(sqlQuery, aasIdentifier, cancellationToken).ConfigureAwait(false);
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
-        {
-            throw new MetaDataNotFoundException();
-        }
+
+        logger.LogError("Shell descriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
+        throw new ShellMetaDataNotFoundException();
     }
 
     public async Task<AssetData> GetAssetAsync(string assetIdentifier, CancellationToken cancellationToken)
     {
-        try
+        var query = GetValidatedQuery(MetaDataEndpoints.Asset);
+        var result = await metaDataProvider.GetAssetAsync(query, assetIdentifier, cancellationToken).ConfigureAwait(false);
+        if (result != null)
         {
-            var sqlQuery = queryProvider.GetQuery("asset");
-            if (string.IsNullOrWhiteSpace(sqlQuery))
-            {
-                logger.LogError("SQL query not found for: asset");
-                throw new SqlQueryNotFoundException();
-            }
-            var result = await metaDataProvider.GetAssetAsync(sqlQuery, assetIdentifier, cancellationToken).ConfigureAwait(false);
-            return result!;
+            return result;
         }
-        catch (ResourceNotFoundException)
+
+        logger.LogError("Asset not found for Asset Identifier: {AssetIdentifier}", assetIdentifier);
+        throw new AssetMetaDataNotFoundException();
+    }
+
+    private string GetValidatedQuery(string queryType)
+    {
+        var query = queryProvider.GetQuery(queryType);
+        if (string.IsNullOrWhiteSpace(query))
         {
-            throw new MetaDataNotFoundException();
+            logger.LogError("Query not found for: {QueryType}", queryType);
+            throw new QueryNotAvailableException();
         }
+
+        return query;
     }
 }

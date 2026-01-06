@@ -24,10 +24,10 @@ public class ManifestHandlerTests
     {
         var manifest = new ManifestData { Capabilities = new CapabilitiesData { HasAssetInformation = true, HasShellDescriptor = true }, SupportedSemanticIds = ["test"] };
         var expectedDto = new ManifestDto { Capabilities = new CapabilitiesDto { HasAssetInformation = true, HasShellDescriptor = true }, SupportedSemanticIds = ["test"] };
-        _ = _manifestService.GetManifestData(Arg.Any<CancellationToken>())
+        _ = _manifestService.GetManifestData()
                         .Returns(await Task.FromResult(manifest));
 
-        var result = await _sut.GetManifestData(CancellationToken.None);
+        var result = await _sut.GetManifestData();
 
         Assert.Equal(expectedDto.ToString(), result.ToString());
     }
@@ -35,19 +35,19 @@ public class ManifestHandlerTests
     [Fact]
     public async Task GetManifestData_ShouldThrowException_WhenServiceThrows()
     {
-        _manifestService.GetManifestData(Arg.Any<CancellationToken>())
+        _manifestService.GetManifestData()
                         .Throws(ex: new Exception("Service failure"));
 
-        await Assert.ThrowsAsync<Exception>(() => _sut.GetManifestData(CancellationToken.None));
+        await Assert.ThrowsAsync<Exception>(_sut.GetManifestData);
     }
 
     [Fact]
     public async Task GetManifestData_ShouldThrowNotFound_WhenServiceReturnsNull()
     {
-        _manifestService.GetManifestData(Arg.Any<CancellationToken>())
+        _manifestService.GetManifestData()
                         .Returns(await Task.FromResult<ManifestData?>(null));
 
-        var ex = await Assert.ThrowsAsync<NotFoundException>(() => _sut.GetManifestData(CancellationToken.None));
+        var ex = await Assert.ThrowsAsync<NotFoundException>(_sut.GetManifestData);
         Assert.NotNull(ex);
     }
 }

@@ -58,7 +58,9 @@ public class MetaDataHandler(
         Func<string, Task<TModel?>> fetchFunc,
         Func<TModel, TDto> mapFunc)
     {
-        var decodedId = encodedId?.DecodeBase64(logger);
+        ArgumentException.ThrowIfNullOrWhiteSpace(encodedId, nameof(encodedId));
+
+        var decodedId = encodedId.DecodeBase64(logger);
         logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, decodedId);
 
         var result = await fetchFunc(decodedId!).ConfigureAwait(false);

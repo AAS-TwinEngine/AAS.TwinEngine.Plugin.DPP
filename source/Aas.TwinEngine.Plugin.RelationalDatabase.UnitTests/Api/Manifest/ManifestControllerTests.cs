@@ -18,9 +18,9 @@ public class ManifestControllerTests
     [Fact]
     public async Task RetrieveManifestDataAsync_ShouldReturnOk_WhenDataIsAvailable()
     {
-        _ = _manifestHandler.GetManifestData(Arg.Any<CancellationToken>()).Returns(Task.FromResult(ManifestDtoValue));
+        _ = _manifestHandler.GetManifestData().Returns(Task.FromResult(ManifestDtoValue));
 
-        var result = await _sut.RetrieveManifestDataAsync(CancellationToken.None);
+        var result = await _sut.RetrieveManifestDataAsync();
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(ManifestDtoValue, okResult.Value);
@@ -29,10 +29,8 @@ public class ManifestControllerTests
     [Fact]
     public async Task RetrieveManifestDataAsync_ShouldReturn500_WhenHandlerThrows()
     {
-        _manifestHandler.GetManifestData(Arg.Any<CancellationToken>())
-                        .Returns<Task<ManifestDto>>(_ => throw new InvalidOperationException());
+        _manifestHandler.GetManifestData().Returns<Task<ManifestDto>>(_ => throw new InvalidOperationException());
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            _sut.RetrieveManifestDataAsync(CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(_sut.RetrieveManifestDataAsync);
     }
 }

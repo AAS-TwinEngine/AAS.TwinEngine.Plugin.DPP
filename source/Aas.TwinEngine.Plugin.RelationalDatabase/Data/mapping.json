@@ -260,6 +260,10 @@
     "semanticId": [ "0112/2///61987#ABA565#009_en", "0112/2///61987#ABA565#009_de", "0173-1#02-AAO677#002" ]
   },
   {
+    "column": "dbo.Asset.ManufacturerName_de",
+    "semanticId": [ "0112/2///61987#ABA565#009_de" ]
+  },
+  {
     "column": "dbo.Asset.ManufacturerProductDesignation_en",
     "semanticId": [ "0112/2///61987#ABA567#009_en", "0173-1#02-AAW338#001_en" ]
   },

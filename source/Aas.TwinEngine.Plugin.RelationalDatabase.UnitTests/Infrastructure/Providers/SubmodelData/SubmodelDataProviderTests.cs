@@ -3,7 +3,7 @@
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.SqlExecutor;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
 
 using Microsoft.Extensions.Logging;
@@ -16,7 +16,7 @@ public class SubmodelDataProviderTests
 {
     private readonly ILogger<SubmodelDataProvider> _logger;
     private readonly IJsonResponseParser _jsonResponseParser;
-    private readonly ISqlCommandExecutor _sqlCommandExecutor;
+    private readonly IQueryExecutor _queryExecutor;
 
     private readonly SubmodelDataProvider _sut;
 
@@ -24,12 +24,12 @@ public class SubmodelDataProviderTests
     {
         _logger = Substitute.For<ILogger<SubmodelDataProvider>>();
         _jsonResponseParser = Substitute.For<IJsonResponseParser>();
-        _sqlCommandExecutor = Substitute.For<ISqlCommandExecutor>();
+        _queryExecutor = Substitute.For<IQueryExecutor>();
 
         _sut = new SubmodelDataProvider(
             _logger,
             _jsonResponseParser,
-            _sqlCommandExecutor);
+            _queryExecutor);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class SubmodelDataProviderTests
 
         var expectedNode = new SemanticLeafNode("semanticId", DataType.String, "value");
 
-        _sqlCommandExecutor.ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        _queryExecutor.ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
 
         _jsonResponseParser.ParseJson(json).Returns(expectedNode);
 
@@ -53,7 +53,7 @@ public class SubmodelDataProviderTests
         Assert.NotNull(result);
         Assert.Equal(expectedNode, result);
 
-        await _sqlCommandExecutor.Received(1).ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>());
+        await _queryExecutor.Received(1).ExecuteQueryAsync(sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>());
 
         _jsonResponseParser.Received(1).ParseJson(json);
     }
@@ -65,7 +65,7 @@ public class SubmodelDataProviderTests
     public async Task GetSubmodelValuesAsync_WhenJsonIsEmpty_ShouldThrowResponseNotFoundException(string json)
     {
         // Arrange
-        _sqlCommandExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
 
         // Act & Assert
         await Assert.ThrowsAsync<ResponseNotFoundException>(() => _sut.GetSubmodelValuesAsync("sql", "productId", CancellationToken.None));
@@ -78,7 +78,7 @@ public class SubmodelDataProviderTests
         var productId = "PROD-XYZ";
         var json = "{ }";
 
-        _sqlCommandExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
 
         _jsonResponseParser.ParseJson(json).Returns(new SemanticLeafNode("id", DataType.String, "value"));
 
@@ -86,7 +86,7 @@ public class SubmodelDataProviderTests
         await _sut.GetSubmodelValuesAsync("sql", productId, CancellationToken.None);
 
         // Assert
-        await _sqlCommandExecutor.Received(1).ExecuteQueryAsync(Arg.Any<string>(), Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Any(p =>
+        await _queryExecutor.Received(1).ExecuteQueryAsync(Arg.Any<string>(), Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Any(p =>
                         p.ParameterName == "@ProductId" && (string?)p.Value == productId)), Arg.Any<CancellationToken>());
     }
 

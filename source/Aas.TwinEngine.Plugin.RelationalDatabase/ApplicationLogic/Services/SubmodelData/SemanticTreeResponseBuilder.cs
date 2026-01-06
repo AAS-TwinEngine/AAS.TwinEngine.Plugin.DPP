@@ -12,13 +12,12 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
     private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
     public SemanticTreeNode BuildResponse(
-        SemanticTreeNode requestNode, 
-        SemanticTreeNode? responseNode, 
+        SemanticTreeNode requestNode,
+        SemanticTreeNode? responseNode,
         Dictionary<string, string> semanticIdToColumnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestNode);
         ArgumentNullException.ThrowIfNull(semanticIdToColumnMapping);
-        
         if (responseNode is not null)
         {
             FillRequestNodeFromResponse(requestNode, responseNode, semanticIdToColumnMapping);
@@ -66,7 +65,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private static string? GetColumnName(string semanticId, Dictionary<string, string> columnMapping)
     {
-        columnMapping.TryGetValue(semanticId, out var columnName);
+        _ = columnMapping.TryGetValue(semanticId, out var columnName);
         return columnName;
     }
 
@@ -148,8 +147,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
     private bool NeedsCloning(SemanticTreeNode child, string? columnName, SemanticTreeNode responseTree, out List<SemanticBranchNode>? matchingBranches)
     {
         matchingBranches = null;
-
-        if (child is not SemanticBranchNode childBranch || string.IsNullOrEmpty(columnName))
+        if (child is not SemanticBranchNode || string.IsNullOrEmpty(columnName))
         {
             return false;
         }
