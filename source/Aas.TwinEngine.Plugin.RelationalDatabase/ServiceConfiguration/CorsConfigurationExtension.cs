@@ -9,36 +9,26 @@ internal static class CorsConfigurationExtension
 {
     public static void ConfigureCorsServices(this WebApplicationBuilder builder)
     {
-        var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>()
-            ?? throw new InvalidOperationException("CORS configuration is missing.");
+        var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>() ?? throw new InvalidOperationException("CORS configuration is missing.");
+
+        if (corsOptions.AllowedOrigins.Length == 0)
+        {
+            throw new InvalidOperationException("CORS AllowedOrigins must be configured.");
+        }
+
+        var allowAnyOrigin = corsOptions.AllowedOrigins.Length == 1 && corsOptions.AllowedOrigins[0] == "*";
 
         _ = builder.Services.AddCors(options =>
         {
             options.AddPolicy(corsOptions.PolicyName, policy =>
             {
-                if (corsOptions.AllowedOrigins.Length > 0)
+                if (allowAnyOrigin)
                 {
-                    _ = policy.WithOrigins(corsOptions.AllowedOrigins);
+                    _ = policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }
-
-                if (corsOptions.AllowAnyHeader)
+                else
                 {
-                    _ = policy.AllowAnyHeader();
-                }
-
-                if (corsOptions.AllowAnyMethod)
-                {
-                    _ = policy.AllowAnyMethod();
-                }
-
-                if (corsOptions.AllowCredentials)
-                {
-                    _ = policy.AllowCredentials();
-                }
-
-                if (corsOptions.AllowAnyOriginFallback)
-                {
-                    _ = policy.SetIsOriginAllowed(_ => true);
+                    _ = policy.WithOrigins(corsOptions.AllowedOrigins).AllowAnyHeader().AllowAnyMethod();
                 }
             });
         });
@@ -46,7 +36,8 @@ internal static class CorsConfigurationExtension
 
     public static void UseCorsServices(this WebApplication app)
     {
-        var policyName = app.Configuration["Cors:PolicyName"] ?? "CorsPolicy";
+        var policyName = app.Configuration.GetValue<string>($"{CorsOptions.Section}:PolicyName") ?? "CorsPolicy";
+
         _ = app.UseCors(policyName);
     }
 }
