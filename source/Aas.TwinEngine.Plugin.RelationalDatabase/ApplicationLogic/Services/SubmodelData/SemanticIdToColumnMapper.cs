@@ -9,49 +9,65 @@ using Microsoft.Extensions.Options;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
-public class SemanticIdToColumnMapper(
-    IOptions<Semantics> semanticsOptions,
-    ILogger<SemanticIdToColumnMapper> logger) : ISemanticIdToColumnMapper
+public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
 {
-    private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
+    private readonly string _indexPrefix;
     private readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private readonly ILogger<SemanticIdToColumnMapper> _logger;
+    private const int MaxNodeCount = 10000;
+    private readonly Lazy<List<MappingItem>> _cachedMappingData;
+
+    public SemanticIdToColumnMapper(IOptions<Semantics> semanticsOptions, ILogger<SemanticIdToColumnMapper> logger)
+    {
+        ArgumentNullException.ThrowIfNull(semanticsOptions);
+
+        _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
+        _logger = logger;
+        _cachedMappingData = new Lazy<List<MappingItem>>(LoadMappingData, LazyThreadSafetyMode.ExecutionAndPublication);
+    }
 
     public Dictionary<string, string> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
-        try
-        {
-            var mappingData = DeserializeMappingData();
-            return BuildSemanticIdToColumnMapping(requestNode, mappingData);
-        }
-        catch (JsonException ex)
-        {
-            logger.LogError(ex, "Failed to de-serialize mapping configuration");
-            throw new InternalDataProcessingException();
-        }
+        ArgumentNullException.ThrowIfNull(requestNode);
+
+        var mappingData = _cachedMappingData.Value;
+        return BuildSemanticIdToColumnMapping(requestNode, mappingData);
     }
 
-    private List<MappingItem?> DeserializeMappingData()
+    private List<MappingItem> LoadMappingData()
     {
         var mappingJson = MappingData.MappingJson;
-        var mappingData = mappingJson.RootElement.Deserialize<List<MappingItem?>>(_jsonOptions) ?? [];
+        var items = mappingJson.RootElement
+            .Deserialize<List<MappingItem?>>(_jsonOptions)?
+            .Where(item => item != null)
+            .Select(item => item!)
+            .ToList() ?? [];
 
-        if (mappingData.Count != 0)
+        if (items.Count != 0)
         {
-            return mappingData;
+            return items;
         }
 
-        logger.LogError("Mapping configuration is empty");
+        _logger.LogError("Mapping configuration is empty or contains only null items");
         throw new InternalDataProcessingException();
     }
 
-    private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, List<MappingItem?> mappingData)
+    private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, List<MappingItem> mappingData)
     {
         var result = new Dictionary<string, string>();
         var queue = new Queue<SemanticTreeNode>();
+        var processedCount = 0;
+
         queue.Enqueue(root);
 
         while (queue.Count > 0)
         {
+            if (++processedCount > MaxNodeCount)
+            {
+                _logger.LogError("Exceeded maximum node count ({MaxCount}). Possible circular reference or malicious payload", MaxNodeCount);
+                throw new InvalidUserInputException();
+            }
+
             var node = queue.Dequeue();
             var columnName = ResolveColumn(node.SemanticId, mappingData, node);
 
@@ -86,7 +102,7 @@ public class SemanticIdToColumnMapper(
             return string.Empty;
         }
 
-        logger.LogError("SemanticId '{SemanticId}' not found in mapping", baseId);
+        _logger.LogError("SemanticId '{SemanticId}' not found in mapping", baseId);
         throw new InvalidUserInputException();
     }
 

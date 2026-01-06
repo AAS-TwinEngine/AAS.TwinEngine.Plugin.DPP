@@ -158,10 +158,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private List<SemanticTreeNode> ExpandChildIntoMultipleBranches(SemanticBranchNode childBranch, List<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
     {
-        return matchingBranches
+        return [.. matchingBranches
             .Select((responseBranch, index) => CreateIndexedAndPopulatedBranch(childBranch, responseBranch, index, columnMapping))
-            .Cast<SemanticTreeNode>()
-            .ToList();
+            .Cast<SemanticTreeNode>()];
     }
 
     private SemanticBranchNode CreateIndexedAndPopulatedBranch(SemanticBranchNode sourceBranch, SemanticBranchNode responseBranch, int index, Dictionary<string, string> columnMapping)
@@ -221,7 +220,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
         };
     }
 
-    private List<SemanticTreeNode> ProcessLeafInBranchContent(SemanticLeafNode leafNode, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
+    private static List<SemanticTreeNode> ProcessLeafInBranchContent(SemanticLeafNode leafNode, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
     {
         var columnName = GetColumnName(leafNode.SemanticId, columnMapping);
         FillLeafNodeFromResponse(leafNode, responseBranch, columnName);
@@ -266,10 +265,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions) :
 
     private List<SemanticTreeNode> HandleMultipleMatches(SemanticBranchNode childBranch, List<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
     {
-        return matchingBranches
+        return [.. matchingBranches
             .Select((match, index) => CreateIndexedAndPopulatedBranch(childBranch, match, index, columnMapping))
-            .Cast<SemanticTreeNode>()
-            .ToList();
+            .Cast<SemanticTreeNode>()];
     }
 
     private SemanticTreeNode CloneNode(SemanticTreeNode node)

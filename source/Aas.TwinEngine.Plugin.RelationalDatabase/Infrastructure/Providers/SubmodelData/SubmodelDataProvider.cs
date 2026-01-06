@@ -10,9 +10,7 @@ using Npgsql;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
 
-public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger,
-    IJsonResponseParser jsonResponseParser
-    , IQueryExecutor queryExecutor) : ISubmodelDataProvider
+public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonResponseParser jsonResponseParser, IQueryExecutor queryExecutor) : ISubmodelDataProvider
 {
     public async Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken)
     {

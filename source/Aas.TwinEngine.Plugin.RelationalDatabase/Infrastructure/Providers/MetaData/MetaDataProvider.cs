@@ -18,8 +18,6 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogWarning("Query returned empty result: {QueryName}", query);
-
             return new ShellDescriptorsData
             {
                 PagingMetaData = new PagingMetaData { Cursor = null },

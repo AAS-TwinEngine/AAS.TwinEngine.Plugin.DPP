@@ -42,10 +42,8 @@ public class MetaDataServiceTests
             .GetShellDescriptorsAsync(query, 10, null, Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        // Act
         var result = await _sut.GetShellDescriptorsAsync(10, null, CancellationToken.None);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Equal("next", result.PagingMetaData?.Cursor);
     }
@@ -53,7 +51,6 @@ public class MetaDataServiceTests
     [Fact]
     public async Task GetShellDescriptorsAsync_WhenQueryMissing_ThrowsQueryNotFoundException()
     {
-        // Arrange
         _queryProvider.GetQuery("shells").Returns((string?)null);
 
         await Assert.ThrowsAsync<QueryNotAvailableException>(() =>
@@ -92,10 +89,8 @@ public class MetaDataServiceTests
             .GetShellDescriptorAsync(query, "aas-1", Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        // Act
         var result = await _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Equal("aas-1", result.Id);
     }
@@ -103,7 +98,6 @@ public class MetaDataServiceTests
     [Fact]
     public async Task GetShellDescriptorAsync_WhenQueryMissing_ThrowsQueryNotFoundException()
     {
-        // Arrange
         _queryProvider.GetQuery("shell").Returns((string?)null);
 
         await Assert.ThrowsAsync<QueryNotAvailableException>(() =>
@@ -140,10 +134,8 @@ public class MetaDataServiceTests
             .GetAssetAsync(query, "asset-123", Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        // Act
         var result = await _sut.GetAssetAsync("asset-123", CancellationToken.None);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Equal("asset-123", result.GlobalAssetId);
     }
@@ -151,7 +143,6 @@ public class MetaDataServiceTests
     [Fact]
     public async Task GetAssetAsync_WhenQueryMissing_ThrowsQueryNotFoundException()
     {
-        // Arrange
         _queryProvider.GetQuery("asset").Returns((string?)null);
 
         await Assert.ThrowsAsync<QueryNotAvailableException>(() =>

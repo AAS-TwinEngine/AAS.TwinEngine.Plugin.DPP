@@ -25,7 +25,7 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         }
 
         logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
-        throw new NotFoundException($"Submodel name '{submodelName}' is not recognized.");
+        throw new NotFoundException();
     }
 
     private string ExtractProductId(string submodelId)

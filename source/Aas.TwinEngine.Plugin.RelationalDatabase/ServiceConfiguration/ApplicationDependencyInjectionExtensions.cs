@@ -31,15 +31,8 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<ISemanticTreeResponseBuilder, SemanticTreeResponseBuilder>();
         _ = services.AddScoped<ISubmodelMetadataExtractor, SubmodelMetadataExtractor>();
         _ = services.AddScoped<ISubmodelDataHandler, SubmodelDataHandler>();
-
         _ = services.AddScoped<ISemanticTreeHandler, SemanticTreeHandler>();
         _ = services.AddScoped<IJsonSchemaValidator, JsonSchemaValidator>();
         _ = services.AddScoped<ISubmodelDataService, SubmodelDataService>();
-
-        _ = services.AddScoped<IManifestService, ManifestService>();
-        _ = services.AddScoped<IManifestHandler, ManifestHandler>();
-
-        _ = services.AddScoped<IMetaDataHandler, MetaDataHandler>();
-        _ = services.AddScoped<IMetaDataService, MetaDataService>();
     }
 }
