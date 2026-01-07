@@ -19,7 +19,7 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
 
         if (!File.Exists(path))
         {
-            logger.LogWarning("Query file not found: {ServiceName}", serviceName);
+            logger.LogError("Query file not found: {ServiceName}", serviceName);
 
             return null;
         }
@@ -31,7 +31,7 @@ public class QueryProvider(ILogger<QueryProvider> logger, IWebHostEnvironment en
     {
         if (string.IsNullOrWhiteSpace(serviceName) || serviceName.Length > MaxServiceNameLength || ContainsInvalidServiceNameCharacters(serviceName))
         {
-            logger.LogWarning("Invalid service name provided: {ServiceName}", serviceName);
+            logger.LogError("Invalid service name provided: {ServiceName}", serviceName);
             throw new InvalidUserInputException();
         }
     }

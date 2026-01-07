@@ -64,7 +64,7 @@ public class ManifestProviderTests
     }
 
     [Fact]
-    public void GetSupportedSemanticIds_WhenJsonIsNotFormated_ThrowsResponseParsingException_AndLogsError()
+    public void GetSupportedSemanticIds_WhenJsonIsNotFormatted_ThrowsResponseParsingException_AndLogsError()
     {
         MappingData.MappingJson = CreateInvalidJsonDocumentForDeserialization();
         _sut = new ManifestProvider(_logger);

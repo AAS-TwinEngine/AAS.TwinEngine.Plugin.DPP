@@ -57,11 +57,11 @@ public class SubmodelDataHandler(
         {
             if (decodedId is not null)
             {
-                logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
+                logger.LogError("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
             }
             else
             {
-                logger.LogWarning("{ResourceName} not found.", resourceName);
+                logger.LogError("{ResourceName} not found.", resourceName);
             }
 
             throw new NotFoundException();

@@ -23,7 +23,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogWarning("Query returned empty result for productId : {ProductId} ", productId);
+            logger.LogError("Query returned empty result for productId : {ProductId} ", productId);
             throw new ResourceNotValidException();
         }
 

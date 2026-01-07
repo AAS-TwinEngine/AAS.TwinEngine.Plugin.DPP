@@ -2,12 +2,14 @@
 
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
+using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Validators;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
 public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory connectionFactory) : IQueryExecutor
 {
     private const int DefaultCommandTimeout = 30;
+    private const int MaxQueryLength = 100000; // 100KB
 
     public Task<string?> ExecuteQueryAsync(
        string query,
@@ -27,6 +29,9 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
     {
         logger.LogDebug("Executing query");
 
+        ValidateQuery(query);
+
+        DbParameterValidator.ValidateParameters(parameters, logger);
         try
         {
             await using var connection = connectionFactory.CreateConnection();
@@ -53,13 +58,28 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
             }
 
             return await reader.IsDBNullAsync(0, cancellationToken).ConfigureAwait(false)
-                ? null
-                : reader.GetString(0);
+                       ? null
+                       : reader.GetString(0);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error executing query");
             throw new ResourceNotFoundException();
+        }
+    }
+
+    private void ValidateQuery(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            logger.LogError("Empty query provided");
+            throw new ResourceNotValidException("Query cannot be empty.");
+        }
+
+        if (query.Length > MaxQueryLength)
+        {
+            logger.LogError("Query exceeds maximum length: {Length}", query.Length);
+            throw new ResourceNotValidException("Query is too long.");
         }
     }
 }

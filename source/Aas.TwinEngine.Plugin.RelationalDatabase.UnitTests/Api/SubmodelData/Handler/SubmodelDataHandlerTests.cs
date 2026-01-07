@@ -25,7 +25,7 @@ public class SubmodelDataHandlerTests
     private readonly ISemanticTreeHandler _semanticTreeHandler = Substitute.For<ISemanticTreeHandler>();
     private readonly SubmodelDataHandler _sut;
 
-    public SubmodelDataHandlerTests() => _sut = new SubmodelDataHandler(_logger,_submodelDataService,_jsonSchemaValidator,_semanticTreeHandler);
+    public SubmodelDataHandlerTests() => _sut = new SubmodelDataHandler(_logger, _submodelDataService, _jsonSchemaValidator, _semanticTreeHandler);
 
     [Fact]
     public async Task GetSubmodelData_ShouldReturnJsonObject_WhenRequestIsValid()
