@@ -26,8 +26,6 @@ public class SubmodelDataController(
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<JsonObject>> RetrieveDataAsync([FromBody] JsonSchema dataQuery, [FromRoute] string submodelId, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Received request to get data by submodel ID. submodelId: {SubmodelId}", submodelId);
-
         var request = new GetSubmodelDataRequest(submodelId, dataQuery);
 
         var aasData = await submodelDataHandler.GetSubmodelData(request, cancellationToken).ConfigureAwait(false);

@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
@@ -166,5 +167,14 @@ public class SubmodelDataHandlerTests
             .Throws(new OperationCanceledException());
 
         await Assert.ThrowsAsync<OperationCanceledException>(() => _sut.GetSubmodelData(request, cts.Token));
+    }
+
+    [Fact]
+    public async Task GetSubmodelData_ShouldThrowNotFoundException_WhenSubmodelIdIsNull()
+    {
+        var dataQuery = new JsonSchemaBuilder().Type(SchemaValueType.Object).Build();
+        var request = new GetSubmodelDataRequest(null!, dataQuery);
+
+        await Assert.ThrowsAsync<NotFoundException>(() => _sut.GetSubmodelData(request, CancellationToken.None));
     }
 }

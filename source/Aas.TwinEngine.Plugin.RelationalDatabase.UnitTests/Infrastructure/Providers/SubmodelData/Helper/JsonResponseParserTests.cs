@@ -1,7 +1,9 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using NSubstitute;
@@ -11,6 +13,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Prov
 public class JsonResponseParserTests
 {
     private readonly IOptions<Semantics> _semanticsOptions;
+    private readonly ILogger<JsonResponseParser> _logger;
     private readonly JsonResponseParser _sut;
     private const string IndexPrefix = "_aastwinengine_";
 
@@ -21,7 +24,8 @@ public class JsonResponseParserTests
         {
             IndexContextPrefix = IndexPrefix
         });
-        _sut = new JsonResponseParser(_semanticsOptions);
+        _logger = Substitute.For<ILogger<JsonResponseParser>>();
+        _sut = new JsonResponseParser(_semanticsOptions, _logger);
     }
 
     [Fact]
@@ -491,7 +495,8 @@ public class JsonResponseParserTests
         const string customPrefix = "_custom_";
         var customOptions = Substitute.For<IOptions<Semantics>>();
         customOptions.Value.Returns(new Semantics { IndexContextPrefix = customPrefix });
-        var parser = new JsonResponseParser(customOptions);
+        var customLogger = Substitute.For<ILogger<JsonResponseParser>>();
+        var parser = new JsonResponseParser(customOptions, customLogger);
 
         const string json = """
         {
@@ -509,5 +514,121 @@ public class JsonResponseParserTests
         var rootBranch = Assert.IsType<SemanticBranchNode>(result);
         Assert.Equal($"items{customPrefix}0", rootBranch.Children[0].SemanticId);
         Assert.Equal($"items{customPrefix}1", rootBranch.Children[1].SemanticId);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("not valid json")]
+    [InlineData("{invalid}")]
+    [InlineData("{\"key\": }")]
+    [InlineData("{\"key\": [1, 2,]}")]
+    [InlineData("{\"key\": \"value\"")]
+    [InlineData("{'single': 'quotes'}")]
+    public void ParseJson_InvalidJson_ThrowsResponseParsingException(string invalidJson)
+    {
+        var exception = Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(invalidJson));
+
+        Assert.NotNull(exception);
+    }
+
+    [Theory]
+    [InlineData("not valid json")]
+    [InlineData("{invalid}")]
+    [InlineData("{\"key\": }")]
+    public void ParseJson_InvalidJson_LogsError(string invalidJson)
+    {
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(invalidJson));
+
+        _logger.Received(1).Log(
+            LogLevel.Error,
+            Arg.Any<EventId>(),
+            Arg.Is<object>(o => o.ToString()!.Contains("Invalid JSON received from database")),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
+    }
+
+    [Fact]
+    public void ParseJson_MalformedNestedJsonString_ThrowsResponseParsingException()
+    {
+        const string json = """
+        "{invalid nested json}"
+        """;
+
+        var exception = Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(json.Trim()));
+
+        Assert.NotNull(exception);
+        _logger.Received(1).Log(
+            LogLevel.Error,
+            Arg.Any<EventId>(),
+            Arg.Any<object>(),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
+    }
+
+    [Fact]
+    public void ParseJson_NullContent_ThrowsResponseParsingException()
+    {
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(null!));
+
+        _logger.Received(1).Log(
+            LogLevel.Error,
+            Arg.Any<EventId>(),
+            Arg.Any<object>(),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
+    }
+
+    [Fact]
+    public void ParseJson_TruncatedJson_ThrowsResponseParsingException()
+    {
+        const string truncatedJson = """
+        {
+            "root": {
+                "property": "value"
+        """;
+
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(truncatedJson));
+    }
+
+    [Fact]
+    public void ParseJson_UnterminatedString_ThrowsResponseParsingException()
+    {
+        const string json = """
+        {
+            "root": {
+                "property": "unterminated
+            }
+        }
+        """;
+
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(json));
+    }
+
+    [Fact]
+    public void ParseJson_InvalidEscapeSequence_ThrowsResponseParsingException()
+    {
+        const string json = """
+        {
+            "root": {
+                "property": "invalid \x escape"
+            }
+        }
+        """;
+
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(json));
+    }
+
+    [Fact]
+    public void ParseJson_ValidJsonAfterException_StillWorks()
+    {
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson("invalid"));
+
+        const string validJson = """{"name": "test"}""";
+        var result = _sut.ParseJson(validJson);
+
+        Assert.NotNull(result);
+        var leafNode = Assert.IsType<SemanticLeafNode>(result);
+        Assert.Equal("name", leafNode.SemanticId);
     }
 }

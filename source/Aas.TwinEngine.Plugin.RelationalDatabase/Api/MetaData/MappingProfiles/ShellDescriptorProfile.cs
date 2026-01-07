@@ -11,14 +11,14 @@ public static class ShellDescriptorProfile
 
         return new ShellDescriptorDto
         {
-             GlobalAssetId = data.GlobalAssetId,
-             IdShort = data.IdShort,
-             Id = data.Id,
-             SpecificAssetIds = data.SpecificAssetIds?
+            GlobalAssetId = data.GlobalAssetId,
+            IdShort = data.IdShort,
+            Id = data.Id,
+            SpecificAssetIds = data.SpecificAssetIds?
                                  .Select(x => new SpecificAssetIdsDto
                                  {
-                                      Name = x.Name,
-                                      Value = x.Value
+                                     Name = x.Name,
+                                     Value = x.Value
                                  })
                                  .ToList()
         };

@@ -16,7 +16,7 @@ public class MappingDataInitializer(IHostEnvironment env, ILogger<MappingDataIni
         MappingData.MappingJson = LoadData(Path.Combine(dataPath, "mapping.json"));
     }
 
-    private JsonDocument LoadData(string filePath)
+    private JsonElement LoadData(string filePath)
     {
         if (!File.Exists(filePath))
         {
@@ -27,7 +27,7 @@ public class MappingDataInitializer(IHostEnvironment env, ILogger<MappingDataIni
         try
         {
             var jsonContent = File.ReadAllText(filePath);
-            return JsonDocument.Parse(jsonContent);
+            return JsonDocument.Parse(jsonContent).RootElement;
         }
         catch (JsonException jex)
         {

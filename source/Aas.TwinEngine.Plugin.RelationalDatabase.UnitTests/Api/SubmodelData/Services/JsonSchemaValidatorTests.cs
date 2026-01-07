@@ -433,5 +433,248 @@ public class JsonSchemaValidatorTests
 
         _sut.ValidateResponseContent(Json, schema);
     }
+
+    [Fact]
+    public void ValidateRequestSchema_ExceedsMaxSchemaSize_ThrowsBadRequestException()
+    {
+        var properties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 15000; i++)
+        {
+            properties[$"property_{i:D5}_with_a_long_name_to_increase_size"] =
+                new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(properties)
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ExceedsMaxSchemaDepth_ThrowsBadRequestException()
+    {
+        var schema = BuildNestedSchema(12); // Depth of 12 exceeds limit of 10
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Maximum allowed depth is 10", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ExceedsMaxProperties_ThrowsBadRequestException()
+    {
+        var properties = new Dictionary<string, JsonSchema>();
+
+        for (var i = 0; i < 1100; i++)
+        {
+            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(properties)
+            .Build();
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Maximum allowed is 1000", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_AtMaxProperties_DoesNotThrow()
+    {
+        var properties = new Dictionary<string, JsonSchema>();
+
+        for (var i = 0; i < 1000; i++)
+        {
+            properties[$"property{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(properties)
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_MultipleNestedObjectsWithManyProperties_ExceedsLimit()
+    {
+        var nestedProperties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 600; i++)
+        {
+            nestedProperties[$"nested{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var properties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 500; i++)
+        {
+            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        properties["nestedObject"] = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(nestedProperties)
+            .Build();
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(properties)
+            .Build();
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ArrayWithNestedObjects_CountsPropertiesCorrectly()
+    {
+        var itemProperties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 600; i++)
+        {
+            itemProperties[$"field{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var rootProperties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 500; i++)
+        {
+            rootProperties[$"root{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        rootProperties["items"] = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Array)
+            .Items(new JsonSchemaBuilder()
+                .Type(SchemaValueType.Object)
+                .Properties(itemProperties)
+                .Build())
+            .Build();
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(rootProperties)
+            .Build();
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_DeepNestingWithArrays_ThrowsBadRequestException()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["root"] = BuildDeepArrayStructure(11)
+            })
+            .Build();
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.CurrentCulture);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ComplexSchemaWithinLimits_DoesNotThrow()
+    {
+        var level2Properties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 100; i++)
+        {
+            level2Properties[$"l2_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        var level1Properties = new Dictionary<string, JsonSchema>();
+        for (var i = 0; i < 100; i++)
+        {
+            level1Properties[$"l1_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build();
+        }
+
+        level1Properties["nested"] = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(level2Properties)
+            .Build();
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(level1Properties)
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_EmptyPropertiesObject_DoesNotCountAsProperty()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>())
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_BoundaryDepthOf11_ThrowsBadRequestException()
+    {
+        var schema = BuildNestedSchema(11);
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.CurrentCulture);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_BoundaryPropertiesCount1001_ThrowsBadRequestException()
+    {
+        var properties = new Dictionary<string, JsonSchema>();
+
+        for (var i = 0; i < 1001; i++)
+        {
+            properties[$"p{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean).Build();
+        }
+
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(properties)
+            .Build();
+
+        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Contains("Maximum allowed is 1000", exception.Message, StringComparison.CurrentCulture);
+    }
+
+    private static JsonSchema BuildNestedSchema(int depth)
+    {
+        if (depth == 0)
+        {
+            return new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        return new JsonSchemaBuilder()
+               .Type(SchemaValueType.Object)
+               .Properties(new Dictionary<string, JsonSchema>
+               {
+                   ["nested"] = BuildNestedSchema(depth - 1)
+               })
+               .Build();
+    }
+
+    private static JsonSchema BuildDeepArrayStructure(int depth)
+    {
+        if (depth == 0)
+        {
+            return new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+        }
+
+        return new JsonSchemaBuilder()
+               .Type(SchemaValueType.Array)
+               .Items(new JsonSchemaBuilder()
+                      .Type(SchemaValueType.Object)
+                      .Properties(new Dictionary<string, JsonSchema>
+                      {
+                          ["child"] = BuildDeepArrayStructure(depth - 1)
+                      })
+                      .Build())
+               .Build();
+    }
 }
 

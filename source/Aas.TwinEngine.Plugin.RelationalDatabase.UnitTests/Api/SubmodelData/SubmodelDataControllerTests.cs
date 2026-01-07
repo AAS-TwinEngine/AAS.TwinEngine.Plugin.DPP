@@ -61,23 +61,6 @@ public class SubmodelDataControllerTests
     }
 
     [Fact]
-    public async Task RetrieveDataAsync_ShouldLogInformation_WhenRequestIsReceived()
-    {
-        const string submodelId = "test-submodel-id";
-        _submodelDataHandler.GetSubmodelData(Arg.Any<GetSubmodelDataRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(_expectedJsonObject));
-
-        await _sut.RetrieveDataAsync(_testSchema, submodelId, CancellationToken.None);
-
-        _logger.Received(1).Log(
-            LogLevel.Information,
-            Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString()!.Contains("Received request to get data by submodel ID")),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
-    }
-
-    [Fact]
     public async Task RetrieveDataAsync_ShouldThrowException_WhenHandlerThrows()
     {
         const string submodelId = "test-submodel-id";

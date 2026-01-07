@@ -24,7 +24,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
             logger.LogWarning("Query returned empty result for productId : {ProductId} ", productId);
-            throw new ResponseNotFoundException();
+            throw new ResourceNotValidException();
         }
 
         var resultSemanticTreeNode = jsonResponseParser.ParseJson(jsonResult);

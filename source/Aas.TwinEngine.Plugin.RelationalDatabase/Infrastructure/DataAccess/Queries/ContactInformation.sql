@@ -96,6 +96,7 @@ SELECT COALESCE(
                                                                     '[]'::json
                                                                 )
                                     )
+    )
      FROM "AssetContactInformation" aci
      JOIN "ContactInformation" ci ON ci."Id" = aci."ContactInformationId"
      WHERE aci."AssetId" = (SELECT "Id" FROM asset_cte)),

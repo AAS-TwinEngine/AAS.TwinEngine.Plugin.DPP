@@ -5,7 +5,6 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
-using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 
@@ -52,14 +51,20 @@ public class SubmodelDataHandler(
         return mapFunc(result!);
     }
 
-    private void ValidateResourceExists<T>(T? result, string resourceName, string decodedId)
+    private void ValidateResourceExists<T>(T? result, string resourceName, string? decodedId = null)
     {
-        if (result is not null)
+        if (result is null)
         {
-            return;
-        }
+            if (decodedId is not null)
+            {
+                logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
+            }
+            else
+            {
+                logger.LogWarning("{ResourceName} not found.", resourceName);
+            }
 
-        logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
-        throw new NotFoundException();
+            throw new NotFoundException();
+        }
     }
 }

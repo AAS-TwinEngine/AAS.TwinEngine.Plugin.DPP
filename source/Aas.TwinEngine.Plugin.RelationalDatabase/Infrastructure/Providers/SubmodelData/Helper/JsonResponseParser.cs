@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
@@ -8,23 +9,31 @@ using Microsoft.Extensions.Options;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
-public class JsonResponseParser(IOptions<Semantics> semanticsOptions) : IJsonResponseParser
+public class JsonResponseParser(IOptions<Semantics> semanticsOptions, ILogger<JsonResponseParser> logger) : IJsonResponseParser
 {
     private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
     public SemanticTreeNode ParseJson(string content)
     {
-        using var doc = JsonDocument.Parse(content);
-        var root = doc.RootElement;
-
-        if (root.ValueKind != JsonValueKind.String)
+        try
         {
-            return ConvertJsonElement(root);
-        }
+            using var doc = JsonDocument.Parse(content);
+            var root = doc.RootElement;
 
-        var jsonString = root.GetString();
-        using var nestedDoc = JsonDocument.Parse(jsonString!);
-        return ConvertJsonElement(nestedDoc.RootElement);
+            if (root.ValueKind != JsonValueKind.String)
+            {
+                return ConvertJsonElement(root);
+            }
+
+            var jsonString = root.GetString();
+            using var nestedDoc = JsonDocument.Parse(jsonString!);
+            return ConvertJsonElement(nestedDoc.RootElement);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Invalid JSON received from database");
+            throw new ResponseParsingException();
+        }
     }
 
     private SemanticTreeNode ConvertJsonElement(JsonElement element)

@@ -43,6 +43,7 @@ SELECT COALESCE(
                                                                                                                     )
                                                                                                     )
                                                     )
+    )
      FROM "Asset" a
      WHERE a."Id" = (SELECT "Id" FROM asset_cte)),
     '{}'::json

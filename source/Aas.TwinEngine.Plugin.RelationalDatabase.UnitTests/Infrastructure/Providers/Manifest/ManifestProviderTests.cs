@@ -19,14 +19,14 @@ public class ManifestProviderTests
     public ManifestProviderTests()
     {
         _logger = Substitute.For<ILogger<ManifestProvider>>();
-        MappingData.MappingJson = CreateJsonDocument("[]");
+        MappingData.MappingJson = CreateJson("[]");
         _sut = new ManifestProvider(_logger);
     }
 
     [Fact]
     public void GetSupportedSemanticIds_ReturnsDistinctTrimmedLeafSemanticIds()
     {
-        MappingData.MappingJson = CreateJsonDocument("""
+        MappingData.MappingJson = CreateJson("""
                                                              [
                                                                  { "Column": "dbo.Products.Name", "SemanticId": [ "  sid:1  " , "sid:1.0"]},
                                                                  { "Column": "dbo.Products.Price", "SemanticId": [ "sid:2" ]},
@@ -54,7 +54,7 @@ public class ManifestProviderTests
     [Fact]
     public void GetSupportedSemanticIds_WhenMappingEmpty_ReturnsEmpty()
     {
-        MappingData.MappingJson = CreateJsonDocument("[]");
+        MappingData.MappingJson = CreateJson("[]");
         _sut = new ManifestProvider(_logger);
 
         var result = _sut.GetSupportedSemanticIds();
@@ -96,12 +96,12 @@ public class ManifestProviderTests
         Assert.Equal(expected, actual);
     }
 
-    private static JsonDocument CreateJsonDocument(string json)
-        => JsonDocument.Parse(Encoding.UTF8.GetBytes(json));
+    private static JsonElement CreateJson(string json)
+        => JsonDocument.Parse(Encoding.UTF8.GetBytes(json)).RootElement;
 
-    private static JsonDocument CreateInvalidJsonDocumentForDeserialization()
+    private static JsonElement CreateInvalidJsonDocumentForDeserialization()
     {
         var bytes = Encoding.UTF8.GetBytes("{}");
-        return JsonDocument.Parse(bytes);
+        return JsonDocument.Parse(bytes).RootElement;
     }
 }

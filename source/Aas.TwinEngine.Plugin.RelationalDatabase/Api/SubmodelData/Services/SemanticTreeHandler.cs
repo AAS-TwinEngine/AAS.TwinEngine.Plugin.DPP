@@ -88,7 +88,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
     private static BranchAnalysis AnalyzeBranchNode(SemanticBranchNode branchNode)
     {
         var children = branchNode.Children.ToList();
-        
+
         return new BranchAnalysis(
             HasOnlyBranchChildren: children.All(c => c is SemanticBranchNode),
             HasOnlyLeafChildren: children.All(c => c is SemanticLeafNode),
@@ -108,7 +108,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
                 .Select(ConvertTreeNodeToJson)
                 .ToList()
                 .ForEach(jsonArray.Add);
-            
+
             return jsonArray;
         }
 
@@ -119,7 +119,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
                 .Select(CreateJsonObjectFromLeaf)
                 .ToList()
                 .ForEach(jsonArray.Add);
-            
+
             return jsonArray;
         }
 
@@ -160,7 +160,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
     private static JsonArray MergeJsonArrays(IEnumerable<JsonNode> arrayNodes)
     {
         var mergedArray = new JsonArray();
-        
+
         arrayNodes
             .Cast<JsonArray>()
             .SelectMany(arr => arr)
@@ -174,7 +174,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
     private static JsonArray WrapNodesInArray(IEnumerable<JsonNode> nodes)
     {
         var wrapperArray = new JsonArray();
-        
+
         nodes
             .Select(n => n?.DeepClone())
             .ToList()
@@ -183,11 +183,6 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
         return wrapperArray;
     }
 
-    private record BranchAnalysis(
-        bool HasOnlyBranchChildren,
-        bool HasOnlyLeafChildren,
-        bool ChildrenShareSameSemanticId,
-        bool HasSingleChild
-    );
+    private record BranchAnalysis(bool HasOnlyBranchChildren, bool HasOnlyLeafChildren, bool ChildrenShareSameSemanticId, bool HasSingleChild);
 }
 

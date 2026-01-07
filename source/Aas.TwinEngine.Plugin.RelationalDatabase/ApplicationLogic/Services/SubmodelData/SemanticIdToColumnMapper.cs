@@ -37,11 +37,10 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
     private List<MappingItem> LoadMappingData()
     {
         var mappingJson = MappingData.MappingJson;
-        var items = mappingJson.RootElement
-            .Deserialize<List<MappingItem?>>(_jsonOptions)?
-            .Where(item => item != null)
-            .Select(item => item!)
-            .ToList() ?? [];
+        var items = mappingJson.Deserialize<List<MappingItem?>>(_jsonOptions)?
+                               .Where(item => item != null)
+                               .Select(item => item!)
+                               .ToList() ?? [];
 
         if (items.Count != 0)
         {

@@ -8,7 +8,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Mani
 
 public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvider
 {
-    private readonly JsonDocument _mappingJson = MappingData.MappingJson;
+    private readonly JsonElement _mappingJson = MappingData.MappingJson;
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
     public IList<string> GetSupportedSemanticIds()
@@ -22,7 +22,7 @@ public class ManifestProvider(ILogger<ManifestProvider> logger) : IManifestProvi
     {
         try
         {
-            var mapping = _mappingJson.RootElement.Deserialize<List<MappingItem?>>(_jsonSerializerOptions) ?? [];
+            var mapping = _mappingJson.Deserialize<List<MappingItem?>>(_jsonSerializerOptions) ?? [];
 
             if (mapping.Count == 0)
             {

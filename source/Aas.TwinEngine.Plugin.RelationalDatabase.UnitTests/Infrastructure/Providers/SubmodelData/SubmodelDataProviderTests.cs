@@ -54,11 +54,11 @@ public class SubmodelDataProviderTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task GetSubmodelValuesAsync_WhenJsonIsEmpty_ShouldThrowResponseNotFoundException(string json)
+    public async Task GetSubmodelValuesAsync_WhenJsonIsEmpty_ShouldThrowResourceNotValidException(string json)
     {
         _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
 
-        await Assert.ThrowsAsync<ResponseNotFoundException>(() => _sut.GetSubmodelValuesAsync("sql", "productId", CancellationToken.None));
+        await Assert.ThrowsAsync<ResourceNotValidException>(() => _sut.GetSubmodelValuesAsync("sql", "productId", CancellationToken.None));
     }
 
     [Fact]

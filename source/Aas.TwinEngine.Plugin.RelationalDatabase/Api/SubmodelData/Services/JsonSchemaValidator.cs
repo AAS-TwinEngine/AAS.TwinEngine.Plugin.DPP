@@ -15,6 +15,9 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
 {
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
     private const string DefinitionsPrefix = "#/definitions/";
+    private const int MaxSchemaDepth = 10;
+    private const int MaxSchemaSize = 1_048_576; // 1MB
+    private const int MaxProperties = 1000;
 
     private static readonly JsonSerializerOptions Serialization = new()
     {
@@ -30,6 +33,11 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             LogAndThrowException($"Schema serialization failed: {serializationError}");
         }
 
+        if (schemaText.Length > MaxSchemaSize)
+        {
+            LogAndThrowException($"Schema size exceeds the maximum allowed size of {MaxSchemaSize} bytes.");
+        }
+
         if (!TryParseSchemaNode(schemaText, out var schemaNode, out var parseError))
         {
             LogAndThrowException($"Schema JSON is invalid: {parseError}");
@@ -39,6 +47,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
         {
             LogAndThrowException("Serialized schema resulted in null JsonNode.");
         }
+
+        ValidateSchemaComplexity(schemaNode!);
 
         try
         {
@@ -249,6 +259,56 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             else
             {
                 EscapeJsonReferencePointers(propertyValue);
+            }
+        }
+    }
+
+    private static void ValidateSchemaComplexity(JsonNode root)
+    {
+        var stack = new Stack<(JsonNode node, int depth)>();
+        stack.Push((root, 0));
+
+        var totalPropertiesCount = 0;
+
+        while (stack.Count > 0)
+        {
+            var (current, depth) = stack.Pop();
+
+            if (depth > MaxSchemaDepth)
+            {
+                throw new BadRequestException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
+            }
+
+            switch (current)
+            {
+                case JsonObject obj:
+                    if (obj.TryGetPropertyValue("properties", out var propsNode) && propsNode is JsonObject propsObj)
+                    {
+                        totalPropertiesCount += propsObj.Count;
+                        if (totalPropertiesCount > MaxProperties)
+                        {
+                            throw new BadRequestException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
+                        }
+                    }
+
+                    foreach (var kv in obj)
+                    {
+                        if (kv.Value != null)
+                        {
+                            stack.Push((kv.Value, depth + 1));
+                        }
+                    }
+                    break;
+
+                case JsonArray arr:
+                    foreach (var item in arr)
+                    {
+                        if (item != null)
+                        {
+                            stack.Push((item, depth + 1));
+                        }
+                    }
+                    break;
             }
         }
     }

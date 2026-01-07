@@ -4,5 +4,5 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sha
 
 public record MappingData
 {
-    public static JsonDocument MappingJson { get; set; } = null!;
+    public static JsonElement MappingJson { get; set; }
 }
