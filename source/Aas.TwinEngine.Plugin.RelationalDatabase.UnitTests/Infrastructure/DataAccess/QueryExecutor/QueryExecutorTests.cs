@@ -75,7 +75,7 @@ public class QueryExecutorTests
         _connection.OpenAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
         _reader.ReadAsync(Arg.Any<CancellationToken>()).Returns(false);
 
-        await Assert.ThrowsAsync<ResourceNotFoundException>(() => 
+        await Assert.ThrowsAsync<ResourceNotFoundException>(() =>
             _sut.ExecuteQueryAsync("SELECT 1", CancellationToken.None));
     }
 
@@ -172,7 +172,7 @@ public class QueryExecutorTests
     {
         var longQuery = new string('A', 100001);
 
-        await Assert.ThrowsAsync<ResourceNotValidException>(() => 
+        await Assert.ThrowsAsync<ResourceNotValidException>(() =>
             _sut.ExecuteQueryAsync(longQuery, CancellationToken.None));
     }
 
@@ -199,7 +199,7 @@ public class QueryExecutorTests
     {
         _connection.OpenAsync(Arg.Any<CancellationToken>()).Throws(new InvalidOperationException());
 
-        await Assert.ThrowsAsync<ResourceNotFoundException>(() => 
+        await Assert.ThrowsAsync<ResourceNotFoundException>(() =>
             _sut.ExecuteQueryAsync("SELECT 1", CancellationToken.None));
     }
 
@@ -209,7 +209,7 @@ public class QueryExecutorTests
         _connection.OpenAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
         _command.ExecuteReaderAsync(Arg.Any<CancellationToken>()).Throws(new Exception("DB error"));
 
-        await Assert.ThrowsAsync<ResourceNotFoundException>(() => 
+        await Assert.ThrowsAsync<ResourceNotFoundException>(() =>
             _sut.ExecuteQueryAsync("SELECT 1", CancellationToken.None));
     }
 

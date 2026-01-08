@@ -6,8 +6,6 @@ using Microsoft.Extensions.Options;
 
 using NSubstitute;
 
-using OpenTelemetry;
-
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.SubmodelData;
 
 public class SemanticTreeResponseBuilderTests
@@ -401,7 +399,7 @@ public class SemanticTreeResponseBuilderTests
         var responseNestedBranch3 = new SemanticBranchNode("nestedBranchCol", DataType.Array);
         var responseLeaf1 = new SemanticLeafNode("leaf1Col", DataType.String, "responseValue1");
         var responseLeaf2 = new SemanticLeafNode("leaf2Col", DataType.String, "responseValue2");
-        
+
         responseNestedBranch1.AddChild(responseLeaf1);
         responseNestedBranch2.AddChild(responseLeaf1);
         responseNestedBranch3.AddChild(responseLeaf1);
@@ -477,13 +475,13 @@ public class SemanticTreeResponseBuilderTests
         //        └─ Categories (Array)
         //             └─ Tags (Array)
         //                  └─ Name (Leaf)
-        
+
         var root = new SemanticBranchNode("root", DataType.Object);
         var products = new SemanticBranchNode("products", DataType.Array);
         var categories = new SemanticBranchNode("categories", DataType.Array);
         var tags = new SemanticBranchNode("tags", DataType.Array);
         var tagName = new SemanticLeafNode("tagName", DataType.String, "");
-        
+
         tags.AddChild(tagName);
         categories.AddChild(tags);
         products.AddChild(categories);
@@ -500,9 +498,9 @@ public class SemanticTreeResponseBuilderTests
         //   └─ Products[1]
         //        └─ Categories[0]
         //             └─ Tags[0] { Name: "Tag2-1-1" }
-        
+
         var responseRoot = new SemanticBranchNode("root", DataType.Object);
-        
+
         // Product 0
         var responseProd0 = new SemanticBranchNode("productsCol_aastwinengine_0", DataType.Array);
         var responseCat0_0 = new SemanticBranchNode("categoriesCol_aastwinengine_0", DataType.Array);
@@ -512,15 +510,15 @@ public class SemanticTreeResponseBuilderTests
         responseTag0_0_1.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag1-1-2"));
         responseCat0_0.AddChild(responseTag0_0_0);
         responseCat0_0.AddChild(responseTag0_0_1);
-        
+
         var responseCat0_1 = new SemanticBranchNode("categoriesCol_aastwinengine_1", DataType.Array);
         var responseTag0_1_0 = new SemanticBranchNode("tagsCol_aastwinengine_0", DataType.Array);
         responseTag0_1_0.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag1-2-1"));
         responseCat0_1.AddChild(responseTag0_1_0);
-        
+
         responseProd0.AddChild(responseCat0_0);
         responseProd0.AddChild(responseCat0_1);
-        
+
         // Product 1
         var responseProd1 = new SemanticBranchNode("productsCol_aastwinengine_1", DataType.Array);
         var responseCat1_0 = new SemanticBranchNode("categoriesCol_aastwinengine_0", DataType.Array);
@@ -528,7 +526,7 @@ public class SemanticTreeResponseBuilderTests
         responseTag1_0_0.AddChild(new SemanticLeafNode("tagNameCol", DataType.String, "Tag2-1-1"));
         responseCat1_0.AddChild(responseTag1_0_0);
         responseProd1.AddChild(responseCat1_0);
-        
+
         responseRoot.AddChild(responseProd0);
         responseRoot.AddChild(responseProd1);
 

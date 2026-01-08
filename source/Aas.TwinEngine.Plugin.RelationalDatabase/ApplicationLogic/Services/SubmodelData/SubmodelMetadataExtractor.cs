@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 
@@ -25,7 +25,7 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         }
 
         logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
-        throw new NotFoundException();
+        throw new InvalidUserInputException();
     }
 
     private string ExtractProductId(string submodelId)
@@ -46,7 +46,7 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         }
 
         logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
-        throw new NotFoundException();
+        throw new InvalidUserInputException();
     }
 
     private string ExtractSubmodelName(string submodelId)
@@ -63,6 +63,6 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         }
 
         logger.LogError("Submodel Name could not be extracted from the provided submodel Identifier.");
-        throw new NotFoundException();
+        throw new InvalidUserInputException();
     }
 }

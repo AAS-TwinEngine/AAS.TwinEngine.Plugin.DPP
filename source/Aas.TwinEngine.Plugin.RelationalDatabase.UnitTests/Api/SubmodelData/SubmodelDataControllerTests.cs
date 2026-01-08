@@ -7,7 +7,6 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
 using Json.Schema;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using NSubstitute;
 
@@ -15,7 +14,6 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.Api.SubmodelData;
 
 public class SubmodelDataControllerTests
 {
-    private readonly ILogger<SubmodelDataController> _logger = Substitute.For<ILogger<SubmodelDataController>>();
     private readonly ISubmodelDataHandler _submodelDataHandler = Substitute.For<ISubmodelDataHandler>();
     private readonly SubmodelDataController _sut;
     private readonly JsonObject _expectedJsonObject = new() { ["name"] = "testValue" };
@@ -23,7 +21,7 @@ public class SubmodelDataControllerTests
 
     public SubmodelDataControllerTests()
     {
-        _sut = new SubmodelDataController(_logger, _submodelDataHandler);
+        _sut = new SubmodelDataController(_submodelDataHandler);
         _testSchema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
             .Properties(new Dictionary<string, JsonSchema>
@@ -75,8 +73,8 @@ public class SubmodelDataControllerTests
     public async Task RetrieveDataAsync_ShouldHandleCancellation_WhenTokenIsCancelled()
     {
         const string submodelId = "test-submodel-id";
-        var cts = new CancellationTokenSource();
-        cts.Cancel();
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync();
 
         _submodelDataHandler.GetSubmodelData(Arg.Any<GetSubmodelDataRequest>(), Arg.Any<CancellationToken>())
             .Returns<Task<JsonObject>>(_ => throw new OperationCanceledException());

@@ -1,4 +1,5 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
@@ -90,7 +91,7 @@ public class SubmodelDataServiceTests
     }
 
     [Fact]
-    public async Task GetValuesBySemanticIds_SqlQueryNotFound_ThrowsInvalidOperationException()
+    public async Task GetValuesBySemanticIds_SqlQueryNotFound_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
         const string submodelId = "test-submodel-id";
@@ -100,14 +101,14 @@ public class SubmodelDataServiceTests
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns((string?)null);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+        var exception = await Assert.ThrowsAsync<QueryNotAvailableException>(
             () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
 
         Assert.Contains("SQL query not found", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task GetValuesBySemanticIds_SqlQueryEmpty_ThrowsInvalidOperationException()
+    public async Task GetValuesBySemanticIds_SqlQueryEmpty_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
         const string submodelId = "test-submodel-id";
@@ -117,12 +118,12 @@ public class SubmodelDataServiceTests
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(string.Empty);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
+        await Assert.ThrowsAsync<QueryNotAvailableException>(
             () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
     }
 
     [Fact]
-    public async Task GetValuesBySemanticIds_SqlQueryWhitespace_ThrowsInvalidOperationException()
+    public async Task GetValuesBySemanticIds_SqlQueryWhitespace_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
         const string submodelId = "test-submodel-id";
@@ -132,7 +133,7 @@ public class SubmodelDataServiceTests
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns("   ");
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
+        await Assert.ThrowsAsync<QueryNotAvailableException>(
             () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
     }
 
@@ -208,8 +209,8 @@ public class SubmodelDataServiceTests
         const string submodelId = "test-submodel-id";
         const string sqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        var cts = new CancellationTokenSource();
-        cts.Cancel();
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync();
         _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
@@ -230,7 +231,7 @@ public class SubmodelDataServiceTests
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);

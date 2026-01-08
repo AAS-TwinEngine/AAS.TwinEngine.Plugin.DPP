@@ -17,7 +17,7 @@ public class SemanticBranchNode(string semanticId, DataType dataType) : Semantic
 
     public void AddChild(SemanticTreeNode child) => _children.Add(child);
 
-    public void ReplaceChildren(List<SemanticTreeNode> newChildren)
+    public void ReplaceChildren(IList<SemanticTreeNode> newChildren)
     {
         _children.Clear();
         _children.AddRange(newChildren);

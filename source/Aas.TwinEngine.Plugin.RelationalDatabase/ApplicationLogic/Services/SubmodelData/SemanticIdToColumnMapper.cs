@@ -51,7 +51,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         throw new InternalDataProcessingException();
     }
 
-    private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, List<MappingItem> mappingData)
+    private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, IList<MappingItem> mappingData)
     {
         var result = new Dictionary<string, string>();
         var queue = new Queue<SemanticTreeNode>();
@@ -86,7 +86,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         return result;
     }
 
-    private string ResolveColumn(string semanticId, List<MappingItem?> mappingData, SemanticTreeNode node)
+    private string ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node)
     {
         var (baseId, suffix) = SplitSemanticId(semanticId);
         var mappingItem = FindMapping(baseId, mappingData);
@@ -112,7 +112,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         return index < 0 ? (semanticId, null) : (semanticId[..index], semanticId[index..]);
     }
 
-    private static MappingItem? FindMapping(string semanticId, List<MappingItem?> mappingData)
+    private static MappingItem? FindMapping(string semanticId, IList<MappingItem> mappingData)
     {
         return mappingData.FirstOrDefault(m =>
             m?.SemanticId != null &&

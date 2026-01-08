@@ -40,7 +40,7 @@ public class DbParameterValidatorTests
     [Fact]
     public void ValidateParameters_WithNullParameters_ShouldNotThrow()
     {
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             DbParameterValidator.ValidateParameters(null, _logger));
 
         Assert.Null(exception);
@@ -51,7 +51,7 @@ public class DbParameterValidatorTests
     {
         var parameters = new List<DbParameter>();
 
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             DbParameterValidator.ValidateParameters(parameters, _logger));
 
         Assert.Null(exception);
@@ -66,7 +66,7 @@ public class DbParameterValidatorTests
             new NpgsqlParameter("@param2", 123) { Direction = ParameterDirection.Input }
         };
 
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             DbParameterValidator.ValidateParameters(parameters, _logger));
 
         Assert.Null(exception);
@@ -76,14 +76,14 @@ public class DbParameterValidatorTests
     public void ValidateParameters_WithTooManyParameters_ShouldThrow()
     {
         var parameters = Enumerable.Range(0, 101)
-            .Select(i => new NpgsqlParameter($"@param{i}", i) 
-            { 
-                Direction = ParameterDirection.Input 
+            .Select(i => new NpgsqlParameter($"@param{i}", i)
+            {
+                Direction = ParameterDirection.Input
             })
             .Cast<DbParameter>()
             .ToList();
 
-        var exception = Assert.Throws<ResourceNotValidException>(() => 
+        var exception = Assert.Throws<ResourceNotValidException>(() =>
             DbParameterValidator.ValidateParameters(parameters, _logger));
 
         AssertLoggedError(_logger);
@@ -113,7 +113,7 @@ public class DbParameterValidatorTests
     [Fact]
     public void ValidateParameter_WithNullParameter_ShouldThrowArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => 
+        Assert.Throws<ArgumentNullException>(() =>
             DbParameterValidator.ValidateParameter(null!, _logger));
     }
 
@@ -125,7 +125,7 @@ public class DbParameterValidatorTests
             Direction = ParameterDirection.Input
         };
 
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             DbParameterValidator.ValidateParameter(parameter, _logger));
 
         Assert.Null(exception);
@@ -143,7 +143,7 @@ public class DbParameterValidatorTests
             Direction = ParameterDirection.Input
         };
 
-        Assert.Throws<ResourceNotValidException>(() => 
+        Assert.Throws<ResourceNotValidException>(() =>
             DbParameterValidator.ValidateParameter(parameter, _logger));
         AssertLoggedError(_logger);
     }
@@ -315,7 +315,7 @@ public class DbParameterValidatorTests
             Direction = ParameterDirection.Input
         };
 
-        var exception = Record.Exception(() => 
+        var exception = Record.Exception(() =>
             DbParameterValidator.ValidateParameter(parameter, _logger));
 
         Assert.Null(exception);
