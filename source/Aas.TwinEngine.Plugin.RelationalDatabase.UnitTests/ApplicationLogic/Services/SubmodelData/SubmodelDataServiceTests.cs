@@ -66,27 +66,27 @@ public class SubmodelDataServiceTests
     public async Task GetValuesBySemanticIds_CallsAllDependenciesInCorrectOrder()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string productId = "product-123";
-        const string sqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult(productId, SubmodelName.NamePlate);
+        const string SubmodelId = "test-submodel-id";
+        const string ProductId = "product-123";
+        const string SqlQuery = "SELECT * FROM TestTable";
+        var extractionResult = new SubmodelIdExtractionResult(ProductId, SubmodelName.NamePlate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
         var columnMapping = new Dictionary<string, string>();
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>()).Returns(columnMapping);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
         _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
             .Returns(resultNode);
 
-        await _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None);
+        await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None);
 
-        _submodelMetadataExtractor.Received(1).ExtractSubmodelMetadata(submodelId);
+        _submodelMetadataExtractor.Received(1).ExtractSubmodelMetadata(SubmodelId);
         _semanticIdToColumnMapper.Received(1).GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>());
-        _queryProvider.Received(1).GetQuery(SubmodelName.NamePlate.ToString());
-        await _submodelDataProvider.Received(1).GetSubmodelValuesAsync(sqlQuery, productId, Arg.Any<CancellationToken>());
+        _queryProvider.Received(1).GetQuery(nameof(SubmodelName.NamePlate));
+        await _submodelDataProvider.Received(1).GetSubmodelValuesAsync(SqlQuery, ProductId, Arg.Any<CancellationToken>());
         _semanticTreeResponseBuilder.Received(1).BuildResponse(Arg.Any<SemanticTreeNode>(), responseNode, columnMapping);
     }
 
@@ -94,156 +94,148 @@ public class SubmodelDataServiceTests
     public async Task GetValuesBySemanticIds_SqlQueryNotFound_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
+        const string SubmodelId = "test-submodel-id";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns((string?)null);
 
-        var exception = await Assert.ThrowsAsync<QueryNotAvailableException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        var exception = await Assert.ThrowsAsync<QueryNotAvailableException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
 
-        Assert.Contains("SQL query not found", exception.Message, StringComparison.Ordinal);
+        Assert.Contains("Internal Server Error.", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_SqlQueryEmpty_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
+        const string SubmodelId = "test-submodel-id";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(string.Empty);
 
-        await Assert.ThrowsAsync<QueryNotAvailableException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<QueryNotAvailableException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_SqlQueryWhitespace_ThrowsQueryNotAvailableException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
+        const string SubmodelId = "test-submodel-id";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns("   ");
 
-        await Assert.ThrowsAsync<QueryNotAvailableException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<QueryNotAvailableException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_MetadataExtractorThrows_PropagatesException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId)
+        const string SubmodelId = "test-submodel-id";
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId)
             .Throws(new InvalidOperationException("Extraction failed"));
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_ColumnMapperThrows_PropagatesException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
+        const string SubmodelId = "test-submodel-id";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Throws(new InvalidOperationException("Mapping failed"));
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_DataProviderThrows_PropagatesException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string sqlQuery = "SELECT * FROM TestTable";
+        const string SubmodelId = "test-submodel-id";
+        const string SqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Throws(new InvalidOperationException("Data provider failed"));
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_ResponseBuilderThrows_PropagatesException()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string sqlQuery = "SELECT * FROM TestTable";
+        const string SubmodelId = "test-submodel-id";
+        const string SqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
         _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
             .Throws(new InvalidOperationException("Response builder failed"));
 
-        await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_CancellationRequested_PropagatesCancellation()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string sqlQuery = "SELECT * FROM TestTable";
+        const string SubmodelId = "test-submodel-id";
+        const string SqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync();
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Throws(new OperationCanceledException());
 
-        await Assert.ThrowsAsync<OperationCanceledException>(
-            () => _sut.GetValuesBySemanticIds(jsonSchema, submodelId, cts.Token));
+        await Assert.ThrowsAsync<OperationCanceledException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, cts.Token));
     }
 
     [Fact]
     public async Task GetValuesBySemanticIds_PassesCancellationTokenToProvider()
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string sqlQuery = "SELECT * FROM TestTable";
+        const string SubmodelId = "test-submodel-id";
+        const string SqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
         using var cts = new CancellationTokenSource();
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
         _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
             .Returns(resultNode);
 
-        await _sut.GetValuesBySemanticIds(jsonSchema, submodelId, cts.Token);
+        await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, cts.Token);
 
-        await _submodelDataProvider.Received(1).GetSubmodelValuesAsync(sqlQuery, "productId", cts.Token);
+        await _submodelDataProvider.Received(1).GetSubmodelValuesAsync(SqlQuery, "productId", cts.Token);
     }
 
     [Theory]
@@ -252,21 +244,21 @@ public class SubmodelDataServiceTests
     public async Task GetValuesBySemanticIds_DifferentSubmodelNames_QueriesCorrectSubmodel(SubmodelName submodelName)
     {
         var jsonSchema = CreateValidJsonSchema();
-        const string submodelId = "test-submodel-id";
-        const string sqlQuery = "SELECT * FROM TestTable";
+        const string SubmodelId = "test-submodel-id";
+        const string SqlQuery = "SELECT * FROM TestTable";
         var extractionResult = new SubmodelIdExtractionResult("productId", submodelName);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
-        _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
-        _queryProvider.GetQuery(Arg.Any<string>()).Returns(sqlQuery);
+        _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
         _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
             .Returns(resultNode);
 
-        await _sut.GetValuesBySemanticIds(jsonSchema, submodelId, CancellationToken.None);
+        await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None);
 
         _queryProvider.Received(1).GetQuery(submodelName.ToString());
     }

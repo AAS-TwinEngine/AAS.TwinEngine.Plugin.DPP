@@ -46,7 +46,7 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         var sqlQuery = queryProvider.GetQuery(submodelName);
         if (string.IsNullOrWhiteSpace(sqlQuery))
         {
-            throw new QueryNotAvailableException($"SQL query not found for: {submodelName}");
+            throw new QueryNotAvailableException();
         }
 
         return sqlQuery;
