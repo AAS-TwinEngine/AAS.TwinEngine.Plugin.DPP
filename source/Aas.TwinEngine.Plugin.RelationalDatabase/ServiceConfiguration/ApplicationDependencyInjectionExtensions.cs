@@ -8,6 +8,7 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
 
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
@@ -27,6 +28,9 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<IMetaDataHandler, MetaDataHandler>();
         _ = services.AddScoped<IMetaDataService, MetaDataService>();
 
+        _ = services.AddScoped<IResponseSemanticTreeNodeResolver, ResponseSemanticTreeNodeResolver>();
+        _ = services.AddScoped<IResponseBranchNodeProcessor, ResponseBranchNodeProcessor>();
+        _ = services.AddScoped<IResponseLeafNodeProcessor, ResponseLeafNodeProcessor>();
         _ = services.AddScoped<ISemanticIdToColumnMapper, SemanticIdToColumnMapper>();
         _ = services.AddScoped<ISemanticTreeResponseBuilder, SemanticTreeResponseBuilder>();
         _ = services.AddScoped<ISubmodelMetadataExtractor, SubmodelMetadataExtractor>();
