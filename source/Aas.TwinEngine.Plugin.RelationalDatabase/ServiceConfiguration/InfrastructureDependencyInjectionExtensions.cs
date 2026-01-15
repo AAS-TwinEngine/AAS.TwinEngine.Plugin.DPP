@@ -1,5 +1,6 @@
 ﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Configuration;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
@@ -33,7 +34,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddOptions<Capabilities>().Bind(configuration.GetSection(Capabilities.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<ExtractionRules>().Bind(configuration.GetSection(ExtractionRules.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<Semantics>().Bind(configuration.GetSection(Semantics.Section)).ValidateDataAnnotations().ValidateOnStart();
-
+        _ = services.AddOptions<MetaDataEndpoints>().Bind(configuration.GetSection(MetaDataEndpoints.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();
         _ = services.AddScoped<IQueryExecutor, QueryExecutor>();
 

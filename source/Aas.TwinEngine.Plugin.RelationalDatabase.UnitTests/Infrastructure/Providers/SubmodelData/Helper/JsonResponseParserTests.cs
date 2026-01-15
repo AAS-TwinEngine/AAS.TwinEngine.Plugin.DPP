@@ -365,7 +365,9 @@ public class JsonResponseParserTests
         Assert.NotNull(manufacturer);
         Assert.IsType<SemanticBranchNode>(manufacturer);
 
-        var products = nameplate.Children.Where(c => c.SemanticId.StartsWith("products")).ToList();
+        var products = nameplate.Children
+            .Where(c => c.SemanticId.StartsWith("products", StringComparison.Ordinal))
+            .ToList();
         Assert.Equal(2, products.Count);
     }
 
@@ -467,8 +469,8 @@ public class JsonResponseParserTests
 
         var rootBranch = Assert.IsType<SemanticBranchNode>(result);
         var specialChild = Assert.IsType<SemanticLeafNode>(rootBranch.Children.First());
-        Assert.Contains("\n", specialChild.Value);
-        Assert.Contains("\t", specialChild.Value);
+        Assert.Contains("\n", specialChild.Value, StringComparison.Ordinal);
+        Assert.Contains("\t", specialChild.Value, StringComparison.Ordinal);
     }
 
     [Fact]

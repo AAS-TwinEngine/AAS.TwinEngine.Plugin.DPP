@@ -16,8 +16,7 @@ namespace Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 [ApiController]
 [Route("")]
 [ApiVersion(1)]
-public class SubmodelDataController(
-    ILogger<SubmodelDataController> logger, ISubmodelDataHandler submodelDataHandler) : ControllerBase
+public class SubmodelDataController(ISubmodelDataHandler submodelDataHandler) : ControllerBase
 {
     [HttpPost("data/{submodelId}")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]

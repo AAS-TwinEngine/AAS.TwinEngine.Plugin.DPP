@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
@@ -105,7 +103,7 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_NoMatchingProductIdRule_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_NoMatchingProductIdRule_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -119,7 +117,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
 
         _logger.Received(1).Log(
             LogLevel.Error,
@@ -130,7 +128,7 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_IndexOutOfRange_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_IndexOutOfRange_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -144,11 +142,11 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_EmptyProductIdRules_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_EmptyProductIdRules_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -159,11 +157,11 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_NoMatchingSubmodelNamePattern_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_NoMatchingSubmodelNamePattern_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -177,7 +175,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
         _logger.Received(1).Log(
             LogLevel.Error,
             Arg.Any<EventId>(),
@@ -187,7 +185,7 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_UnrecognizedSubmodelName_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_UnrecognizedSubmodelName_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -201,7 +199,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Invalid/data";
 
-        var exception = Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
         _logger.Received(1).Log(
             LogLevel.Error,
             Arg.Any<EventId>(),
@@ -211,7 +209,7 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_EmptySubmodelNameRules_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_EmptySubmodelNameRules_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -222,7 +220,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     [Fact]
@@ -292,19 +290,16 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsNotFoundException() => Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(null!));
+    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(null!));
 
     [Fact]
-    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsNotFoundException()
-    {
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
-    }
+    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
 
     [Fact]
-    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsNotFoundException() => Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata("   "));
+    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
 
     [Fact]
-    public void ExtractSubmodelMetadata_ZeroIndex_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_ZeroIndex_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -318,11 +313,11 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_NegativeIndex_ThrowsNotFoundException()
+    public void ExtractSubmodelMetadata_NegativeIndex_ThrowsInvalidUserInputException()
     {
         var rules = new ExtractionRules
         {
@@ -336,7 +331,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Nameplate/data";
 
-        Assert.Throws<NotFoundException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     private static ExtractionRules CreateDefaultExtractionRules()

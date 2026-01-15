@@ -1,4 +1,6 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
@@ -17,19 +19,26 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
 {
     public async Task<SemanticTreeNode> GetValuesBySemanticIds(JsonSchema jsonSchema, string submodelId, CancellationToken cancellationToken)
     {
-        var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
+        try
+        {
+            var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
 
-        var extractionResult = submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId);
+            var extractionResult = submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId);
 
-        var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(requestSemanticTreeNode);
+            var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(requestSemanticTreeNode);
 
-        var sqlQuery = GetSqlQueryForSubmodel(extractionResult.SubmodelName.ToString());
+            var sqlQuery = GetSqlQueryForSubmodel(extractionResult.SubmodelName.ToString());
 
-        var responseSemanticTreeNode = await submodelDataProvider.GetSubmodelValuesAsync(sqlQuery, extractionResult.ProductId, cancellationToken).ConfigureAwait(false);
+            var responseSemanticTreeNode = await submodelDataProvider.GetSubmodelValuesAsync(sqlQuery, extractionResult.ProductId, cancellationToken).ConfigureAwait(false);
 
-        var result = semanticTreeResponseBuilder.BuildResponse(requestSemanticTreeNode, responseSemanticTreeNode, semanticIdToColumnMapping);
+            var result = semanticTreeResponseBuilder.BuildResponse(requestSemanticTreeNode, responseSemanticTreeNode, semanticIdToColumnMapping);
 
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw HandleSubmodelDataException(ex);
+        }
     }
 
     private string GetSqlQueryForSubmodel(string submodelName)
@@ -37,9 +46,25 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         var sqlQuery = queryProvider.GetQuery(submodelName);
         if (string.IsNullOrWhiteSpace(sqlQuery))
         {
-            throw new InvalidOperationException($"SQL query not found for: {submodelName}");
+            throw new QueryNotAvailableException($"SQL query not found for: {submodelName}");
         }
 
         return sqlQuery;
+    }
+
+    private static Exception HandleSubmodelDataException(Exception exception)
+    {
+        return exception switch
+        {
+            ResourceNotFoundException ex => new SubmodelDataNotFoundException(ex),
+
+            ResourceNotValidException ex => new SubmodelDataNotFoundException(ex),
+
+            ResponseParsingException ex => new InternalDataProcessingException(ex),
+
+            ValidationFailedException ex => new InternalDataProcessingException(ex),
+
+            _ => exception
+        };
     }
 }

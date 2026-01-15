@@ -305,12 +305,5 @@ public class SemanticIdToColumnMapperTests
             Arg.Any<Func<object, Exception?, string>>());
     }
 
-    private static JsonElement CreateJsonDocument(string json)
-        => JsonDocument.Parse(Encoding.UTF8.GetBytes(json)).RootElement;
-
-    private static JsonElement CreateInvalidJsonDocumentForDeserialization()
-    {
-        var bytes = Encoding.UTF8.GetBytes("{}");
-        return JsonDocument.Parse(bytes).RootElement;
-    }
+    private static JsonElement CreateJsonDocument(string json) => JsonDocument.Parse(Encoding.UTF8.GetBytes(json)).RootElement;
 }
