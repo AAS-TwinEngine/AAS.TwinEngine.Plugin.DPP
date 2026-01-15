@@ -24,8 +24,6 @@ public static class Program
         builder.Services.ConfigureInfrastructure(builder.Configuration);
         builder.Services.ConfigureApplication();
 
-        _ = builder.Services.AddAuthorization();
-
         _ = builder.Services.AddControllers();
 
         _ = builder.Services.AddEndpointsApiExplorer();
