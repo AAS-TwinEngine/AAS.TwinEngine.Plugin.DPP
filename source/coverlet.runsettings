@@ -15,6 +15,7 @@
             **/ServiceConfiguration/*.cs,
             **/ApplicationLogic/Exceptions/**/*.cs,
             **/ApplicationLogic/Services/**/Config/*.cs,
+            **/ServiceConfiguration/Config/*.cs,
             **/Infrastructure/Providers/**/Config/*.cs,
             **/Infrastructure/DataAccess/Entities/**/*.cs,
             **/Infrastructure/DataAccess/MapperProfiles/**/*.cs,

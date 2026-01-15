@@ -1,5 +1,4 @@
-﻿using Aas.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
-using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+﻿using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using Aas.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Json.Schema;
