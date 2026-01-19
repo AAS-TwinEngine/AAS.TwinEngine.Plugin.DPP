@@ -5,6 +5,8 @@ using Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Respo
 
 using Microsoft.AspNetCore.Diagnostics;
 
+using UnauthorizedAccessException = Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base.UnauthorizedAccessException;
+
 namespace Aas.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions;
 
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
@@ -23,7 +25,9 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             BadRequestException => StatusCodes.Status400BadRequest,
             ForbiddenException => StatusCodes.Status403Forbidden,
             NotFoundException => StatusCodes.Status404NotFound,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             TimeoutException => StatusCodes.Status408RequestTimeout,
+            ServiceUnavailableException => StatusCodes.Status503ServiceUnavailable,
             _ => StatusCodes.Status500InternalServerError
         };
 
