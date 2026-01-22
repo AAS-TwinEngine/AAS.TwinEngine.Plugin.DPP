@@ -44,13 +44,13 @@ public class SubmodelDataServiceTests
         const string submodelId = "test-submodel-id";
         const string productId = "product-123";
         const string sqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult(productId, SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult(productId, SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("responseSemanticId", DataType.String, "responseValue");
         var expectedResult = new SemanticLeafNode("resultSemanticId", DataType.String, "finalValue");
         var columnMapping = new Dictionary<string, string> { ["requestSemanticId"] = "columnName" };
         _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>()).Returns(columnMapping);
-        _queryProvider.GetQuery(SubmodelName.NamePlate.ToString()).Returns(sqlQuery);
+        _queryProvider.GetQuery(SubmodelName.Nameplate.ToString()).Returns(sqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(sqlQuery, productId, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
         _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), responseNode, columnMapping)
@@ -69,7 +69,7 @@ public class SubmodelDataServiceTests
         const string SubmodelId = "test-submodel-id";
         const string ProductId = "product-123";
         const string SqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult(ProductId, SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult(ProductId, SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
         var columnMapping = new Dictionary<string, string>();
@@ -85,7 +85,7 @@ public class SubmodelDataServiceTests
 
         _submodelMetadataExtractor.Received(1).ExtractSubmodelMetadata(SubmodelId);
         _semanticIdToColumnMapper.Received(1).GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>());
-        _queryProvider.Received(1).GetQuery(nameof(SubmodelName.NamePlate));
+        _queryProvider.Received(1).GetQuery(nameof(SubmodelName.Nameplate));
         await _submodelDataProvider.Received(1).GetSubmodelValuesAsync(SqlQuery, ProductId, Arg.Any<CancellationToken>());
         _semanticTreeResponseBuilder.Received(1).BuildResponse(Arg.Any<SemanticTreeNode>(), responseNode, columnMapping);
     }
@@ -95,7 +95,7 @@ public class SubmodelDataServiceTests
     {
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
@@ -111,7 +111,7 @@ public class SubmodelDataServiceTests
     {
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
@@ -125,7 +125,7 @@ public class SubmodelDataServiceTests
     {
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
@@ -150,7 +150,7 @@ public class SubmodelDataServiceTests
     {
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Throws(new InvalidOperationException("Mapping failed"));
@@ -164,7 +164,7 @@ public class SubmodelDataServiceTests
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
         const string SqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
             .Returns([]);
@@ -181,7 +181,7 @@ public class SubmodelDataServiceTests
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
         const string SqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
@@ -201,7 +201,7 @@ public class SubmodelDataServiceTests
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
         const string SqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync();
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
@@ -220,7 +220,7 @@ public class SubmodelDataServiceTests
         var jsonSchema = CreateValidJsonSchema();
         const string SubmodelId = "test-submodel-id";
         const string SqlQuery = "SELECT * FROM TestTable";
-        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.NamePlate);
+        var extractionResult = new SubmodelIdExtractionResult("productId", SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
         using var cts = new CancellationTokenSource();
@@ -239,7 +239,7 @@ public class SubmodelDataServiceTests
     }
 
     [Theory]
-    [InlineData(SubmodelName.NamePlate)]
+    [InlineData(SubmodelName.Nameplate)]
     [InlineData(SubmodelName.ContactInformation)]
     public async Task GetValuesBySemanticIds_DifferentSubmodelNames_QueriesCorrectSubmodel(SubmodelName submodelName)
     {

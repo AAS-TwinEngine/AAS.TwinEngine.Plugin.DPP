@@ -36,7 +36,7 @@ public class SubmodelMetadataExtractorTests
 
         Assert.NotNull(result);
         Assert.Equal("product123", result.ProductId);
-        Assert.Equal(SubmodelName.NamePlate, result.SubmodelName);
+        Assert.Equal(SubmodelName.Nameplate, result.SubmodelName);
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class SubmodelMetadataExtractorTests
 
         var result = _sut.ExtractSubmodelMetadata(submodelId);
 
-        Assert.Equal(SubmodelName.NamePlate, result.SubmodelName);
+        Assert.Equal(SubmodelName.Nameplate, result.SubmodelName);
     }
 
     [Fact]
@@ -244,7 +244,7 @@ public class SubmodelMetadataExtractorTests
 
         var result = _sut.ExtractSubmodelMetadata(submodelId);
 
-        Assert.Equal(SubmodelName.NamePlate, result.SubmodelName);
+        Assert.Equal(SubmodelName.Nameplate, result.SubmodelName);
     }
 
     [Fact]

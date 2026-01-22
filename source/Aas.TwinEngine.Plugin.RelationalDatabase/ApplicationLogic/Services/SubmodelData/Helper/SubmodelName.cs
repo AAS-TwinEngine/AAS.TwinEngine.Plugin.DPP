@@ -2,7 +2,7 @@
 
 public enum SubmodelName
 {
-    NamePlate,
+    Nameplate,
     ContactInformation,
     HandoverDocumentation,
     CarbonFootprint,
