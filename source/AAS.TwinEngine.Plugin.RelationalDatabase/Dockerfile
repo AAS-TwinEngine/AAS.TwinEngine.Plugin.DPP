@@ -10,7 +10,7 @@ RUN dotnet restore "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plug
 RUN dotnet publish "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" -c "$BUILD_CONFIGURATION" -o out
 
 # Generate Application SBOM at sbom/bom.xml (omitting dev/test dependencies as they do not appear in final build)
-RUN dotnet-CycloneDX "AAS.TwinEngine.DataEngine/AAS.TwinEngine.DataEngine.csproj" -o "sbom/" --exclude-dev --exclude-test-projects --set-nuget-purl --spec-version 1.6  --disable-package-restore
+RUN dotnet-CycloneDX "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" -o "sbom/" --exclude-dev --exclude-test-projects --set-nuget-purl --spec-version 1.6  --disable-package-restore
 
 # Create an "app-sbom-artifact" image which can be use to extract the pure APP SBOM after completing the docker build (we want to keep the SBOM for the application separate from the pure linux image SBOM as this provides more details and simplifies vuln management)
 FROM scratch AS app-sbom-artifact
