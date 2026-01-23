@@ -28,7 +28,7 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/plugindpp
-  DOCKERFILE_PATH: source/Aas.TwinEngine.Plugin.RelationalDatabase/Dockerfile
+  DOCKERFILE_PATH: source/AAS.TwinEngine.Plugin.RelationalDatabase/Dockerfile
   BUILD_CONTEXT: source
 
 

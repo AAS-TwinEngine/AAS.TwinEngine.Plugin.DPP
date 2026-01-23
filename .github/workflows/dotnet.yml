@@ -19,8 +19,8 @@ permissions:
 
 env:
   BUILD_CONFIGURATION: "Release"
-  SOLUTION_PATH: source/Aas.TwinEngine.Plugin.RelationalDatabase.sln
-  TEST_PROJECT: source/Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests/Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests.csproj
+  SOLUTION_PATH: source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
+  TEST_PROJECT: source/AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests/AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.csproj
 
 jobs:
 
@@ -93,7 +93,7 @@ jobs:
         if: github.event.pull_request.head.repo.fork == false
         uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95 # v1.3.0
         with:
-          filename: "source/Aas.TwinEngine.Plugin.RelationalDatabase.UnitTests/TestResults/*/coverage.cobertura.xml"
+          filename: "source/AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests/TestResults/*/coverage.cobertura.xml"
           badge: false
           fail_below_min: true
           format: markdown
