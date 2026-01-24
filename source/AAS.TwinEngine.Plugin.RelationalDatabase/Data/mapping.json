@@ -493,11 +493,11 @@
   },
   {
     "column": "dbo.DocumentClassification.ClassName_en",
-    "semanticId": [ "0173-1#02-ABH997#003_en" ]
+    "semanticId": [ "0173-1#02-ABJ219#002_en" ]
   },
   {
     "column": "dbo.DocumentClassification.ClassName_de",
-    "semanticId": [ "0173-1#02-ABH997#003_de" ]
+    "semanticId": [ "0173-1#02-ABJ219#002_de" ]
   },
   {
     "column": "dbo.DocumentVersion",
