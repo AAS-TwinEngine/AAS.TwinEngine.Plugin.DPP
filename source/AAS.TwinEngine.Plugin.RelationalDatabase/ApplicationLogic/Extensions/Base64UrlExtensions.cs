@@ -40,7 +40,7 @@ public static class Base64UrlExtensions
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Failed to decode Base64 URL string: {Encoded}", encoded);
+            logger?.LogError(ex, "Failed to decode input Base64 URL string.");
             throw new InvalidUserInputException();
         }
     }
