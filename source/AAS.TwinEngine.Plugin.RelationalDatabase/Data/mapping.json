@@ -364,8 +364,12 @@
     "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductImage/1/1" ]
   },
   {
-    "column": "dbo.Asset.TextStatement",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1" ]
+    "column": "dbo.Asset.TextStatement_en",
+    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_en" ]
+  },
+  {
+    "column": "dbo.Asset.TextStatement_de",
+    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_de" ]
   },
   {
     "column": "dbo.Asset.ValidDate",

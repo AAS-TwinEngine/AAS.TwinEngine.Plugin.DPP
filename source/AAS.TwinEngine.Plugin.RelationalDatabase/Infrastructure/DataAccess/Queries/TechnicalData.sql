@@ -35,7 +35,8 @@ COALESCE(
 
                                         'FurtherInformation',           json_build_object(
 
-                                                                            'TextStatement',    a."TextStatement_en",
+                                                                            'TextStatement_en',    a."TextStatement_en",
+                                                                            'TextStatement_de',    a."TextStatement_de",
                                                                             'ValidDate',        a."ValidDate"
                                                                         )
                                     )
