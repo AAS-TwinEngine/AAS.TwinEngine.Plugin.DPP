@@ -364,8 +364,12 @@
     "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductImage/1/1" ]
   },
   {
-    "column": "dbo.Asset.TextStatement",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1" ]
+    "column": "dbo.Asset.TextStatement_en",
+    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_en" ]
+  },
+  {
+    "column": "dbo.Asset.TextStatement_de",
+    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_de" ]
   },
   {
     "column": "dbo.Asset.ValidDate",
@@ -505,11 +509,11 @@
   },
   {
     "column": "dbo.DocumentVersion.en",
-    "semanticId": [ "0173-1#02-AAN468#008" ]
+    "semanticId": [ "0173-1#02-AAN468#009" ]
   },
   {
     "column": "dbo.DocumentVersion.DigitalFile",
-    "semanticId": [ "0173-1#02-ABK126#002" ]
+    "semanticId": [ "0173-1#02-ABK126#003" ]
   },
   {
     "column": "dbo.DocumentVersion.Version",
