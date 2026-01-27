@@ -505,11 +505,11 @@
   },
   {
     "column": "dbo.DocumentVersion.en",
-    "semanticId": [ "0173-1#02-AAN468#008" ]
+    "semanticId": [ "0173-1#02-AAN468#009" ]
   },
   {
     "column": "dbo.DocumentVersion.DigitalFile",
-    "semanticId": [ "0173-1#02-ABK126#002" ]
+    "semanticId": [ "0173-1#02-ABK126#003" ]
   },
   {
     "column": "dbo.DocumentVersion.Version",
