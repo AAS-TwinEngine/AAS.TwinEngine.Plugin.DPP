@@ -46,7 +46,8 @@ SELECT COALESCE(
                                                                                                                     'Subtitle_de',                  dv."Subtitle_de",
                                                                                                                     'Description_en',               dv."Description_en",
                                                                                                                     'Description_de',               dv."Description_de",
-                                                                                                                    'KeyWords',                     dv."KeyWords_en",
+                                                                                                                    'KeyWords_en',                  dv."KeyWords_en",
+                                                                                                                    'KeyWords_de',                  dv."KeyWords_de",
                                                                                                                     'PreviewFile',                  dv."PreviewFile"
                                                                                                                 ) ORDER BY dv."Index")
                                                                                                          FROM "DocumentDocumentVersion" ddv
