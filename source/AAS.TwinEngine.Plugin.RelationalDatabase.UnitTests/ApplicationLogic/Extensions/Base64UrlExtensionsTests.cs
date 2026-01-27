@@ -50,7 +50,7 @@ public class Base64UrlExtensionsTests
         string act() => Base64UrlExtensions.DecodeBase64(encoded, logger);
 
         Assert.Throws<InvalidUserInputException>((Func<string>)act);
-        AssertLogErrorCalled(logger, expectedMessageContains: "Failed to decode Base64 URL string");
+        AssertLogErrorCalled(logger, expectedMessageContains: "Failed to decode input Base64 URL string");
     }
 
     [Theory]
