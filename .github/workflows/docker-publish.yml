@@ -104,13 +104,13 @@ jobs:
           target: app-sbom-artifact
           push: false
           outputs: type=local,dest=sbom-output
-          
+
       # Extract the first tag from the list for Trivy scanning
       - name: Get first image tag
         if: ${{ github.event_name != 'pull_request' }}
         id: first-tag
         run: echo "value=$(echo '${{ steps.meta.outputs.tags }}' | head -n1)" >> $GITHUB_OUTPUT
-        
+
       # Generate container SBOM. 
       - name: Run Trivy in GitHub SBOM mode to generate CycloneDX SBOM for container
         if: ${{ github.event_name != 'pull_request' }}
