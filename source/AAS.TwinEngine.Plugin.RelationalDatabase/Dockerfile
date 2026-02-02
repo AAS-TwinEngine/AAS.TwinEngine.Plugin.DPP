@@ -6,7 +6,7 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /App
 COPY ["AAS.TwinEngine.Plugin.RelationalDatabase/", "AAS.TwinEngine.Plugin.RelationalDatabase/"]
-RUN dotnet restore "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj"
+RUN dotnet restore "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" --locked-mode
 RUN dotnet publish "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" -c "$BUILD_CONFIGURATION" -o out
 
 # Generate Application SBOM at sbom/bom.xml (omitting dev/test dependencies as they do not appear in final build)
