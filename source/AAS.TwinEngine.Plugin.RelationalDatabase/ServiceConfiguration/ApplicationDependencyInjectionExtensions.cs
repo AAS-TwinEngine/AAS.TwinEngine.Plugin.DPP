@@ -9,6 +9,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifes
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
@@ -27,6 +28,8 @@ public static class ApplicationDependencyInjectionExtensions
 
         _ = services.AddScoped<IMetaDataHandler, MetaDataHandler>();
         _ = services.AddScoped<IMetaDataService, MetaDataService>();
+
+        _ = services.AddScoped<IHealthService, HealthService>();
 
         _ = services.AddScoped<IResponseSemanticTreeNodeResolver, ResponseSemanticTreeNodeResolver>();
         _ = services.AddScoped<IResponseBranchNodeProcessor, ResponseBranchNodeProcessor>();

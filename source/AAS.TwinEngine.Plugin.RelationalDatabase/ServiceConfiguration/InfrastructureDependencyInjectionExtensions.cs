@@ -3,6 +3,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifes
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Configuration;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
@@ -37,6 +38,8 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddOptions<MetaDataEndpoints>().Bind(configuration.GetSection(MetaDataEndpoints.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();
         _ = services.AddScoped<IQueryExecutor, QueryExecutor>();
+
+        _ = services.AddScoped<IHealthProvider, HealthProvider>();
 
         _ = services.AddScoped<MappingDataInitializer>();
 
