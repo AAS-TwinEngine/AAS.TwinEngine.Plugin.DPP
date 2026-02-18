@@ -1,0 +1,24 @@
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
+using System.Data.Common;
+
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
+
+public class DatabaseAvailabilityHealthCheck(IDbConnectionFactory connectionFactory, ILogger<DatabaseAvailabilityHealthCheck> logger) : IHealthCheck
+{
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await using var connection = connectionFactory.CreateConnection();
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            return HealthCheckResult.Healthy();
+        }
+        catch (DbException ex)
+        {
+            logger.LogError(ex, "Database health check failed");
+            return HealthCheckResult.Unhealthy();
+        }
+    }
+}

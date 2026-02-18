@@ -1,4 +1,5 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
@@ -24,6 +25,7 @@ public static class Program
         builder.Services.ConfigureInfrastructure(builder.Configuration);
         builder.Services.ConfigureApplication();
 
+        _ = builder.Services.AddHealthChecks().AddCheck<DatabaseAvailabilityHealthCheck>("database");
         _ = builder.Services.AddControllers();
 
         _ = builder.Services.AddEndpointsApiExplorer();
@@ -43,6 +45,8 @@ public static class Program
         .AddMvc();
 
         var app = builder.Build();
+
+        _ = app.MapHealthChecks("/healthz");
 
         using (var scope = app.Services.CreateScope())
         {
