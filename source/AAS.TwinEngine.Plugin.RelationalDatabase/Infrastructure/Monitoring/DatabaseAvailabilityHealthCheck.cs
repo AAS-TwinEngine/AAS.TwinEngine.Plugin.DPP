@@ -7,7 +7,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
 
 public class DatabaseAvailabilityHealthCheck(IDbConnectionFactory connectionFactory, ILogger<DatabaseAvailabilityHealthCheck> logger) : IHealthCheck
 {
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
