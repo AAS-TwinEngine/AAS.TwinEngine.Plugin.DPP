@@ -64,6 +64,21 @@ public class DatabaseAvailabilityHealthCheckTests
     }
 
     [Fact]
+    public async Task CheckHealthAsync_ReturnsUnhealthy_WhenUnexpectedExceptionIsThrown()
+    {
+        var connection = Substitute.For<DbConnection>();
+        _connectionFactory.CreateConnection().Returns(connection);
+
+        connection.OpenAsync(Arg.Any<CancellationToken>()).Returns<Task>(_ => throw new InvalidOperationException());
+
+        var context = new HealthCheckContext();
+
+        var result = await _sut.CheckHealthAsync(context, CancellationToken.None);
+
+        Assert.Equal(HealthStatus.Unhealthy, result.Status);
+    }
+
+    [Fact]
     public async Task CheckHealthAsync_PassesCancellationTokenToConnectionOpen()
     {
         var connection = Substitute.For<DbConnection>();

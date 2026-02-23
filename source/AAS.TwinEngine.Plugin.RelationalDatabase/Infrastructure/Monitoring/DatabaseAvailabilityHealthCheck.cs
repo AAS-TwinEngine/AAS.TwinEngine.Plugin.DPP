@@ -1,5 +1,6 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
-using System.Data.Common;
+﻿using System.Data.Common;
+
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -23,6 +24,11 @@ public class DatabaseAvailabilityHealthCheck(IDbConnectionFactory connectionFact
         catch (TimeoutException ex)
         {
             logger.LogError(ex, "Database health check timed out");
+            return HealthCheckResult.Unhealthy();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Database health check encountered an unexpected error");
             return HealthCheckResult.Unhealthy();
         }
     }
