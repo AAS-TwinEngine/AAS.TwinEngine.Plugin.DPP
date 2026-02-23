@@ -20,5 +20,10 @@ public class DatabaseAvailabilityHealthCheck(IDbConnectionFactory connectionFact
             logger.LogError(ex, "Database health check failed");
             return HealthCheckResult.Unhealthy();
         }
+        catch (TimeoutException ex)
+        {
+            logger.LogError(ex, "Database health check timed out");
+            return HealthCheckResult.Unhealthy();
+        }
     }
 }

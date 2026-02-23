@@ -1,4 +1,4 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
@@ -46,6 +46,37 @@ public class DatabaseAvailabilityHealthCheckTests
         var result = await _sut.CheckHealthAsync(context, CancellationToken.None);
 
         Assert.Equal(HealthStatus.Unhealthy, result.Status);
+    }
+
+    [Fact]
+    public async Task CheckHealthAsync_ReturnsUnhealthy_WhenTimeoutExceptionIsThrown()
+    {
+        var connection = Substitute.For<DbConnection>();
+        _connectionFactory.CreateConnection().Returns(connection);
+
+        connection.OpenAsync(Arg.Any<CancellationToken>()).Returns<Task>(_ => throw new TimeoutException());
+
+        var context = new HealthCheckContext();
+
+        var result = await _sut.CheckHealthAsync(context, CancellationToken.None);
+
+        Assert.Equal(HealthStatus.Unhealthy, result.Status);
+    }
+
+    [Fact]
+    public async Task CheckHealthAsync_PassesCancellationTokenToConnectionOpen()
+    {
+        var connection = Substitute.For<DbConnection>();
+        _connectionFactory.CreateConnection().Returns(connection);
+        using var cts = new CancellationTokenSource();
+
+        connection.OpenAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+
+        var context = new HealthCheckContext();
+
+        await _sut.CheckHealthAsync(context, cts.Token);
+
+        await connection.Received(1).OpenAsync(cts.Token);
     }
 
     private sealed class TestDbException : DbException
