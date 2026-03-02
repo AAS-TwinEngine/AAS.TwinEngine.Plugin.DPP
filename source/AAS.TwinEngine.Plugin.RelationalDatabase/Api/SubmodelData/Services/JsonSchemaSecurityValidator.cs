@@ -53,45 +53,69 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
         {
             var (current, depth) = stack.Pop();
 
-            if (depth > MaxSchemaDepth)
-            {
-                throw new BadRequestException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
-            }
+            ValidateDepth(depth);
 
-            switch (current)
-            {
-                case JsonObject obj:
-                    if (obj.TryGetPropertyValue("properties", out var propsNode) && propsNode is JsonObject propsObj)
-                    {
-                        totalPropertiesCount += propsObj.Count;
-                        if (totalPropertiesCount > MaxProperties)
-                        {
-                            throw new BadRequestException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
-                        }
-                    }
-
-                    foreach (var kv in obj)
-                    {
-                        if (kv.Value != null)
-                        {
-                            stack.Push((kv.Value, depth + 1));
-                        }
-                    }
-
-                    break;
-
-                case JsonArray arr:
-                    foreach (var item in arr)
-                    {
-                        if (item != null)
-                        {
-                            stack.Push((item, depth + 1));
-                        }
-                    }
-
-                    break;
-            }
+            totalPropertiesCount = ProcessNode(current, depth, totalPropertiesCount, stack);
         }
+    }
+
+    private static void ValidateDepth(int depth)
+    {
+        if (depth > MaxSchemaDepth)
+        {
+            throw new BadRequestException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
+        }
+    }
+
+    private static int ProcessNode(JsonNode node, int depth, int totalPropertiesCount, Stack<(JsonNode node, int depth)> stack)
+    {
+        return node switch
+        {
+            JsonObject obj => ProcessJsonObject(obj, depth, totalPropertiesCount, stack),
+            JsonArray arr => ProcessJsonArray(arr, depth, stack, totalPropertiesCount),
+            _ => totalPropertiesCount
+        };
+    }
+
+    private static int ProcessJsonObject(JsonObject obj, int depth, int totalPropertiesCount, Stack<(JsonNode node, int depth)> stack)
+    {
+        var updatedCount = ValidateAndCountProperties(obj, totalPropertiesCount);
+        EnqueueChildNodesForValidation(obj, depth, stack);
+        return updatedCount;
+    }
+
+    private static int ValidateAndCountProperties(JsonObject obj, int currentCount)
+    {
+        if (!obj.TryGetPropertyValue("properties", out var propsNode) || propsNode is not JsonObject propsObj)
+        {
+            return currentCount;
+        }
+
+        var newCount = currentCount + propsObj.Count;
+        if (newCount > MaxProperties)
+        {
+            throw new BadRequestException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
+        }
+
+        return newCount;
+    }
+
+    private static void EnqueueChildNodesForValidation(JsonObject obj, int depth, Stack<(JsonNode node, int depth)> stack)
+    {
+        foreach (var childNode in obj.Select(kv => kv.Value).Where(value => value != null))
+        {
+            stack.Push((childNode!, depth + 1));
+        }
+    }
+
+    private static int ProcessJsonArray(JsonArray arr, int depth, Stack<(JsonNode node, int depth)> stack, int totalPropertiesCount)
+    {
+        foreach (var childNode in arr.Where(item => item != null))
+        {
+            stack.Push((childNode!, depth + 1));
+        }
+
+        return totalPropertiesCount;
     }
 
     public void ValidateSchemaContent(JsonNode rootNode)
@@ -102,36 +126,42 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
         while (stack.Count > 0)
         {
             var current = stack.Pop();
+            ProcessNodeForContentValidation(current, stack);
+        }
+    }
 
-            switch (current)
-            {
-                case JsonObject obj:
-                    ValidateJsonObject(obj);
-                    foreach (var property in obj)
-                    {
-                        if (property.Value != null)
-                        {
-                            stack.Push(property.Value);
-                        }
-                    }
+    private void ProcessNodeForContentValidation(JsonNode node, Stack<JsonNode> stack)
+    {
+        switch (node)
+        {
+            case JsonObject obj:
+                ProcessJsonObjectContent(obj, stack);
+                break;
 
-                    break;
+            case JsonArray arr:
+                ProcessJsonArrayContent(arr, stack);
+                break;
 
-                case JsonArray arr:
-                    foreach (var item in arr)
-                    {
-                        if (item != null)
-                        {
-                            stack.Push(item);
-                        }
-                    }
+            case JsonValue value:
+                ValidateJsonValue(value);
+                break;
+        }
+    }
 
-                    break;
+    private void ProcessJsonObjectContent(JsonObject obj, Stack<JsonNode> stack)
+    {
+        ValidateJsonObject(obj);
+        foreach (var childNode in obj.Select(p => p.Value).Where(value => value != null))
+        {
+            stack.Push(childNode!);
+        }
+    }
 
-                case JsonValue value:
-                    ValidateJsonValue(value);
-                    break;
-            }
+    private static void ProcessJsonArrayContent(JsonArray arr, Stack<JsonNode> stack)
+    {
+        foreach (var item in arr.Where(item => item != null))
+        {
+            stack.Push(item!);
         }
     }
 
@@ -139,44 +169,66 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
     {
         foreach (var property in obj)
         {
-            var propertyName = property.Key;
+            ValidateProperty(property);
+        }
+    }
 
-            if (propertyName.Length > MaxPropertyNameLength)
-            {
-                ThrowBadRequest($"Property name exceeds maximum length of {MaxPropertyNameLength} characters: {propertyName[..Math.Min(50, propertyName.Length)]}...");
-            }
+    private void ValidateProperty(KeyValuePair<string, JsonNode?> property)
+    {
+        var propertyName = property.Key;
 
-            if (!AllowedSchemaKeywords.Contains(propertyName) &&
-                !propertyName.StartsWith('$') &&
-                !propertyName.Contains(_contextPrefix, StringComparison.Ordinal))
-            {
-                var cleanedName = RemoveContextSuffix(propertyName);
-                if (!cleanedName.IsValidIdentifier())
+        ValidatePropertyNameLength(propertyName);
+        ValidatePropertyNameSafety(propertyName);
+        ValidateSpecialPropertyValues(property);
+    }
+
+    private static void ValidatePropertyNameLength(string propertyName)
+    {
+        if (propertyName.Length > MaxPropertyNameLength)
+        {
+            throw new BadRequestException($"Property name exceeds maximum length of {MaxPropertyNameLength} characters: {propertyName[..Math.Min(50, propertyName.Length)]}...");
+        }
+    }
+
+    private void ValidatePropertyNameSafety(string propertyName)
+    {
+        if (AllowedSchemaKeywords.Contains(propertyName) ||
+            propertyName.StartsWith('$') ||
+            propertyName.Contains(_contextPrefix, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        var cleanedName = RemoveContextSuffix(propertyName);
+        if (!cleanedName.IsValidIdentifier())
+        {
+            ThrowBadRequest($"Property name contains potentially malicious patterns: {propertyName}");
+        }
+    }
+
+    private void ValidateSpecialPropertyValues(KeyValuePair<string, JsonNode?> property)
+    {
+        var propertyName = property.Key;
+
+        switch (propertyName)
+        {
+            case "$ref":
+            case "$id":
+            case "$schema":
+                if (property.Value is JsonValue refValue && refValue.TryGetValue<string>(out var uriString))
                 {
-                    ThrowBadRequest($"Property name contains potentially malicious patterns: {propertyName}");
+                    ValidateUri(uriString, propertyName);
                 }
-            }
 
-            switch (propertyName)
-            {
-                case "$ref":
-                case "$id":
-                case "$schema":
-                    if (property.Value is JsonValue refValue && refValue.TryGetValue<string>(out var uriString))
-                    {
-                        ValidateUri(uriString, propertyName);
-                    }
+                break;
 
-                    break;
+            case "pattern":
+                if (property.Value is JsonValue patternValue && patternValue.TryGetValue<string>(out var pattern))
+                {
+                    ValidateRegexPattern(pattern);
+                }
 
-                case "pattern":
-                    if (property.Value is JsonValue patternValue && patternValue.TryGetValue<string>(out var pattern))
-                    {
-                        ValidateRegexPattern(pattern);
-                    }
-
-                    break;
-            }
+                break;
         }
     }
 
