@@ -835,6 +835,29 @@ public class JsonSchemaSecurityValidatorTests
         _sut.ValidateSchemaContent(root);
     }
 
+    [Theory]
+    [InlineData("property🔒")]
+    [InlineData("属性名称")]
+    [InlineData("свойство")]
+    public void ValidateSchemaContent_UnicodePropertyNames_HandledCorrectly(string propertyName)
+    {
+        var root = CreateSchemaWithProperty(propertyName,
+                                            new JsonObject { ["type"] = "string" });
+
+        _sut.ValidateSchemaContent(root);
+    }
+
+    [Fact]
+    public void ValidateSchemaContent_ConcurrentValidation_ThreadSafe()
+    {
+        var root = new JsonObject { ["type"] = "object" };
+        var tasks = Enumerable.Range(0, 10)
+                              .Select(_ => Task.Run(() => _sut.ValidateSchemaContent(root)))
+                              .ToArray();
+
+        Task.WaitAll(tasks);
+    }
+
     [Fact]
     public void ValidateSchemaContent_ComplexRealWorldSchema_DoesNotThrow()
     {
@@ -886,10 +909,22 @@ public class JsonSchemaSecurityValidatorTests
 
         return new JsonObject
         {
-            ["type"] = "object",
+        ["type"] = "object",
             ["properties"] = new JsonObject
             {
                 ["child"] = BuildNestedObject(depth - 1)
+         }
+        };
+    }
+
+    private static JsonObject CreateSchemaWithProperty(string propertyName, JsonNode value)
+    {
+        return new JsonObject
+        {
+            ["type"] = "object",
+            ["properties"] = new JsonObject
+            {
+                [propertyName] = value
             }
         };
     }

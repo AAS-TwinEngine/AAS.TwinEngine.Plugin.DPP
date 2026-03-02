@@ -46,12 +46,11 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_NullSchema_ThrowsNotFoundException()
     {
         Assert.Throws<NotFoundException>(() => _sut.ValidateRequestSchema(null!));
-        _logger.Received(1).Log(
-            LogLevel.Error,
-            Arg.Any<EventId>(),
-            Arg.Any<object>(),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
+        _logger.Received(1).Log(LogLevel.Error,
+                                Arg.Any<EventId>(),
+                                Arg.Any<object>(),
+                                Arg.Any<Exception>(),
+                                Arg.Any<Func<object, Exception?, string>>());
     }
 
     [Fact]
