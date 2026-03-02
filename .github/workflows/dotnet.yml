@@ -121,7 +121,6 @@ jobs:
           path: results.md
           
       - name: Upload TRX as artifact (Fork PR fallback)
-        if: github.event.pull_request.head.repo.fork == true
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: test-results
