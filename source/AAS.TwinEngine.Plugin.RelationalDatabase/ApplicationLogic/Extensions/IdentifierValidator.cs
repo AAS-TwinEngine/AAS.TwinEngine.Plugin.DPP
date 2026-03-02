@@ -1,0 +1,125 @@
+﻿using System.Text.RegularExpressions;
+
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
+
+/// <summary>
+/// Validates identifiers to prevent injection attacks through ID-based URLs.
+/// </summary>
+public static class IdentifierValidator
+{
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromMilliseconds(100);
+
+    private static readonly Regex XssPattern = new(@"<[^>]*on\w+\s*=|<\s*script|<\s*/\s*script", RegexOptions.IgnoreCase | RegexOptions.Compiled, RegexTimeout);
+    private static readonly Regex SqlInjectionPattern = new(@"(\b(ALTER|CREATE|DELETE|DROP|EXEC(UTE)?|INSERT( +INTO)?|MERGE|SELECT|UPDATE|UNION( +ALL)?)\b)|('|(--)|;|\/\*|\*\/|xp_)", RegexOptions.IgnoreCase | RegexOptions.Compiled, RegexTimeout);
+    private static readonly Regex PathTraversalPattern = new(@"(\.\.[/\\])|(%2e%2e[/\\])|(\.\.[%2f%5c])", RegexOptions.IgnoreCase | RegexOptions.Compiled, RegexTimeout);
+
+    private static readonly string[] DangerousProtocols =
+    [
+        "JAVASCRIPT:",
+        "DATA:",
+        "VBSCRIPT:",
+        "FILE:",
+        "ABOUT:"
+    ];
+
+    private static readonly string[] DangerousPatterns =
+    [
+        "<SCRIPT",
+        "</SCRIPT",
+        "ONERROR=",
+        "ONLOAD=",
+        "ONCLICK=",
+        "EVAL(",
+        "EXPRESSION(",
+        "JAVASCRIPT:",
+        "VBSCRIPT:",
+        "\0",
+        "%00"
+    ];
+
+    /// <summary>
+    /// Checks if an identifier contains potentially malicious URL patterns.
+    /// </summary>
+    /// <param name="identifier">The identifier to check</param>
+    /// <param name="logger">Optional logger for validation warnings</param>
+    /// <returns>True if the identifier appears safe, false otherwise</returns>
+    public static bool IsValidIdentifier(this string identifier, ILogger? logger = null)
+    {
+        if (string.IsNullOrWhiteSpace(identifier))
+        {
+            return false;
+        }
+
+        if (ContainsDangerousProtocol(identifier))
+        {
+            logger?.LogWarning("Identifier contains dangerous protocol: {Identifier}", identifier);
+            return false;
+        }
+
+        if (ContainsDangerousPattern(identifier))
+        {
+            logger?.LogWarning("Identifier contains dangerous pattern: {Identifier}", identifier);
+            return false;
+        }
+
+        if (ContainsXssPattern(identifier))
+        {
+            logger?.LogWarning("Identifier contains potential XSS pattern: {Identifier}", identifier);
+            return false;
+        }
+
+        if (ContainsSqlInjectionPattern(identifier))
+        {
+            logger?.LogWarning("Identifier contains potential SQL injection pattern: {Identifier}", identifier);
+            return false;
+        }
+
+        if (!ContainsPathTraversalPattern(identifier))
+        {
+            return true;
+        }
+
+        logger?.LogWarning("Identifier contains potential path traversal pattern: {Identifier}", identifier);
+        return false;
+    }
+
+    private static bool ContainsDangerousProtocol(string identifier) => DangerousProtocols.Any(protocol => identifier.Contains(protocol, StringComparison.OrdinalIgnoreCase));
+
+    private static bool ContainsDangerousPattern(string identifier) => DangerousPatterns.Any(pattern => identifier.Contains(pattern, StringComparison.OrdinalIgnoreCase));
+
+    private static bool ContainsXssPattern(string identifier)
+    {
+        try
+        {
+            return XssPattern.IsMatch(identifier);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return true;
+        }
+    }
+
+    private static bool ContainsSqlInjectionPattern(string identifier)
+    {
+        try
+        {
+            return SqlInjectionPattern.IsMatch(identifier);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return true;
+        }
+    }
+
+    private static bool ContainsPathTraversalPattern(string identifier)
+    {
+        try
+        {
+            return PathTraversalPattern.IsMatch(identifier);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return true;
+        }
+    }
+}

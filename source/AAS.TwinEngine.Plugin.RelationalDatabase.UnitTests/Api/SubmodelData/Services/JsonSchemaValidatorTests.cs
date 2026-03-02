@@ -15,6 +15,8 @@ public class JsonSchemaValidatorTests
 {
     private readonly JsonSchemaValidator _sut;
     private readonly ILogger<JsonSchemaValidator> _logger;
+    private readonly ILogger<JsonSchemaSecurityValidator> _securityLogger;
+    private readonly JsonSchemaSecurityValidator _securityValidator;
 
     public static IEnumerable<object[]> InvalidPrimitives => [
         [SchemaValueType.String,  "name",  123],
@@ -22,7 +24,7 @@ public class JsonSchemaValidatorTests
         [SchemaValueType.Number,  "price", "19.99a"],
         [SchemaValueType.Boolean, "flag",  "flase"],
         [SchemaValueType.Number,  "age",   "8o5"],
-        [SchemaValueType.Number,  "age",   "-10n5"],
+        [SchemaValueType.Number,  "age", "-10n5"],
         [SchemaValueType.Integer, "name",  "10o"],
         [SchemaValueType.Boolean, "flag",  "\"true\""]
     ];
@@ -35,7 +37,9 @@ public class JsonSchemaValidatorTests
             IndexContextPrefix = "_aastwinengine_"
         });
         _logger = Substitute.For<ILogger<JsonSchemaValidator>>();
-        _sut = new JsonSchemaValidator(semantics, _logger);
+        _securityLogger = Substitute.For<ILogger<JsonSchemaSecurityValidator>>();
+        _securityValidator = new JsonSchemaSecurityValidator(semantics, _securityLogger);
+        _sut = new JsonSchemaValidator(semantics, _logger, _securityValidator);
     }
 
     [Fact]
@@ -640,6 +644,271 @@ public class JsonSchemaValidatorTests
 
         var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Maximum allowed is 1000", exception.Message, StringComparison.CurrentCulture);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_PropertyNameExceedsMaxLength_ThrowsBadRequestException()
+    {
+        var longPropertyName = new string('a', 300); // Exceeds 256 character limit
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                [longPropertyName] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Theory]
+    [InlineData("<script>alert('xss')</script>")]
+    [InlineData("'; DROP TABLE Users; --")]
+    [InlineData("../../etc/passwd")]
+    [InlineData("javascript:alert(1)")]
+    [InlineData("<img onerror='alert(1)'>")]
+    public void ValidateRequestSchema_PropertyNameWithMaliciousPatterns_ThrowsBadRequestException(string maliciousName)
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                [maliciousName] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+            })
+            .Build();
+
+       Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_StringValueExceedsMaxLength_ThrowsBadRequestException()
+    {
+        var longString = new string('a', 3000); // Exceeds 2048 character limit
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["description"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.String)
+                    .Const(longString)
+                    .Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Theory]
+    [InlineData("test\0value")]
+    [InlineData("test%00value")]
+    public void ValidateRequestSchema_StringValueWithNullBytes_ThrowsBadRequestException(string valueWithNullByte)
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["field"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.String)
+                    .Const(valueWithNullByte)
+                    .Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Theory]
+    [InlineData("ftp://example.com/schema")]
+    [InlineData("file:///etc/passwd")]
+    [InlineData("javascript:alert(1)")]
+    [InlineData("data:text/html,<script>alert(1)</script>")]
+    public void ValidateRequestSchema_InvalidUriScheme_ThrowsBadRequestException(string invalidUri)
+    {
+        var schema = new JsonSchemaBuilder()
+                     .Schema(invalidUri)
+                     .Type(SchemaValueType.Object)
+                     .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Theory]
+    [InlineData("http://example.com/schema")]
+    [InlineData("https://json-schema.org/draft-07/schema")]
+    [InlineData("urn:uuid:12345678-1234-1234-1234-123456789012")]
+    public void ValidateRequestSchema_ValidUriScheme_DoesNotThrow(string validUri)
+    {
+        var schema = new JsonSchemaBuilder()
+            .Schema(validUri)
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+            })
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_UriWithMaliciousPatterns_ThrowsBadRequestException()
+    {
+        const string MaliciousUri = "http://example.com/<script>alert(1)</script>";
+        var schema = new JsonSchemaBuilder()
+            .Id(MaliciousUri)
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_RelativeUriWithPathTraversal_ThrowsBadRequestException()
+    {
+        var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
+                                            .Properties(new Dictionary<string, JsonSchema>
+                                            {
+                                                ["test"] = new JsonSchemaBuilder()
+                                                           .Ref("../../malicious/path")
+                                                           .Build()
+                                            })
+                                            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ValidSchemaWithContextPrefix_DoesNotThrow()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["Property1_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
+                ["Property2_aastwinengine_01"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+            })
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_NestedSchemaWithValidation_ValidatesAllLevels()
+    {
+        var longString = new string('a', 3000);
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["outer"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.Object)
+                    .Properties(new Dictionary<string, JsonSchema>
+                    {
+                        ["inner"] = new JsonSchemaBuilder()
+                            .Type(SchemaValueType.String)
+                            .Const(longString) // This should be caught
+                    })
+                    .Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ArrayWithMaliciousItems_ThrowsBadRequestException()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["items"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.Array)
+                    .Items(new JsonSchemaBuilder()
+                        .Type(SchemaValueType.String)
+                        .Pattern("(a+)+") // Dangerous pattern
+                        .Build())
+                    .Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_ComplexValidSchema_DoesNotThrow()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Schema("https://json-schema.org/draft-07/schema#")
+            .Id("https://example.com/myschema")
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["name"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.String)
+                    .Pattern("^[a-zA-Z0-9_-]+$")
+                    .MinLength(1)
+                    .MaxLength(100)
+                    .Build(),
+                ["age"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.Integer)
+                    .Minimum(0)
+                    .Maximum(150)
+                    .Build(),
+                ["address"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.Object)
+                    .Properties(new Dictionary<string, JsonSchema>
+                    {
+                        ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
+                        ["city"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                    })
+                    .Build()
+            })
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_LogsErrorForSecurityViolations()
+    {
+        var maliciousSchema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["<script>"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+            })
+            .Build();
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(maliciousSchema));
+
+        _securityLogger.Received().Log(
+            LogLevel.Error,
+            Arg.Any<EventId>(),
+            Arg.Is<object>(o => o.ToString()!.Contains("malicious", StringComparison.OrdinalIgnoreCase)),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
+    }
+
+    [Fact]
+    public void ValidateRequestSchema_AllowedSchemaKeywords_DoNotGetValidated()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Type(SchemaValueType.Object)
+            .Properties(new Dictionary<string, JsonSchema>
+            {
+                ["normalProperty"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.String)
+                    .Description("This is a valid description")
+                    .Build()
+            })
+            .Build();
+
+        _sut.ValidateRequestSchema(schema);
     }
 
     private static JsonSchema BuildNestedSchema(int depth)
