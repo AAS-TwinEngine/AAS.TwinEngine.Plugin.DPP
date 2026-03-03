@@ -52,25 +52,25 @@ public static class IdentifierValidator
 
         if (ContainsDangerousProtocol(identifier))
         {
-            logger?.LogWarning("Identifier contains dangerous protocol: {Identifier}", identifier);
+            LogIdentifierWarning(logger, "Identifier contains dangerous protocol", identifier.Length);
             return false;
         }
 
         if (ContainsDangerousPattern(identifier))
         {
-            logger?.LogWarning("Identifier contains dangerous pattern: {Identifier}", identifier);
+            LogIdentifierWarning(logger, "Identifier contains dangerous pattern", identifier.Length);
             return false;
         }
 
         if (ContainsXssPattern(identifier))
         {
-            logger?.LogWarning("Identifier contains potential XSS pattern: {Identifier}", identifier);
+            LogIdentifierWarning(logger, "Identifier contains potential XSS pattern", identifier.Length);
             return false;
         }
 
         if (ContainsSqlInjectionPattern(identifier))
         {
-            logger?.LogWarning("Identifier contains potential SQL injection pattern: {Identifier}", identifier);
+            LogIdentifierWarning(logger, "Identifier contains potential SQL injection pattern", identifier.Length);
             return false;
         }
 
@@ -79,8 +79,26 @@ public static class IdentifierValidator
             return true;
         }
 
-        logger?.LogWarning("Identifier contains potential path traversal pattern: {Identifier}", identifier);
+        LogIdentifierWarning(logger, "Identifier contains potential path traversal pattern", identifier.Length);
         return false;
+    }
+
+    /// <summary>
+    /// Safely logs identifier validation warnings without exposing any untrusted content.
+    /// Only logs the detection reason and identifier length to prevent log injection and information disclosure.
+    /// </summary>
+    /// <param name="logger">The logger instance</param>
+    /// <param name="message">The warning message describing what was detected</param>
+    /// <param name="identifierLength">The length of the rejected identifier</param>
+    private static void LogIdentifierWarning(ILogger? logger, string message, int identifierLength)
+    {
+        if (logger == null)
+        {
+            return;
+        }
+
+        // Log only metadata - no identifier content to prevent log injection and information disclosure
+        logger.LogWarning("{Message}. Identifier length: {Length}", message, identifierLength);
     }
 
     private static bool ContainsDangerousProtocol(string identifier) => DangerousProtocols.Any(protocol => identifier.Contains(protocol, StringComparison.OrdinalIgnoreCase));

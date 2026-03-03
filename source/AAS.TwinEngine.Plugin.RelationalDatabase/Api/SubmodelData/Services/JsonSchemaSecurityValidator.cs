@@ -193,16 +193,38 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
     private void ValidatePropertyNameSafety(string propertyName)
     {
         if (AllowedSchemaKeywords.Contains(propertyName) ||
-            propertyName.StartsWith('$') ||
-            propertyName.Contains(_contextPrefix, StringComparison.Ordinal))
+            propertyName.StartsWith('$'))
         {
             return;
         }
 
-        var cleanedName = RemoveContextSuffix(propertyName);
-        if (!cleanedName.IsValidIdentifier())
+        var nameWithoutContextSuffix = RemoveContextSuffix(propertyName);
+
+        if (!nameWithoutContextSuffix.IsValidIdentifier())
         {
             ThrowBadRequest($"Property name contains potentially malicious patterns: {propertyName}");
+        }
+
+        if (nameWithoutContextSuffix != propertyName)
+        {
+            ValidateContextSuffix(propertyName, nameWithoutContextSuffix.Length);
+        }
+    }
+
+    private void ValidateContextSuffix(string propertyName, int nameWithoutContextSuffixLength)
+    {
+        var suffix = propertyName[nameWithoutContextSuffixLength..];
+
+        if (!suffix.StartsWith(_contextPrefix, StringComparison.Ordinal))
+        {
+            ThrowBadRequest($"Invalid context suffix format in property name: {propertyName}");
+        }
+
+        var suffixAfterPrefix = suffix[_contextPrefix.Length..];
+
+        if (!string.IsNullOrEmpty(suffixAfterPrefix) && !suffixAfterPrefix.All(char.IsDigit))
+        {
+            ThrowBadRequest($"Context suffix must contain only digits after prefix: {propertyName}");
         }
     }
 

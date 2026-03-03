@@ -9,6 +9,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 public static class Base64UrlExtensions
 {
     private const int MaxIdentifierLength = 2048;
+    private const int MaxBase64UrlLength = 256;
 
     /// <summary>
     /// Decodes a Base64 URL encoded string to its original UTF-8 representation.
@@ -24,6 +25,12 @@ public static class Base64UrlExtensions
         if (string.IsNullOrWhiteSpace(encoded))
         {
             logger?.LogError("Identifier cannot be null or empty.");
+            throw new InvalidUserInputException();
+        }
+
+        if (encoded.Length > MaxBase64UrlLength)
+        {
+            logger?.LogError("Base64 URL input exceeds maximum allowed length ({MaxLength}). Actual length: {ActualLength}", MaxBase64UrlLength, encoded.Length);
             throw new InvalidUserInputException();
         }
 

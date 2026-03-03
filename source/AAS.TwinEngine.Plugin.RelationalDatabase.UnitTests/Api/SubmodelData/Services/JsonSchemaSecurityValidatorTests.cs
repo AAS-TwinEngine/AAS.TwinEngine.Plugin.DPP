@@ -110,15 +110,15 @@ public class JsonSchemaSecurityValidatorTests
             ["items"] = new JsonArray
             {
                 new JsonObject
-{
-      ["type"] = "object",
-["properties"] = new JsonObject
- {
-            ["field"] = new JsonObject { ["type"] = "string" }
-    }
-         }
-}
- };
+                {
+                    ["type"] = "object",
+                    ["properties"] = new JsonObject
+                    {
+                        ["field"] = new JsonObject { ["type"] = "string" }
+                    }
+                }
+            }
+        };
 
      _sut.ValidateSchemaComplexity(root);
     }
@@ -293,6 +293,63 @@ public class JsonSchemaSecurityValidatorTests
         };
 
         _sut.ValidateSchemaContent(root);
+    }
+
+    [Theory]
+    [InlineData("<script>_aastwinengine_00")]
+    [InlineData("'; DROP TABLE_aastwinengine_01")]
+    [InlineData("../../etc/passwd_aastwinengine_")]
+    [InlineData("javascript:alert(1)_aastwinengine_99")]
+    public void ValidateSchemaContent_MaliciousPropertyWithContextSuffix_ThrowsBadRequestException(string maliciousPropertyName)
+    {
+        var root = CreateSchemaWithProperty(maliciousPropertyName,
+            new JsonObject { ["type"] = "string" });
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+    }
+
+    [Theory]
+    [InlineData("ValidProperty_aastwinengine_00")]
+    [InlineData("MyProperty_aastwinengine_01")]
+    [InlineData("Property123_aastwinengine_99")]
+    [InlineData("test_property_aastwinengine_")]
+    [InlineData("simple_aastwinengine_123")]
+    public void ValidateSchemaContent_ValidPropertyWithContextSuffix_DoesNotThrow(string validPropertyName)
+    {
+        var root = CreateSchemaWithProperty(validPropertyName,
+            new JsonObject { ["type"] = "string" });
+
+        _sut.ValidateSchemaContent(root);
+    }
+
+    [Theory]
+    [InlineData("ValidProperty_aastwinengine_abc")] // Non-digit after prefix
+    [InlineData("Property_aastwinengine_#")] // Invalid character
+    [InlineData("test_aastwinengine_-1")] // Negative number (hyphen)
+    public void ValidateSchemaContent_InvalidContextSuffixFormat_ThrowsBadRequestException(string invalidPropertyName)
+    {
+        var root = CreateSchemaWithProperty(invalidPropertyName,
+               new JsonObject { ["type"] = "string" });
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+    }
+
+    [Fact]
+    public void ValidateSchemaContent_MaliciousPropertyWithMultipleContextPrefixes_ThrowsBadRequestException()
+    {
+        var root = CreateSchemaWithProperty("<script>_aastwinengine_00_aastwinengine_01",
+            new JsonObject { ["type"] = "string" });
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+    }
+
+    [Fact]
+    public void ValidateSchemaContent_ContextSuffixOnly_ThrowsBadRequestException()
+    {
+        var root = CreateSchemaWithProperty("_aastwinengine_00",
+             new JsonObject { ["type"] = "string" });
+
+        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]

@@ -542,7 +542,8 @@ public class JsonResponseParserTests
     {
         Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(invalidJson));
 
-        _logger.Received(1).Log(LogLevel.Error,
+        _logger.Received(1).Log(
+                                LogLevel.Error,
                                 Arg.Any<EventId>(),
                                 Arg.Is<object>(o => o.ToString()!.Contains("Invalid JSON received from database")),
                                 Arg.Any<Exception>(),
@@ -571,7 +572,9 @@ public class JsonResponseParserTests
     {
         Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(null!));
 
-        _logger.Received(1).Log(LogLevel.Error, Arg.Any<EventId>(),
+        _logger.Received(1).Log(
+                                LogLevel.Error,
+                                Arg.Any<EventId>(),
                                 Arg.Any<object>(),
                                 Arg.Any<Exception>(),
                                 Arg.Any<Func<object, Exception?, string>>());

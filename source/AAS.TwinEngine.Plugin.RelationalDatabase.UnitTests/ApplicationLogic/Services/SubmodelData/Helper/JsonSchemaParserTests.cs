@@ -397,7 +397,6 @@ public class JsonSchemaParserTests
         Assert.Equal(DataType.String, leafNode.DataType);
     }
 
-
     [Fact]
     public void ParseJsonSchema_DeeplyNestedSchema_ReturnsCorrectStructure()
     {
@@ -491,7 +490,6 @@ public class JsonSchemaParserTests
         var arrayChild = Assert.IsType<SemanticBranchNode>(rootNode.Children.First(c => c.SemanticId == "arrayProp"));
         Assert.Equal(DataType.Array, arrayChild.DataType);
     }
-
 
     [Fact]
     public void ParseJsonSchema_EmptySchema_LogsError()

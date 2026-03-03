@@ -77,7 +77,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             LogAndThrowException($"Failed to parse response JSON: {parseError}");
         }
 
-        JsonObject normalizedSchema;
+        JsonObject normalizedSchema = null!;
+
         try
         {
             normalizedSchema = NormalizeSchema(requestSchema);
@@ -85,7 +86,6 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         catch (Exception ex)
         {
             LogAndThrowException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
-            return;
         }
 
         if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
