@@ -1,5 +1,6 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
@@ -77,7 +78,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             LogAndThrowException($"Failed to parse response JSON: {parseError}");
         }
 
-        JsonObject normalizedSchema = null!;
+        JsonObject normalizedSchema;
 
         try
         {
@@ -86,6 +87,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         catch (Exception ex)
         {
             LogAndThrowException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
+            return;
         }
 
         if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
@@ -108,6 +110,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         }
     }
 
+    [DoesNotReturn]
     private void LogAndThrowException(string logMessage, Exception? ex = null)
     {
         if (ex != null)
