@@ -2,9 +2,6 @@
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 
-/// <summary>
-/// Validates identifiers to prevent injection attacks through ID-based URLs.
-/// </summary>
 public static class IdentifierValidator
 {
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromMilliseconds(100);
@@ -37,12 +34,6 @@ public static class IdentifierValidator
         "%00"
     ];
 
-    /// <summary>
-    /// Checks if an identifier contains potentially malicious URL patterns.
-    /// </summary>
-    /// <param name="identifier">The identifier to check</param>
-    /// <param name="logger">Optional logger for validation warnings</param>
-    /// <returns>True if the identifier appears safe, false otherwise</returns>
     public static bool IsValidIdentifier(this string identifier, ILogger? logger = null)
     {
         if (string.IsNullOrWhiteSpace(identifier))
@@ -83,22 +74,9 @@ public static class IdentifierValidator
         return false;
     }
 
-    /// <summary>
-    /// Safely logs identifier validation warnings without exposing any untrusted content.
-    /// Only logs the detection reason and identifier length to prevent log injection and information disclosure.
-    /// </summary>
-    /// <param name="logger">The logger instance</param>
-    /// <param name="message">The warning message describing what was detected</param>
-    /// <param name="identifierLength">The length of the rejected identifier</param>
     private static void LogIdentifierWarning(ILogger? logger, string message, int identifierLength)
     {
-        if (logger == null)
-        {
-            return;
-        }
-
-        // Log only metadata - no identifier content to prevent log injection and information disclosure
-        logger.LogWarning("{Message}. Identifier length: {Length}", message, identifierLength);
+        logger?.LogWarning("{Message}. Identifier length: {Length}", message, identifierLength);
     }
 
     private static bool ContainsDangerousProtocol(string identifier) => DangerousProtocols.Any(protocol => identifier.Contains(protocol, StringComparison.OrdinalIgnoreCase));
