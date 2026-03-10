@@ -8,6 +8,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryEx
 
 using Npgsql;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
 
 public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonResponseParser jsonResponseParser, IQueryExecutor queryExecutor) : ISubmodelDataProvider
@@ -23,7 +25,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogError("Query returned empty result for productId : {ProductId} ", productId);
+            logger.LogError("Query returned empty result for productId : {ProductId} ", Sanitize(productId));
             throw new ResourceNotValidException();
         }
 

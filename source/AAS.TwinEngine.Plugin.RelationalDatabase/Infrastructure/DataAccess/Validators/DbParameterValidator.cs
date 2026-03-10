@@ -2,6 +2,8 @@
 using System.Data.Common;
 using System.Text.RegularExpressions;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 using ResourceNotValidException = AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure.ResourceNotValidException;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Validators;
@@ -160,7 +162,7 @@ public static partial class DbParameterValidator
             return;
         }
 
-        logger?.LogError("Invalid parameter name format: {Name}", parameterName);
+        logger?.LogError("Invalid parameter name format: {Name}", Sanitize(parameterName));
         throw new ResourceNotValidException();
     }
 
@@ -183,7 +185,7 @@ public static partial class DbParameterValidator
             return;
         }
 
-        logger?.LogError("Potential SQL injection detected in parameter {Name}. Value: {Value}", parameterName, value);
+        logger?.LogError("Potential SQL injection detected in parameter {Name}", Sanitize(parameterName));
         throw new ResourceNotValidException();
     }
 

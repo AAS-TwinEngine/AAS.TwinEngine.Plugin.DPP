@@ -6,6 +6,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 
 public class SubmodelDataHandler(
@@ -43,7 +45,7 @@ public class SubmodelDataHandler(
         Func<TModel, TDto> mapFunc)
     {
         var decodedId = encodedId?.DecodeBase64(logger);
-        logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, decodedId);
+        logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, Sanitize(decodedId));
 
         var result = await fetchFunc(decodedId!).ConfigureAwait(false);
         ValidateResourceExists(result, resourceName, decodedId!);
@@ -57,7 +59,7 @@ public class SubmodelDataHandler(
         {
             if (decodedId is not null)
             {
-                logger.LogError("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
+                logger.LogError("{ResourceName} not found for Identifier: {DecodedId}", resourceName, Sanitize(decodedId));
             }
             else
             {

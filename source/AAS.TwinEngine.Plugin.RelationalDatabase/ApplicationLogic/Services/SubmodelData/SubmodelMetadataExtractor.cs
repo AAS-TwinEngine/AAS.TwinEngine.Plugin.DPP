@@ -6,6 +6,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Submode
 
 using Microsoft.Extensions.Options;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
 public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogger<SubmodelMetadataExtractor> logger) : ISubmodelMetadataExtractor
@@ -24,7 +26,7 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
             return new SubmodelIdExtractionResult(productId, parsedSubmodelName);
         }
 
-        logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
+        logger.LogError("Submodel name '{SubmodelName}' is not recognized.", Sanitize(submodelName));
         throw new InvalidUserInputException();
     }
 

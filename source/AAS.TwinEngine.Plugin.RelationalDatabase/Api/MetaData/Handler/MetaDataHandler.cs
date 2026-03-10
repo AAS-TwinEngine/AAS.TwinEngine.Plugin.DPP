@@ -5,6 +5,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 
 public class MetaDataHandler(
@@ -61,7 +63,7 @@ public class MetaDataHandler(
         ArgumentException.ThrowIfNullOrWhiteSpace(encodedId, nameof(encodedId));
 
         var decodedId = encodedId.DecodeBase64(logger);
-        logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, decodedId);
+        logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, Sanitize(decodedId));
 
         var result = await fetchFunc(decodedId!).ConfigureAwait(false);
         ValidateResourceExists(result, resourceName, decodedId!);
@@ -75,7 +77,7 @@ public class MetaDataHandler(
         {
             if (decodedId is not null)
             {
-                logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, decodedId);
+                logger.LogWarning("{ResourceName} not found for Identifier: {DecodedId}", resourceName, Sanitize(decodedId));
             }
             else
             {

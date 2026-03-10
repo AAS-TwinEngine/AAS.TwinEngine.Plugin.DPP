@@ -8,6 +8,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData
 
 using Npgsql;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
 
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
@@ -77,7 +79,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogWarning("ShellDescriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
+            logger.LogWarning("ShellDescriptor not found for AAS Identifier: {AasIdentifier}", Sanitize(aasIdentifier));
 
             return new ShellDescriptorData();
         }
@@ -105,7 +107,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
-            logger.LogWarning("Asset not found for Asset Identifier: {AssetIdentifier}", assetIdentifier);
+            logger.LogWarning("Asset not found for Asset Identifier: {AssetIdentifier}", Sanitize(assetIdentifier));
 
             return new AssetData();
         }

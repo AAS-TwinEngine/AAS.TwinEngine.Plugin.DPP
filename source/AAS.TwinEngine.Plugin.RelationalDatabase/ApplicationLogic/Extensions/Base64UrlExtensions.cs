@@ -4,6 +4,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Appli
 
 using Microsoft.AspNetCore.WebUtilities;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 
 public static class Base64UrlExtensions
@@ -66,7 +68,7 @@ public static class Base64UrlExtensions
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Failed to encode string to Base64 URL format: {PlainText}", plainText);
+            logger?.LogError(ex, "Failed to encode string to Base64 URL format: {PlainText}", Sanitize(plainText));
             throw new InvalidUserInputException();
         }
     }

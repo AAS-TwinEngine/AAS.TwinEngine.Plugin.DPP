@@ -7,6 +7,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Microsoft.Extensions.Options;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
 
 public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
@@ -101,7 +103,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             return string.Empty;
         }
 
-        _logger.LogError("SemanticId '{SemanticId}' not found in mapping", baseId);
+        _logger.LogError("SemanticId '{SemanticId}' not found in mapping", Sanitize(baseId));
         throw new InvalidUserInputException();
     }
 

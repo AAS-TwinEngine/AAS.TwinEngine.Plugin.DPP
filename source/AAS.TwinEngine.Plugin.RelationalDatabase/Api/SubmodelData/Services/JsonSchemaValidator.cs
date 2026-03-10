@@ -9,6 +9,8 @@ using Json.Schema;
 
 using Microsoft.Extensions.Options;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 
 public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSchemaValidator> logger) : IJsonSchemaValidator
@@ -103,13 +105,14 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
 
     private void LogAndThrowException(string logMessage, Exception? ex = null)
     {
+        var sanitizedMessage = Sanitize(logMessage);
         if (ex != null)
         {
-            logger.LogError(ex, logMessage);
+            logger.LogError(ex, "{Message}", sanitizedMessage);
         }
         else
         {
-            logger.LogError(logMessage);
+            logger.LogError("{Message}", sanitizedMessage);
         }
 
         throw new NotFoundException();

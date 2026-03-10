@@ -6,6 +6,8 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 using Microsoft.Extensions.Options;
 
+using static AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions.LogSanitizer;
+
 using IQueryProvider = AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 
@@ -22,7 +24,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
-            logger.LogError("Shell descriptors not found for limit: {Limit}, cursor: {Cursor}", limit, cursor);
+            logger.LogError("Shell descriptors not found for limit: {Limit}, cursor: {Cursor}", limit, Sanitize(cursor));
             throw new ShellMetaDataNotFoundException();
         }
         catch (Exception ex)
@@ -42,7 +44,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
-            logger.LogError("Shell descriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
+            logger.LogError("Shell descriptor not found for AAS Identifier: {AasIdentifier}", Sanitize(aasIdentifier));
             throw new ShellMetaDataNotFoundException();
         }
         catch (Exception ex)
@@ -62,7 +64,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
-            logger.LogError("Asset not found for Asset Identifier: {AssetIdentifier}", assetIdentifier);
+            logger.LogError("Asset not found for Asset Identifier: {AssetIdentifier}", Sanitize(assetIdentifier));
             throw new AssetMetaDataNotFoundException();
         }
         catch (Exception ex)
