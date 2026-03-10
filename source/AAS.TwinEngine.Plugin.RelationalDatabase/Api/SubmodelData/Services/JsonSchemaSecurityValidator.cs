@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
@@ -202,7 +203,7 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
 
         if (!nameWithoutContextSuffix.IsValidIdentifier())
         {
-            ThrowBadRequest($"Property name contains potentially malicious patterns: {propertyName}");
+            ThrowInvalidUserInputException($"Property name contains potentially malicious patterns: {propertyName}");
         }
 
         if (nameWithoutContextSuffix != propertyName)
@@ -217,14 +218,14 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
 
         if (!suffix.StartsWith(_contextPrefix, StringComparison.Ordinal))
         {
-            ThrowBadRequest($"Invalid context suffix format in property name: {propertyName}");
+            ThrowInvalidUserInputException($"Invalid context suffix format in property name: {propertyName}");
         }
 
         var suffixAfterPrefix = suffix[_contextPrefix.Length..];
 
         if (!string.IsNullOrEmpty(suffixAfterPrefix) && !suffixAfterPrefix.All(char.IsDigit))
         {
-            ThrowBadRequest($"Context suffix must contain only digits after prefix: {propertyName}");
+            ThrowInvalidUserInputException($"Context suffix must contain only digits after prefix: {propertyName}");
         }
     }
 
@@ -263,13 +264,13 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
 
         if (stringValue.Length > MaxStringValueLength)
         {
-            ThrowBadRequest($"String value exceeds maximum length of {MaxStringValueLength} characters.");
+            ThrowInvalidUserInputException($"String value exceeds maximum length of {MaxStringValueLength} characters.");
         }
 
         if (stringValue.Contains('\0', StringComparison.Ordinal) ||
             stringValue.Contains("%00", StringComparison.OrdinalIgnoreCase))
         {
-            ThrowBadRequest("String value contains null byte characters.");
+            ThrowInvalidUserInputException("String value contains null byte characters.");
         }
     }
 
@@ -282,25 +283,25 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
 
         if (uriString.Length > MaxUriLength)
         {
-            ThrowBadRequest($"URI in '{propertyName}' exceeds maximum length of {MaxUriLength} characters.");
+            ThrowInvalidUserInputException($"URI in '{propertyName}' exceeds maximum length of {MaxUriLength} characters.");
         }
 
         if (!uriString.IsValidIdentifier())
         {
-            ThrowBadRequest($"URI in '{propertyName}' contains potentially malicious patterns: {uriString[..Math.Min(50, uriString.Length)]}");
+            ThrowInvalidUserInputException($"URI in '{propertyName}' contains potentially malicious patterns: {uriString[..Math.Min(50, uriString.Length)]}");
         }
 
         if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
         {
             if (!AllowedUriSchemes.Contains(uri.Scheme))
             {
-                ThrowBadRequest($"URI scheme '{uri.Scheme}' is not allowed in '{propertyName}'. Allowed schemes: {string.Join(", ", AllowedUriSchemes)}");
+                ThrowInvalidUserInputException($"URI scheme '{uri.Scheme}' is not allowed in '{propertyName}'. Allowed schemes: {string.Join(", ", AllowedUriSchemes)}");
             }
         }
         else if (uriString.Contains("..", StringComparison.Ordinal) &&
             !uriString.StartsWith("#/", StringComparison.Ordinal))
         {
-            ThrowBadRequest($"URI in '{propertyName}' contains potential path traversal pattern.");
+            ThrowInvalidUserInputException($"URI in '{propertyName}' contains potential path traversal pattern.");
         }
     }
 
@@ -313,12 +314,12 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
 
         if (pattern.Length > MaxPatternLength)
         {
-            ThrowBadRequest($"Regex pattern exceeds maximum length of {MaxPatternLength} characters.");
+            ThrowInvalidUserInputException($"Regex pattern exceeds maximum length of {MaxPatternLength} characters.");
         }
 
         if (ContainsDangerousRegexPattern(pattern))
         {
-            ThrowBadRequest("Regex pattern contains potentially dangerous constructs that could cause ReDoS attacks.");
+            ThrowInvalidUserInputException("Regex pattern contains potentially dangerous constructs that could cause ReDoS attacks.");
         }
 
         try
@@ -327,11 +328,11 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
         }
         catch (ArgumentException ex)
         {
-            ThrowBadRequest($"Invalid regex pattern: {ex.Message}");
+            ThrowInvalidUserInputException($"Invalid regex pattern: {ex.Message}");
         }
         catch (RegexMatchTimeoutException)
         {
-            ThrowBadRequest("Regex pattern is too complex and could cause performance issues.");
+            ThrowInvalidUserInputException("Regex pattern is too complex and could cause performance issues.");
         }
     }
 
@@ -371,9 +372,9 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
         return suffixIndex >= 0 ? propertyName[..suffixIndex] : propertyName;
     }
 
-    private void ThrowBadRequest(string message)
+    private void ThrowInvalidUserInputException(string message)
     {
         logger.LogError("Validation error: {Message}", message);
-        throw new BadRequestException();
+        throw new InvalidUserInputException();
     }
 }
