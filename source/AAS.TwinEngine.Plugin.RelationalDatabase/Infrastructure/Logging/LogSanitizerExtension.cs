@@ -1,11 +1,11 @@
-﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
+﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Logging;
 
 /// <summary>
 /// Provides log input sanitization to prevent log poisoning attacks.
 /// Strips control characters and truncates values to prevent log injection,
 /// ANSI escape sequence attacks, and log forging via newline injection.
 /// </summary>
-public static class LogSanitizer
+public static class LogSanitizerExtension
 {
     private const int DefaultMaxLength = 500;
 
