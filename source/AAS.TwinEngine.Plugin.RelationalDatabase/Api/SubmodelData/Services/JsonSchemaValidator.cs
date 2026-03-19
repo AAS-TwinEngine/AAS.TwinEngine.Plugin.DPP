@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
@@ -31,22 +32,22 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
     {
         if (!TrySerializeSchema(schema!, out var schemaText, out var serializationError))
         {
-            LogAndThrowException($"Schema serialization failed: {serializationError}");
+            LogAndThrowRequestException($"Schema serialization failed: {serializationError}");
         }
 
         if (schemaText.Length > MaxSchemaSize)
         {
-            LogAndThrowException($"Schema size exceeds the maximum allowed size of {MaxSchemaSize} bytes.");
+            LogAndThrowRequestException($"Schema size exceeds the maximum allowed size of {MaxSchemaSize} bytes.");
         }
 
         if (!TryParseSchemaNode(schemaText, out var schemaNode, out var parseError))
         {
-            LogAndThrowException($"Schema JSON is invalid: {parseError}");
+            LogAndThrowRequestException($"Schema JSON is invalid: {parseError}");
         }
 
         if (schemaNode == null)
         {
-            LogAndThrowException("Serialized schema resulted in null JsonNode.");
+            LogAndThrowRequestException("Serialized schema resulted in null JsonNode.");
         }
 
         securityValidator.ValidateSchemaComplexity(schemaNode!);
@@ -57,12 +58,12 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             var result = MetaSchemas.Draft7.Evaluate(schemaNode, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
-                LogAndThrowException("Schema is not valid against Draft-7.");
+                LogAndThrowRequestException("Schema is not valid against Draft-7.");
             }
         }
         catch (Exception ex)
         {
-            LogAndThrowException("Draft-7 evaluation failed.", ex);
+            LogAndThrowRequestException("Draft-7 evaluation failed.", ex);
         }
     }
 
@@ -70,12 +71,12 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
     {
         if (string.IsNullOrWhiteSpace(responseJson))
         {
-            LogAndThrowException("Response JSON is empty.");
+            LogAndThrowResponseException("Response JSON is empty.");
         }
 
         if (!TryParseJson(responseJson, out var responseDoc, out var parseError))
         {
-            LogAndThrowException($"Failed to parse response JSON: {parseError}");
+            LogAndThrowResponseException($"Failed to parse response JSON: {parseError}");
         }
 
         JsonObject normalizedSchema;
@@ -86,13 +87,13 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         }
         catch (Exception ex)
         {
-            LogAndThrowException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
+            LogAndThrowResponseException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
             return;
         }
 
         if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
         {
-            LogAndThrowException($"Failed to register schema: {registerError}");
+            LogAndThrowResponseException($"Failed to register schema: {registerError}");
         }
 
         try
@@ -101,17 +102,17 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             var result = schema.Evaluate(responseDoc!.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
-                LogAndThrowException("Response did not validate against schema.");
+                LogAndThrowResponseException("Response did not validate against schema.");
             }
         }
         catch (Exception ex)
         {
-            LogAndThrowException("Exception occurred during response validation.", ex);
+            LogAndThrowResponseException("Exception occurred during response validation.", ex);
         }
     }
 
     [DoesNotReturn]
-    private void LogAndThrowException(string logMessage, Exception? ex = null)
+    private void LogAndThrowRequestException(string logMessage, Exception? ex = null)
     {
         if (ex != null)
         {
@@ -122,7 +123,22 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             logger.LogError(logMessage);
         }
 
-        throw new NotFoundException();
+        throw new InvalidUserInputException(logMessage);
+    }
+
+    [DoesNotReturn]
+    private void LogAndThrowResponseException(string logMessage, Exception? ex = null)
+    {
+        if (ex != null)
+        {
+            logger.LogError(ex, logMessage);
+        }
+        else
+        {
+            logger.LogError(logMessage);
+        }
+
+        throw new NotFoundException(logMessage);
     }
 
     private static bool TrySerializeSchema(JsonSchema schema, out string schemaText, out string? error)
@@ -226,11 +242,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             RemoveContextSuffixFromRequiredProperties(requiredPropertiesArray);
         }
 
-        foreach (var property in jsonObject.ToList())
+        foreach (var (propertyName, propertyValue) in jsonObject.ToList())
         {
-            var propertyName = property.Key;
-            var propertyValue = property.Value;
-
             if (propertyName == "$ref" &&
                 propertyValue is JsonValue referenceValue &&
                 referenceValue.TryGetValue<string>(out var referenceString) &&

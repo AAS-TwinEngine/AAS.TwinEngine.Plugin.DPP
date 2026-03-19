@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
@@ -64,7 +63,7 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
     {
         if (depth > MaxSchemaDepth)
         {
-            throw new BadRequestException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
+            throw new InvalidUserInputException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
         }
     }
 
@@ -95,7 +94,7 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
         var newCount = currentCount + propsObj.Count;
         if (newCount > MaxProperties)
         {
-            throw new BadRequestException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
+            throw new InvalidUserInputException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
         }
 
         return newCount;
@@ -187,7 +186,7 @@ public class JsonSchemaSecurityValidator(IOptions<Semantics> semantics, ILogger<
     {
         if (propertyName.Length > MaxPropertyNameLength)
         {
-            throw new BadRequestException($"Property name exceeds maximum length of {MaxPropertyNameLength} characters: {propertyName[..Math.Min(50, propertyName.Length)]}...");
+            throw new InvalidUserInputException($"Property name exceeds maximum length of {MaxPropertyNameLength} characters: {propertyName[..Math.Min(50, propertyName.Length)]}...");
         }
     }
 

@@ -31,7 +31,7 @@ public class JsonSchemaSecurityValidatorTests
     #region ValidateSchemaComplexity Tests
 
     [Fact]
-    public void ValidateSchemaComplexity_DepthExceedsLimit_ThrowsBadRequestException()
+    public void ValidateSchemaComplexity_DepthExceedsLimit_ThrowsInvalidUserInputException()
     {
         var root = BuildNestedObject(depth: 11);
 
@@ -39,7 +39,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaComplexity_PropertyCountExceedsLimit_ThrowsBadRequestException()
+    public void ValidateSchemaComplexity_PropertyCountExceedsLimit_ThrowsInvalidUserInputException()
     {
         var properties = new JsonObject();
         for (var index = 0; index < 1001; index++)
@@ -220,7 +220,7 @@ public class JsonSchemaSecurityValidatorTests
     #region ValidateSchemaContent Tests
 
     [Fact]
-    public void ValidateSchemaContent_MaliciousPropertyName_ThrowsBadRequestException()
+    public void ValidateSchemaContent_MaliciousPropertyName_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -235,7 +235,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_InvalidUriScheme_ThrowsBadRequestException()
+    public void ValidateSchemaContent_InvalidUriScheme_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -247,7 +247,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_DangerousRegexPattern_ThrowsBadRequestException()
+    public void ValidateSchemaContent_DangerousRegexPattern_ThrowsInvalidUserInputException()
     {
       var root = new JsonObject
         {
@@ -266,7 +266,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_StringWithNullByte_ThrowsBadRequestException()
+    public void ValidateSchemaContent_StringWithNullByte_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -300,7 +300,7 @@ public class JsonSchemaSecurityValidatorTests
     [InlineData("'; DROP TABLE_aastwinengine_01")]
     [InlineData("../../etc/passwd_aastwinengine_")]
     [InlineData("javascript:alert(1)_aastwinengine_99")]
-    public void ValidateSchemaContent_MaliciousPropertyWithContextSuffix_ThrowsBadRequestException(string maliciousPropertyName)
+    public void ValidateSchemaContent_MaliciousPropertyWithContextSuffix_ThrowsInvalidUserInputException(string maliciousPropertyName)
     {
         var root = CreateSchemaWithProperty(maliciousPropertyName,
             new JsonObject { ["type"] = "string" });
@@ -326,7 +326,7 @@ public class JsonSchemaSecurityValidatorTests
     [InlineData("ValidProperty_aastwinengine_abc")] // Non-digit after prefix
     [InlineData("Property_aastwinengine_#")] // Invalid character
     [InlineData("test_aastwinengine_-1")] // Negative number (hyphen)
-    public void ValidateSchemaContent_InvalidContextSuffixFormat_ThrowsBadRequestException(string invalidPropertyName)
+    public void ValidateSchemaContent_InvalidContextSuffixFormat_ThrowsInvalidUserInputException(string invalidPropertyName)
     {
         var root = CreateSchemaWithProperty(invalidPropertyName,
                new JsonObject { ["type"] = "string" });
@@ -335,7 +335,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_MaliciousPropertyWithMultipleContextPrefixes_ThrowsBadRequestException()
+    public void ValidateSchemaContent_MaliciousPropertyWithMultipleContextPrefixes_ThrowsInvalidUserInputException()
     {
         var root = CreateSchemaWithProperty("<script>_aastwinengine_00_aastwinengine_01",
             new JsonObject { ["type"] = "string" });
@@ -344,7 +344,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_ContextSuffixOnly_ThrowsBadRequestException()
+    public void ValidateSchemaContent_ContextSuffixOnly_ThrowsInvalidUserInputException()
     {
         var root = CreateSchemaWithProperty("_aastwinengine_00",
              new JsonObject { ["type"] = "string" });
@@ -471,7 +471,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
   [Fact]
-    public void ValidateSchemaContent_MaliciousPropertyNotStartingWithDollar_ThrowsBadRequestException()
+    public void ValidateSchemaContent_MaliciousPropertyNotStartingWithDollar_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -486,7 +486,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_EmptyPropertyName_ThrowsBadRequestException()
+    public void ValidateSchemaContent_EmptyPropertyName_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -608,7 +608,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_VeryLongPropertyName_ThrowsBadRequestException()
+    public void ValidateSchemaContent_VeryLongPropertyName_ThrowsInvalidUserInputException()
     {
         var longName = new string('a', 300);
         var root = new JsonObject
@@ -737,7 +737,7 @@ public class JsonSchemaSecurityValidatorTests
     [InlineData("(a*)+")]
     [InlineData("(a{1,})+")]
     [InlineData("(a{1,})*")]
-    public void ValidateSchemaContent_DangerousRegexPatterns_ThrowsBadRequestException(string pattern)
+    public void ValidateSchemaContent_DangerousRegexPatterns_ThrowsInvalidUserInputException(string pattern)
     {
         var root = new JsonObject
         {
@@ -778,7 +778,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_InvalidRegexSyntax_ThrowsBadRequestException()
+    public void ValidateSchemaContent_InvalidRegexSyntax_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -821,7 +821,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_PathTraversalInRef_ThrowsBadRequestException()
+    public void ValidateSchemaContent_PathTraversalInRef_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
@@ -861,7 +861,7 @@ public class JsonSchemaSecurityValidatorTests
     }
 
     [Fact]
-    public void ValidateSchemaContent_UriWithMaliciousPatterns_ThrowsBadRequestException()
+    public void ValidateSchemaContent_UriWithMaliciousPatterns_ThrowsInvalidUserInputException()
     {
         var root = new JsonObject
         {
