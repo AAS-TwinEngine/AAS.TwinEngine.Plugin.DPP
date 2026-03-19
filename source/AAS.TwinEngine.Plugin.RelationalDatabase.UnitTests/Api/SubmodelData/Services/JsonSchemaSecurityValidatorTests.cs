@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
 using Microsoft.Extensions.Logging;
@@ -35,7 +35,7 @@ public class JsonSchemaSecurityValidatorTests
     {
         var root = BuildNestedObject(depth: 11);
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaComplexity(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaComplexity(root));
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class JsonSchemaSecurityValidatorTests
             ["properties"] = properties
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaComplexity(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaComplexity(root));
     }
 
     [Fact]
@@ -149,7 +149,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaComplexity(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaComplexity(root));
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public class JsonSchemaSecurityValidatorTests
             ["properties"] = level1Props
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaComplexity(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaComplexity(root));
     }
 
     #endregion
@@ -231,7 +231,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public class JsonSchemaSecurityValidatorTests
         ["type"] = "object"
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -262,7 +262,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -274,7 +274,7 @@ public class JsonSchemaSecurityValidatorTests
             ["const"] = "abc%00xyz"
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -305,7 +305,7 @@ public class JsonSchemaSecurityValidatorTests
         var root = CreateSchemaWithProperty(maliciousPropertyName,
             new JsonObject { ["type"] = "string" });
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Theory]
@@ -331,7 +331,7 @@ public class JsonSchemaSecurityValidatorTests
         var root = CreateSchemaWithProperty(invalidPropertyName,
                new JsonObject { ["type"] = "string" });
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -340,7 +340,7 @@ public class JsonSchemaSecurityValidatorTests
         var root = CreateSchemaWithProperty("<script>_aastwinengine_00_aastwinengine_01",
             new JsonObject { ["type"] = "string" });
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -349,7 +349,7 @@ public class JsonSchemaSecurityValidatorTests
         var root = CreateSchemaWithProperty("_aastwinengine_00",
              new JsonObject { ["type"] = "string" });
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -364,7 +364,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
 
         _logger.Received().Log(LogLevel.Error,
                                Arg.Any<EventId>(),
@@ -482,7 +482,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -497,7 +497,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -574,7 +574,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Theory]
@@ -604,7 +604,7 @@ public class JsonSchemaSecurityValidatorTests
             ["type"] = "object"
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -620,7 +620,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -649,7 +649,7 @@ public class JsonSchemaSecurityValidatorTests
             ["const"] = longString
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -675,7 +675,7 @@ public class JsonSchemaSecurityValidatorTests
             ["type"] = "object"
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -708,7 +708,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -752,7 +752,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Theory]
@@ -793,7 +793,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -835,7 +835,7 @@ public class JsonSchemaSecurityValidatorTests
             }
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Fact]
@@ -869,7 +869,7 @@ public class JsonSchemaSecurityValidatorTests
             ["type"] = "object"
         };
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateSchemaContent(root));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateSchemaContent(root));
     }
 
     [Theory]

@@ -1,4 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
@@ -452,7 +453,7 @@ public class JsonSchemaValidatorTests
             .Properties(properties)
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -460,7 +461,7 @@ public class JsonSchemaValidatorTests
     {
         var schema = BuildNestedSchema(12); // Depth of 12 exceeds limit of 10
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Maximum allowed depth is 10", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
@@ -480,7 +481,7 @@ public class JsonSchemaValidatorTests
             .Properties(properties)
             .Build();
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Maximum allowed is 1000", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
@@ -527,7 +528,7 @@ public class JsonSchemaValidatorTests
             .Properties(properties)
             .Build();
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -559,7 +560,7 @@ public class JsonSchemaValidatorTests
             .Properties(rootProperties)
             .Build();
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema contains too many properties", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -574,7 +575,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.CurrentCulture);
     }
 
@@ -622,7 +623,7 @@ public class JsonSchemaValidatorTests
     {
         var schema = BuildNestedSchema(11);
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.CurrentCulture);
     }
 
@@ -641,7 +642,7 @@ public class JsonSchemaValidatorTests
             .Properties(properties)
             .Build();
 
-        var exception = Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Maximum allowed is 1000", exception.Message, StringComparison.CurrentCulture);
     }
 
@@ -657,7 +658,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Theory]
@@ -676,7 +677,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-       Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+       Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -694,7 +695,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Theory]
@@ -713,7 +714,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Theory]
@@ -728,7 +729,7 @@ public class JsonSchemaValidatorTests
                      .Type(SchemaValueType.Object)
                      .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Theory]
@@ -762,7 +763,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -777,7 +778,7 @@ public class JsonSchemaValidatorTests
                                             })
                                             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -815,7 +816,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -835,7 +836,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(schema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
 
     [Fact]
@@ -883,7 +884,7 @@ public class JsonSchemaValidatorTests
             })
             .Build();
 
-        Assert.Throws<BadRequestException>(() => _sut.ValidateRequestSchema(maliciousSchema));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(maliciousSchema));
 
         _securityLogger.Received().Log(
             LogLevel.Error,
