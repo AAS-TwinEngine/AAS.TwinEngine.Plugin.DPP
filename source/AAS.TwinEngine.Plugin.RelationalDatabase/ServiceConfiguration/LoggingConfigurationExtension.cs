@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Logging;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using OpenTelemetry.Logs;
@@ -28,6 +29,7 @@ internal static class LoggingConfigurationExtension
             _ = loggerConfig
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.FromLogContext()
+                .Enrich.With<SanitizingEnricher>()
                 .MinimumLevel.ControlledBy(logLevelSwitch);
         }, writeToProviders: true);
 
