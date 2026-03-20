@@ -10,7 +10,11 @@ public class InvalidUserInputException : BadRequestException
 
     public InvalidUserInputException(Exception ex) : base(DefaultMessage, ex) { }
 
-    public InvalidUserInputException(string message) : base(DefaultMessage)
+    public InvalidUserInputException(string message) : base(message)
+    {
+    }
+
+    public InvalidUserInputException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }

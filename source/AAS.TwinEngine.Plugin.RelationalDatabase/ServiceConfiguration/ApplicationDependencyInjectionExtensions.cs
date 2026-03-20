@@ -36,6 +36,7 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<ISubmodelMetadataExtractor, SubmodelMetadataExtractor>();
         _ = services.AddScoped<ISubmodelDataHandler, SubmodelDataHandler>();
         _ = services.AddScoped<ISemanticTreeHandler, SemanticTreeHandler>();
+        _ = services.AddScoped<IJsonSchemaSecurityValidator, JsonSchemaSecurityValidator>();
         _ = services.AddScoped<IJsonSchemaValidator, JsonSchemaValidator>();
         _ = services.AddScoped<ISubmodelDataService, SubmodelDataService>();
     }
