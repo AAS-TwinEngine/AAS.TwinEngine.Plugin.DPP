@@ -89,11 +89,11 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
     private ColumnMapping ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node)
     {
         var (baseId, suffix) = SplitSemanticId(semanticId);
-        var mappingItem = FindMapping(baseId, mappingData);
+        var mappingItems = FindMappings(baseId, mappingData);
 
-        if (mappingItem != null)
+        if (mappingItems.Count > 0)
         {
-            var baseMapping = CreateColumnMapping(mappingItem.Column);
+            var baseMapping = CreateColumnMapping(mappingItems);
             return AppendSuffix(baseMapping, suffix);
         }
 
@@ -113,30 +113,65 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         return index < 0 ? (semanticId, null) : (semanticId[..index], semanticId[index..]);
     }
 
-    private static MappingItem? FindMapping(string semanticId, IList<MappingItem> mappingData)
+    private static List<MappingItem> FindMappings(string semanticId, IList<MappingItem> mappingData)
     {
-        return mappingData.FirstOrDefault(m =>
+        return mappingData
+            .Where(m =>
             m?.SemanticId != null &&
-            m.SemanticId.Any(id => string.Equals(id, semanticId, StringComparison.OrdinalIgnoreCase)));
+            m.SemanticId.Any(id => string.Equals(id, semanticId, StringComparison.OrdinalIgnoreCase)))
+            .ToList()!;
     }
 
-    private static ColumnMapping CreateColumnMapping(string? column)
+    private static ColumnMapping CreateColumnMapping(IReadOnlyCollection<MappingItem> mappingItems)
+    {
+        var branchColumn = mappingItems
+            .Select(item => ExtractBranchColumn(item.Column))
+            .FirstOrDefault(column => !string.IsNullOrEmpty(column)) ?? string.Empty;
+
+        var leafColumn = mappingItems
+            .Select(item => ExtractLeafColumn(item.Column))
+            .FirstOrDefault(column => !string.IsNullOrEmpty(column)) ?? string.Empty;
+
+        return new ColumnMapping(branchColumn, leafColumn);
+    }
+
+    private static string ExtractBranchColumn(string? column)
     {
         if (string.IsNullOrEmpty(column))
         {
-            return new ColumnMapping(string.Empty, string.Empty);
+            return string.Empty;
         }
 
         var segments = column.Split('.', StringSplitOptions.RemoveEmptyEntries);
 
         return segments.Length switch
         {
-            0 => new ColumnMapping(string.Empty, string.Empty),
-            1 => new ColumnMapping(segments[0], string.Empty),
-            2 => new ColumnMapping(segments[1], string.Empty),
-            _ => new ColumnMapping(segments[^2], segments[^1])
+            1 => segments[0],
+            2 => segments[1],
+            _ => string.Empty
         };
     }
 
-    private static ColumnMapping AppendSuffix(ColumnMapping mapping, string? suffix) => string.IsNullOrEmpty(suffix) ? mapping : new ColumnMapping(BranchColumn: mapping.BranchColumn + suffix, LeafColumn: mapping.LeafColumn + suffix);
+    private static string ExtractLeafColumn(string? column)
+    {
+        if (string.IsNullOrEmpty(column))
+        {
+            return string.Empty;
+        }
+
+        var segments = column.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length >= 3 ? segments[^1] : string.Empty;
+    }
+
+    private static ColumnMapping AppendSuffix(ColumnMapping mapping, string? suffix)
+    {
+        if (string.IsNullOrEmpty(suffix))
+        {
+            return mapping;
+        }
+
+        return new ColumnMapping(
+            BranchColumn: string.IsNullOrEmpty(mapping.BranchColumn) ? string.Empty : mapping.BranchColumn + suffix,
+            LeafColumn: string.IsNullOrEmpty(mapping.LeafColumn) ? string.Empty : mapping.LeafColumn + suffix);
+    }
 }

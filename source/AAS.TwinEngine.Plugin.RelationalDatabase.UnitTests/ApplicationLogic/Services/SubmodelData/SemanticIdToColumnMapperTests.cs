@@ -168,9 +168,8 @@ public class SemanticIdToColumnMapperTests
         Assert.Single(result);
         var key = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName_aastwinengine_00";
         Assert.True(result.ContainsKey(key));
-        Assert.Contains("_aastwinengine_00", result[key].BranchColumn, StringComparison.Ordinal);
+        Assert.Equal(string.Empty, result[key].BranchColumn);
         Assert.Contains("_aastwinengine_00", result[key].LeafColumn, StringComparison.Ordinal);
-        Assert.Equal("Nameplate_aastwinengine_00", result[key].BranchColumn);
         Assert.Equal("ManufacturerName_aastwinengine_00", result[key].LeafColumn);
     }
 
@@ -289,6 +288,30 @@ public class SemanticIdToColumnMapperTests
         Assert.Equal("Branch2", result["branch2"].BranchColumn);
         Assert.Equal(string.Empty, result["nested"].BranchColumn);
         Assert.Equal(string.Empty, result["nested"].LeafColumn);
+    }
+
+    [Fact]
+    public void GetSemanticIdToColumnMapping_WhenSameSemanticIdIsUsedForBranchAndLeaf_MergesBothColumns()
+    {
+        MappingData.MappingJson = CreateJsonDocument("""
+        [
+            { "Column": "dbo.DocumentVersion", "SemanticId": [ "0173-1#02-ABI503#003/0173-1#01-AHF582#003"]},
+            { "Column": "dbo.Languages", "SemanticId": [ "0173-1#02-AAN468#008"]},
+            { "Column": "dbo.Languages.Language", "SemanticId": [ "0173-1#02-AAN468#008"]}
+        ]
+        """);
+
+        var documentVersion = new SemanticBranchNode("0173-1#02-ABI503#003/0173-1#01-AHF582#003", DataType.Array);
+        var languagesBranch = new SemanticBranchNode("0173-1#02-AAN468#008", DataType.Array);
+        var languageLeaf = new SemanticLeafNode("0173-1#02-AAN468#008", DataType.String, string.Empty);
+        languagesBranch.AddChild(languageLeaf);
+        documentVersion.AddChild(languagesBranch);
+
+        var result = _sut.GetSemanticIdToColumnMapping(documentVersion);
+
+        Assert.True(result.ContainsKey("0173-1#02-AAN468#008"));
+        Assert.Equal("Languages", result["0173-1#02-AAN468#008"].BranchColumn);
+        Assert.Equal("Language", result["0173-1#02-AAN468#008"].LeafColumn);
     }
 
     [Fact]
