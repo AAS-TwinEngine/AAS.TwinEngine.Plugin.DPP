@@ -26,7 +26,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         _cachedMappingData = new Lazy<List<MappingItem>>(LoadMappingData, LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
-    public Dictionary<string, string> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
+    public Dictionary<string, ColumnMapping> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
         ArgumentNullException.ThrowIfNull(requestNode);
 
@@ -51,9 +51,9 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         throw new InternalDataProcessingException();
     }
 
-    private Dictionary<string, string> BuildSemanticIdToColumnMapping(SemanticTreeNode root, IList<MappingItem> mappingData)
+    private Dictionary<string, ColumnMapping> BuildSemanticIdToColumnMapping(SemanticTreeNode root, IList<MappingItem> mappingData)
     {
-        var result = new Dictionary<string, string>();
+        var result = new Dictionary<string, ColumnMapping>();
         var queue = new Queue<SemanticTreeNode>();
         var processedCount = 0;
 
@@ -68,9 +68,9 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             }
 
             var node = queue.Dequeue();
-            var columnName = ResolveColumn(node.SemanticId, mappingData, node);
+            var columnMapping = ResolveColumn(node.SemanticId, mappingData, node);
 
-            result[node.SemanticId] = columnName;
+            result[node.SemanticId] = columnMapping;
 
             if (node is not SemanticBranchNode { Children.Count: > 0 } branchNode)
             {
@@ -86,19 +86,20 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
         return result;
     }
 
-    private string ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node)
+    private ColumnMapping ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node)
     {
         var (baseId, suffix) = SplitSemanticId(semanticId);
         var mappingItem = FindMapping(baseId, mappingData);
 
         if (mappingItem != null)
         {
-            return ExtractColumnName(mappingItem.Column) + (suffix ?? string.Empty);
+            var baseMapping = CreateColumnMapping(mappingItem.Column);
+            return AppendSuffix(baseMapping, suffix);
         }
 
         if (node is SemanticBranchNode)
         {
-            return string.Empty;
+            return new ColumnMapping(string.Empty, string.Empty);
         }
 
         _logger.LogError("SemanticId '{SemanticId}' not found in mapping", baseId);
@@ -119,13 +120,23 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             m.SemanticId.Any(id => string.Equals(id, semanticId, StringComparison.OrdinalIgnoreCase)));
     }
 
-    private static string ExtractColumnName(string? column)
+    private static ColumnMapping CreateColumnMapping(string? column)
     {
         if (string.IsNullOrEmpty(column))
         {
-            return string.Empty;
+            return new ColumnMapping(string.Empty, string.Empty);
         }
 
-        return column.Split('.').LastOrDefault() ?? column;
+        var segments = column.Split('.', StringSplitOptions.RemoveEmptyEntries);
+
+        return segments.Length switch
+        {
+            0 => new ColumnMapping(string.Empty, string.Empty),
+            1 => new ColumnMapping(segments[0], string.Empty),
+            2 => new ColumnMapping(segments[1], string.Empty),
+            _ => new ColumnMapping(segments[^2], segments[^1])
+        };
     }
+
+    private static ColumnMapping AppendSuffix(ColumnMapping mapping, string? suffix) => string.IsNullOrEmpty(suffix) ? mapping : new ColumnMapping(BranchColumn: mapping.BranchColumn + suffix, LeafColumn: mapping.LeafColumn + suffix);
 }

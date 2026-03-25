@@ -508,12 +508,16 @@
     "semanticId": [ "0173-1#02-ABI503#003/0173-1#01-AHF582#003" ]
   },
   {
-    "column": "dbo.DocumentVersion.en",
-    "semanticId": [ "0173-1#02-AAN468#009" ]
+    "column": "dbo.Languages",
+    "semanticId": [ "0173-1#02-AAN468#008" ]
+  },
+  {
+    "column": "dbo.Languages.Language",
+    "semanticId": [ "0173-1#02-AAN468#008" ]
   },
   {
     "column": "dbo.DocumentVersion.DigitalFile",
-    "semanticId": [ "0173-1#02-ABK126#003" ]
+    "semanticId": [ "0173-1#02-ABK126#002" ]
   },
   {
     "column": "dbo.DocumentVersion.Version",

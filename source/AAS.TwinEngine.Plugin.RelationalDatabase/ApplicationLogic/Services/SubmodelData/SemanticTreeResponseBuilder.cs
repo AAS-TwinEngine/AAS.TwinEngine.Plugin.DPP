@@ -10,7 +10,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions, I
 {
     private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
-    public SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode? responseNode, Dictionary<string, string> semanticIdToColumnMapping)
+    public SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode? responseNode, Dictionary<string, ColumnMapping> semanticIdToColumnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestNode);
         ArgumentNullException.ThrowIfNull(semanticIdToColumnMapping);
@@ -25,7 +25,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions, I
         return requestNode;
     }
 
-    private void FillRequestNodeFromResponse(SemanticTreeNode requestNode, SemanticTreeNode responseNode, Dictionary<string, string> columnMapping)
+    private void FillRequestNodeFromResponse(SemanticTreeNode requestNode, SemanticTreeNode responseNode, Dictionary<string, ColumnMapping> columnMapping)
     {
         switch (requestNode)
         {

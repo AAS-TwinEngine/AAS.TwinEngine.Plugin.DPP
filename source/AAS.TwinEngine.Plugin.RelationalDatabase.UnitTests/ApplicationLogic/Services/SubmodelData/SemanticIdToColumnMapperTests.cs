@@ -55,8 +55,8 @@ public class SemanticIdToColumnMapperTests
 
         Assert.Single(result);
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"));
-        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
+        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class SemanticIdToColumnMapperTests
         MappingData.MappingJson = CreateJsonDocument("""
                                                              [
                                                                  { "Column": "dbo.Products.Name", "SemanticId": [ "  sid:1  " , "sid:1.0"]}
-                                                               
+
                                                              ]
                                                      """);
         var branchNode = new SemanticBranchNode("unmapped-branch-id", DataType.Object);
@@ -93,7 +93,8 @@ public class SemanticIdToColumnMapperTests
         var result = _sut.GetSemanticIdToColumnMapping(branchNode);
 
         Assert.Single(result);
-        Assert.Equal(string.Empty, result["unmapped-branch-id"]);
+        Assert.Equal(string.Empty, result["unmapped-branch-id"].BranchColumn);
+        Assert.Equal(string.Empty, result["unmapped-branch-id"].LeafColumn);
     }
 
     [Fact]
@@ -103,7 +104,7 @@ public class SemanticIdToColumnMapperTests
                                                              [
                                                                  { "Column": "dbo.Nameplate", "SemanticId": [ "https://admin-shell.io/zvei/nameplate/2/0/Nameplate"]},
                                                                  { "Column": "dbo.Nameplate.ManufacturerName", "SemanticId": [ "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]}
-                                                               
+
                                                              ]
                                                      """);
         var branchNode = new SemanticBranchNode("https://admin-shell.io/zvei/nameplate/2/0/Nameplate", DataType.Object);
@@ -115,10 +116,10 @@ public class SemanticIdToColumnMapperTests
         Assert.Equal(2, result.Count);
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate"));
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"));
-        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate"]);
-        Assert.Equal("Nameplate", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate"]);
-        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
+        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate"].BranchColumn);
+        Assert.Equal("Nameplate", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate"].BranchColumn);
+        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
     }
 
     [Fact]
@@ -128,7 +129,7 @@ public class SemanticIdToColumnMapperTests
                                                              [
                                                                  { "Column": "dbo.root", "SemanticId": [ "root-branch"]},
                                                                  { "Column": "dbo.root.ManufacturerName", "SemanticId": [ "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]}
-                                                               
+
                                                              ]
                                                      """);
         var rootBranch = new SemanticBranchNode("root-branch", DataType.Object);
@@ -144,11 +145,12 @@ public class SemanticIdToColumnMapperTests
         Assert.True(result.ContainsKey("root-branch"));
         Assert.True(result.ContainsKey("child-branch"));
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"));
-        Assert.NotEmpty(result["root-branch"]);
-        Assert.Equal("root", result["root-branch"]);
-        Assert.Empty(result["child-branch"]);
-        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
+        Assert.NotEmpty(result["root-branch"].BranchColumn);
+        Assert.Equal("root", result["root-branch"].BranchColumn);
+        Assert.Empty(result["child-branch"].BranchColumn);
+        Assert.Empty(result["child-branch"].LeafColumn);
+        Assert.NotEmpty(result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
     }
 
     [Fact]
@@ -166,8 +168,10 @@ public class SemanticIdToColumnMapperTests
         Assert.Single(result);
         var key = "https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName_aastwinengine_00";
         Assert.True(result.ContainsKey(key));
-        Assert.Contains("_aastwinengine_00", result[key], StringComparison.Ordinal);
-        Assert.Equal("ManufacturerName_aastwinengine_00", result[key]);
+        Assert.Contains("_aastwinengine_00", result[key].BranchColumn, StringComparison.Ordinal);
+        Assert.Contains("_aastwinengine_00", result[key].LeafColumn, StringComparison.Ordinal);
+        Assert.Equal("Nameplate_aastwinengine_00", result[key].BranchColumn);
+        Assert.Equal("ManufacturerName_aastwinengine_00", result[key].LeafColumn);
     }
 
     [Fact]
@@ -183,8 +187,8 @@ public class SemanticIdToColumnMapperTests
         var result = _sut.GetSemanticIdToColumnMapping(leafNode);
 
         Assert.Single(result);
-        Assert.DoesNotContain("_aastwinengine_", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"], StringComparison.CurrentCulture);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
+        Assert.DoesNotContain("_aastwinengine_", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn, StringComparison.CurrentCulture);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
     }
 
     [Fact]
@@ -200,7 +204,7 @@ public class SemanticIdToColumnMapperTests
         var result = _sut.GetSemanticIdToColumnMapping(leafNode);
 
         Assert.Single(result);
-        var columnName = result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"];
+        var columnName = result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn;
         Assert.DoesNotContain(".", columnName, StringComparison.Ordinal);
         Assert.Equal("ManufacturerName", columnName);
     }
@@ -227,9 +231,10 @@ public class SemanticIdToColumnMapperTests
         Assert.True(result.ContainsKey("parent-branch"));
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"));
         Assert.True(result.ContainsKey("child-branch"));
-        Assert.Equal("Parent", result["parent-branch"]);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
-        Assert.Equal(string.Empty, result["child-branch"]);
+        Assert.Equal("Parent", result["parent-branch"].BranchColumn);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
+        Assert.Equal(string.Empty, result["child-branch"].BranchColumn);
+        Assert.Equal(string.Empty, result["child-branch"].LeafColumn);
     }
 
     [Fact]
@@ -245,8 +250,8 @@ public class SemanticIdToColumnMapperTests
         var result = _sut.GetSemanticIdToColumnMapping(leafNode);
 
         Assert.Single(result);
-        Assert.NotEmpty(result["HTTPS://ADMIN-SHELL.IO/ZVEI/NAMEPLATE/2/0/NAMEPLATE/MANUFACTURERNAME"]);
-        Assert.Equal("ManufacturerName", result["HTTPS://ADMIN-SHELL.IO/ZVEI/NAMEPLATE/2/0/NAMEPLATE/MANUFACTURERNAME"]);
+        Assert.NotEmpty(result["HTTPS://ADMIN-SHELL.IO/ZVEI/NAMEPLATE/2/0/NAMEPLATE/MANUFACTURERNAME"].LeafColumn);
+        Assert.Equal("ManufacturerName", result["HTTPS://ADMIN-SHELL.IO/ZVEI/NAMEPLATE/2/0/NAMEPLATE/MANUFACTURERNAME"].LeafColumn);
     }
 
     [Fact]
@@ -278,11 +283,12 @@ public class SemanticIdToColumnMapperTests
         Assert.True(result.ContainsKey("https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"));
         Assert.True(result.ContainsKey("branch2"));
         Assert.True(result.ContainsKey("nested"));
-        Assert.Equal("Root", result["root"]);
-        Assert.Equal("Branch1", result["branch1"]);
-        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"]);
-        Assert.Equal("Branch2", result["branch2"]);
-        Assert.Equal(string.Empty, result["nested"]);
+        Assert.Equal("Root", result["root"].BranchColumn);
+        Assert.Equal("Branch1", result["branch1"].BranchColumn);
+        Assert.Equal("ManufacturerName", result["https://admin-shell.io/zvei/nameplate/2/0/Nameplate/ManufacturerName"].LeafColumn);
+        Assert.Equal("Branch2", result["branch2"].BranchColumn);
+        Assert.Equal(string.Empty, result["nested"].BranchColumn);
+        Assert.Equal(string.Empty, result["nested"].LeafColumn);
     }
 
     [Fact]
