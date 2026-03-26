@@ -4,7 +4,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public interface IResponseSemanticTreeNodeResolver
 {
-    string? GetColumnName(string semanticId, Dictionary<string, string> columnMapping);
+    ColumnMapping? GetColumnMapping(string semanticId, Dictionary<string, ColumnMapping> columnMapping);
 
     IList<SemanticLeafNode> FindMatchingLeafNodes(SemanticTreeNode root, string semanticId);
 
