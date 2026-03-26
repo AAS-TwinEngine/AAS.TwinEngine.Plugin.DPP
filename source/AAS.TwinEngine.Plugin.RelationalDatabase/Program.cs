@@ -4,7 +4,11 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
 
+using Microsoft.AspNetCore.ResponseCompression;
+
 using Serilog;
+
+using System.IO.Compression;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase;
 
@@ -16,6 +20,14 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        _ = builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+        });
+        _ = builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+        _ = builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
         _ = builder.Host.UseSerilog();
         builder.ConfigureLogging(builder.Configuration);
@@ -56,6 +68,7 @@ public static class Program
 
         _ = app.UseExceptionHandler();
         _ = app.UseHttpsRedirection();
+        _ = app.UseResponseCompression();
 
         app.UseCorsServices();
         _ = app.UseOpenApi(c => c.PostProcess = (d, _) => d.Servers.Clear());
