@@ -4,5 +4,5 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public interface ISemanticTreeResponseBuilder
 {
-    SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode responseNode, Dictionary<string, string> semanticIdToColumnMapping);
+    SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode responseNode, Dictionary<string, ColumnMapping> semanticIdToColumnMapping);
 }
