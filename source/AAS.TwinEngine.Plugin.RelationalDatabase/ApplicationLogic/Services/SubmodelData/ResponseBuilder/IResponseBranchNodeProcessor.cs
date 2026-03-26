@@ -4,5 +4,5 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public interface IResponseBranchNodeProcessor
 {
-    void FillBranchNode(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping);
+    void FillBranchNode(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping);
 }

@@ -4,11 +4,11 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver responseSemanticTreeNodeResolver, IResponseLeafNodeProcessor responseLeafNodeProcessor) : IResponseBranchNodeProcessor
 {
-    public void FillBranchNode(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping)
+    public void FillBranchNode(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestBranch);
 
-        var columnName = responseSemanticTreeNodeResolver.GetColumnName(requestBranch.SemanticId, columnMapping);
+        var columnName = responseSemanticTreeNodeResolver.GetColumnMapping(requestBranch.SemanticId, columnMapping)?.BranchColumn;
 
         if (string.IsNullOrEmpty(columnName))
         {
@@ -22,7 +22,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region No Column Strategy
 
-    private void FillBranchNodeWithoutColumn(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping)
+    private void FillBranchNodeWithoutColumn(SemanticBranchNode requestBranch, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
         var newChildren = requestBranch.Children
             .SelectMany(child => ProcessSingleChildWithoutColumn(child, responseTree, columnMapping))
@@ -31,9 +31,9 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         requestBranch.ReplaceChildren(newChildren);
     }
 
-    private List<SemanticTreeNode> ProcessSingleChildWithoutColumn(SemanticTreeNode child, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ProcessSingleChildWithoutColumn(SemanticTreeNode child, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
-        var childColumnName = responseSemanticTreeNodeResolver.GetColumnName(child.SemanticId, columnMapping);
+        var childColumnName = responseSemanticTreeNodeResolver.GetColumnMapping(child.SemanticId, columnMapping)?.BranchColumn;
 
         if (NeedsCloning(child, childColumnName, responseTree, out var matchingBranches))
         {
@@ -57,7 +57,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         return matchingBranches.Count > 1;
     }
 
-    private List<SemanticTreeNode> ExpandChildIntoMultipleBranches(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ExpandChildIntoMultipleBranches(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, ColumnMapping> columnMapping)
     {
         return [.. matchingBranches
             .Select((responseBranch, index) =>
@@ -69,7 +69,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region Match Count Processing
 
-    private void ProcessBranchBasedOnMatchCount(SemanticBranchNode requestBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
+    private void ProcessBranchBasedOnMatchCount(SemanticBranchNode requestBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, ColumnMapping> columnMapping)
     {
         switch (matchingBranches.Count)
         {
@@ -112,7 +112,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
     private void FillSingleBranchMatch(
         SemanticBranchNode requestBranch,
         SemanticBranchNode responseBranch,
-        Dictionary<string, string> columnMapping)
+        Dictionary<string, ColumnMapping> columnMapping)
     {
         foreach (var child in requestBranch.Children)
         {
@@ -124,7 +124,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region Multiple Matches Strategy
 
-    private void FillMultipleBranchMatches(SemanticBranchNode requestBranch, IList<SemanticBranchNode> responseBranches, Dictionary<string, string> columnMapping)
+    private void FillMultipleBranchMatches(SemanticBranchNode requestBranch, IList<SemanticBranchNode> responseBranches, Dictionary<string, ColumnMapping> columnMapping)
     {
         var newChildren = responseBranches
             .Select((responseBranch, index) =>
@@ -135,7 +135,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         requestBranch.ReplaceChildren(newChildren);
     }
 
-    private SemanticBranchNode CreateIndexedAndPopulatedBranch(SemanticBranchNode sourceBranch, SemanticBranchNode responseBranch, int index, Dictionary<string, string> columnMapping)
+    private SemanticBranchNode CreateIndexedAndPopulatedBranch(SemanticBranchNode sourceBranch, SemanticBranchNode responseBranch, int index, Dictionary<string, ColumnMapping> columnMapping)
     {
         var clonedChild = CloneBranchNode(sourceBranch);
         PopulateBranchNodeContent(clonedChild, responseBranch, columnMapping);
@@ -143,7 +143,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         return clonedChild;
     }
 
-    private void PopulateBranchNodeContent(SemanticBranchNode branchNode, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
+    private void PopulateBranchNodeContent(SemanticBranchNode branchNode, SemanticBranchNode responseBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
         var newChildren = branchNode.Children
             .SelectMany(child => ProcessChildForBranchContent(child, responseBranch, columnMapping))
@@ -152,7 +152,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         branchNode.ReplaceChildren(newChildren);
     }
 
-    private List<SemanticTreeNode> ProcessChildForBranchContent(SemanticTreeNode child, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ProcessChildForBranchContent(SemanticTreeNode child, SemanticBranchNode responseBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
         return child switch
         {
@@ -162,15 +162,15 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         };
     }
 
-    private List<SemanticTreeNode> ProcessLeafInBranch(SemanticLeafNode leafNode, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ProcessLeafInBranch(SemanticLeafNode leafNode, SemanticBranchNode responseBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
         responseLeafNodeProcessor.FillLeafNode(leafNode, responseBranch, columnMapping);
         return [leafNode];
     }
 
-    private List<SemanticTreeNode> ProcessBranchInBranch(SemanticBranchNode childBranch, SemanticBranchNode responseBranch, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ProcessBranchInBranch(SemanticBranchNode childBranch, SemanticBranchNode responseBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
-        var columnName = responseSemanticTreeNodeResolver.GetColumnName(childBranch.SemanticId, columnMapping);
+        var columnName = responseSemanticTreeNodeResolver.GetColumnMapping(childBranch.SemanticId, columnMapping)?.BranchColumn;
 
         if (string.IsNullOrEmpty(columnName))
         {
@@ -182,7 +182,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         return ProcessNestedBranchBasedOnMatchCount(childBranch, matchingBranches, columnMapping);
     }
 
-    private List<SemanticTreeNode> ProcessNestedBranchBasedOnMatchCount(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> ProcessNestedBranchBasedOnMatchCount(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, ColumnMapping> columnMapping)
     {
         return matchingBranches.Count switch
         {
@@ -198,13 +198,13 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
         return [childBranch];
     }
 
-    private List<SemanticTreeNode> HandleSingleMatch(SemanticBranchNode childBranch, SemanticBranchNode matchingBranch, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> HandleSingleMatch(SemanticBranchNode childBranch, SemanticBranchNode matchingBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
         FillSingleBranchMatch(childBranch, matchingBranch, columnMapping);
         return [childBranch];
     }
 
-    private List<SemanticTreeNode> HandleMultipleMatches(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, string> columnMapping)
+    private List<SemanticTreeNode> HandleMultipleMatches(SemanticBranchNode childBranch, IList<SemanticBranchNode> matchingBranches, Dictionary<string, ColumnMapping> columnMapping)
     {
         return [.. matchingBranches
             .Select((match, index) => CreateIndexedAndPopulatedBranch(childBranch, match, index, columnMapping))
@@ -215,7 +215,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region Helper Methods
 
-    private void FillChildNode(SemanticTreeNode child, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping)
+    private void FillChildNode(SemanticTreeNode child, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
         switch (child)
         {
