@@ -66,9 +66,9 @@ public static class Program
             initializer.Initialize();
         }
 
+        _ = app.UseResponseCompression();
         _ = app.UseExceptionHandler();
         _ = app.UseHttpsRedirection();
-        _ = app.UseResponseCompression();
 
         app.UseCorsServices();
         _ = app.UseOpenApi(c => c.PostProcess = (d, _) => d.Servers.Clear());
