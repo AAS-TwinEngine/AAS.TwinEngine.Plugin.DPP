@@ -1,4 +1,6 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
+﻿using System.IO.Compression;
+
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
@@ -7,8 +9,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 
 using Serilog;
-
-using System.IO.Compression;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase;
 
