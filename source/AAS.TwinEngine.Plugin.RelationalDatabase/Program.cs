@@ -20,15 +20,6 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        _ = builder.Services.AddResponseCompression(options =>
-        {
-            options.EnableForHttps = true;
-            options.Providers.Add<BrotliCompressionProvider>();
-            options.Providers.Add<GzipCompressionProvider>();
-        });
-        _ = builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-        _ = builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-
         _ = builder.Host.UseSerilog();
         builder.ConfigureLogging(builder.Configuration);
         builder.ConfigureCorsServices();
@@ -36,6 +27,7 @@ public static class Program
         _ = builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureInfrastructure(builder.Configuration);
         builder.Services.ConfigureApplication();
+        builder.Services.ConfigureResponseCompression();
 
         _ = builder.Services.AddHealthChecks().AddCheck<DatabaseAvailabilityHealthCheck>("database");
         _ = builder.Services.AddControllers();
@@ -66,8 +58,8 @@ public static class Program
             initializer.Initialize();
         }
 
-        _ = app.UseResponseCompression();
         _ = app.UseExceptionHandler();
+        _ = app.UseResponseCompression();
         _ = app.UseHttpsRedirection();
 
         app.UseCorsServices();
