@@ -1,8 +1,12 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
+﻿using System.IO.Compression;
+
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
+
+using Microsoft.AspNetCore.ResponseCompression;
 
 using Serilog;
 
@@ -16,7 +20,6 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
         _ = builder.Host.UseSerilog();
         builder.ConfigureLogging(builder.Configuration);
         builder.ConfigureCorsServices();
@@ -24,6 +27,7 @@ public static class Program
         _ = builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureInfrastructure(builder.Configuration);
         builder.Services.ConfigureApplication();
+        builder.Services.ConfigureResponseCompression();
 
         _ = builder.Services.AddHealthChecks().AddCheck<DatabaseAvailabilityHealthCheck>("database");
         _ = builder.Services.AddControllers();
@@ -55,6 +59,7 @@ public static class Program
         }
 
         _ = app.UseExceptionHandler();
+        _ = app.UseResponseCompression();
         _ = app.UseHttpsRedirection();
 
         app.UseCorsServices();
