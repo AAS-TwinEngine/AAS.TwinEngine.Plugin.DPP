@@ -53,7 +53,7 @@ jobs:
         run: dotnet test ${{ env.TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --logger "trx;LogFileName=unit_test_results.trx" --collect:"XPlat Code Coverage" --settings source/coverlet.runsettings
 
       - name: Publish Test Results
-        uses: dorny/test-reporter@3d76b34a4535afbd0600d347b09a6ee5deb3ed7f # v2.6.0
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         id: test-results
         if: github.event.pull_request.head.repo.fork == false
         with:
@@ -80,7 +80,7 @@ jobs:
           echo "" >> results.md
 
       - name: Generate Detailed Code Coverage HTML Report
-        uses: danielpalme/ReportGenerator-GitHub-Action@ee0ae774f6d3afedcbd1683c1ab21b83670bdf8e # v5.5.1
+        uses: danielpalme/ReportGenerator-GitHub-Action@cf6fe1b38ed5becc89ffe056c1f240825993be5b # v5.5.4
         with:
           reports: 'source/**/TestResults/**/coverage.cobertura.xml'
           targetdir: 'coverlet/reports'
