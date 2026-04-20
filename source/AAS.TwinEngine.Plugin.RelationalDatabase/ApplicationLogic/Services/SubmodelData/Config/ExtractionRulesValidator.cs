@@ -18,7 +18,9 @@ public class ExtractionRulesValidator : IValidateOptions<ExtractionRules>
             : ValidateOptionsResult.Success;
     }
 
-    private static void ValidateProductIdRules(IList<ProductIdExtractionRule> rules, List<string> errors)
+    private static void ValidateProductIdRules(
+    IList<ProductIdExtractionRule> rules,
+    List<string> errors)
     {
         if (rules.Count == 0)
         {
@@ -30,52 +32,99 @@ public class ExtractionRulesValidator : IValidateOptions<ExtractionRules>
 
         for (var i = 0; i < rules.Count; i++)
         {
-            var rule = rules[i];
-            var label = rule.Description ?? $"ProductIdExtractionRule[{i}]";
+            ValidateSingleRule(rules[i], i, hasMultipleRules, errors);
+        }
+    }
 
-            if (string.IsNullOrWhiteSpace(rule.Pattern))
-            {
-                errors.Add($"{label}: Pattern must not be empty.");
-            }
+    private static void ValidateSingleRule(
+        ProductIdExtractionRule rule,
+        int index,
+        bool hasMultipleRules,
+        List<string> errors)
+    {
+        var label = rule.Description ?? $"ProductIdExtractionRule[{index}]";
 
-            if (rule.Index < 1)
-            {
-                errors.Add($"{label}: Index must be >= 1.");
-            }
+        ValidatePattern(rule, label, errors);
+        ValidateIndexes(rule, label, errors);
+        ValidateRegexPattern(rule, label, errors);
+        ValidateValidationPattern(rule, label, errors);
+        ValidateMultipleRulesConstraint(rule, label, hasMultipleRules, errors);
+    }
 
-            if (rule.EndIndex is not null && rule.EndIndex < rule.Index)
-            {
-                errors.Add($"{label}: EndIndex must be >= Index.");
-            }
+    private static void ValidatePattern(
+        ProductIdExtractionRule rule,
+        string label,
+        List<string> errors)
+    {
+        if (string.IsNullOrWhiteSpace(rule.Pattern))
+        {
+            errors.Add($"{label}: Pattern must not be empty.");
+        }
+    }
 
-            if (rule.Strategy == ExtractionStrategy.Regex && !string.IsNullOrWhiteSpace(rule.Pattern))
-            {
-                try
-                {
-                    _ = Regex.Match(string.Empty, rule.Pattern, RegexOptions.None, TimeSpan.FromSeconds(1));
-                }
-                catch (ArgumentException)
-                {
-                    errors.Add($"{label}: Pattern is not a valid regex.");
-                }
-            }
+    private static void ValidateIndexes(
+        ProductIdExtractionRule rule,
+        string label,
+        List<string> errors)
+    {
+        if (rule.Index < 1)
+        {
+            errors.Add($"{label}: Index must be >= 1.");
+        }
 
-            if (!string.IsNullOrWhiteSpace(rule.ValidationPattern))
-            {
-                try
-                {
-                    _ = Regex.Match(string.Empty, rule.ValidationPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
-                }
-                catch (ArgumentException)
-                {
-                    errors.Add($"{label}: ValidationPattern is not a valid regex.");
-                }
-            }
+        if (rule.EndIndex is not null && rule.EndIndex < rule.Index)
+        {
+            errors.Add($"{label}: EndIndex must be >= Index.");
+        }
+    }
 
-            if (hasMultipleRules && string.IsNullOrWhiteSpace(rule.ValidationPattern))
-            {
-                errors.Add($"{label}: ValidationPattern is required when multiple rules are configured.");
-            }
+    private static void ValidateRegexPattern(
+        ProductIdExtractionRule rule,
+        string label,
+        List<string> errors)
+    {
+        if (rule.Strategy == ExtractionStrategy.Regex &&
+            !string.IsNullOrWhiteSpace(rule.Pattern) &&
+            !IsValidRegex(rule.Pattern))
+        {
+            errors.Add($"{label}: Pattern is not a valid regex.");
+        }
+    }
+
+    private static void ValidateValidationPattern(
+        ProductIdExtractionRule rule,
+        string label,
+        List<string> errors)
+    {
+        if (!string.IsNullOrWhiteSpace(rule.ValidationPattern) &&
+            !IsValidRegex(rule.ValidationPattern))
+        {
+            errors.Add($"{label}: ValidationPattern is not a valid regex.");
+        }
+    }
+
+    private static void ValidateMultipleRulesConstraint(
+        ProductIdExtractionRule rule,
+        string label,
+        bool hasMultipleRules,
+        List<string> errors)
+    {
+        if (hasMultipleRules && string.IsNullOrWhiteSpace(rule.ValidationPattern))
+        {
+            errors.Add($"{label}: ValidationPattern is required when multiple rules are configured.");
+        }
+    }
+
+    private static bool IsValidRegex(string pattern)
+    {
+        try
+        {
+            _ = Regex.Match(string.Empty, pattern, RegexOptions.None, TimeSpan.FromSeconds(1));
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            return false;
         }
     }
 
