@@ -33,6 +33,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>();
         _ = services.AddOptions<Capabilities>().Bind(configuration.GetSection(Capabilities.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<ExtractionRules>().Bind(configuration.GetSection(ExtractionRules.Section)).ValidateDataAnnotations().ValidateOnStart();
+        _ = services.AddSingleton<IValidateOptions<ExtractionRules>, ExtractionRulesValidator>();
         _ = services.AddOptions<Semantics>().Bind(configuration.GetSection(Semantics.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddOptions<MetaDataEndpoints>().Bind(configuration.GetSection(MetaDataEndpoints.Section)).ValidateDataAnnotations().ValidateOnStart();
         _ = services.AddScoped<IQueryProvider, QueryProvider>();

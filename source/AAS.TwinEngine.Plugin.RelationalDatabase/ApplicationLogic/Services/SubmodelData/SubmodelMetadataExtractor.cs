@@ -10,12 +10,18 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogger<SubmodelMetadataExtractor> logger) : ISubmodelMetadataExtractor
 {
-    private readonly IList<ProductIdExtractionRules> _productIdExtractionRules = options.Value.ProductIdExtractionRules;
+    private readonly IList<ProductIdExtractionRule> _productIdExtractionRules = options.Value.ProductIdExtractionRules;
     private readonly IList<SubmodelNameExtractionRules> _submodelNameExtractionRules = options.Value.SubmodelNameExtractionRules;
     private readonly TimeSpan _regexTimeout = TimeSpan.FromSeconds(2);
 
     public SubmodelIdExtractionResult ExtractSubmodelMetadata(string submodelId)
     {
+        if (string.IsNullOrWhiteSpace(submodelId))
+        {
+            logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
+            throw new InvalidUserInputException();
+        }
+
         var productId = ExtractProductId(submodelId);
         var submodelName = ExtractSubmodelName(submodelId);
 
@@ -30,23 +36,76 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
 
     private string ExtractProductId(string submodelId)
     {
-        var productId = _productIdExtractionRules
-            .Select(rule => new
-            {
-                Rule = rule,
-                Parts = submodelId?.Split(rule.Separator),
-            })
-            .Where(x => x.Parts is { Length: >= 1 } && x.Rule.Index > 0 && x.Parts.Length >= x.Rule.Index)
-            .Select(x => x.Parts![x.Rule.Index - 1])
-            .FirstOrDefault(extractedId => !string.Equals(extractedId, submodelId, StringComparison.Ordinal));
-
-        if (!string.IsNullOrEmpty(productId))
+        foreach (var rule in _productIdExtractionRules)
         {
-            return productId;
+            var extracted = rule.Strategy switch
+            {
+                ExtractionStrategy.Regex => TryExtractWithRegex(submodelId, rule),
+                ExtractionStrategy.Split => TryExtractWithSplit(submodelId, rule),
+                _ => null
+            };
+
+            if (string.IsNullOrEmpty(extracted))
+            {
+                continue;
+            }
+
+            if (rule.ValidationPattern is not null &&
+                !Regex.IsMatch(extracted, rule.ValidationPattern, RegexOptions.None, _regexTimeout))
+            {
+                continue;
+            }
+
+            return extracted;
         }
 
         logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
         throw new InvalidUserInputException();
+    }
+
+    private string? TryExtractWithRegex(string input, ProductIdExtractionRule rule)
+    {
+        try
+        {
+            var match = Regex.Match(input, rule.Pattern, RegexOptions.None, _regexTimeout);
+            if (!match.Success || rule.Index < 1 || rule.Index >= match.Groups.Count)
+            {
+                return null;
+            }
+
+            var value = match.Groups[rule.Index].Value;
+            return string.IsNullOrEmpty(value) ? null : value;
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return null;
+        }
+    }
+
+    private static string? TryExtractWithSplit(string input, ProductIdExtractionRule rule)
+    {
+        var parts = input.Split(rule.Pattern);
+        var startIndex = rule.Index - 1;
+
+        if (startIndex < 0 || startIndex >= parts.Length)
+        {
+            return null;
+        }
+
+        if (rule.EndIndex is not null)
+        {
+            var endIndex = rule.EndIndex.Value - 1;
+            if (endIndex < startIndex || endIndex >= parts.Length)
+            {
+                return null;
+            }
+
+            var segment = string.Join(rule.Pattern, parts[startIndex..(endIndex + 1)]);
+            return string.IsNullOrEmpty(segment) ? null : segment;
+        }
+
+        var value = parts[startIndex];
+        return string.IsNullOrEmpty(value) ? null : value;
     }
 
     private string ExtractSubmodelName(string submodelId)
