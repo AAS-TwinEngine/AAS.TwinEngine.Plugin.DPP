@@ -267,11 +267,11 @@ public class SubmodelDataServiceTests
     {
         return new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["testProperty"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.String)
-                    .Build()
+
             })
             .Build();
     }

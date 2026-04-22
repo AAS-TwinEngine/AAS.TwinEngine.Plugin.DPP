@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Nodes;
+using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
@@ -24,9 +24,9 @@ public class SubmodelDataControllerTests
         _sut = new SubmodelDataController(_submodelDataHandler);
         _testSchema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
             })
             .Build();
     }
@@ -83,3 +83,5 @@ public class SubmodelDataControllerTests
             _sut.RetrieveDataAsync(_testSchema, submodelId, cts.Token));
     }
 }
+
+

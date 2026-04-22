@@ -43,7 +43,7 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>())
+            .Properties(new Dictionary<string, JsonSchemaBuilder>())
             .Build();
 
         Assert.Throws<BadRequestException>(() => JsonSchemaParser.ParseJsonSchema(schema, _logger));
@@ -54,9 +54,9 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
             })
             .Build();
 
@@ -73,9 +73,9 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+                ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer)
             })
             .Build();
 
@@ -91,9 +91,9 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["price"] = new JsonSchemaBuilder().Type(SchemaValueType.Number).Build()
+                ["price"] = new JsonSchemaBuilder().Type(SchemaValueType.Number)
             })
             .Build();
 
@@ -109,9 +109,9 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["isActive"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean).Build()
+                ["isActive"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean)
             })
             .Build();
 
@@ -127,9 +127,9 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["noType"] = new JsonSchemaBuilder().Build()
+                ["noType"] = new JsonSchemaBuilder()
             })
             .Build();
 
@@ -145,15 +145,15 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["person"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
-                        ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                        ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                     })
-                    .Build()
+
             })
             .Build();
 
@@ -170,16 +170,16 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["person"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
-                        ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                        ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+                        ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                        ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer)
                     })
-                    .Build()
+
             })
             .Build();
 
@@ -204,11 +204,11 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["emptyObject"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Build()
+
             })
             .Build();
 
@@ -225,12 +225,12 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["items"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Array)
-                    .Items(new JsonSchemaBuilder().Type(SchemaValueType.String).Build())
-                    .Build()
+                    .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+
             })
             .Build();
 
@@ -248,18 +248,18 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["users"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Array)
                     .Items(new JsonSchemaBuilder()
                         .Type(SchemaValueType.Object)
-                        .Properties(new Dictionary<string, JsonSchema>
+                        .Properties(new Dictionary<string, JsonSchemaBuilder>
                         {
-                            ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                            ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                         })
-                        .Build())
-                    .Build()
+                        )
+
             })
             .Build();
 
@@ -280,11 +280,11 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["emptyArray"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Array)
-                    .Build()
+
             })
             .Build();
 
@@ -300,22 +300,23 @@ public class JsonSchemaParserTests
     public void ParseJsonSchema_ReferenceToDefinition_ResolvesCorrectly()
     {
         var schema = new JsonSchemaBuilder()
+            .Schema("http://json-schema.org/draft-07/schema#")
             .Type(SchemaValueType.Object)
-            .Definitions(new Dictionary<string, JsonSchema>
+            .Definitions(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["address"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
-                        ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                        ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                     })
-                    .Build()
+
             })
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["homeAddress"] = new JsonSchemaBuilder()
                     .Ref("#/definitions/address")
-                    .Build()
+
             })
             .Build();
 
@@ -332,11 +333,11 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["missingRef"] = new JsonSchemaBuilder()
                     .Ref("#/definitions/nonexistent")
-                    .Build()
+
             })
             .Build();
 
@@ -351,16 +352,17 @@ public class JsonSchemaParserTests
     public void ParseJsonSchema_ReferenceToDefinitionWithoutType_ReturnsLeafNodeWithStringType()
     {
         var schema = new JsonSchemaBuilder()
+            .Schema("http://json-schema.org/draft-07/schema#")
             .Type(SchemaValueType.Object)
-            .Definitions(new Dictionary<string, JsonSchema>
+            .Definitions(new Dictionary<string, JsonSchemaBuilder>
             {
-                ["noTypeDefinition"] = new JsonSchemaBuilder().Build()
+                ["noTypeDefinition"] = new JsonSchemaBuilder()
             })
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["refWithoutType"] = new JsonSchemaBuilder()
                     .Ref("#/definitions/noTypeDefinition")
-                    .Build()
+
             })
             .Build();
 
@@ -375,18 +377,19 @@ public class JsonSchemaParserTests
     public void ParseJsonSchema_ReferenceToStringDefinition_ReturnsLeafNode()
     {
         var schema = new JsonSchemaBuilder()
+            .Schema("http://json-schema.org/draft-07/schema#")
             .Type(SchemaValueType.Object)
-            .Definitions(new Dictionary<string, JsonSchema>
+            .Definitions(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["stringType"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.String)
-                    .Build()
+
             })
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["stringRef"] = new JsonSchemaBuilder()
                     .Ref("#/definitions/stringType")
-                    .Build()
+
             })
             .Build();
 
@@ -402,23 +405,23 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["level1"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
                         ["level2"] = new JsonSchemaBuilder()
                             .Type(SchemaValueType.Object)
-                            .Properties(new Dictionary<string, JsonSchema>
+                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                             {
                                 ["level3"] = new JsonSchemaBuilder()
                                     .Type(SchemaValueType.String)
-                                    .Build()
+
                             })
-                            .Build()
+
                     })
-                    .Build()
+
             })
             .Build();
 
@@ -440,29 +443,29 @@ public class JsonSchemaParserTests
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
-            .Properties(new Dictionary<string, JsonSchema>
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
             {
                 ["root"] = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
-                        ["stringProp"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                        ["intProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build(),
-                        ["boolProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean).Build(),
-                        ["numberProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Number).Build(),
+                        ["stringProp"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                        ["intProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer),
+                        ["boolProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean),
+                        ["numberProp"] = new JsonSchemaBuilder().Type(SchemaValueType.Number),
                         ["objectProp"] = new JsonSchemaBuilder()
                             .Type(SchemaValueType.Object)
-                            .Properties(new Dictionary<string, JsonSchema>
+                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                             {
-                                ["nested"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                ["nested"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                             })
-                            .Build(),
+                            ,
                         ["arrayProp"] = new JsonSchemaBuilder()
                             .Type(SchemaValueType.Array)
-                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String).Build())
-                            .Build()
+                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+
                     })
-                    .Build()
+
             })
             .Build();
 
@@ -507,3 +510,5 @@ public class JsonSchemaParserTests
     }
 
 }
+
+

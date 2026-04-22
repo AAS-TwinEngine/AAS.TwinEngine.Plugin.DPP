@@ -20,6 +20,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
     private const int MaxSchemaSize = 1_048_576; // 1MB
     private const string DefinitionsPrefix = "#/definitions/";
+    private const string DefsPrefix = "#/$defs/";
 
     private static readonly JsonSerializerOptions SerializationOptions = new()
     {
@@ -55,7 +56,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
         try
         {
-            var result = MetaSchemas.Draft7.Evaluate(schemaNode, new EvaluationOptions { OutputFormat = OutputFormat.List });
+            using var schemaDocument = JsonDocument.Parse(schemaNode.ToJsonString());
+            var result = MetaSchemas.Draft7.Evaluate(schemaDocument.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
                 LogAndThrowRequestException("Schema is not valid against Draft-7.");
@@ -91,24 +93,47 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             return;
         }
 
-        if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
-        {
-            LogAndThrowResponseException($"Failed to register schema: {registerError}");
-        }
-
         try
         {
-            var schema = JsonSchema.FromText(normalizedSchema.ToJsonString());
-            var result = schema.Evaluate(responseDoc!.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
-            if (!result.IsValid)
+            ValidateResponseAgainstSchema(responseDoc!.RootElement, normalizedSchema);
+        }
+        catch (JsonSchemaException schemaEx) when (schemaEx.Message.Contains("Overwriting registered schemas"))
+        {
+            try
             {
-                LogAndThrowResponseException("Response did not validate against schema.");
+                ValidateResponseAgainstSchemaWithoutId(responseDoc!.RootElement, normalizedSchema);
+            }
+            catch (Exception retryEx)
+            {
+                LogAndThrowResponseException("Exception occurred during response validation.", retryEx);
             }
         }
         catch (Exception ex)
         {
             LogAndThrowResponseException("Exception occurred during response validation.", ex);
         }
+    }
+
+    private void ValidateResponseAgainstSchema(JsonElement responseElement, JsonObject schemaNode)
+    {
+        var schema = JsonSchema.FromText(schemaNode.ToJsonString());
+        var result = schema.Evaluate(responseElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
+        if (!result.IsValid)
+        {
+            LogAndThrowResponseException("Response did not validate against schema.");
+        }
+    }
+
+    private void ValidateResponseAgainstSchemaWithoutId(JsonElement responseElement, JsonObject schemaNode)
+    {
+        var schemaClone = JsonNode.Parse(schemaNode.ToJsonString())?.AsObject();
+        if (schemaClone == null)
+        {
+            LogAndThrowResponseException("Failed to clone normalized schema for response validation retry.");
+        }
+
+        _ = schemaClone.Remove("$id");
+        ValidateResponseAgainstSchema(responseElement, schemaClone);
     }
 
     [DoesNotReturn]
@@ -246,16 +271,33 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         {
             if (propertyName == "$ref" &&
                 propertyValue is JsonValue referenceValue &&
-                referenceValue.TryGetValue<string>(out var referenceString) &&
-                referenceString.StartsWith(DefinitionsPrefix, StringComparison.OrdinalIgnoreCase))
+                referenceValue.TryGetValue<string>(out var referenceString))
             {
-                jsonObject["$ref"] = BuildEscapedReferencePath(referenceString);
+                if (referenceString.StartsWith(DefinitionsPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, DefinitionsPrefix);
+                }
+                else if (referenceString.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, DefsPrefix);
+                }
             }
             else
             {
                 EscapeJsonReferencePointers(propertyValue);
             }
         }
+    }
+
+    private string BuildEscapedReferencePath(string originalReferencePath, string prefix)
+    {
+        var referenceWithoutPrefix = originalReferencePath[prefix.Length..];
+        var strippedReference = RemoveContextSuffix(referenceWithoutPrefix);
+        var escapedReference = strippedReference
+            .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
+            .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
+
+        return prefix + escapedReference;
     }
 
     private void RemoveContextSuffixFromRequiredProperties(JsonArray requiredProperties)
@@ -267,17 +309,6 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
                 requiredProperties[index] = RemoveContextSuffix(propertyName);
             }
         }
-    }
-
-    private string BuildEscapedReferencePath(string originalReferencePath)
-    {
-        var referenceWithoutPrefix = originalReferencePath[DefinitionsPrefix.Length..];
-        var strippedReference = RemoveContextSuffix(referenceWithoutPrefix);
-        var escapedReference = strippedReference
-            .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
-            .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
-
-        return DefinitionsPrefix + escapedReference;
     }
 
     private string RemoveContextSuffix(string propertyName)
@@ -296,23 +327,5 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         var propertyValue = jsonObject[oldPropertyName];
         _ = jsonObject.Remove(oldPropertyName);
         jsonObject[newPropertyName] = propertyValue!;
-    }
-
-    private static bool TryRegisterJsonSchema(JsonObject schemaJsonObject, out string? registrationErrorMessage)
-    {
-        registrationErrorMessage = null;
-
-        try
-        {
-            var jsonSchema = JsonSchema.FromText(schemaJsonObject.ToJsonString());
-            var schemaIdentifierUri = new Uri(schemaJsonObject["$id"]!.GetValue<string>()!);
-            SchemaRegistry.Global.Register(schemaIdentifierUri, jsonSchema);
-            return true;
-        }
-        catch (Exception exception)
-        {
-            registrationErrorMessage = $"Schema registration failed: {exception.Message}";
-            return false;
-        }
     }
 }

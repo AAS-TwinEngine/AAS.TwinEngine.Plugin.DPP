@@ -59,9 +59,9 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_WithInvalidJson_ThrowsInvalidUserInputException()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["invalid"] = null!
+                                                ["<script>alert('xss')</script>"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Build();
 
@@ -71,11 +71,10 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ValidSchema_DoesNotThrow()
     {
-        var schema = new JsonSchemaBuilder().Schema("http://json-schema.org/draft-07/schema#")
-                                            .Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+        var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Build();
 
@@ -96,16 +95,16 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_ComplexNestedSchema_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["person"] = new JsonSchemaBuilder()
                                                              .Type(SchemaValueType.Object)
-                                                             .Properties(new Dictionary<string, JsonSchema>
+                                                             .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                              {
-                                                                 ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                                                                 ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+                                                                 ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                                                                 ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer)
                                                              })
-                                                             .Build()
+
                                             })
                                             .Build();
 
@@ -116,15 +115,15 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_SchemaWithDefinitions_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Defs(new Dictionary<string, JsonSchema>
+                                            .Defs(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["address"] = new JsonSchemaBuilder()
                                                               .Type(SchemaValueType.Object)
-                                                              .Properties(new Dictionary<string, JsonSchema>
+                                                              .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                               {
-                                                                  ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                                  ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                                               })
-                                                              .Build()
+
                                             })
                                             .Build();
 
@@ -159,9 +158,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_ValidateJsonSchemaRemovePrefix_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["ContactInformation_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.Object).Build()
+                                                ["ContactInformation_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.Object)
                                             })
                                             .Required("ContactInformation_aastwinengine_00")
                                             .Build();
@@ -175,9 +174,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_ValidJsonAndSchema_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("name")
                                             .Build();
@@ -195,9 +194,9 @@ public class JsonSchemaValidatorTests
     {
         var schema = new JsonSchemaBuilder()
                     .Type(SchemaValueType.Object)
-                    .Properties(new Dictionary<string, JsonSchema>
+                    .Properties(new Dictionary<string, JsonSchemaBuilder>
                     {
-                        [property] = new JsonSchemaBuilder().Type(expectedType).Build()
+                        [property] = new JsonSchemaBuilder().Type(expectedType)
                     })
                     .Required(property)
                     .Build();
@@ -211,9 +210,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_SchemaMismatch_ThrowsInvalidUserInputException()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("name")
                                             .Build();
@@ -248,9 +247,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_JsonWithExtraProperties_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("name")
                                             .Build();
@@ -264,17 +263,17 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_NestedObjectValidation_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["person"] = new JsonSchemaBuilder()
                                                              .Type(SchemaValueType.Object)
-                                                             .Properties(new Dictionary<string, JsonSchema>
+                                                             .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                              {
-                                                                 ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                                                                 ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+                                                                 ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                                                                 ["age"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer)
                                                              })
                                                              .Required("name", "age")
-                                                             .Build()
+
                                             })
                                             .Required("person")
                                             .Build();
@@ -288,12 +287,12 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_ArrayValidation_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["items"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.Array)
-                                                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String).Build())
-                                                            .Build()
+                                                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+
                                             })
                                             .Required("items")
                                             .Build();
@@ -307,10 +306,10 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_WithContextPrefixInMultipleProperties_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["Property1_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                                                ["Property2_aastwinengine_01"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["Property1_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                                                ["Property2_aastwinengine_01"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("Property1_aastwinengine_00", "Property2_aastwinengine_01")
                                             .Build();
@@ -324,22 +323,22 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_ComplexSchemaWithNestedArrays_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["users"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.Array)
                                                             .Items(new JsonSchemaBuilder()
                                                                    .Type(SchemaValueType.Object)
-                                                                   .Properties(new Dictionary<string, JsonSchema>
+                                                                   .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                                    {
-                                                                       ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
+                                                                       ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
                                                                        ["emails"] = new JsonSchemaBuilder()
                                                                                     .Type(SchemaValueType.Array)
-                                                                                    .Items(new JsonSchemaBuilder().Type(SchemaValueType.String).Build())
-                                                                                    .Build()
+                                                                                    .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+
                                                                    })
-                                                                   .Build())
-                                                            .Build()
+                                                                   )
+
                                             })
                                             .Build();
 
@@ -352,9 +351,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_WithSpecialCharactersInPropertyNames_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["property/with~special_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["property/with~special_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("property/with~special_aastwinengine_00")
                                             .Build();
@@ -368,12 +367,12 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_EmptyArray_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["items"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.Array)
-                                                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String).Build())
-                                                            .Build()
+                                                            .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+
                                             })
                                             .Required("items")
                                             .Build();
@@ -387,9 +386,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_LogsError_WhenValidationFails()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["name"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Required("name")
                                             .Build();
@@ -409,9 +408,9 @@ public class JsonSchemaValidatorTests
     public void ValidateResponseContent_WithNullableProperties_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["optionalField"] = new JsonSchemaBuilder().Type(SchemaValueType.String, SchemaValueType.Null).Build()
+                                                ["optionalField"] = new JsonSchemaBuilder().Type(SchemaValueType.String, SchemaValueType.Null)
                                             })
                                             .Build();
 
@@ -423,11 +422,11 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ExceedsMaxSchemaSize_ThrowsInvalidUserInputException()
     {
-        var properties = new Dictionary<string, JsonSchema>();
+        var properties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 15000; i++)
         {
             properties[$"property_{i:D5}_with_a_long_name_to_increase_size"] =
-                 new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+                 new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
@@ -440,7 +439,7 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ExceedsMaxSchemaDepth_ThrowsInvalidUserInputException()
     {
-        var schema = BuildNestedSchema(12); // Depth of 12 exceeds limit of 10
+        var schema = BuildNestedSchema(12).Build(); // Depth of 12 exceeds limit of 10
 
         var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.OrdinalIgnoreCase);
@@ -450,11 +449,11 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ExceedsMaxProperties_ThrowsInvalidUserInputException()
     {
-        var properties = new Dictionary<string, JsonSchema>();
+        var properties = new Dictionary<string, JsonSchemaBuilder>();
 
         for (var i = 0; i < 1100; i++)
         {
-            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
@@ -469,11 +468,11 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_AtMaxProperties_DoesNotThrow()
     {
-        var properties = new Dictionary<string, JsonSchema>();
+        var properties = new Dictionary<string, JsonSchemaBuilder>();
 
         for (var i = 0; i < 1000; i++)
         {
-            properties[$"property{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            properties[$"property{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
@@ -486,21 +485,20 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_MultipleNestedObjectsWithManyProperties_ExceedsLimit()
     {
-        var nestedProperties = new Dictionary<string, JsonSchema>();
+        var nestedProperties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 600; i++)
         {
-            nestedProperties[$"nested{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            nestedProperties[$"nested{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
-        var properties = new Dictionary<string, JsonSchema>();
+        var properties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 500; i++)
         {
-            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            properties[$"prop{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         properties["nestedObject"] = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                                            .Properties(nestedProperties)
-                                                            .Build();
+                                                            .Properties(nestedProperties);
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
                                             .Properties(properties)
                                             .Build();
@@ -512,24 +510,24 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ArrayWithNestedObjects_CountsPropertiesCorrectly()
     {
-        var itemProperties = new Dictionary<string, JsonSchema>();
+        var itemProperties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 600; i++)
         {
-            itemProperties[$"field{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            itemProperties[$"field{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
-        var rootProperties = new Dictionary<string, JsonSchema>();
+        var rootProperties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 500; i++)
         {
-            rootProperties[$"root{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            rootProperties[$"root{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         rootProperties["items"] = new JsonSchemaBuilder().Type(SchemaValueType.Array)
                                                          .Items(new JsonSchemaBuilder()
                                                                 .Type(SchemaValueType.Object)
                                                                 .Properties(itemProperties)
-                                                                .Build())
-                                                         .Build();
+                                                                )
+                                                         ;
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
                                             .Properties(rootProperties)
@@ -543,7 +541,7 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_DeepNestingWithArrays_ThrowsInvalidUserInputException()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["root"] = BuildDeepArrayStructure(11)
                                             })
@@ -556,21 +554,20 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ComplexSchemaWithinLimits_DoesNotThrow()
     {
-        var level2Properties = new Dictionary<string, JsonSchema>();
+        var level2Properties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 100; i++)
         {
-            level2Properties[$"l2_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            level2Properties[$"l2_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
-        var level1Properties = new Dictionary<string, JsonSchema>();
+        var level1Properties = new Dictionary<string, JsonSchemaBuilder>();
         for (var i = 0; i < 100; i++)
         {
-            level1Properties[$"l1_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build();
+            level1Properties[$"l1_{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer);
         }
 
         level1Properties["nested"] = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                                            .Properties(level2Properties)
-                                                            .Build();
+                                                            .Properties(level2Properties);
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
                                             .Properties(level1Properties)
@@ -583,7 +580,7 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_EmptyPropertiesObject_DoesNotCountAsProperty()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>())
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>())
                                             .Build();
 
         _sut.ValidateRequestSchema(schema);
@@ -592,7 +589,7 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_BoundaryDepthOf11_ThrowsInvalidUserInputException()
     {
-        var schema = BuildNestedSchema(11);
+        var schema = BuildNestedSchema(11).Build();
 
         var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
         Assert.Contains("Schema nesting too deep", exception.Message, StringComparison.CurrentCulture);
@@ -601,11 +598,11 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_BoundaryPropertiesCount1001_ThrowsInvalidUserInputException()
     {
-        var properties = new Dictionary<string, JsonSchema>();
+        var properties = new Dictionary<string, JsonSchemaBuilder>();
 
         for (var i = 0; i < 1001; i++)
         {
-            properties[$"p{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean).Build();
+            properties[$"p{i}"] = new JsonSchemaBuilder().Type(SchemaValueType.Boolean);
         }
 
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
@@ -621,9 +618,9 @@ public class JsonSchemaValidatorTests
     {
         var longPropertyName = new string('a', 300); // Exceeds 256 character limit
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                [longPropertyName] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                [longPropertyName] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Build();
 
@@ -639,9 +636,9 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_PropertyNameWithMaliciousPatterns_ThrowsInvalidUserInputException(string maliciousName)
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                [maliciousName] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                [maliciousName] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Build();
 
@@ -653,12 +650,12 @@ public class JsonSchemaValidatorTests
     {
         var longString = new string('a', 3000); // Exceeds 2048 character limit
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["description"] = new JsonSchemaBuilder()
                                                                   .Type(SchemaValueType.String)
                                                                   .Const(longString)
-                                                                  .Build()
+
                                             })
                                             .Build();
 
@@ -671,12 +668,12 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_StringValueWithNullBytes_ThrowsInvalidUserInputException(string valueWithNullByte)
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["field"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.String)
                                                             .Const(valueWithNullByte)
-                                                            .Build()
+
                                             })
                                             .Build();
 
@@ -690,8 +687,12 @@ public class JsonSchemaValidatorTests
     [InlineData("data:text/html,<script>alert(1)</script>")]
     public void ValidateRequestSchema_InvalidUriScheme_ThrowsInvalidUserInputException(string invalidUri)
     {
-        var schema = new JsonSchemaBuilder().Schema(invalidUri)
+        var schema = new JsonSchemaBuilder().Id(invalidUri)
                                             .Type(SchemaValueType.Object)
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
+                                            {
+                                                ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
+                                            })
                                             .Build();
 
         Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
@@ -704,11 +705,11 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_ValidUriScheme_DoesNotThrow(string validUri)
     {
         var schema = new JsonSchemaBuilder()
-                     .Schema(validUri)
+                     .Id(validUri)
                      .Type(SchemaValueType.Object)
-                     .Properties(new Dictionary<string, JsonSchema>
+                     .Properties(new Dictionary<string, JsonSchemaBuilder>
                      {
-                         ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                         ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                      })
                      .Build();
 
@@ -721,9 +722,9 @@ public class JsonSchemaValidatorTests
         const string MaliciousUri = "http://example.com/<script>alert(1)</script>";
         var schema = new JsonSchemaBuilder().Id(MaliciousUri)
                                             .Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                ["test"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                             })
                                             .Build();
 
@@ -733,12 +734,12 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_RelativeUriWithPathTraversal_ThrowsInvalidUserInputException()
     {
-        var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object).Properties(new Dictionary<string, JsonSchema>
-                                            {
-                                                ["test"] = new JsonSchemaBuilder()
-                                                           .Ref("../../malicious/path")
-                                                           .Build()
-                                            }).Build();
+        var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object).Properties(new Dictionary<string, JsonSchemaBuilder>
+        {
+            ["test"] = new JsonSchemaBuilder()
+            .Ref("../../malicious/path")
+
+        }).Build();
 
         Assert.Throws<InvalidUserInputException>(() => _sut.ValidateRequestSchema(schema));
     }
@@ -747,10 +748,10 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_ValidSchemaWithContextPrefix_DoesNotThrow()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
-                                                ["Property1_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                                                ["Property2_aastwinengine_01"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer).Build()
+                                                ["Property1_aastwinengine_00"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                                                ["Property2_aastwinengine_01"] = new JsonSchemaBuilder().Type(SchemaValueType.Integer)
                                             })
                                             .Build();
 
@@ -762,17 +763,17 @@ public class JsonSchemaValidatorTests
     {
         var longString = new string('a', 3000);
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["outer"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.Object)
-                                                            .Properties(new Dictionary<string, JsonSchema>
+                                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                             {
                                                                 ["inner"] = new JsonSchemaBuilder()
                                                                             .Type(SchemaValueType.String)
                                                                             .Const(longString) // This should be caught
                                                             })
-                                                            .Build()
+
                                             })
                                             .Build();
 
@@ -783,15 +784,15 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_ArrayWithMaliciousItems_ThrowsInvalidUserInputException()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["items"] = new JsonSchemaBuilder()
                                                             .Type(SchemaValueType.Array)
                                                             .Items(new JsonSchemaBuilder()
                                                                    .Type(SchemaValueType.String)
                                                                    .Pattern("(a+)+") // Dangerous pattern
-                                                                   .Build())
-                                                            .Build()
+                                                                   )
+
                                             })
                                             .Build();
 
@@ -801,30 +802,28 @@ public class JsonSchemaValidatorTests
     [Fact]
     public void ValidateRequestSchema_ComplexValidSchema_DoesNotThrow()
     {
-        var schema = new JsonSchemaBuilder().Schema("https://json-schema.org/draft-07/schema#")
-                                            .Id("https://example.com/myschema")
-                                            .Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+        var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["name"] = new JsonSchemaBuilder()
                                                            .Type(SchemaValueType.String)
                                                            .Pattern("^[a-zA-Z0-9_-]+$")
                                                            .MinLength(1)
                                                            .MaxLength(100)
-                                                           .Build(),
+                                                           ,
                                                 ["age"] = new JsonSchemaBuilder()
                                                           .Type(SchemaValueType.Integer)
                                                           .Minimum(0)
                                                           .Maximum(150)
-                                                          .Build(),
+                                                          ,
                                                 ["address"] = new JsonSchemaBuilder()
                                                               .Type(SchemaValueType.Object)
-                                                              .Properties(new Dictionary<string, JsonSchema>
+                                                              .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                               {
-                                                                  ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build(),
-                                                                  ["city"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                                  ["street"] = new JsonSchemaBuilder().Type(SchemaValueType.String),
+                                                                  ["city"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                                               })
-                                                              .Build()
+
                                             })
                                             .Build();
 
@@ -835,9 +834,9 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_LogsErrorForSecurityViolations()
     {
         var maliciousSchema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                                     .Properties(new Dictionary<string, JsonSchema>
+                                                     .Properties(new Dictionary<string, JsonSchemaBuilder>
                                                      {
-                                                         ["<script>"] = new JsonSchemaBuilder().Type(SchemaValueType.String).Build()
+                                                         ["<script>"] = new JsonSchemaBuilder().Type(SchemaValueType.String)
                                                      })
                                                      .Build();
 
@@ -854,50 +853,49 @@ public class JsonSchemaValidatorTests
     public void ValidateRequestSchema_AllowedSchemaKeywords_DoNotGetValidated()
     {
         var schema = new JsonSchemaBuilder().Type(SchemaValueType.Object)
-                                            .Properties(new Dictionary<string, JsonSchema>
+                                            .Properties(new Dictionary<string, JsonSchemaBuilder>
                                             {
                                                 ["normalProperty"] = new JsonSchemaBuilder()
                                                                      .Type(SchemaValueType.String)
                                                                      .Description("This is a valid description")
-                                                                     .Build()
+
                                             })
                                             .Build();
 
         _sut.ValidateRequestSchema(schema);
     }
 
-    private static JsonSchema BuildNestedSchema(int depth)
+    private static JsonSchemaBuilder BuildNestedSchema(int depth)
     {
         if (depth == 0)
         {
-            return new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            return new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         return new JsonSchemaBuilder()
                 .Type(SchemaValueType.Object)
-             .Properties(new Dictionary<string, JsonSchema>
+             .Properties(new Dictionary<string, JsonSchemaBuilder>
              {
                  ["nested"] = BuildNestedSchema(depth - 1)
              })
-           .Build();
+           ;
     }
 
-    private static JsonSchema BuildDeepArrayStructure(int depth)
+    private static JsonSchemaBuilder BuildDeepArrayStructure(int depth)
     {
         if (depth == 0)
         {
-            return new JsonSchemaBuilder().Type(SchemaValueType.String).Build();
+            return new JsonSchemaBuilder().Type(SchemaValueType.String);
         }
 
         return new JsonSchemaBuilder().Type(SchemaValueType.Array)
                                       .Items(new JsonSchemaBuilder()
                                              .Type(SchemaValueType.Object)
-                                             .Properties(new Dictionary<string, JsonSchema>
+                                             .Properties(new Dictionary<string, JsonSchemaBuilder>
                                              {
                                                  ["child"] = BuildDeepArrayStructure(depth - 1)
                                              })
-                                             .Build())
-                                      .Build();
+                                             )
+                                      ;
     }
 }
-
