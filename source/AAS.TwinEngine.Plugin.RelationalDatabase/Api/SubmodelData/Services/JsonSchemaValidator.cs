@@ -250,6 +250,13 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     private void ProcessJsonObjectForEscaping(JsonObject jsonObject)
     {
+        RenamePropertiesWithContextSuffix(jsonObject);
+        UpdateRequiredPropertiesArray(jsonObject);
+        ProcessReferencesAndChildren(jsonObject);
+    }
+
+    private void RenamePropertiesWithContextSuffix(JsonObject jsonObject)
+    {
         var propertiesToRename = jsonObject
             .Select(property => property.Key)
             .Select(propertyName => (originalName: propertyName, strippedName: RemoveContextSuffix(propertyName)))
@@ -260,45 +267,92 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         {
             RenameJsonProperty(jsonObject, originalName, strippedName);
         }
+    }
 
-        if (jsonObject.TryGetPropertyValue("required", out var requiredPropertiesNode) &&
-            requiredPropertiesNode is JsonArray requiredPropertiesArray)
+    private void UpdateRequiredPropertiesArray(JsonObject jsonObject)
+    {
+        if (TryGetRequiredPropertiesArray(jsonObject, out var requiredPropertiesArray))
         {
             RemoveContextSuffixFromRequiredProperties(requiredPropertiesArray);
         }
+    }
 
+    private static bool TryGetRequiredPropertiesArray(JsonObject jsonObject, [NotNullWhen(true)] out JsonArray? requiredPropertiesArray)
+    {
+        requiredPropertiesArray = null;
+        return jsonObject.TryGetPropertyValue("required", out var node) && 
+               node is JsonArray array &&
+               (requiredPropertiesArray = array) != null;
+    }
+
+    private void ProcessReferencesAndChildren(JsonObject jsonObject)
+    {
         foreach (var (propertyName, propertyValue) in jsonObject.ToList())
         {
-            if (propertyName == "$ref" &&
-                propertyValue is JsonValue referenceValue &&
-                referenceValue.TryGetValue<string>(out var referenceString))
+            if (TryProcessSchemaReference(jsonObject, propertyName, propertyValue))
             {
-                if (referenceString.StartsWith(DefinitionsPrefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, DefinitionsPrefix);
-                }
-                else if (referenceString.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, DefsPrefix);
-                }
+                continue;
             }
-            else
-            {
-                EscapeJsonReferencePointers(propertyValue);
-            }
+
+            EscapeJsonReferencePointers(propertyValue);
         }
+    }
+
+    private bool TryProcessSchemaReference(JsonObject jsonObject, string propertyName, JsonNode? propertyValue)
+    {
+        if (!IsReferenceProperty(propertyName, propertyValue, out var referenceString))
+        {
+            return false;
+        }
+
+        if (TryGetReferencePrefix(referenceString, out var prefix))
+        {
+            jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, prefix);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsReferenceProperty(string propertyName, JsonNode? propertyValue, [NotNullWhen(true)] out string? referenceString)
+    {
+        referenceString = null;
+        return propertyName == "$ref" &&
+               propertyValue is JsonValue referenceValue &&
+               referenceValue.TryGetValue(out referenceString);
+    }
+
+    private static bool TryGetReferencePrefix(string referenceString, [NotNullWhen(true)] out string? prefix)
+    {
+        if (referenceString.StartsWith(DefinitionsPrefix, StringComparison.Ordinal))
+        {
+            prefix = DefinitionsPrefix;
+            return true;
+        }
+
+        if (referenceString.StartsWith(DefsPrefix, StringComparison.Ordinal))
+        {
+            prefix = DefsPrefix;
+            return true;
+        }
+
+        prefix = null;
+        return false;
     }
 
     private string BuildEscapedReferencePath(string originalReferencePath, string prefix)
     {
         var referenceWithoutPrefix = originalReferencePath[prefix.Length..];
         var strippedReference = RemoveContextSuffix(referenceWithoutPrefix);
-        var escapedReference = strippedReference
-            .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
-            .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
+        var escapedReference = EscapeJsonPointer(strippedReference);
 
         return prefix + escapedReference;
     }
+
+    private static string EscapeJsonPointer(string value)
+        => value
+            .Replace("~", "~0", StringComparison.Ordinal)
+            .Replace("/", "~1", StringComparison.Ordinal);
 
     private void RemoveContextSuffixFromRequiredProperties(JsonArray requiredProperties)
     {
