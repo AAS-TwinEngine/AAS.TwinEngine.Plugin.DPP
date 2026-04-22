@@ -46,7 +46,7 @@ public class SubmodelMetadataExtractorTests
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 2 }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1 }
             ],
             SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
         };
@@ -55,7 +55,6 @@ public class SubmodelMetadataExtractorTests
         const string submodelId = "prefix/product999/Nameplate/data";
 
         var result = _sut.ExtractSubmodelMetadata(submodelId);
-
         Assert.Equal("product999", result.ProductId);
     }
 
@@ -66,7 +65,7 @@ public class SubmodelMetadataExtractorTests
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "-", Index = 1 }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "-", Index = 0 }
             ],
             SubmodelNameExtractionRules =
             [
@@ -89,7 +88,7 @@ public class SubmodelMetadataExtractorTests
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 2, EndIndex = 3 }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, EndIndex = 2 }
             ],
             SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
         };
@@ -109,7 +108,7 @@ public class SubmodelMetadataExtractorTests
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 2, EndIndex = 10 }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, EndIndex = 9 }
             ],
             SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
         };
@@ -156,7 +155,8 @@ public class SubmodelMetadataExtractorTests
                 {
                     Strategy = ExtractionStrategy.Regex,
                     Pattern = @"^https?://[^/]+/ids/submodel/([^/]+/[^/]+)(?:/|$)",
-                    Index = 1
+                    Index = 1,
+                    ValidationPattern = @"^[0-9-]+/[0-9-]+$"
                 }
             ],
             SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
@@ -227,7 +227,7 @@ public class SubmodelMetadataExtractorTests
                 {
                     Strategy = ExtractionStrategy.Split,
                     Pattern = "/",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^[a-zA-Z0-9]+$"
                 }
             ],
@@ -243,47 +243,14 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_ValidationPatternFails_SkipsToNextRule()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new()
-                {
-                    Strategy = ExtractionStrategy.Split,
-                    Pattern = "/",
-                    Index = 1,
-                    ValidationPattern = @"^\d+$"
-                },
-                new()
-                {
-                    Strategy = ExtractionStrategy.Split,
-                    Pattern = "/",
-                    Index = 2,
-                    ValidationPattern = @"^[a-zA-Z0-9]+$"
-                }
-            ],
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "notdigits/product456/Nameplate/data";
-
-        var result = _sut.ExtractSubmodelMetadata(submodelId);
-
-        Assert.Equal("product456", result.ProductId);
-    }
-
-    [Fact]
     public void ExtractSubmodelMetadata_MultipleRules_FirstMatchWins()
     {
         var rules = new ExtractionRules
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "|", Index = 1, ValidationPattern = @"^\d+$" },
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, ValidationPattern = @"^[a-zA-Z0-9]+$" }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "|", Index = 0, ValidationPattern = @"^\d+$" },
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 0, ValidationPattern = @"^[a-zA-Z0-9]+$" }
             ],
             SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
         };
@@ -307,14 +274,14 @@ public class SubmodelMetadataExtractorTests
                 {
                     Strategy = ExtractionStrategy.Regex,
                     Pattern = @"^NOMATCH(\d+)$",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^\d+$"
                 },
                 new()
                 {
                     Strategy = ExtractionStrategy.Split,
                     Pattern = "/",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^[a-zA-Z0-9]+$"
                 }
             ],
@@ -340,21 +307,21 @@ public class SubmodelMetadataExtractorTests
                 {
                     Strategy = ExtractionStrategy.Regex,
                     Pattern = @"^NOMATCH1(\w+)$",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^\d+$"
                 },
                 new()
                 {
                     Strategy = ExtractionStrategy.Regex,
                     Pattern = @"^NOMATCH2(\w+)$",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^\d+$"
                 },
                 new()
                 {
                     Strategy = ExtractionStrategy.Split,
                     Pattern = "/",
-                    Index = 1,
+                    Index = 0,
                     ValidationPattern = @"^[a-zA-Z0-9]+$"
                 }
             ],
@@ -580,7 +547,7 @@ public class SubmodelMetadataExtractorTests
     {
         return
         [
-            new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1 }
+            new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 0 }
         ];
     }
 

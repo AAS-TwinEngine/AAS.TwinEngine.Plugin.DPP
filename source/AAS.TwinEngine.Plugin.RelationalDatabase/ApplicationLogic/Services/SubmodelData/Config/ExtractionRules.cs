@@ -22,7 +22,6 @@ public class ProductIdExtractionRule
     [Required] public int Index { get; set; }
     public int? EndIndex { get; set; }
     public string? ValidationPattern { get; set; }
-    public string? Description { get; set; }
 }
 
 public class SubmodelNameExtractionRules

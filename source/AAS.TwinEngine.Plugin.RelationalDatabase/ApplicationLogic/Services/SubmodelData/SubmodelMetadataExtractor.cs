@@ -68,13 +68,20 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         try
         {
             var match = Regex.Match(input, rule.Pattern, RegexOptions.None, _regexTimeout);
-            if (!match.Success || rule.Index < 1 || rule.Index >= match.Groups.Count)
+
+            if (match.Success == false)
+            {
+                return null;
+            }
+
+            if (rule.Index >= match.Groups.Count)
             {
                 return null;
             }
 
             var value = match.Groups[rule.Index].Value;
-            return string.IsNullOrEmpty(value) ? null : value;
+
+            return string.IsNullOrWhiteSpace(value) ? null : value;
         }
         catch (RegexMatchTimeoutException)
         {
@@ -85,27 +92,18 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
     private static string? TryExtractWithSplit(string input, ProductIdExtractionRule rule)
     {
         var parts = input.Split(rule.Pattern);
-        var startIndex = rule.Index - 1;
 
-        if (startIndex < 0 || startIndex >= parts.Length)
+        var startIndex = rule.Index;
+        var endIndex = rule.EndIndex ?? rule.Index;
+
+        if (endIndex >= parts.Length)
         {
             return null;
         }
 
-        if (rule.EndIndex is not null)
-        {
-            var endIndex = rule.EndIndex.Value - 1;
-            if (endIndex < startIndex || endIndex >= parts.Length)
-            {
-                return null;
-            }
+        var extracted = string.Join(rule.Pattern, parts[startIndex..(endIndex + 1)]);
 
-            var segment = string.Join(rule.Pattern, parts[startIndex..(endIndex + 1)]);
-            return string.IsNullOrEmpty(segment) ? null : segment;
-        }
-
-        var value = parts[startIndex];
-        return string.IsNullOrEmpty(value) ? null : value;
+        return string.IsNullOrWhiteSpace(extracted) ? null : extracted;
     }
 
     private string ExtractSubmodelName(string submodelId)

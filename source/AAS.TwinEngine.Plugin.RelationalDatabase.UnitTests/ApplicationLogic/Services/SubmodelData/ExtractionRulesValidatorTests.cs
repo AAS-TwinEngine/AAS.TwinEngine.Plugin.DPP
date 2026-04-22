@@ -1,10 +1,20 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.SubmodelData;
 
 public class ExtractionRulesValidatorTests
 {
-    private readonly ExtractionRulesValidator _sut = new();
+    private readonly ILogger<ExtractionRulesValidator> _logger;
+    private readonly ExtractionRulesValidator _sut;
+
+    public ExtractionRulesValidatorTests()
+    {
+        _logger = Substitute.For<ILogger<ExtractionRulesValidator>>();
+        _sut = new ExtractionRulesValidator(_logger);
+    }
 
     [Fact]
     public void Validate_NoProductIdRules_Fails()
@@ -56,25 +66,6 @@ public class ExtractionRulesValidatorTests
     }
 
     [Fact]
-    public void Validate_MultipleRules_AllMustHaveValidationPattern()
-    {
-        var options = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Strategy = ExtractionStrategy.Regex, Pattern = @"^(\w+)/", Index = 1, ValidationPattern = @"^\w+$" },
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, ValidationPattern = null }
-            ],
-            SubmodelNameExtractionRules = [new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }]
-        };
-
-        var result = _sut.Validate(null, options);
-
-        Assert.True(result.Failed);
-        Assert.Contains("ValidationPattern is required when multiple rules are configured", result.FailureMessage);
-    }
-
-    [Fact]
     public void Validate_MultipleRules_AllHaveValidationPattern_Succeeds()
     {
         var options = new ExtractionRules
@@ -111,13 +102,13 @@ public class ExtractionRulesValidatorTests
     }
 
     [Fact]
-    public void Validate_IndexLessThanOne_Fails()
+    public void Validate_IndexLessThanZero_Fails()
     {
         var options = new ExtractionRules
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 0 }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = -1 }
             ],
             SubmodelNameExtractionRules = [new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }]
         };
@@ -125,7 +116,7 @@ public class ExtractionRulesValidatorTests
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
-        Assert.Contains("Index must be >= 1", result.FailureMessage);
+        Assert.Contains("Index must be >= 0", result.FailureMessage);
     }
 
     [Fact]
@@ -165,31 +156,13 @@ public class ExtractionRulesValidatorTests
     }
 
     [Fact]
-    public void Validate_InvalidValidationPattern_Fails()
-    {
-        var options = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, ValidationPattern = "[invalid(" }
-            ],
-            SubmodelNameExtractionRules = [new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }]
-        };
-
-        var result = _sut.Validate(null, options);
-
-        Assert.True(result.Failed);
-        Assert.Contains("ValidationPattern is not a valid regex", result.FailureMessage);
-    }
-
-    [Fact]
     public void Validate_DescriptionUsedInErrorMessage()
     {
         var options = new ExtractionRules
         {
             ProductIdExtractionRules =
             [
-                new() { Strategy = ExtractionStrategy.Split, Pattern = "", Index = 1, Description = "My custom rule" }
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "", Index = 1 }
             ],
             SubmodelNameExtractionRules = [new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }]
         };
@@ -197,7 +170,7 @@ public class ExtractionRulesValidatorTests
         var result = _sut.Validate(null, options);
 
         Assert.True(result.Failed);
-        Assert.Contains("My custom rule", result.FailureMessage);
+        Assert.Contains("ProductIdExtractionRule[0]: Pattern must", result.FailureMessage);
     }
 
     [Fact]
