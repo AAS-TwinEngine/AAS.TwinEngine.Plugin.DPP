@@ -70,19 +70,13 @@ public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger) 
 
     private static void ValidateIndexes(ProductIdExtractionRule rule, string label, List<string> errors)
     {
-        if (rule.Strategy == ExtractionStrategy.Regex)
+        if (rule.Strategy == ExtractionStrategy.Regex && rule.Index < 1)
         {
-            if (rule.Index < 1)
-            {
-                errors.Add($"{label}: Index must be >= 1 for Regex strategy.");
-            }
+            errors.Add($"{label}: Index must be >= 1 for Regex strategy.");
         }
-        else if (rule.Strategy == ExtractionStrategy.Split)
+        else if (rule.Strategy == ExtractionStrategy.Split && rule.Index < 0)
         {
-            if (rule.Index < 0)
-            {
-                errors.Add($"{label}: Index must be >= 0 for Split strategy.");
-            }
+            errors.Add($"{label}: Index must be >= 0 for Split strategy.");
         }
 
         if (rule.EndIndex is not null && rule.EndIndex < rule.Index)
@@ -140,13 +134,11 @@ public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger) 
                 errors.Add($"{label}: At least one pattern is required.");
             }
 
-            foreach (var pattern in rule.Pattern.Where(p => !string.IsNullOrWhiteSpace(p)))
-            {
-                if (!IsValidRegex(pattern))
-                {
-                    errors.Add($"{label}: Pattern '{pattern}' is not a valid regex.");
-                }
-            }
+            errors.AddRange(
+                     rule.Pattern
+                    .Where(p => !string.IsNullOrWhiteSpace(p) && !IsValidRegex(p))
+                    .Select(p => $"{label}: Pattern '{p}' is not a valid regex.")
+        );
         }
     }
 }
