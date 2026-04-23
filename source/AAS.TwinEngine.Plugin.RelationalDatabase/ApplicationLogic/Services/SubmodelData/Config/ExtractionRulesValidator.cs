@@ -1,107 +1,144 @@
 ﻿using System.Text.RegularExpressions;
+
 using Microsoft.Extensions.Options;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 
-public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger) : IValidateOptions<ExtractionRules>
+public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger)
+    : IValidateOptions<ExtractionRules>
 {
+    private const string GenericErrorMessage = "Invalid extraction rules configuration.";
+
     public ValidateOptionsResult Validate(string? name, ExtractionRules options)
     {
-        var errors = new List<string>();
-
-        ValidateProductIdRules(options.ProductIdExtractionRules, errors);
-        ValidateSubmodelNameRules(options.SubmodelNameExtractionRules, errors);
-
-        if (errors.Count > 0)
+        var result = ValidateProductIdRules(options.ProductIdExtractionRules);
+        if (result != ValidateOptionsResult.Success)
         {
-            foreach (var error in errors)
-            {
-                logger.LogError("ExtractionRules validation failed: {Error}", error);
-            }
-
-            return ValidateOptionsResult.Fail(errors);
+            return result;
         }
 
-        return ValidateOptionsResult.Success;
+        result = ValidateSubmodelNameRules(options.SubmodelNameExtractionRules);
+        return result != ValidateOptionsResult.Success ? result : ValidateOptionsResult.Success;
     }
 
-    private static void ValidateProductIdRules(IList<ProductIdExtractionRule> rules, List<string> errors)
+    private ValidateOptionsResult ValidateProductIdRules(IList<ProductIdExtractionRule> rules)
     {
         if (rules.Count == 0)
         {
-            errors.Add("At least one ProductIdExtractionRule is required.");
-            return;
+            return Fail("At least one ProductIdExtractionRule is required.");
         }
 
         var hasMultipleRules = rules.Count > 1;
 
         for (var i = 0; i < rules.Count; i++)
         {
-            ValidateSingleRule(rules[i], i, hasMultipleRules, errors);
+            var result = ValidateSingleProductRule(rules[i], i, hasMultipleRules);
+            if (result != ValidateOptionsResult.Success)
+            {
+                return result;
+            }
         }
+
+        return ValidateOptionsResult.Success;
     }
 
-    private static void ValidateSingleRule(ProductIdExtractionRule rule, int index, bool hasMultipleRules, List<string> errors)
+    private ValidateOptionsResult ValidateSingleProductRule(ProductIdExtractionRule rule, int index, bool hasMultipleRules)
     {
         var label = $"ProductIdExtractionRule[{index}]";
 
-        ValidatePattern(rule, label, errors);
-        ValidateIndexes(rule, label, errors);
-        ValidateRegexPattern(rule, label, errors);
-
-        if (rule.Strategy == ExtractionStrategy.Regex)
-        {
-            ValidateValidationPattern(rule, label, errors);
-
-            if (hasMultipleRules && string.IsNullOrWhiteSpace(rule.ValidationPattern))
-            {
-                errors.Add($"{label}: ValidationPattern is required when multiple Regex rules are configured.");
-            }
-        }
+        return ValidatePattern(rule.Pattern, label)
+            ?? ValidateIndex(rule, label)
+            ?? ValidateEndIndex(rule, label)
+            ?? ValidateRegexPattern(rule, label)
+            ?? ValidateValidationPattern(rule, label, hasMultipleRules)
+            ?? ValidateOptionsResult.Success;
     }
 
-    private static void ValidatePattern(ProductIdExtractionRule rule, string label, List<string> errors)
-    {
-        if (string.IsNullOrWhiteSpace(rule.Pattern))
-        {
-            errors.Add($"{label}: Pattern must not be empty.");
-        }
-    }
+    private ValidateOptionsResult? ValidatePattern(string? pattern, string label) => string.IsNullOrWhiteSpace(pattern) ? Fail($"{label}: Pattern must not be empty.") : null;
 
-    private static void ValidateIndexes(ProductIdExtractionRule rule, string label, List<string> errors)
-    {
-        if (rule.Strategy == ExtractionStrategy.Regex && rule.Index < 1)
-        {
-            errors.Add($"{label}: Index must be >= 1 for Regex strategy.");
-        }
-        else if (rule.Strategy == ExtractionStrategy.Split && rule.Index < 0)
-        {
-            errors.Add($"{label}: Index must be >= 0 for Split strategy.");
-        }
+    private ValidateOptionsResult? ValidateIndex(ProductIdExtractionRule rule, string label) => rule.Index < 0 ? Fail($"{label}: Index must be >= 0") : null;
 
-        if (rule.EndIndex is not null && rule.EndIndex < rule.Index)
-        {
-            errors.Add($"{label}: EndIndex must be >= Index.");
-        }
-    }
+    private ValidateOptionsResult? ValidateEndIndex(ProductIdExtractionRule rule, string label) => rule.EndIndex is not null && rule.EndIndex < rule.Index ? Fail($"{label}: EndIndex must be >= Index.") : null;
 
-    private static void ValidateRegexPattern(ProductIdExtractionRule rule, string label, List<string> errors)
+    private ValidateOptionsResult? ValidateRegexPattern(ProductIdExtractionRule rule, string label)
     {
         if (rule.Strategy == ExtractionStrategy.Regex &&
-            !string.IsNullOrWhiteSpace(rule.Pattern) &&
             !IsValidRegex(rule.Pattern))
         {
-            errors.Add($"{label}: Pattern is not a valid regex.");
+            return Fail($"{label}: Pattern is not a valid regex.");
         }
+
+        return null;
     }
 
-    private static void ValidateValidationPattern(ProductIdExtractionRule rule, string label, List<string> errors)
+    private ValidateOptionsResult? ValidateValidationPattern(ProductIdExtractionRule rule, string label, bool hasMultipleRules)
     {
+        if (rule.Strategy != ExtractionStrategy.Regex)
+        {
+            return null;
+        }
+
         if (!string.IsNullOrWhiteSpace(rule.ValidationPattern) &&
             !IsValidRegex(rule.ValidationPattern))
         {
-            errors.Add($"{label}: ValidationPattern is not a valid regex.");
+            return Fail($"{label}: ValidationPattern is not a valid regex.");
         }
+
+        if (hasMultipleRules && string.IsNullOrWhiteSpace(rule.ValidationPattern))
+        {
+            return Fail($"{label}: ValidationPattern is required when multiple Regex rules are configured.");
+        }
+
+        return null;
+    }
+
+    private ValidateOptionsResult ValidateSubmodelNameRules(IList<SubmodelNameExtractionRules> rules)
+    {
+        for (var i = 0; i < rules.Count; i++)
+        {
+            var result = ValidateSingleSubmodelRule(rules[i], i);
+            if (result != ValidateOptionsResult.Success)
+            {
+                return result;
+            }
+        }
+
+        return ValidateOptionsResult.Success;
+    }
+
+    private ValidateOptionsResult ValidateSingleSubmodelRule(SubmodelNameExtractionRules rule, int index)
+    {
+        var label = rule.SubmodelName ?? $"SubmodelNameExtractionRule[{index}]";
+
+        return ValidateSubmodelName(rule.SubmodelName, index)
+            ?? ValidateSubmodelPatterns(rule.Pattern, label)
+            ?? ValidateOptionsResult.Success;
+    }
+
+    private ValidateOptionsResult? ValidateSubmodelName(string? name, int index) => string.IsNullOrWhiteSpace(name) ? Fail($"SubmodelNameExtractionRule[{index}]: SubmodelName must not be empty.") : null;
+
+    private ValidateOptionsResult? ValidateSubmodelPatterns(IList<string> patterns, string label)
+    {
+        if (patterns.Count == 0)
+        {
+            return Fail($"{label}: At least one pattern is required.");
+        }
+
+        foreach (var pattern in patterns.Where(p => !string.IsNullOrWhiteSpace(p)))
+        {
+            if (!IsValidRegex(pattern))
+            {
+                return Fail($"{label}: Pattern '{pattern}' is not a valid regex.");
+            }
+        }
+
+        return null;
+    }
+
+    private ValidateOptionsResult Fail(string detailedMessage)
+    {
+        logger.LogError("ExtractionRules validation failed: {Error}", detailedMessage);
+        return ValidateOptionsResult.Fail(GenericErrorMessage);
     }
 
     private static bool IsValidRegex(string pattern)
@@ -114,31 +151,6 @@ public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger) 
         catch (ArgumentException)
         {
             return false;
-        }
-    }
-
-    private static void ValidateSubmodelNameRules(IList<SubmodelNameExtractionRules> rules, List<string> errors)
-    {
-        for (var i = 0; i < rules.Count; i++)
-        {
-            var rule = rules[i];
-            var label = rule.SubmodelName ?? $"SubmodelNameExtractionRule[{i}]";
-
-            if (string.IsNullOrWhiteSpace(rule.SubmodelName))
-            {
-                errors.Add($"SubmodelNameExtractionRule[{i}]: SubmodelName must not be empty.");
-            }
-
-            if (rule.Pattern.Count == 0)
-            {
-                errors.Add($"{label}: At least one pattern is required.");
-            }
-
-            errors.AddRange(
-                     rule.Pattern
-                    .Where(p => !string.IsNullOrWhiteSpace(p) && !IsValidRegex(p))
-                    .Select(p => $"{label}: Pattern '{p}' is not a valid regex.")
-        );
         }
     }
 }

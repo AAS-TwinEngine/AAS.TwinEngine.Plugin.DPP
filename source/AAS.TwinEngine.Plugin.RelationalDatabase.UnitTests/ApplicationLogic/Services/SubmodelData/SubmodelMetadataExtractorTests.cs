@@ -163,7 +163,7 @@ public class SubmodelMetadataExtractorTests
         };
         _extractionRulesOptions.Value.Returns(rules);
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "https://wago.com/ids/submodel/2000-2201/353-000/Nameplate";
+        const string submodelId = "https://test.com/ids/submodel/2000-2201/353-000/Nameplate";
 
         var result = _sut.ExtractSubmodelMetadata(submodelId);
 
@@ -191,6 +191,33 @@ public class SubmodelMetadataExtractorTests
         const string submodelId = "product/Nameplate/data";
 
         Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_IndexZero_ReturnsFullMatch()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+            {
+                Strategy = ExtractionStrategy.Regex,
+                Pattern = @"^([^/]+)/",
+                Index = 0
+            }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+
+        const string submodelId = "product/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product/", result.ProductId); // full match
     }
 
     [Fact]
@@ -395,16 +422,16 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsInvalidUserInputException() =>
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(null!));
+    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(null!));
 
     [Fact]
-    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsInvalidUserInputException() =>
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
+    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
 
     [Fact]
-    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsInvalidUserInputException() =>
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
+    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
 
     [Fact]
     public void ExtractSubmodelMetadata_ContactInformationSubmodel_ReturnsCorrectSubmodelName()
