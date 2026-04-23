@@ -124,15 +124,13 @@ public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger)
             return Fail($"{label}: At least one pattern is required.");
         }
 
-        foreach (var pattern in patterns.Where(p => !string.IsNullOrWhiteSpace(p)))
-        {
-            if (!IsValidRegex(pattern))
-            {
-                return Fail($"{label}: Pattern '{pattern}' is not a valid regex.");
-            }
-        }
+        var invalidPattern = patterns
+        .Where(p => !string.IsNullOrWhiteSpace(p))
+        .FirstOrDefault(p => !IsValidRegex(p));
 
-        return null;
+        return invalidPattern is not null
+            ? Fail($"{label}: Pattern '{invalidPattern}' is not a valid regex.")
+            : null;
     }
 
     private ValidateOptionsResult Fail(string detailedMessage)
