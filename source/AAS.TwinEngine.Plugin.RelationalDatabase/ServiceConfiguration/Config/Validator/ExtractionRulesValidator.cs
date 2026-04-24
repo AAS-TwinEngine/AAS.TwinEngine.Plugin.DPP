@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Options;
 
-namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config.Validator;
 
 public class ExtractionRulesValidator(ILogger<ExtractionRulesValidator> logger)
     : IValidateOptions<ExtractionRules>

@@ -1,11 +1,12 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config.Validator;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using NSubstitute;
 
-namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Services.SubmodelData;
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ServiceConfiguration.Config.Validator;
 
 public class ExtractionRulesValidatorTests
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 public class ExtractionRules
 {

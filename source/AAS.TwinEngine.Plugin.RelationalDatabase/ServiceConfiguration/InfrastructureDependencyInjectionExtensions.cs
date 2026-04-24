@@ -1,8 +1,6 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Configuration;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Configuration;
@@ -18,6 +16,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Submodel
 using Microsoft.Extensions.Options;
 
 using IQueryProvider = AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared.IQueryProvider;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config.Validator;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
