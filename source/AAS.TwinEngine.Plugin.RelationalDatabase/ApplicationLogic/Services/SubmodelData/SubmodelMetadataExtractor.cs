@@ -25,6 +25,12 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         var productId = ExtractProductId(submodelId);
         var submodelName = ExtractSubmodelName(submodelId);
 
+        logger.LogInformation(
+            "Extracted ProductId: {ProductId}, SubmodelName: {SubmodelName} from SubmodelId: {SubmodelId}",
+            productId,
+            submodelName,
+            submodelId);
+
         if (Enum.TryParse<SubmodelName>(submodelName, ignoreCase: true, result: out var parsedSubmodelName))
         {
             return new SubmodelIdExtractionResult(productId, parsedSubmodelName);
