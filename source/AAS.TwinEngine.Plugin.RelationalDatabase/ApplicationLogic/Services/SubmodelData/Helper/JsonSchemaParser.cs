@@ -38,7 +38,12 @@ public static class JsonSchemaParser
             throw new BadRequestException("Schema must contain at least one property.");
         }
 
-        return props.First();
+        foreach (var prop in props)
+        {
+            return prop;
+        }
+
+        throw new BadRequestException("Schema must contain at least one property.");
     }
 
     private static SemanticTreeNode ConvertPropertyToNode(string name, JsonNode node, JsonObject root)
