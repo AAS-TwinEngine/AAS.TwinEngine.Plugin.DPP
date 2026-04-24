@@ -19,7 +19,6 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 {
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
     private const int MaxSchemaSize = 1_048_576; // 1MB
-    private const string DefinitionsPrefix = "#/definitions/";
     private const string DefsPrefix = "#/$defs/";
 
     private static readonly JsonSerializerOptions SerializationOptions = new()
@@ -27,6 +26,11 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         WriteIndented = false,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+    };
+
+    private readonly EvaluationOptions _evaluationOptions = new()
+    {
+        OutputFormat = OutputFormat.List
     };
 
     public void ValidateRequestSchema(JsonSchema schema)
@@ -57,7 +61,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         try
         {
             using var schemaDocument = JsonDocument.Parse(schemaNode.ToJsonString());
-            var result = MetaSchemas.Draft7.Evaluate(schemaDocument.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
+            var result = MetaSchemas.Draft202012.Evaluate(schemaDocument.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
                 LogAndThrowRequestException("Schema is not valid against Draft-7.");
@@ -65,7 +69,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         }
         catch (Exception ex)
         {
-            LogAndThrowRequestException("Draft-7 evaluation failed.", ex);
+            LogAndThrowRequestException("Draft-2020-12 evaluation failed.", ex);
         }
     }
 
@@ -81,59 +85,26 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             LogAndThrowResponseException($"Failed to parse response JSON: {parseError}");
         }
 
-        JsonObject normalizedSchema;
-
-        try
+        if (!TryNormalizeSchema(requestSchema, out var normalizedSchema, out var normalizeError))
         {
-            normalizedSchema = NormalizeSchema(requestSchema);
-        }
-        catch (Exception ex)
-        {
-            LogAndThrowResponseException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
-            return;
+            LogAndThrowResponseException($"Failed to normalize request schema: {normalizeError}");
         }
 
         try
         {
-            ValidateResponseAgainstSchema(responseDoc!.RootElement, normalizedSchema);
-        }
-        catch (JsonSchemaException schemaEx) when (schemaEx.Message.Contains("Overwriting registered schemas"))
-        {
-            try
+            var schema = JsonSchema.FromText(normalizedSchema.ToJsonString());
+
+            var result = schema.Evaluate(responseDoc!.RootElement, _evaluationOptions);
+
+            if (!result.IsValid)
             {
-                ValidateResponseAgainstSchemaWithoutId(responseDoc!.RootElement, normalizedSchema);
-            }
-            catch (Exception retryEx)
-            {
-                LogAndThrowResponseException("Exception occurred during response validation.", retryEx);
+                LogAndThrowResponseException("Response did not validate against schema.");
             }
         }
         catch (Exception ex)
         {
             LogAndThrowResponseException("Exception occurred during response validation.", ex);
         }
-    }
-
-    private void ValidateResponseAgainstSchema(JsonElement responseElement, JsonObject schemaNode)
-    {
-        var schema = JsonSchema.FromText(schemaNode.ToJsonString());
-        var result = schema.Evaluate(responseElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
-        if (!result.IsValid)
-        {
-            LogAndThrowResponseException("Response did not validate against schema.");
-        }
-    }
-
-    private void ValidateResponseAgainstSchemaWithoutId(JsonElement responseElement, JsonObject schemaNode)
-    {
-        var schemaClone = JsonNode.Parse(schemaNode.ToJsonString())?.AsObject();
-        if (schemaClone == null)
-        {
-            LogAndThrowResponseException("Failed to clone normalized schema for response validation retry.");
-        }
-
-        _ = schemaClone.Remove("$id");
-        ValidateResponseAgainstSchema(responseElement, schemaClone);
     }
 
     [DoesNotReturn]
@@ -217,142 +188,84 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         }
     }
 
-    private JsonObject NormalizeSchema(JsonSchema schema)
+    private bool TryNormalizeSchema(JsonSchema schema, out JsonObject normalized, out string? error)
     {
-        var json = JsonSerializer.Serialize(schema, SerializationOptions);
+        error = null;
+        normalized = [];
 
-        var normalized = JsonNode.Parse(json)?.AsObject()
-            ?? throw new ArgumentException("Failed to parse schema JSON.");
+        try
+        {
+            var json = JsonSerializer.Serialize(schema, SerializationOptions);
 
-        EscapeJsonReferencePointers(normalized);
-        normalized["$id"] = normalized["$id"]?.GetValue<string>() ?? $"urn:uuid:{Guid.NewGuid():D}";
+            normalized = JsonNode.Parse(json)?.AsObject()
+                ?? throw new ArgumentException("Failed to parse schema JSON.");
 
-        return normalized;
+            EscapeJsonReferencePointers(normalized);
+
+            normalized["$schema"] ??= "https://json-schema.org/draft/2020-12/schema";
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            error = $"Schema normalization failed: {ex.Message}";
+            return false;
+        }
     }
 
     private void EscapeJsonReferencePointers(JsonNode? currentNode)
     {
         switch (currentNode)
         {
-            case JsonObject jsonObjectNode:
-                ProcessJsonObjectForEscaping(jsonObjectNode);
+            case JsonObject obj:
+                ProcessJsonObjectForEscaping(obj);
                 break;
 
-            case JsonArray jsonArrayNode:
-                foreach (var arrayElement in jsonArrayNode)
+            case JsonArray array:
+                foreach (var item in array)
                 {
-                    EscapeJsonReferencePointers(arrayElement);
+                    EscapeJsonReferencePointers(item);
                 }
-
                 break;
         }
     }
 
     private void ProcessJsonObjectForEscaping(JsonObject jsonObject)
     {
-        RenamePropertiesWithContextSuffix(jsonObject);
-        UpdateRequiredPropertiesArray(jsonObject);
-        ProcessReferencesAndChildren(jsonObject);
-    }
-
-    private void RenamePropertiesWithContextSuffix(JsonObject jsonObject)
-    {
         var propertiesToRename = jsonObject
-            .Select(property => property.Key)
-            .Select(propertyName => (originalName: propertyName, strippedName: RemoveContextSuffix(propertyName)))
-            .Where(namePair => namePair.strippedName != namePair.originalName)
+            .Select(p => p.Key)
+            .Select(name => (original: name, stripped: RemoveContextSuffix(name)))
+            .Where(x => x.original != x.stripped)
             .ToList();
 
-        foreach (var (originalName, strippedName) in propertiesToRename)
+        foreach (var (original, stripped) in propertiesToRename)
         {
-            RenameJsonProperty(jsonObject, originalName, strippedName);
+            RenameJsonProperty(jsonObject, original, stripped);
         }
-    }
 
-    private void UpdateRequiredPropertiesArray(JsonObject jsonObject)
-    {
-        if (TryGetRequiredPropertiesArray(jsonObject, out var requiredPropertiesArray))
+        if (jsonObject.TryGetPropertyValue("required", out var requiredNode) &&
+            requiredNode is JsonArray requiredArray)
         {
-            RemoveContextSuffixFromRequiredProperties(requiredPropertiesArray);
+            RemoveContextSuffixFromRequiredProperties(requiredArray);
         }
-    }
 
-    private static bool TryGetRequiredPropertiesArray(JsonObject jsonObject, [NotNullWhen(true)] out JsonArray? requiredPropertiesArray)
-    {
-        requiredPropertiesArray = null;
-        return jsonObject.TryGetPropertyValue("required", out var node) && 
-               node is JsonArray array &&
-               (requiredPropertiesArray = array) != null;
-    }
-
-    private void ProcessReferencesAndChildren(JsonObject jsonObject)
-    {
-        foreach (var (propertyName, propertyValue) in jsonObject.ToList())
+        foreach (var property in jsonObject.ToList())
         {
-            if (TryProcessSchemaReference(jsonObject, propertyName, propertyValue))
+            if (property.Key == "$ref" &&
+                property.Value is JsonValue value &&
+                value.TryGetValue<string>(out var reference))
             {
-                continue;
+                if (reference.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    jsonObject["$ref"] = BuildEscapedReferencePath(reference);
+                }
             }
-
-            EscapeJsonReferencePointers(propertyValue);
+            else
+            {
+                EscapeJsonReferencePointers(property.Value);
+            }
         }
     }
-
-    private bool TryProcessSchemaReference(JsonObject jsonObject, string propertyName, JsonNode? propertyValue)
-    {
-        if (!IsReferenceProperty(propertyName, propertyValue, out var referenceString))
-        {
-            return false;
-        }
-
-        if (TryGetReferencePrefix(referenceString, out var prefix))
-        {
-            jsonObject["$ref"] = BuildEscapedReferencePath(referenceString, prefix);
-            return true;
-        }
-
-        return false;
-    }
-
-    private static bool IsReferenceProperty(string propertyName, JsonNode? propertyValue, [NotNullWhen(true)] out string? referenceString)
-    {
-        referenceString = null;
-        return propertyName == "$ref" &&
-               propertyValue is JsonValue referenceValue &&
-               referenceValue.TryGetValue(out referenceString);
-    }
-
-    private static bool TryGetReferencePrefix(string referenceString, [NotNullWhen(true)] out string? prefix)
-    {
-        if (referenceString.StartsWith(DefinitionsPrefix, StringComparison.Ordinal))
-        {
-            prefix = DefinitionsPrefix;
-            return true;
-        }
-
-        if (referenceString.StartsWith(DefsPrefix, StringComparison.Ordinal))
-        {
-            prefix = DefsPrefix;
-            return true;
-        }
-
-        prefix = null;
-        return false;
-    }
-
-    private string BuildEscapedReferencePath(string originalReferencePath, string prefix)
-    {
-        var referenceWithoutPrefix = originalReferencePath[prefix.Length..];
-        var strippedReference = RemoveContextSuffix(referenceWithoutPrefix);
-        var escapedReference = EscapeJsonPointer(strippedReference);
-
-        return prefix + escapedReference;
-    }
-
-    private static string EscapeJsonPointer(string value)
-        => value
-            .Replace("~", "~0", StringComparison.Ordinal)
-            .Replace("/", "~1", StringComparison.Ordinal);
 
     private void RemoveContextSuffixFromRequiredProperties(JsonArray requiredProperties)
     {
@@ -363,6 +276,24 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
                 requiredProperties[index] = RemoveContextSuffix(propertyName);
             }
         }
+    }
+
+    private string BuildEscapedReferencePath(string reference)
+    {
+        if (!reference.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return reference;
+        }
+
+        var body = reference[DefsPrefix.Length..];
+
+        var stripped = RemoveContextSuffix(body);
+
+        var escaped = stripped
+            .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
+            .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
+
+        return DefsPrefix + escaped;
     }
 
     private string RemoveContextSuffix(string propertyName)
