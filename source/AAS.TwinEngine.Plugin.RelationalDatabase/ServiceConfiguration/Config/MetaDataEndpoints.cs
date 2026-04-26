@@ -1,4 +1,4 @@
-﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Configuration;
+﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 public class MetaDataEndpoints
 {

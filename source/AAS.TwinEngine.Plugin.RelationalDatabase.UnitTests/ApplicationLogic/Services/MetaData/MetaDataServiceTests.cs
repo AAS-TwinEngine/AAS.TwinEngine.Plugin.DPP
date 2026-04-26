@@ -1,8 +1,8 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Configuration;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

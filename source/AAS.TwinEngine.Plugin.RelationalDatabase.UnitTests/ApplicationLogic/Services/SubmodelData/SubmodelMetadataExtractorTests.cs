@@ -1,7 +1,7 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -28,7 +28,7 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_ValidSubmodelId_ReturnsExtractionResult()
+    public void ExtractSubmodelMetadata_SplitStrategy_ReturnsExtractionResult()
     {
         const string submodelId = "product123/Nameplate/data";
 
@@ -38,6 +38,400 @@ public class SubmodelMetadataExtractorTests
         Assert.Equal("product123", result.ProductId);
         Assert.Equal(SubmodelName.Nameplate, result.SubmodelName);
     }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_SplitStrategy_DifferentIndex_ExtractsCorrectly()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1 }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "prefix/product999/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+        Assert.Equal("product999", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_SplitStrategy_DifferentSeparator_ExtractsCorrectly()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "-", Index = 0 }
+            ],
+            SubmodelNameExtractionRules =
+            [
+                new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }
+            ]
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "productABC-Nameplate-data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("productABC", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_SplitStrategy_RangeEndIndex_JoinsSegments()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, EndIndex = 2 }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "prefix/2000-2201/353-000/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("2000-2201/353-000", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_SplitStrategy_EndIndexOutOfBounds_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 1, EndIndex = 9 }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "prefix/product/Nameplate";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_SingleSegment_ExtractsCorrectly()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^[^/]+/([^/]+)/",
+                    Index = 1
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "prefix/product123/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product123", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_MultiSegment_ExtractsCorrectly()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^https?://[^/]+/ids/submodel/([^/]+/[^/]+)(?:/|$)",
+                    Index = 1,
+                    ValidationPattern = @"^[0-9-]+/[0-9-]+$"
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "https://test.com/ids/submodel/2000-2201/353-000/Nameplate";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("2000-2201/353-000", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_NoMatch_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^NOMATCH(\d+)$",
+                    Index = 1
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product/Nameplate/data";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_IndexZero_ReturnsFullMatch()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+            {
+                Strategy = ExtractionStrategy.Regex,
+                Pattern = @"^([^/]+)/",
+                Index = 0
+            }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+
+        const string submodelId = "product/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product/", result.ProductId); // full match
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_RegexStrategy_GroupIndexOutOfBounds_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^([^/]+)/",
+                    Index = 5
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product/Nameplate/data";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_ValidationPatternMatches_ReturnsExtractedValue()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Split,
+                    Pattern = "/",
+                    Index = 0,
+                    ValidationPattern = @"^[a-zA-Z0-9]+$"
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product123/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product123", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_MultipleRules_FirstMatchWins()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "|", Index = 0, ValidationPattern = @"^\d+$" },
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 0, ValidationPattern = @"^[a-zA-Z0-9]+$" }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product123/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product123", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_MixedStrategies_RegexFallsBackToSplit()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^NOMATCH(\d+)$",
+                    Index = 0,
+                    ValidationPattern = @"^\d+$"
+                },
+                new()
+                {
+                    Strategy = ExtractionStrategy.Split,
+                    Pattern = "/",
+                    Index = 0,
+                    ValidationPattern = @"^[a-zA-Z0-9]+$"
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product123/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product123", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_ThreeRuleFallbackChain_ThirdRuleWins()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^NOMATCH1(\w+)$",
+                    Index = 0,
+                    ValidationPattern = @"^\d+$"
+                },
+                new()
+                {
+                    Strategy = ExtractionStrategy.Regex,
+                    Pattern = @"^NOMATCH2(\w+)$",
+                    Index = 0,
+                    ValidationPattern = @"^\d+$"
+                },
+                new()
+                {
+                    Strategy = ExtractionStrategy.Split,
+                    Pattern = "/",
+                    Index = 0,
+                    ValidationPattern = @"^[a-zA-Z0-9]+$"
+                }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product123/Nameplate/data";
+
+        var result = _sut.ExtractSubmodelMetadata(submodelId);
+
+        Assert.Equal("product123", result.ProductId);
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_NoMatchingProductIdRule_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "|", Index = 3 }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "noseparator";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+
+        _logger.Received(1).Log(
+            LogLevel.Error,
+            Arg.Any<EventId>(),
+            Arg.Is<object>(o => o.ToString()!.Contains("ProductId could not be extracted")),
+            Arg.Any<Exception>(),
+            Arg.Any<Func<object, Exception?, string>>());
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_SplitIndexOutOfRange_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules =
+            [
+                new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 10 }
+            ],
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product/Nameplate";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_EmptyProductIdRules_ThrowsInvalidUserInputException()
+    {
+        var rules = new ExtractionRules
+        {
+            ProductIdExtractionRules = new List<ProductIdExtractionRule>(),
+            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
+        };
+        _extractionRulesOptions.Value.Returns(rules);
+        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
+        const string submodelId = "product/Nameplate/data";
+
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+    }
+
+    [Fact]
+    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(null!));
+
+    [Fact]
+    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
+
+    [Fact]
+    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsInvalidUserInputException()
+        => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
 
     [Fact]
     public void ExtractSubmodelMetadata_ContactInformationSubmodel_ReturnsCorrectSubmodelName()
@@ -57,107 +451,6 @@ public class SubmodelMetadataExtractorTests
         var result = _sut.ExtractSubmodelMetadata(submodelId);
 
         Assert.Equal(SubmodelName.Nameplate, result.SubmodelName);
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_ProductIdAtDifferentIndex_ExtractsCorrectly()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Separator = "/", Index = 2, Pattern = string.Empty }
-            ],
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "prefix/product999/Nameplate/data";
-
-        var result = _sut.ExtractSubmodelMetadata(submodelId);
-
-        Assert.Equal("product999", result.ProductId);
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_DifferentSeparator_ExtractsCorrectly()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Separator = "-", Index = 1, Pattern = string.Empty }
-            ],
-            SubmodelNameExtractionRules =
-            [
-                new() { SubmodelName = "Nameplate", Pattern = [".*Nameplate.*"] }
-            ]
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "productABC-Nameplate-data";
-
-        var result = _sut.ExtractSubmodelMetadata(submodelId);
-
-        Assert.Equal("productABC", result.ProductId);
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_NoMatchingProductIdRule_ThrowsInvalidUserInputException()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Separator = "|", Index = 1, Pattern = string.Empty }
-            ],
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/Nameplate/data";
-
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
-
-        _logger.Received(1).Log(
-            LogLevel.Error,
-            Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString()!.Contains("ProductId could not be extracted")),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_IndexOutOfRange_ThrowsInvalidUserInputException()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Separator = "/", Index = 10, Pattern = string.Empty }
-            ],
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/Nameplate";
-
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_EmptyProductIdRules_ThrowsInvalidUserInputException()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules = new List<ProductIdExtractionRules>(),
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/Nameplate/data";
-
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
     }
 
     [Fact]
@@ -199,7 +492,7 @@ public class SubmodelMetadataExtractorTests
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
         const string submodelId = "product/Invalid/data";
 
-        var exception = Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
+        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
         _logger.Received(1).Log(
             LogLevel.Error,
             Arg.Any<EventId>(),
@@ -248,27 +541,6 @@ public class SubmodelMetadataExtractorTests
     }
 
     [Fact]
-    public void ExtractSubmodelMetadata_MultipleProductIdRules_UsesFirstMatch()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules =
-            [
-                new() { Separator = "|", Index = 1, Pattern = "Regex" },
-                new() { Separator = "/", Index = 1, Pattern = "Regex" }
-            ],
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product123/Nameplate/data";
-
-        var result = _sut.ExtractSubmodelMetadata(submodelId);
-
-        Assert.Equal("product123", result.ProductId);
-    }
-
-    [Fact]
     public void ExtractSubmodelMetadata_MultipleSubmodelNameRules_UsesFirstMatch()
     {
         var rules = new ExtractionRules
@@ -289,51 +561,6 @@ public class SubmodelMetadataExtractorTests
         Assert.Equal(SubmodelName.ContactInformation, result.SubmodelName);
     }
 
-    [Fact]
-    public void ExtractSubmodelMetadata_NullSubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(null!));
-
-    [Fact]
-    public void ExtractSubmodelMetadata_EmptySubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(string.Empty));
-
-    [Fact]
-    public void ExtractSubmodelMetadata_WhitespaceSubmodelId_ThrowsInvalidUserInputException() => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
-
-    [Fact]
-    public void ExtractSubmodelMetadata_ZeroIndex_ThrowsInvalidUserInputException()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules = new List<ProductIdExtractionRules>
-            {
-                new() { Separator = "/", Index = 0, Pattern = string.Empty }
-            },
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/Nameplate/data";
-
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
-    }
-
-    [Fact]
-    public void ExtractSubmodelMetadata_NegativeIndex_ThrowsInvalidUserInputException()
-    {
-        var rules = new ExtractionRules
-        {
-            ProductIdExtractionRules = new List<ProductIdExtractionRules>
-            {
-                new() { Separator = "/", Index = -1, Pattern = string.Empty }
-            },
-            SubmodelNameExtractionRules = CreateDefaultSubmodelNameRules()
-        };
-        _extractionRulesOptions.Value.Returns(rules);
-        _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/Nameplate/data";
-
-        Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata(submodelId));
-    }
-
     private static ExtractionRules CreateDefaultExtractionRules()
     {
         return new ExtractionRules
@@ -343,11 +570,11 @@ public class SubmodelMetadataExtractorTests
         };
     }
 
-    private static List<ProductIdExtractionRules> CreateDefaultProductIdRules()
+    private static List<ProductIdExtractionRule> CreateDefaultProductIdRules()
     {
         return
         [
-            new() { Separator = "/", Index = 1, Pattern = string.Empty }
+            new() { Strategy = ExtractionStrategy.Split, Pattern = "/", Index = 0 }
         ];
     }
 

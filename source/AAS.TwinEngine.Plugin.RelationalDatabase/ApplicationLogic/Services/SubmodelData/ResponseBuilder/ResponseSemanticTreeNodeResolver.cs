@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Microsoft.Extensions.Options;

@@ -1,13 +1,7 @@
 ﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 
-public class SubmodelIdExtractionResult
+public class SubmodelIdExtractionResult(string productId, SubmodelName submodelName)
 {
-    public string ProductId { get; }
-    public SubmodelName SubmodelName { get; }
-
-    public SubmodelIdExtractionResult(string productId, SubmodelName submodelName)
-    {
-        ProductId = productId;
-        SubmodelName = submodelName;
-    }
+    public string ProductId { get; } = productId;
+    public SubmodelName SubmodelName { get; } = submodelName;
 }
