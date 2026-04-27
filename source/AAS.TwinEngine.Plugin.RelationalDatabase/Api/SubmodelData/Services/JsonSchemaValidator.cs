@@ -20,6 +20,11 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
     private const int MaxSchemaSize = 1_048_576; // 1MB
     private const string DefsPrefix = "#/$defs/";
+    private const string DefinitionsPrefix = "#/definitions/";
+    private const string Draft7Schema = "http://json-schema.org/draft-07/schema#";
+    private const string Draft7SchemaHttps = "https://json-schema.org/draft-07/schema#";
+    private const string Draft201909Schema = "https://json-schema.org/draft/2019-09/schema";
+    private const string Draft202012Schema = "https://json-schema.org/draft/2020-12/schema";
 
     private static readonly JsonSerializerOptions SerializationOptions = new()
     {
@@ -60,16 +65,19 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
         try
         {
-            using var schemaDocument = JsonDocument.Parse(schemaNode.ToJsonString());
-            var result = MetaSchemas.Draft202012.Evaluate(schemaDocument.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
+            var normalizedSchema = schemaNode.AsObject();
+            var draftUri = GetSchemaDraftUri(normalizedSchema);
+            using var schemaDocument = JsonDocument.Parse(normalizedSchema.ToJsonString());
+
+            var result = ResolveMetaSchema(draftUri).Evaluate(schemaDocument.RootElement, _evaluationOptions);
             if (!result.IsValid)
             {
-                LogAndThrowRequestException("Schema is not valid against Draft-7.");
+                LogAndThrowRequestException($"Schema is not valid against '{draftUri}'.");
             }
         }
         catch (Exception ex)
         {
-            LogAndThrowRequestException("Draft-2020-12 evaluation failed.", ex);
+            LogAndThrowRequestException("Schema dialect evaluation failed.", ex);
         }
     }
 
@@ -202,7 +210,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
             EscapeJsonReferencePointers(normalized);
 
-            normalized["$schema"] ??= "https://json-schema.org/draft/2020-12/schema";
+            normalized["$schema"] = GetSchemaDraftUri(normalized);
 
             return true;
         }
@@ -259,6 +267,10 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
                 {
                     jsonObject["$ref"] = BuildEscapedReferencePath(reference);
                 }
+                else if (reference.StartsWith(DefinitionsPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    jsonObject["$ref"] = BuildEscapedReferencePath(reference);
+                }
             }
             else
             {
@@ -280,12 +292,27 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     private string BuildEscapedReferencePath(string reference)
     {
-        if (!reference.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
+        if (reference.StartsWith(DefsPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return BuildEscapedReferencePath(reference, DefsPrefix);
+        }
+
+        if (reference.StartsWith(DefinitionsPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return BuildEscapedReferencePath(reference, DefinitionsPrefix);
+        }
+
+        return reference;
+    }
+
+    private string BuildEscapedReferencePath(string reference, string prefix)
+    {
+        if (!reference.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
         {
             return reference;
         }
 
-        var body = reference[DefsPrefix.Length..];
+        var body = reference[prefix.Length..];
 
         var stripped = RemoveContextSuffix(body);
 
@@ -293,7 +320,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
             .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
 
-        return DefsPrefix + escaped;
+        return prefix + escaped;
     }
 
     private string RemoveContextSuffix(string propertyName)
@@ -312,5 +339,33 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         var propertyValue = jsonObject[oldPropertyName];
         _ = jsonObject.Remove(oldPropertyName);
         jsonObject[newPropertyName] = propertyValue!;
+    }
+
+    private static string GetSchemaDraftUri(JsonObject schema)
+    {
+        if (!schema.TryGetPropertyValue("$schema", out var schemaNode) || schemaNode == null)
+        {
+            return Draft202012Schema;
+        }
+
+        var raw = schemaNode.GetValue<string>().Trim();
+
+        return raw switch
+        {
+            Draft7Schema or Draft7SchemaHttps => Draft7Schema,
+            Draft201909Schema => Draft201909Schema,
+            Draft202012Schema => Draft202012Schema,
+            _ => Draft202012Schema
+        };
+    }
+
+    private static JsonSchema ResolveMetaSchema(string draftUri)
+    {
+        return draftUri switch
+        {
+            Draft7Schema => MetaSchemas.Draft7,
+            Draft201909Schema => MetaSchemas.Draft201909,
+            _ => MetaSchemas.Draft202012
+        };
     }
 }

@@ -10,12 +10,22 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public static class JsonSchemaParser
 {
+    private const string DefsRefPrefix = "#/$defs/";
+    private const string DefinitionsRefPrefix = "#/definitions/";
+    private const string DefsProperty = "$defs";
+    private const string DefinitionsProperty = "definitions";
+    private const string Draft7Schema = "http://json-schema.org/draft-07/schema#";
+    private const string Draft7SchemaHttps = "https://json-schema.org/draft-07/schema#";
+    private const string Draft201909Schema = "https://json-schema.org/draft/2019-09/schema";
+    private const string Draft202012Schema = "https://json-schema.org/draft/2020-12/schema";
+
     public static SemanticTreeNode ParseJsonSchema(JsonSchema schema, ILogger logger)
     {
         ArgumentNullException.ThrowIfNull(schema);
 
         var json = ConvertSchemaToJson(schema);
-        return BuildSemanticTree(json, logger);
+        var draft = GetSchemaDraft(json);
+        return BuildSemanticTree(json, logger, draft);
     }
 
     private static JsonObject ConvertSchemaToJson(JsonSchema schema)
@@ -24,10 +34,10 @@ public static class JsonSchemaParser
             ?? throw new BadRequestException("Invalid schema format.");
     }
 
-    private static SemanticTreeNode BuildSemanticTree(JsonObject schema, ILogger logger)
+    private static SemanticTreeNode BuildSemanticTree(JsonObject schema, ILogger logger, SchemaDraft draft)
     {
         var rootProperty = ExtractRootProperty(schema, logger);
-        return ConvertPropertyToNode(rootProperty.Key, rootProperty.Value!, schema);
+        return ConvertPropertyToNode(rootProperty.Key, rootProperty.Value!, schema, draft);
     }
 
     private static KeyValuePair<string, JsonNode?> ExtractRootProperty(JsonObject schema, ILogger logger)
@@ -46,19 +56,19 @@ public static class JsonSchemaParser
         throw new BadRequestException("Schema must contain at least one property.");
     }
 
-    private static SemanticTreeNode ConvertPropertyToNode(string name, JsonNode node, JsonObject root)
+    private static SemanticTreeNode ConvertPropertyToNode(string name, JsonNode node, JsonObject root, SchemaDraft draft)
     {
         var obj = node.AsObject();
 
-        if (TryHandleReference(name, obj, root, out var refNode))
+        if (TryHandleReference(name, obj, root, draft, out var refNode))
         {
             return refNode;
         }
 
-        return CreateNodeByType(name, obj, root);
+        return CreateNodeByType(name, obj, root, draft);
     }
 
-    private static bool TryHandleReference(string name, JsonObject obj, JsonObject root, out SemanticTreeNode result)
+    private static bool TryHandleReference(string name, JsonObject obj, JsonObject root, SchemaDraft draft, out SemanticTreeNode result)
     {
         result = null!;
 
@@ -67,46 +77,92 @@ public static class JsonSchemaParser
             return false;
         }
 
-        result = ResolveReference(name, refNode!.GetValue<string>(), root);
+        result = ResolveReference(name, refNode!.GetValue<string>(), root, draft);
         return true;
     }
 
-    private static SemanticTreeNode CreateNodeByType(string name, JsonObject obj, JsonObject root)
+    private static SemanticTreeNode CreateNodeByType(string name, JsonObject obj, JsonObject root, SchemaDraft draft)
     {
         var type = GetType(obj);
 
         return type switch
         {
-            DataType.Object => BuildObjectNode(name, obj, root),
-            DataType.Array => BuildArrayNode(name, obj, root),
+            DataType.Object => BuildObjectNode(name, obj, root, draft),
+            DataType.Array => BuildArrayNode(name, obj, root, draft),
             _ => CreateLeafNode(name, type)
         };
     }
 
     private static SemanticLeafNode CreateLeafNode(string name, DataType type) => new(name, type, string.Empty);
 
-    private static SemanticTreeNode ResolveReference(string name, string reference, JsonObject root)
+    private static SemanticTreeNode ResolveReference(string name, string reference, JsonObject root, SchemaDraft draft)
     {
-        if (!reference.StartsWith("#/$defs/", StringComparison.OrdinalIgnoreCase))
+        if (!TryResolveReference(reference, root, draft, out var defNode))
         {
             return CreateLeafNode(name, DataType.Unknown);
         }
 
-        var key = reference.Replace("#/$defs/", "", StringComparison.OrdinalIgnoreCase);
-
-        if (!TryGetDefinition(root, key, out var defNode))
-        {
-            return CreateLeafNode(name, DataType.Unknown);
-        }
-
-        return ConvertPropertyToNode(name, defNode!, root);
+        return ConvertPropertyToNode(name, defNode!, root, draft);
     }
 
-    private static bool TryGetDefinition(JsonObject root, string key, out JsonNode? defNode)
+    private static bool TryResolveReference(string reference, JsonObject root, SchemaDraft draft, out JsonNode? definitionNode)
+    {
+        definitionNode = null;
+        if (!TryGetReferenceKey(reference, out var key))
+        {
+            return false;
+        }
+
+        var preferredDefinitionsProperty = GetPreferredDefinitionsProperty(draft);
+        var fallbackDefinitionsProperty = preferredDefinitionsProperty == DefsProperty ? DefinitionsProperty : DefsProperty;
+
+        if (TryGetDefinition(root, preferredDefinitionsProperty, key, out definitionNode))
+        {
+            return true;
+        }
+
+        if (TryGetDefinition(root, fallbackDefinitionsProperty, key, out definitionNode))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool TryGetReferenceKey(string reference, out string key)
+    {
+        key = string.Empty;
+
+        var referencePrefix = GetReferencePrefix(reference);
+        if (referencePrefix == null)
+        {
+            return false;
+        }
+
+        key = DecodeJsonPointerToken(reference[referencePrefix.Length..]);
+        return !string.IsNullOrWhiteSpace(key);
+    }
+
+    private static string? GetReferencePrefix(string reference)
+    {
+        if (reference.StartsWith(DefsRefPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return DefsRefPrefix;
+        }
+
+        if (reference.StartsWith(DefinitionsRefPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return DefinitionsRefPrefix;
+        }
+
+        return null;
+    }
+
+    private static bool TryGetDefinition(JsonObject root, string definitionsProperty, string key, out JsonNode? defNode)
     {
         defNode = null;
 
-        if (!root.TryGetPropertyValue("$defs", out var defsNode) ||
+        if (!root.TryGetPropertyValue(definitionsProperty, out var defsNode) ||
             defsNode is not JsonObject defs)
         {
             return false;
@@ -115,7 +171,14 @@ public static class JsonSchemaParser
         return defs.TryGetPropertyValue(key, out defNode);
     }
 
-    private static SemanticBranchNode BuildObjectNode(string name, JsonObject obj, JsonObject root)
+    private static string DecodeJsonPointerToken(string token)
+    {
+        return token
+            .Replace("~1", "/", StringComparison.OrdinalIgnoreCase)
+            .Replace("~0", "~", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static SemanticBranchNode BuildObjectNode(string name, JsonObject obj, JsonObject root, SchemaDraft draft)
     {
         var branch = new SemanticBranchNode(name, DataType.Object);
 
@@ -124,7 +187,7 @@ public static class JsonSchemaParser
             return branch;
         }
 
-        AddObjectChildren(branch, props, root);
+        AddObjectChildren(branch, props, root, draft);
         return branch;
     }
 
@@ -142,15 +205,15 @@ public static class JsonSchemaParser
         return true;
     }
 
-    private static void AddObjectChildren(SemanticBranchNode branch, JsonObject props, JsonObject root)
+    private static void AddObjectChildren(SemanticBranchNode branch, JsonObject props, JsonObject root, SchemaDraft draft)
     {
         foreach (var prop in props)
         {
-            branch.AddChild(ConvertPropertyToNode(prop.Key, prop.Value!, root));
+            branch.AddChild(ConvertPropertyToNode(prop.Key, prop.Value!, root, draft));
         }
     }
 
-    private static SemanticBranchNode BuildArrayNode(string name, JsonObject obj, JsonObject root)
+    private static SemanticBranchNode BuildArrayNode(string name, JsonObject obj, JsonObject root, SchemaDraft draft)
     {
         var branch = new SemanticBranchNode(name, DataType.Array);
 
@@ -159,7 +222,7 @@ public static class JsonSchemaParser
             return branch;
         }
 
-        ProcessArrayItems(branch, name, itemObj, root);
+        ProcessArrayItems(branch, name, itemObj, root, draft);
         return branch;
     }
 
@@ -177,7 +240,7 @@ public static class JsonSchemaParser
         return true;
     }
 
-    private static void ProcessArrayItems(SemanticBranchNode branch, string name, JsonObject itemObj, JsonObject root)
+    private static void ProcessArrayItems(SemanticBranchNode branch, string name, JsonObject itemObj, JsonObject root, SchemaDraft draft)
     {
         if (itemObj.Count == 0)
         {
@@ -188,17 +251,17 @@ public static class JsonSchemaParser
 
         if (itemType == DataType.Array)
         {
-            HandleNestedArray(branch, name, itemObj, root);
+            HandleNestedArray(branch, name, itemObj, root, draft);
             return;
         }
 
         if (itemType == DataType.Object && TryGetProperties(itemObj, out var props))
         {
-            AddObjectChildren(branch, props, root);
+            AddObjectChildren(branch, props, root, draft);
             return;
         }
 
-        if (TryHandleReference(name, itemObj, root, out var refNode))
+        if (TryHandleReference(name, itemObj, root, draft, out var refNode))
         {
             AddReferenceChildren(branch, refNode);
             return;
@@ -210,11 +273,11 @@ public static class JsonSchemaParser
         }
     }
 
-    private static void HandleNestedArray(SemanticBranchNode branch, string name, JsonObject itemObj, JsonObject root)
+    private static void HandleNestedArray(SemanticBranchNode branch, string name, JsonObject itemObj, JsonObject root, SchemaDraft draft)
     {
         if (TryGetItems(itemObj, out var nested))
         {
-            ProcessArrayItems(branch, name, nested, root);
+            ProcessArrayItems(branch, name, nested, root, draft);
         }
     }
 
@@ -252,5 +315,35 @@ public static class JsonSchemaParser
             "boolean" => DataType.Boolean,
             _ => DataType.String
         };
+    }
+
+    private static SchemaDraft GetSchemaDraft(JsonObject schema)
+    {
+        if (!schema.TryGetPropertyValue("$schema", out var schemaNode) || schemaNode == null)
+        {
+            return SchemaDraft.Draft202012;
+        }
+
+        var raw = schemaNode.GetValue<string>().Trim();
+
+        return raw switch
+        {
+            Draft7Schema or Draft7SchemaHttps => SchemaDraft.Draft7,
+            Draft201909Schema => SchemaDraft.Draft201909,
+            Draft202012Schema => SchemaDraft.Draft202012,
+            _ => SchemaDraft.Draft202012
+        };
+    }
+
+    private static string GetPreferredDefinitionsProperty(SchemaDraft draft)
+    {
+        return draft == SchemaDraft.Draft7 ? DefinitionsProperty : DefsProperty;
+    }
+
+    private enum SchemaDraft
+    {
+        Draft7,
+        Draft201909,
+        Draft202012
     }
 }

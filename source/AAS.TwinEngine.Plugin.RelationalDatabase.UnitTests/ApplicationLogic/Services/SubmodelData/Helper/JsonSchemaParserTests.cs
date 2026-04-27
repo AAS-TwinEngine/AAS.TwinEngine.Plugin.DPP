@@ -52,6 +52,27 @@ public class JsonSchemaParserTests
         Assert.Equal(DataType.String, leaf.DataType);
     }
 
+    [Theory]
+    [InlineData("http://json-schema.org/draft-07/schema#")]
+    [InlineData("https://json-schema.org/draft/2019-09/schema")]
+    [InlineData("https://json-schema.org/draft/2020-12/schema")]
+    public void ParseJsonSchema_SimpleSchemaAcrossDrafts_ReturnsLeafNode(string draft)
+    {
+        var schema = JsonSchema.FromText($@"{{
+            ""$schema"": ""{draft}"",
+            ""type"": ""object"",
+            ""properties"": {{
+                ""foo"": {{ ""type"": ""string"" }}
+            }}
+        }}");
+
+        var node = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var leaf = Assert.IsType<SemanticLeafNode>(node);
+        Assert.Equal("foo", leaf.SemanticId);
+        Assert.Equal(DataType.String, leaf.DataType);
+    }
+
     [Fact]
     public void ParseJsonSchema_ObjectProperty_ReturnsBranch()
     {
@@ -150,6 +171,91 @@ public class JsonSchemaParserTests
         var child = Assert.IsType<SemanticLeafNode>(branch.Children.First());
 
         Assert.Equal("val", child.SemanticId);
+    }
+
+    [Fact]
+    public void ParseJsonSchema_Draft7ArrayWithDefinitionsRef_ReturnsBranchNodeWithLeafChild()
+    {
+        var schema = JsonSchema.FromText(@"{
+            ""$schema"": ""http://json-schema.org/draft-07/schema#"",
+            ""type"": ""object"",
+            ""properties"": {
+                ""items"": {
+                    ""type"": ""array"",
+                    ""items"": { ""$ref"": ""#/definitions/ItemDef"" }
+                }
+            },
+            ""definitions"": {
+                ""ItemDef"": {
+                    ""type"": ""object"",
+                    ""properties"": {
+                        ""value"": { ""type"": ""integer"" }
+                    }
+                }
+            }
+        }");
+
+        var node = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var branch = Assert.IsType<SemanticBranchNode>(node);
+        Assert.Equal("items", branch.SemanticId);
+        var child = Assert.IsType<SemanticLeafNode>(branch.Children[0]);
+        Assert.Equal("value", child.SemanticId);
+        Assert.Equal(DataType.Integer, child.DataType);
+    }
+
+    [Fact]
+    public void ParseJsonSchema_Draft7SchemaWithDefsKeyword_ReturnsLeafNode()
+    {
+        var schema = JsonSchema.FromText(@"{
+            ""$schema"": ""http://json-schema.org/draft-07/schema#"",
+            ""type"": ""object"",
+            ""properties"": {
+                ""item"": { ""$ref"": ""#/$defs/ItemDef"" }
+            },
+            ""$defs"": {
+                ""ItemDef"": {
+                    ""type"": ""object"",
+                    ""properties"": {
+                        ""value"": { ""type"": ""string"" }
+                    }
+                }
+            }
+        }");
+
+        var node = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var branch = Assert.IsType<SemanticBranchNode>(node);
+        var child = Assert.IsType<SemanticLeafNode>(branch.Children[0]);
+        Assert.Equal("value", child.SemanticId);
+        Assert.Equal(DataType.String, child.DataType);
+    }
+
+    [Fact]
+    public void ParseJsonSchema_Draft202012SchemaWithDefinitionsKeyword_ReturnsLeafNode()
+    {
+        var schema = JsonSchema.FromText(@"{
+            ""$schema"": ""https://json-schema.org/draft/2020-12/schema"",
+            ""type"": ""object"",
+            ""properties"": {
+                ""item"": { ""$ref"": ""#/definitions/ItemDef"" }
+            },
+            ""definitions"": {
+                ""ItemDef"": {
+                    ""type"": ""object"",
+                    ""properties"": {
+                        ""value"": { ""type"": ""integer"" }
+                    }
+                }
+            }
+        }");
+
+        var node = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var branch = Assert.IsType<SemanticBranchNode>(node);
+        var child = Assert.IsType<SemanticLeafNode>(branch.Children[0]);
+        Assert.Equal("value", child.SemanticId);
+        Assert.Equal(DataType.Integer, child.DataType);
     }
 
     [Fact]
@@ -328,7 +434,7 @@ public class JsonSchemaParserTests
                 ""type"": ""array"",
                 ""items"": {}
                 }
-            }   
+            }
         }");
 
         var result = JsonSchemaParser.ParseJsonSchema(schema, _logger);
