@@ -30,7 +30,7 @@ public static class Program
         builder.Services.ConfigureResponseCompression();
 
         _ = builder.Services.AddHealthChecks().AddCheck<DatabaseAvailabilityHealthCheck>("database");
-        _ = builder.Services.AddControllers();
+        _ = builder.Services.AddControllers(options => options.MaxValidationDepth = 64);
 
         _ = builder.Services.AddEndpointsApiExplorer();
         _ = builder.Services.AddOpenApiDocument(settings =>
