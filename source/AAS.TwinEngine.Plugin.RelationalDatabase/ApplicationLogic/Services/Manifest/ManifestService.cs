@@ -1,8 +1,8 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.Manifest;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Microsoft.Extensions.Options;
 
