@@ -283,12 +283,9 @@ public static class JsonSchemaParser
     {
         dataType = DataType.String;
 
-        if (schema.TryGetProperty("type", out var typeElement))
+        if (schema.TryGetProperty("type", out var typeElement) && TryMapTypeElement(typeElement, out dataType))
         {
-            if (TryMapTypeElement(typeElement, out dataType))
-            {
-                return true;
-            }
+            return true;
         }
 
         if (schema.TryGetProperty("properties", out var propertiesElement) && propertiesElement.ValueKind == JsonValueKind.Object)
