@@ -215,7 +215,7 @@ public class JsonSchemaParserTests
     }
 
     [Fact]
-    public void ParseJsonSchema_ArrayProperty_ReturnsBranchNodeWithArrayType()
+    public void ParseJsonSchema_ArrayPropertyWithPrimitiveItems_ReturnsLeafNodeWithPrimitiveType()
     {
         var schema = new JsonSchemaBuilder()
             .Type(SchemaValueType.Object)
@@ -230,12 +230,9 @@ public class JsonSchemaParserTests
 
         var result = JsonSchemaParser.ParseJsonSchema(schema, _logger);
 
-        var branchNode = Assert.IsType<SemanticBranchNode>(result);
-        Assert.Equal("items", branchNode.SemanticId);
-        Assert.Equal(DataType.Array, branchNode.DataType);
-        var itemNode = Assert.IsType<SemanticLeafNode>(Assert.Single(branchNode.Children));
-        Assert.Equal("item", itemNode.SemanticId);
-        Assert.Equal(DataType.String, itemNode.DataType);
+        var leafNode = Assert.IsType<SemanticLeafNode>(result);
+        Assert.Equal("items", leafNode.SemanticId);
+        Assert.Equal(DataType.String, leafNode.DataType);
     }
 
     [Fact]
@@ -301,10 +298,39 @@ public class JsonSchemaParserTests
 
         var result = JsonSchemaParser.ParseJsonSchema(schema, _logger);
 
-        var branch = Assert.IsType<SemanticBranchNode>(result);
-        var child = Assert.IsType<SemanticLeafNode>(branch.Children.First());
-        Assert.Equal("tags", branch.SemanticId);
-        Assert.Equal(DataType.String, child.DataType);
+        var leaf = Assert.IsType<SemanticLeafNode>(result);
+        Assert.Equal("tags", leaf.SemanticId);
+        Assert.Equal(DataType.String, leaf.DataType);
+    }
+
+    [Fact]
+    public void ParseJsonSchema_ArrayOfPrimitiveNestedInObject_ReturnsPrimitiveLeafForProperty()
+    {
+        var schema = JsonSchema.FromText(
+                """
+                        {
+                            "type": "object",
+                            "properties": {
+                                "contactInformation": {
+                                    "type": "object",
+                                    "properties": {
+                                        "phoneNumber": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "number"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        """);
+
+        var result = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var contactInformationNode = Assert.IsType<SemanticBranchNode>(result);
+        var phoneNumberNode = Assert.IsType<SemanticLeafNode>(contactInformationNode.Children.First(c => c.SemanticId == "phoneNumber"));
+        Assert.Equal(DataType.Number, phoneNumberNode.DataType);
     }
 
     [Fact]
@@ -660,8 +686,8 @@ public class JsonSchemaParserTests
         Assert.Equal(DataType.Number, numberChild.DataType);
         var objectChild = Assert.IsType<SemanticBranchNode>(rootNode.Children.First(c => c.SemanticId == "objectProp"));
         Assert.Equal(DataType.Object, objectChild.DataType);
-        var arrayChild = Assert.IsType<SemanticBranchNode>(rootNode.Children.First(c => c.SemanticId == "arrayProp"));
-        Assert.Equal(DataType.Array, arrayChild.DataType);
+        var arrayChild = Assert.IsType<SemanticLeafNode>(rootNode.Children.First(c => c.SemanticId == "arrayProp"));
+        Assert.Equal(DataType.String, arrayChild.DataType);
     }
 
     [Fact]
