@@ -605,6 +605,32 @@ public class JsonSchemaParserTests
     }
 
     [Fact]
+    public void ParseJsonSchema_ReferenceToPrimitiveArrayDefinition_ReturnsLeafNode()
+    {
+        var schema = new JsonSchemaBuilder()
+            .Schema("http://json-schema.org/draft-07/schema#")
+            .Type(SchemaValueType.Object)
+            .Definitions(new Dictionary<string, JsonSchemaBuilder>
+            {
+                ["stringArray"] = new JsonSchemaBuilder()
+                    .Type(SchemaValueType.Array)
+                    .Items(new JsonSchemaBuilder().Type(SchemaValueType.String))
+            })
+            .Properties(new Dictionary<string, JsonSchemaBuilder>
+            {
+                ["tags"] = new JsonSchemaBuilder()
+                    .Ref("#/definitions/stringArray")
+            })
+            .Build();
+
+        var result = JsonSchemaParser.ParseJsonSchema(schema, _logger);
+
+        var leafNode = Assert.IsType<SemanticLeafNode>(result);
+        Assert.Equal("tags", leafNode.SemanticId);
+        Assert.Equal(DataType.String, leafNode.DataType);
+    }
+
+    [Fact]
     public void ParseJsonSchema_DeeplyNestedSchema_ReturnsCorrectStructure()
     {
         var schema = new JsonSchemaBuilder()

@@ -73,6 +73,12 @@ public static class JsonSchemaParser
             return CreateLeafNode(propertyName, DataType.String);
         }
 
+        if (dataType == DataType.Array
+            && TryGetPrimitiveArrayItemType(definitionSchema, definitions, out var primitiveItemType))
+        {
+            return CreateLeafNode(propertyName, primitiveItemType);
+        }
+
         if (IsComplexType(dataType))
         {
             return CreateBranchNode(propertyName, dataType, definitionSchema, definitions);
@@ -405,8 +411,6 @@ public static class JsonSchemaParser
             {
                 return true;
             }
-
-            return false;
         }
 
         return false;
