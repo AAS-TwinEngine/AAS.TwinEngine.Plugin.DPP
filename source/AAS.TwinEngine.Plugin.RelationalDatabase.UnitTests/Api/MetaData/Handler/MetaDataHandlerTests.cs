@@ -22,7 +22,7 @@ public class MetaDataHandlerTests
     [Fact]
     public async Task GetShellDescriptors_ReturnsShellDescriptorsDto_WhenDescriptorsExist()
     {
-        var request = new GetShellDescriptorsRequest(10, "cursor1234");
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==");
         var shellDescriptorsData = new ShellDescriptorsData
         {
             PagingMetaData = new PagingMetaData { Cursor = "nextCursor" },
@@ -90,7 +90,7 @@ public class MetaDataHandlerTests
     [Fact]
     public async Task GetShellDescriptors_ThrowsNotFound_WhenServiceReturnsNull()
     {
-        var request = new GetShellDescriptorsRequest(10, "cursor1234");
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==");
         _metaDataService
             .GetShellDescriptorsAsync(Arg.Any<int?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns((ShellDescriptorsData)null!);
