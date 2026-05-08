@@ -42,7 +42,7 @@ public class Base64UrlExtensionsTests
     [Theory]
     [InlineData("%%%invalid%%%")]
     [InlineData("====")]
-    [InlineData("a b c")]
+    [InlineData("abc$")]
     public void DecodeBase64_ShouldThrowAndLog_OnInvalidBase64Url(string encoded)
     {
         var logger = Substitute.For<ILogger>();
