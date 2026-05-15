@@ -163,7 +163,7 @@ public class MetaDataProviderTests
         await Assert.ThrowsAsync<ValidationFailedException>(() =>
             _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None));
 
-        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "ShellDescriptor with null/empty Id excluded from response"));
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Id is null or empty"));
     }
 
     #endregion
