@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
@@ -50,7 +51,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         };
     }
 
-    private static List<ShellDescriptorData>? DeserializeAndProcessItems(string jsonResult)
+    private List<ShellDescriptorData>? DeserializeAndProcessItems(string jsonResult)
     {
         var allItems = JsonSerializer.Deserialize<List<ShellDescriptorData>>(jsonResult);
         if (allItems == null || allItems.Count == 0)
@@ -58,12 +59,21 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
             return null;
         }
 
+        var validItems = new List<ShellDescriptorData>(allItems.Count);
         foreach (var item in allItems)
         {
             ApplyShellDescriptorDefaults(item);
+
+            if (string.IsNullOrWhiteSpace(item.Id))
+            {
+                logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
+                continue;
+            }
+
+            validItems.Add(item);
         }
 
-        return allItems;
+        return validItems;
     }
 
     public async Task<ShellDescriptorData?> GetShellDescriptorAsync(string query, string aasIdentifier, CancellationToken cancellationToken)
@@ -79,17 +89,23 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         {
             logger.LogWarning("ShellDescriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
 
-            return new ShellDescriptorData();
+            return null;
         }
 
         var item = JsonSerializer.Deserialize<ShellDescriptorData>(jsonResult);
 
         if (item == null)
         {
-            return new ShellDescriptorData();
+            return null;
         }
 
         ApplyShellDescriptorDefaults(item);
+
+        if (string.IsNullOrWhiteSpace(item.Id))
+        {
+            logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
+            throw new ValidationFailedException("ShellDescriptor Id is null or empty.");
+        }
 
         return item;
     }
@@ -117,8 +133,6 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
     private static void ApplyShellDescriptorDefaults(ShellDescriptorData item)
     {
-        item.Id ??= item.GlobalAssetId;
-
         if (item.SpecificAssetIds == null)
         {
             return;
