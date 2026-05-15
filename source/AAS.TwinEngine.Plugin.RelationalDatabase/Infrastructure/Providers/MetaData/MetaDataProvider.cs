@@ -103,8 +103,8 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(item.Id))
         {
-            logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
-            throw new ValidationFailedException("ShellDescriptor Id is null or empty.");
+            logger.LogError("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
+            throw new ValidationFailedException("Shell Id is null or empty.");
         }
 
         return item;

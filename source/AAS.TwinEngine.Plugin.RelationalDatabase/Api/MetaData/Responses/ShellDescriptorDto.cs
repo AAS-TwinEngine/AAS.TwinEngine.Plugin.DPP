@@ -11,7 +11,6 @@ public class ShellDescriptorDto
     public string? IdShort { get; set; }
 
     [JsonPropertyName("id")]
-    [JsonRequired]
     public required string Id { get; set; }
 
     [JsonPropertyName("specificAssetIds")]
