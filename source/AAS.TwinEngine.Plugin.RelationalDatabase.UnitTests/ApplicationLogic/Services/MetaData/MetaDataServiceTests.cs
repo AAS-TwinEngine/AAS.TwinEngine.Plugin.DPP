@@ -1,4 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
@@ -118,6 +119,19 @@ public class MetaDataServiceTests
             .Returns(Task.FromResult<ShellDescriptorData?>(null));
 
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
+            _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorAsync_WhenProviderReturnsInvalidData_ThrowsInternalDataProcessingException()
+    {
+        var query = "SELECT * FROM shell";
+        _queryProvider.GetQuery("Shell").Returns(query);
+        _metaDataProvider
+            .GetShellDescriptorAsync(query, "aas-1", Arg.Any<CancellationToken>())
+            .Returns<Task<ShellDescriptorData?>>(_ => throw new ValidationFailedException("ShellDescriptor Id is null or empty."));
+
+        await Assert.ThrowsAsync<InternalDataProcessingException>(() =>
             _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None));
     }
 
