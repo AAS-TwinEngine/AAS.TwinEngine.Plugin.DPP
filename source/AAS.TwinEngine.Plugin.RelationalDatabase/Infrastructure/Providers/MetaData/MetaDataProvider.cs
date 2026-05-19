@@ -66,7 +66,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
             if (string.IsNullOrWhiteSpace(item.Id))
             {
-                logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
+                LogDescriptorWithMissingId("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", item);
                 continue;
             }
 
@@ -103,7 +103,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(item.Id))
         {
-            logger.LogError("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}", item.GlobalAssetId);
+            LogDescriptorWithMissingId("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", item);
             throw new ValidationFailedException("Shell Id is null or empty.");
         }
 
@@ -142,6 +142,13 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         {
             sai.Name ??= sai.Value;
         }
+    }
+
+    private void LogDescriptorWithMissingId(string messageTemplate, ShellDescriptorData item)
+    {
+        var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
+        var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
+        logger.LogError(messageTemplate, globalAssetId, idShort);
     }
 
     public static DbParameter Create(string name, object? value) => new NpgsqlParameter(name, value ?? DBNull.Value);
