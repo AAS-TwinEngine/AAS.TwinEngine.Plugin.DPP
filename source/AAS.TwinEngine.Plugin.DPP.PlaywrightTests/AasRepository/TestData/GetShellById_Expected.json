@@ -1,0 +1,69 @@
+{
+  "id": "https://mm-software.com/ids/aas/000-001",
+  "assetInformation": {
+    "assetKind": "Instance",
+    "globalAssetId": "https://mm-software.com/ids/assets/000-001",
+    "specificAssetIds": [
+      {
+        "name": "product1.0",
+        "value": "M&M - 001"
+      },
+      {
+        "name": "product1.1",
+        "value": "M&M - 002"
+      }
+    ],
+    "defaultThumbnail": {
+      "path": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+      "contentType": "image/jpeg"
+    }
+  },
+  "submodels": [
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/ContactInformation"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/TechnicalData"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/CarbonFootprint"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/HandoverDocumentation"
+        }
+      ]
+    }
+  ],
+  "modelType": "AssetAdministrationShell"
+}
