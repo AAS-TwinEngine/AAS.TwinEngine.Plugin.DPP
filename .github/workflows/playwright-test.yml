@@ -22,7 +22,7 @@ env:
   BUILD_CONFIGURATION: "Release"
   SOLUTION_PATH: plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
   PLAYWRIGHT_TEST_PROJECT: plugin-repo/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
-  DOCKER_COMPOSE_PATH: dataengine-repo/Example
+  DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
 
 jobs:
