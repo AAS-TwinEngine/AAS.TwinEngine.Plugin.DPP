@@ -63,6 +63,35 @@ jobs:
       - name: Build Playwright test project
         run: dotnet build ${{ env.PLAYWRIGHT_TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
+      - name: Resolve image names from compose files
+        id: image-tags
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+
+          DPP_IMAGE=$(grep -rhoE 'ghcr.io/aas-twinengine/plugindpp[^"[:space:]]*' . | head -n1)
+          DATAENGINE_IMAGE=$(grep -rhoE 'ghcr.io/aas-twinengine/dataengine[^"[:space:]]*' . | head -n1)
+
+          if [ -z "$DPP_IMAGE" ] || [ -z "$DATAENGINE_IMAGE" ]; then
+            echo "Could not resolve image names from compose files"
+            exit 1
+          fi
+
+          echo "Resolved DPP image: $DPP_IMAGE"
+          echo "Resolved DataEngine image: $DATAENGINE_IMAGE"
+
+          echo "dpp_image=$DPP_IMAGE" >> "$GITHUB_OUTPUT"
+          echo "dataengine_image=$DATAENGINE_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Build DPP Plugin Docker Image
+        run: |
+          cd plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase
+          docker build -t ${{ steps.image-tags.outputs.dpp_image }} .
+
+      - name: Build DataEngine Docker Image
+        run: |
+          cd dataengine-repo/source/AAS.TwinEngine.DataEngine
+          docker build -t ${{ steps.image-tags.outputs.dataengine_image }} .
+
       - name: Start Docker Compose services
         run: |
           cd ${{ env.DOCKER_COMPOSE_PATH }}
@@ -84,18 +113,18 @@ jobs:
             # Check if all services are running
             RUNNING=$(docker compose ps --status running --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
             TOTAL=$(docker compose ps --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
-            
+
             echo "Running containers: $RUNNING/$TOTAL"
-            
+
             # Check for any unhealthy services
             UNHEALTHY=$(docker compose ps --format json 2>/dev/null | jq -r 'select(.Health != "" and .Health != "healthy") | .Service' 2>/dev/null | wc -l)
-            
+
             if [ $RUNNING -ge 6 ] && [ $UNHEALTHY -eq 0 ]; then
               echo "Services are up and running!"
               docker compose ps
               break
             fi
-            
+
             echo "Waiting for services... ($ELAPSED/$MAX_WAIT seconds)"
             sleep $INTERVAL
             ELAPSED=$((ELAPSED + INTERVAL))
