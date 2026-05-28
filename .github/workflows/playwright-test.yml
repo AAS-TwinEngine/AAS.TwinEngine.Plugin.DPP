@@ -20,8 +20,8 @@ permissions:
 
 env:
   BUILD_CONFIGURATION: "Release"
-  SOLUTION_PATH: plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
-  PLAYWRIGHT_TEST_PROJECT: plugin-repo/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
+  SOLUTION_PATH: source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
+  PLAYWRIGHT_TEST_PROJECT: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
 
@@ -47,7 +47,7 @@ jobs:
       - name: Checkout DPP Plugin Repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          path: plugin-repo
+          path: .
 
       - name: Setup .NET
         uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
@@ -85,9 +85,9 @@ jobs:
       - name: Build DPP Plugin Docker Image
         run: |
           docker build \
-            -f plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase/Dockerfile \
+            -f source/AAS.TwinEngine.Plugin.RelationalDatabase/Dockerfile \
             -t ${{ steps.image-tags.outputs.dpp_image }} \
-            plugin-repo/source
+            source
 
       - name: Build DataEngine Docker Image
         run: |
@@ -208,3 +208,4 @@ jobs:
         run: |
           cd ${{ env.DOCKER_COMPOSE_PATH }}
           docker compose down -v
+ 
