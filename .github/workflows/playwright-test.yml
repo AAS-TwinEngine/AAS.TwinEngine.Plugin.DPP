@@ -186,6 +186,7 @@ jobs:
           path: "**/playwright_test_results.trx"
           reporter: dotnet-trx
           fail-on-error: true
+        working-directory: ${{ github.workspace }}
 
       - name: Upload TRX as artifact
         if: always()
