@@ -84,13 +84,17 @@ jobs:
 
       - name: Build DPP Plugin Docker Image
         run: |
-          cd plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase
-          docker build -t ${{ steps.image-tags.outputs.dpp_image }} .
+          docker build \
+            -f plugin-repo/source/AAS.TwinEngine.Plugin.RelationalDatabase/Dockerfile \
+            -t ${{ steps.image-tags.outputs.dpp_image }} \
+            plugin-repo/source
 
       - name: Build DataEngine Docker Image
         run: |
-          cd dataengine-repo/source/AAS.TwinEngine.DataEngine
-          docker build -t ${{ steps.image-tags.outputs.dataengine_image }} .
+          docker build \
+            -f dataengine-repo/source/AAS.TwinEngine.DataEngine/Dockerfile \
+            -t ${{ steps.image-tags.outputs.dataengine_image }} \
+            dataengine-repo/source
 
       - name: Start Docker Compose services
         run: |
@@ -113,18 +117,18 @@ jobs:
             # Check if all services are running
             RUNNING=$(docker compose ps --status running --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
             TOTAL=$(docker compose ps --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
-
+           
             echo "Running containers: $RUNNING/$TOTAL"
-
+           
             # Check for any unhealthy services
             UNHEALTHY=$(docker compose ps --format json 2>/dev/null | jq -r 'select(.Health != "" and .Health != "healthy") | .Service' 2>/dev/null | wc -l)
-
+           
             if [ $RUNNING -ge 6 ] && [ $UNHEALTHY -eq 0 ]; then
               echo "Services are up and running!"
               docker compose ps
               break
             fi
-
+           
             echo "Waiting for services... ($ELAPSED/$MAX_WAIT seconds)"
             sleep $INTERVAL
             ELAPSED=$((ELAPSED + INTERVAL))
