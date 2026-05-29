@@ -3,6 +3,7 @@ using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
+using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
@@ -13,7 +14,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
-    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
     {
         var jsonResult = await queryExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
 
@@ -35,6 +36,11 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
                 PagingMetaData = new PagingMetaData { Cursor = null },
                 Result = Array.Empty<ShellDescriptorData>()
             };
+        }
+
+        if (filter != null)
+        {
+            allItems = allItems.Where(item => AssetIdMatcher.MatchesAllIdentifiers(item, filter)).ToList();
         }
 
         var (pagedItems, pagingMetaData) = Paginator.GetPagedResult(

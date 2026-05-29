@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
@@ -34,7 +35,7 @@ public class MetaDataProviderTests
     {
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(string.Empty);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result.Result!);
@@ -70,7 +71,7 @@ public class MetaDataProviderTests
         var json = JsonSerializer.Serialize(items);
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(json);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
 
         var item = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", item.Id);
@@ -88,6 +89,7 @@ public class MetaDataProviderTests
             query: "query",
             limit: null,
             cursor: null,
+            filter: null,
             cancellationToken: CancellationToken.None);
 
         Assert.NotNull(result);
@@ -95,6 +97,104 @@ public class MetaDataProviderTests
         Assert.Null(result.PagingMetaData.Cursor);
         Assert.NotNull(result.Result);
         Assert.Empty(result.Result);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterMatchesSpecificAssetId_ReturnsOnlyMatchingItems()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new()
+            {
+                GlobalAssetId = "asset-1",
+                Id = "shell-1",
+                IdShort = "Shell1",
+                SpecificAssetIds =
+                [
+                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
+                ]
+            },
+            new()
+            {
+                GlobalAssetId = "asset-2",
+                Id = "shell-2",
+                IdShort = "Shell2",
+                SpecificAssetIds =
+                [
+                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-9999" }
+                ]
+            }
+        };
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        var matched = Assert.Single(result!.Result!);
+        Assert.Equal("shell-1", matched.Id);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterHasNoMatches_ReturnsEmptyResult()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new()
+            {
+                GlobalAssetId = "asset-1",
+                Id = "shell-1",
+                IdShort = "Shell1",
+                SpecificAssetIds =
+                [
+                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
+                ]
+            }
+        };
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-NOMATCH" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.Empty(result!.Result!);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterHasGlobalAssetId_ReturnsMatchingGlobalAssetItem()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "https://mm-software.com/ids/assets/000-001", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "https://mm-software.com/ids/assets/000-002", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] }
+        };
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        var matched = Assert.Single(result!.Result!);
+        Assert.Equal("shell-2", matched.Id);
     }
 
     #endregion

@@ -2,6 +2,7 @@
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
+using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
@@ -44,10 +45,10 @@ public class MetaDataServiceTests
         };
         _queryProvider.GetQuery("Shells").Returns(query);
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, 10, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, 10, null, null, Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        var result = await _sut.GetShellDescriptorsAsync(10, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(10, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Equal("next", result.PagingMetaData?.Cursor);
@@ -59,7 +60,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("Shells").Returns((string?)null);
 
         await Assert.ThrowsAsync<QueryNotAvailableException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
     }
 
     [Fact]
@@ -68,11 +69,91 @@ public class MetaDataServiceTests
         var query = "SELECT * FROM shells";
         _queryProvider.GetQuery("Shells").Returns(query);
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<ShellDescriptorsData?>(null));
 
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterProvided_PassesFilterToProvider()
+    {
+        var query = "SELECT * FROM shells";
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+            ]
+        };
+        var expected = new ShellDescriptorsData
+        {
+            PagingMetaData = new PagingMetaData { Cursor = null },
+            Result = []
+        };
+        _queryProvider.GetQuery("Shells").Returns(query);
+        _metaDataProvider
+            .GetShellDescriptorsAsync(query, 10, null, filter, Arg.Any<CancellationToken>())
+            .Returns(expected);
+
+        var result = await _sut.GetShellDescriptorsAsync(10, null, filter, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataProvider.Received(1)
+            .GetShellDescriptorsAsync(query, 10, null, filter, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResultCollectionIsNull_ThrowsShellMetaDataNotFoundException()
+    {
+        var query = "SELECT * FROM shells";
+
+        var response = new ShellDescriptorsData
+        {
+            Result = null
+        };
+
+        _queryProvider.GetQuery("Shells").Returns(query);
+
+        _metaDataProvider
+            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
+            .Returns(response);
+
+        await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
+            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResourceNotFoundExceptionThrown_ThrowsShellMetaDataNotFoundException()
+    {
+        var query = "SELECT * FROM shells";
+
+        _queryProvider.GetQuery("Shells").Returns(query);
+
+        _metaDataProvider
+            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
+            .Returns<Task<ShellDescriptorsData?>>(_ =>
+                throw new ResourceNotFoundException("not found"));
+
+        await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
+            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorAsync_WhenInternalDataProcessingExceptionThrown_RethrowsOriginalException()
+    {
+        var query = "SELECT * FROM shell";
+
+        _queryProvider.GetQuery("Shell").Returns(query);
+
+        _metaDataProvider
+            .GetShellDescriptorAsync(query, "aas-1", Arg.Any<CancellationToken>())
+            .Returns<Task<ShellDescriptorData?>>(_ =>
+                throw new InternalDataProcessingException("unexpected"));
+
+        await Assert.ThrowsAsync<InternalDataProcessingException>(() =>
+            _sut.GetShellDescriptorAsync("aas-1", CancellationToken.None));
     }
 
     #endregion
@@ -177,6 +258,47 @@ public class MetaDataServiceTests
             .Returns((AssetData?)null);
 
         await Assert.ThrowsAsync<AssetMetaDataNotFoundException>(() =>
+            _sut.GetAssetAsync("asset-1", CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetAssetAsync_WhenResourceNotValidExceptionThrown_ThrowsAssetMetaDataNotFoundException()
+    {
+        var query = "SELECT * FROM asset";
+
+        _queryProvider.GetQuery("Asset").Returns(query);
+
+        _metaDataProvider
+            .GetAssetAsync(query, "asset-1", Arg.Any<CancellationToken>())
+            .Returns<Task<AssetData?>>(_ =>
+                throw new ResourceNotValidException("invalid"));
+
+        await Assert.ThrowsAsync<AssetMetaDataNotFoundException>(() =>
+            _sut.GetAssetAsync("asset-1", CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetAssetAsync_WhenResponseParsingExceptionThrown_ThrowsInternalDataProcessingException()
+    {
+        var query = "SELECT * FROM asset";
+
+        _queryProvider.GetQuery("Asset").Returns(query);
+
+        _metaDataProvider
+            .GetAssetAsync(query, "asset-1", Arg.Any<CancellationToken>())
+            .Returns<Task<AssetData?>>(_ =>
+                throw new ResponseParsingException("parse error"));
+
+        await Assert.ThrowsAsync<InternalDataProcessingException>(() =>
+            _sut.GetAssetAsync("asset-1", CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetAssetAsync_WhenQueryIsWhitespace_ThrowsQueryNotAvailableException()
+    {
+        _queryProvider.GetQuery("Asset").Returns(" ");
+
+        await Assert.ThrowsAsync<QueryNotAvailableException>(() =>
             _sut.GetAssetAsync("asset-1", CancellationToken.None));
     }
 

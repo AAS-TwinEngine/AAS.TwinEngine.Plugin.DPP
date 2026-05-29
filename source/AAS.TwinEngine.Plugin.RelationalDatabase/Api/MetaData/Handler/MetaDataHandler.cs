@@ -1,24 +1,28 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.MappingProfiles;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Responses;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
+using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 
 public class MetaDataHandler(
     ILogger<MetaDataHandler> logger,
+    IAssetIdsFilterHeaderValidation assetIdsFilterHeaderService,
     IMetaDataService metaDataService) : IMetaDataHandler
 {
     public Task<ShellDescriptorsDto> GetShellDescriptors(GetShellDescriptorsRequest request, CancellationToken cancellationToken)
     {
         request?.Limit.ValidateLimit(logger);
         request?.Cursor?.ValidateCursor(logger);
+        var filter = assetIdsFilterHeaderService.ParseToDomainModel(request?.AssetIdsFilter);
 
         return GetResourceAsync(
             "shell-descriptors",
-            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, cancellationToken)!,
+            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, filter, cancellationToken)!,
             descriptors => descriptors.ToDto()
         );
     }
