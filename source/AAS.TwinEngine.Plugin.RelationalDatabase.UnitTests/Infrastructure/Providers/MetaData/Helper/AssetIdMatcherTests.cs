@@ -1,5 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.MetaData.Helper;
@@ -25,7 +24,7 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
+                new SpecificAssetIdsData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
             ]
         };
 
@@ -45,7 +44,7 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
 
@@ -66,8 +65,8 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" },
-                new SpecificAssetIdData { Name = "batchId", Value = "B-2026-03" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" },
+                new SpecificAssetIdsData { Name = "batchId", Value = "B-2026-03" }
             ]
         };
 
@@ -87,8 +86,8 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" },
-                new SpecificAssetIdData { Name = "batchId", Value = "B-2026-03" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" },
+                new SpecificAssetIdsData { Name = "batchId", Value = "B-2026-03" }
             ]
         };
 
@@ -105,7 +104,7 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
 
@@ -122,7 +121,7 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
+                new SpecificAssetIdsData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
             ]
         };
 
@@ -143,7 +142,7 @@ public class AssetIdMatcherTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
 

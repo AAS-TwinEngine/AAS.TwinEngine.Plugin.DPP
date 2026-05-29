@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 

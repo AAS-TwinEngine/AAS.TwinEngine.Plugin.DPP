@@ -5,7 +5,6 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 

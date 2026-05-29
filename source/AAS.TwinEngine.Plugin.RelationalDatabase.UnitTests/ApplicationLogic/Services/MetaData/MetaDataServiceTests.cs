@@ -2,7 +2,6 @@
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
@@ -84,7 +83,7 @@ public class MetaDataServiceTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
         var expected = new ShellDescriptorsData

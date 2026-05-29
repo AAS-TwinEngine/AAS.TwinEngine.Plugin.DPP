@@ -1,7 +1,6 @@
 ﻿using System.Data.Common;
 using System.Text.Json;
 
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
@@ -131,7 +130,7 @@ public class MetaDataProviderTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
 
@@ -163,7 +162,7 @@ public class MetaDataProviderTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-NOMATCH" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-NOMATCH" }
             ]
         };
 
@@ -187,7 +186,7 @@ public class MetaDataProviderTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
+                new SpecificAssetIdsData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
             ]
         };
 

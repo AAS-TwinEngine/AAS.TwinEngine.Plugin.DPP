@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
+using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 
@@ -39,7 +39,7 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
                 return false;
             }
 
-            var identifiers = new List<SpecificAssetIdData>();
+            var identifiers = new List<SpecificAssetIdsData>();
             foreach (var element in root.EnumerateArray())
             {
                 if (element.ValueKind != JsonValueKind.Object)
@@ -77,7 +77,7 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
         }
     }
 
-    private static SpecificAssetIdData? ParseIdentifier(JsonElement element, out string? error)
+    private static SpecificAssetIdsData? ParseIdentifier(JsonElement element, out string? error)
     {
         error = null;
 
@@ -119,7 +119,7 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
             return null;
         }
 
-        return new SpecificAssetIdData
+        return new SpecificAssetIdsData
         {
             Name = name,
             Value = value

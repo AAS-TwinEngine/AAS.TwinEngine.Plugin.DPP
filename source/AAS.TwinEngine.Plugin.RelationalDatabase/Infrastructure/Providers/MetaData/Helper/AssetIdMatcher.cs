@@ -1,5 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
@@ -15,7 +14,7 @@ public static class AssetIdMatcher
         return filter.Identifiers.All(identifier => MatchesSingleIdentifier(shellDescriptor, identifier));
     }
 
-    private static bool MatchesSingleIdentifier(ShellDescriptorData shellDescriptor, SpecificAssetIdData identifier)
+    private static bool MatchesSingleIdentifier(ShellDescriptorData shellDescriptor, SpecificAssetIdsData identifier)
     {
         if (string.Equals(identifier.Name, "globalAssetId", StringComparison.Ordinal))
         {
@@ -35,7 +34,7 @@ public static class AssetIdMatcher
         return string.Equals(shellGlobalAssetId, identifierValue, StringComparison.Ordinal);
     }
 
-    private static bool MatchesSpecificAssetId(IList<SpecificAssetIdsData>? shellAssets, SpecificAssetIdData identifier)
+    private static bool MatchesSpecificAssetId(IList<SpecificAssetIdsData>? shellAssets, SpecificAssetIdsData identifier)
     {
         if (shellAssets == null || shellAssets.Count == 0)
         {
@@ -45,7 +44,7 @@ public static class AssetIdMatcher
         return shellAssets.Any(shellAsset => MatchesNameAndValue(shellAsset, identifier));
     }
 
-    private static bool MatchesNameAndValue(SpecificAssetIdsData shellAsset, SpecificAssetIdData identifier)
+    private static bool MatchesNameAndValue(SpecificAssetIdsData shellAsset, SpecificAssetIdsData identifier)
     {
         if (string.IsNullOrEmpty(shellAsset.Name) || string.IsNullOrEmpty(shellAsset.Value))
         {

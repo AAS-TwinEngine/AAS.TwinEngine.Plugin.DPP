@@ -4,7 +4,6 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
-using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.AssetIdFilter;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 using Microsoft.Extensions.Logging;
@@ -79,7 +78,7 @@ public class MetaDataHandlerTests
         {
             Identifiers =
             [
-                new SpecificAssetIdData { Name = "serialNumber", Value = "SN-4711" }
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
             ]
         };
 
