@@ -15,7 +15,11 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 {
     public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
     {
-        var jsonResult = await queryExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        var (filteredQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, Create);
+
+        var jsonResult = parameters.Count == 0
+            ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)
+            : await queryExecutor.ExecuteQueryAsync(filteredQuery, parameters, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {
@@ -35,11 +39,6 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
                 PagingMetaData = new PagingMetaData { Cursor = null },
                 Result = Array.Empty<ShellDescriptorData>()
             };
-        }
-
-        if (filter != null)
-        {
-            allItems = allItems.Where(item => AssetIdMatcher.MatchesAllIdentifiers(item, filter)).ToList();
         }
 
         var (pagedItems, pagingMetaData) = Paginator.GetPagedResult(

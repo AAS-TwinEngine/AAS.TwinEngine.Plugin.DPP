@@ -112,19 +112,10 @@ public class MetaDataProviderTests
                 [
                     new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
                 ]
-            },
-            new()
-            {
-                GlobalAssetId = "asset-2",
-                Id = "shell-2",
-                IdShort = "Shell2",
-                SpecificAssetIds =
-                [
-                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-9999" }
-                ]
             }
         };
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
 
         var filter = new AssetIdFilterHeader
         {
@@ -138,25 +129,20 @@ public class MetaDataProviderTests
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-1", matched.Id);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)
+                                    && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)
+                                    && query.Contains("COALESCE(sai.\"Name\", sai.\"Value\")", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
+            Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public async Task GetShellDescriptorsAsync_WhenFilterHasNoMatches_ReturnsEmptyResult()
     {
-        var items = new List<ShellDescriptorData>
-        {
-            new()
-            {
-                GlobalAssetId = "asset-1",
-                Id = "shell-1",
-                IdShort = "Shell1",
-                SpecificAssetIds =
-                [
-                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
-                ]
-            }
-        };
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns("[]");
 
         var filter = new AssetIdFilterHeader
         {
@@ -170,6 +156,11 @@ public class MetaDataProviderTests
 
         Assert.NotNull(result);
         Assert.Empty(result!.Result!);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)),
+            Arg.Any<IEnumerable<DbParameter>>(),
+            Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -177,10 +168,10 @@ public class MetaDataProviderTests
     {
         var items = new List<ShellDescriptorData>
         {
-            new() { GlobalAssetId = "https://mm-software.com/ids/assets/000-001", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
             new() { GlobalAssetId = "https://mm-software.com/ids/assets/000-002", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] }
         };
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(JsonSerializer.Serialize(items));
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
 
         var filter = new AssetIdFilterHeader
         {
@@ -194,6 +185,12 @@ public class MetaDataProviderTests
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", matched.Id);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("A.\"GlobalAssetId\" = @f_value_0", StringComparison.Ordinal)
+                                    && !query.Contains("EXISTS", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 1),
+            Arg.Any<CancellationToken>());
     }
 
     #endregion

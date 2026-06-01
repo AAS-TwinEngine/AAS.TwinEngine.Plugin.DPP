@@ -10,6 +10,6 @@ public class ShellDescriptorData
 
 public class SpecificAssetIdsData
 {
-    public string? Name { get; set; }
-    public string? Value { get; set; }
+    public required string Name { get; set; }
+    public required string Value { get; set; }
 }
