@@ -7,13 +7,13 @@ using Npgsql;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.MetaData.Helper;
 
-public class ShellDescriptorFilterQueryBuilderTests
+public class ShellsFilterQueryBuilderTests
 {
     [Fact]
     public void Build_WhenBaseQueryIsNull_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ShellDescriptorFilterQueryBuilder.Build(null!, null, CreateParameter));
+            ShellsFilterQueryBuilder.Build(null!, null, CreateParameter));
     }
 
     [Theory]
@@ -22,14 +22,14 @@ public class ShellDescriptorFilterQueryBuilderTests
     public void Build_WhenBaseQueryIsEmptyOrWhitespace_ThrowsArgumentException(string baseQuery)
     {
         Assert.Throws<ArgumentException>(() =>
-            ShellDescriptorFilterQueryBuilder.Build(baseQuery, null, CreateParameter));
+            ShellsFilterQueryBuilder.Build(baseQuery, null, CreateParameter));
     }
 
     [Fact]
     public void Build_WhenParameterFactoryIsNull_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ShellDescriptorFilterQueryBuilder.Build("SELECT 1;", null, null!));
+            ShellsFilterQueryBuilder.Build("SELECT 1;", null, null!));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class ShellDescriptorFilterQueryBuilderTests
     {
         const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, CreateParameter);
 
         Assert.DoesNotContain("/*__ASSET_FILTER__*/", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
@@ -50,7 +50,7 @@ public class ShellDescriptorFilterQueryBuilderTests
         const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
         var filter = new AssetIdFilterHeader { Identifiers = [] };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.DoesNotContain("/*__ASSET_FILTER__*/", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
@@ -69,11 +69,11 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
-        Assert.Contains("COALESCE(sai.\"Name\", sai.\"Value\") = @f_name_0", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("sai.\"Name\" = @f_name_0", resultQuery, StringComparison.Ordinal);
         Assert.Contains("sai.\"Value\" = @f_value_0", resultQuery, StringComparison.Ordinal);
 
         Assert.Equal(2, parameters.Count);
@@ -93,7 +93,7 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Contains("A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -115,7 +115,7 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Contains("A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -139,7 +139,7 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("A.\"GlobalAssetId\"", resultQuery, StringComparison.Ordinal);
@@ -155,7 +155,7 @@ public class ShellDescriptorFilterQueryBuilderTests
         const string query = "SELECT * FROM \"Asset\" A;";
         var filter = new AssetIdFilterHeader { Identifiers = [] };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Equal(query, resultQuery);
         Assert.Empty(parameters);
@@ -173,7 +173,7 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.StartsWith("SELECT * FROM \"Asset\" A", resultQuery, StringComparison.Ordinal);
         Assert.EndsWith(";", resultQuery, StringComparison.Ordinal);
@@ -195,7 +195,7 @@ public class ShellDescriptorFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
         Assert.Contains("WHERE A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.EndsWith(";", resultQuery, StringComparison.Ordinal);

@@ -132,8 +132,7 @@ public class MetaDataProviderTests
 
         await _queryExecutor.Received(1).ExecuteQueryAsync(
             Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)
-                                    && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)
-                                    && query.Contains("COALESCE(sai.\"Name\", sai.\"Value\")", StringComparison.Ordinal)),
+                                    && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)),
             Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
             Arg.Any<CancellationToken>());
     }

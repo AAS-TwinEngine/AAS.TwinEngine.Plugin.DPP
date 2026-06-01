@@ -15,7 +15,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 {
     public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
     {
-        var (filteredQuery, parameters) = ShellDescriptorFilterQueryBuilder.Build(query, filter, Create);
+        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, Create);
 
         var jsonResult = parameters.Count == 0
             ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)

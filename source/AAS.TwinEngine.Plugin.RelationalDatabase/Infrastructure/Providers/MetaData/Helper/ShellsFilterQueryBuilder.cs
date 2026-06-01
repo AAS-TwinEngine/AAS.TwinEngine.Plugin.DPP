@@ -4,7 +4,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
-public static class ShellDescriptorFilterQueryBuilder
+public static class ShellsFilterQueryBuilder
 {
     private const string FilterMarker = "/*__ASSET_FILTER__*/";
     private const string GlobalAssetId = "globalAssetId";
@@ -69,7 +69,7 @@ public static class ShellDescriptorFilterQueryBuilder
                 SELECT 1
                 FROM "SpecificAssetIds" sai
                 WHERE sai."AssetId" = A."Id"
-                AND COALESCE(sai."Name", sai."Value") = 
+                AND sai."Name" = 
             """
             + $"{nameParameter} "
             + $"AND sai.\"Value\" = {valueParameter}"

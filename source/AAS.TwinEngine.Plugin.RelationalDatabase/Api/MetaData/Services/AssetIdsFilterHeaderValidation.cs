@@ -7,6 +7,8 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 
 public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidation> logger) : IAssetIdsFilterHeaderValidation
 {
+    private const int MaxIdentifiers = 50;
+
     public AssetIdFilterHeader? ParseToDomainModel(string? headerValue)
     {
         if (string.IsNullOrWhiteSpace(headerValue))
@@ -56,6 +58,11 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
                 }
 
                 identifiers.Add(identifier);
+
+                if (ExceedsMaximumIdentifiers(identifiers.Count, out error))
+                {
+                    return false;
+                }
             }
 
             filter = new AssetIdFilterHeader
@@ -65,14 +72,14 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
 
             return true;
         }
-        catch (JsonException ex)
+        catch (JsonException)
         {
-            error = $"Invalid JSON in header: {ex.Message}";
+            error = "Invalid JSON in header";
             return false;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            error = $"Unexpected error parsing header: {ex.Message}";
+            error = "Unexpected error parsing header";
             return false;
         }
     }
@@ -124,5 +131,18 @@ public class AssetIdsFilterHeaderValidation(ILogger<AssetIdsFilterHeaderValidati
             Name = name,
             Value = value
         };
+    }
+
+    private static bool ExceedsMaximumIdentifiers(int identifierCount, out string? error)
+    {
+        error = null;
+
+        if (identifierCount <= MaxIdentifiers)
+        {
+            return false;
+        }
+
+        error = $"A maximum of {MaxIdentifiers} asset identifiers are allowed";
+        return true;
     }
 }

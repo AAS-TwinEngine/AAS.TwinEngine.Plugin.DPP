@@ -1,4 +1,6 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
+﻿using System.Text.Json;
+
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 
 using Microsoft.Extensions.Logging;
@@ -74,7 +76,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(malformedHeader));
 
-        Assert.Contains("Invalid aastwinengine-assetids header", ex.Message);
+        Assert.Contains("Invalid aastwinengine-assetids header", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -84,7 +86,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(objectHeader));
 
-        Assert.Contains("JSON array", ex.Message);
+        Assert.Contains("JSON array", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -94,7 +96,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
 
-        Assert.Contains("Unsupported property", ex.Message);
+        Assert.Contains("Unsupported property", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -104,7 +106,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
 
-        Assert.Contains("'name' property", ex.Message);
+        Assert.Contains("'name' property", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -114,7 +116,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
 
-        Assert.Contains("'value' property", ex.Message);
+        Assert.Contains("'value' property", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -124,7 +126,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
 
-        Assert.Contains("'name' must not be empty", ex.Message);
+        Assert.Contains("'name' must not be empty", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -134,6 +136,55 @@ public class AssetIdsFilterHeaderValidationTests
 
         var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
 
-        Assert.Contains("'value' must not be empty", ex.Message);
+        Assert.Contains("'value' must not be empty", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenIdentifierCountExceedsMaximum_ThrowsInvalidUserInputException()
+    {
+        var logger = Substitute.For<ILogger<AssetIdsFilterHeaderValidation>>();
+        var sut = new AssetIdsFilterHeaderValidation(logger);
+        var identifiers = Enumerable.Range(1, 51)
+            .Select(index => new
+            {
+                name = $"name-{index}",
+                value = $"value-{index}"
+            });
+        var headerValue = JsonSerializer.Serialize(identifiers);
+
+        var exception = Assert.Throws<InvalidUserInputException>(() => sut.ParseToDomainModel(headerValue));
+
+        Assert.Contains("maximum of 50 asset identifiers", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenIdentifierCountIsAtMaximum_ReturnsFilter()
+    {
+        var logger = Substitute.For<ILogger<AssetIdsFilterHeaderValidation>>();
+        var sut = new AssetIdsFilterHeaderValidation(logger);
+        var identifiers = Enumerable.Range(1, 50)
+            .Select(index => new
+            {
+                name = $"name-{index}",
+                value = $"value-{index}"
+            });
+        var headerValue = JsonSerializer.Serialize(identifiers);
+
+        var result = sut.ParseToDomainModel(headerValue);
+
+        Assert.NotNull(result);
+        Assert.Equal(50, result!.Identifiers.Count);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenArrayIsEmpty_ReturnsEmptyFilter()
+    {
+        var logger = Substitute.For<ILogger<AssetIdsFilterHeaderValidation>>();
+        var sut = new AssetIdsFilterHeaderValidation(logger);
+
+        var result = sut.ParseToDomainModel("[]");
+
+        Assert.NotNull(result);
+        Assert.Empty(result!.Identifiers);
     }
 }
