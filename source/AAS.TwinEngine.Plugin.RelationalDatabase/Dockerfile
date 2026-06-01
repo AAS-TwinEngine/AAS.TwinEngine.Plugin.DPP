@@ -7,7 +7,11 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /App
 COPY ["AAS.TwinEngine.Plugin.RelationalDatabase/", "AAS.TwinEngine.Plugin.RelationalDatabase/"]
 RUN dotnet restore "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" --locked-mode
-RUN dotnet publish "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" -c "$BUILD_CONFIGURATION" -o out
+RUN dotnet publish \
+    "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" \
+    -c "$BUILD_CONFIGURATION" \
+    -o out \
+    --no-restore
 
 # Generate Application SBOM at sbom/bom.xml (omitting dev/test dependencies as they do not appear in final build)
 RUN dotnet-CycloneDX "AAS.TwinEngine.Plugin.RelationalDatabase/AAS.TwinEngine.Plugin.RelationalDatabase.csproj" -o "sbom/" --exclude-dev --exclude-test-projects --set-nuget-purl --spec-version 1.6  --disable-package-restore
