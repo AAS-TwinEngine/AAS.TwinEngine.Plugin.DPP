@@ -2,6 +2,12 @@ name: Playwright Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      dataengine_ref:
+        description: "DataEngine branch, tag, or SHA"
+        required: false
+        default: "main"
+        type: string
   pull_request:
     branches:
       - "main"
@@ -24,6 +30,7 @@ env:
   PLAYWRIGHT_TEST_PROJECT: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
+  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'main' }}
 
 jobs:
   playwright-tests:
@@ -46,7 +53,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: AAS-TwinEngine/AAS.TwinEngine.DataEngine
-          ref: develop
+          ref: ${{ env.DATAENGINE_REF }}
           path: dataengine-repo
 
       - name: Setup .NET
