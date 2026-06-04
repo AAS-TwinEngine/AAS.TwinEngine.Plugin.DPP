@@ -35,11 +35,11 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenFilterIsNull_ReplacesMarkerWithEmptyClause()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
 
         var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, CreateParameter);
 
-        Assert.DoesNotContain("/*__ASSET_FILTER__*/", resultQuery, StringComparison.Ordinal);
+        Assert.DoesNotContain("{{__ASSET_FILTER__}}", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Empty(parameters);
     }
@@ -47,12 +47,12 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenFilterIdentifiersAreEmpty_ReplacesMarkerWithEmptyClause()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
         var filter = new AssetIdFilterHeader { Identifiers = [] };
 
         var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, CreateParameter);
 
-        Assert.DoesNotContain("/*__ASSET_FILTER__*/", resultQuery, StringComparison.Ordinal);
+        Assert.DoesNotContain("{{__ASSET_FILTER__}}", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Empty(parameters);
     }
@@ -60,7 +60,7 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenFilterHasSpecificAssetId_BuildsExistsClauseAndTwoParameters()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
         var filter = new AssetIdFilterHeader
         {
             Identifiers =
@@ -73,7 +73,7 @@ public class ShellsFilterQueryBuilderTests
 
         Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
-        Assert.Contains("sai.\"Name\" = @f_name_0", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("sai.\"Name\" =@f_name_0", resultQuery, StringComparison.Ordinal);
         Assert.Contains("sai.\"Value\" = @f_value_0", resultQuery, StringComparison.Ordinal);
 
         Assert.Equal(2, parameters.Count);
@@ -84,7 +84,7 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenFilterHasGlobalAssetId_BuildsGlobalClauseAndSingleParameter()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
         var filter = new AssetIdFilterHeader
         {
             Identifiers =
@@ -105,7 +105,7 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenFilterHasMixedIdentifiers_CombinesClausesUsingAnd()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
         var filter = new AssetIdFilterHeader
         {
             Identifiers =
@@ -130,7 +130,7 @@ public class ShellsFilterQueryBuilderTests
     [Fact]
     public void Build_WhenIdentifierNameCaseDoesNotMatchGlobalAssetId_TreatsItAsSpecificAssetId()
     {
-        const string query = "SELECT * FROM \"Asset\" A\n/*__ASSET_FILTER__*/;";
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}};";
         var filter = new AssetIdFilterHeader
         {
             Identifiers =

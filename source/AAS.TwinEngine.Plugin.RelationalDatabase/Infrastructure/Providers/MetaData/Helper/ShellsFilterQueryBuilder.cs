@@ -6,7 +6,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 
 public static class ShellsFilterQueryBuilder
 {
-    private const string FilterMarker = "/*__ASSET_FILTER__*/";
+    private const string FilterMarker = "{{__ASSET_FILTER__}}";
     private const string GlobalAssetId = "globalAssetId";
 
     public static (string Query, List<DbParameter> Parameters) Build(
@@ -69,7 +69,7 @@ public static class ShellsFilterQueryBuilder
                 SELECT 1
                 FROM "SpecificAssetIds" sai
                 WHERE sai."AssetId" = A."Id"
-                AND sai."Name" = 
+                AND sai."Name" =
             """
             + $"{nameParameter} "
             + $"AND sai.\"Value\" = {valueParameter}"

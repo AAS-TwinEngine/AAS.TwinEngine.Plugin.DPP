@@ -144,7 +144,7 @@ public class AssetIdsFilterHeaderValidationTests
     {
         var logger = Substitute.For<ILogger<AssetIdsFilterHeaderValidation>>();
         var sut = new AssetIdsFilterHeaderValidation(logger);
-        var identifiers = Enumerable.Range(1, 51)
+        var identifiers = Enumerable.Range(1, 11)
             .Select(index => new
             {
                 name = $"name-{index}",
@@ -154,7 +154,7 @@ public class AssetIdsFilterHeaderValidationTests
 
         var exception = Assert.Throws<InvalidUserInputException>(() => sut.ParseToDomainModel(headerValue));
 
-        Assert.Contains("maximum of 50 asset identifiers", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("maximum of 10 asset identifiers", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -162,7 +162,7 @@ public class AssetIdsFilterHeaderValidationTests
     {
         var logger = Substitute.For<ILogger<AssetIdsFilterHeaderValidation>>();
         var sut = new AssetIdsFilterHeaderValidation(logger);
-        var identifiers = Enumerable.Range(1, 50)
+        var identifiers = Enumerable.Range(1, 10)
             .Select(index => new
             {
                 name = $"name-{index}",
@@ -173,7 +173,7 @@ public class AssetIdsFilterHeaderValidationTests
         var result = sut.ParseToDomainModel(headerValue);
 
         Assert.NotNull(result);
-        Assert.Equal(50, result!.Identifiers.Count);
+        Assert.Equal(10, result!.Identifiers.Count);
     }
 
     [Fact]
@@ -186,5 +186,150 @@ public class AssetIdsFilterHeaderValidationTests
 
         Assert.NotNull(result);
         Assert.Empty(result!.Identifiers);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenNameExceedsMaxLength_ThrowsInvalidUserInput()
+    {
+        var longName = new string('a', AssetIdsFilterHeaderValidation.NameMaxLength + 1);
+        var header = $"[{{\"name\":\"{longName}\",\"value\":\"SN-4711\"}}]";
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains($"'name' must not exceed {AssetIdsFilterHeaderValidation.NameMaxLength} characters", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenNameIsAtMaxLength_ReturnsFilter()
+    {
+        var exactName = new string('a', AssetIdsFilterHeaderValidation.NameMaxLength);
+        var header = $"[{{\"name\":\"{exactName}\",\"value\":\"SN-4711\"}}]";
+
+        var result = _sut.ParseToDomainModel(header);
+
+        Assert.NotNull(result);
+        Assert.Single(result!.Identifiers);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenValueExceedsMaxLength_ThrowsInvalidUserInput()
+    {
+        var longValue = new string('a', AssetIdsFilterHeaderValidation.ValueMaxLength + 1);
+        var header = $"[{{\"name\":\"serialNumber\",\"value\":\"{longValue}\"}}]";
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains($"'value' must not exceed {AssetIdsFilterHeaderValidation.ValueMaxLength} characters", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenValueIsAtMaxLength_ReturnsFilter()
+    {
+        var exactValue = new string('a', AssetIdsFilterHeaderValidation.ValueMaxLength);
+        var header = $"[{{\"name\":\"serialNumber\",\"value\":\"{exactValue}\"}}]";
+
+        var result = _sut.ParseToDomainModel(header);
+
+        Assert.NotNull(result);
+        Assert.Single(result!.Identifiers);
+    }
+
+    [Theory]
+    [InlineData("\u0000")]
+    [InlineData("\u0001")]
+    [InlineData("\u001F")]
+    [InlineData("\uFFFE")]
+    [InlineData("\uFFFF")]
+    public void ParseToDomainModel_WhenNameContainsInvalidXmlCharacter_ThrowsInvalidUserInput(string invalidChar)
+    {
+        var header = JsonSerializer.Serialize(new[] { new { name = $"serial{invalidChar}Number", value = "SN-4711" } });
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains("'name' contains invalid characters", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("\u0000")]
+    [InlineData("\u0001")]
+    [InlineData("\u001F")]
+    [InlineData("\uFFFE")]
+    [InlineData("\uFFFF")]
+    public void ParseToDomainModel_WhenValueContainsInvalidXmlCharacter_ThrowsInvalidUserInput(string invalidChar)
+    {
+        var header = JsonSerializer.Serialize(new[] { new { name = "serialNumber", value = $"SN{invalidChar}4711" } });
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains("'value' contains invalid characters", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("Hello World")]
+    [InlineData("serial\u0009Number")]
+    [InlineData("value\u000AHere")]
+    [InlineData("\u20AC-price")]
+    public void ParseToDomainModel_WhenNameContainsValidXmlCharacters_ReturnsFilter(string validName)
+    {
+        var header = JsonSerializer.Serialize(new[] { new { name = validName, value = "SN-4711" } });
+
+        var result = _sut.ParseToDomainModel(header);
+
+        Assert.NotNull(result);
+        Assert.Single(result!.Identifiers);
+    }
+
+    [Theory]
+    [InlineData("<script>alert(1)</script>")]
+    [InlineData("javascript:alert(1)")]
+    [InlineData("../../etc/passwd")]
+    [InlineData("'; DROP TABLE assets; --")]
+    public void ParseToDomainModel_WhenNameContainsInjectionPattern_ThrowsInvalidUserInput(string maliciousName)
+    {
+        var header = JsonSerializer.Serialize(new[] { new { name = maliciousName, value = "SN-4711" } });
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains("potentially malicious patterns", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
+    [InlineData("<script>alert(1)</script>")]
+    [InlineData("javascript:alert(1)")]
+    [InlineData("../../etc/passwd")]
+    [InlineData("'; DROP TABLE assets; --")]
+    public void ParseToDomainModel_WhenValueContainsInjectionPattern_ThrowsInvalidUserInput(string maliciousValue)
+    {
+        var header = JsonSerializer.Serialize(new[] { new { name = "serialNumber", value = maliciousValue } });
+
+        var ex = Assert.Throws<InvalidUserInputException>(() => _sut.ParseToDomainModel(header));
+
+        Assert.Contains("potentially malicious patterns", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenNameIsNumericJsonValue_CoercesToStringAndReturnsFilter()
+    {
+        const string header = "[{\"name\":42,\"value\":\"SN-4711\"}]";
+
+        var result = _sut.ParseToDomainModel(header);
+
+        Assert.NotNull(result);
+        var identifier = Assert.Single(result!.Identifiers);
+        Assert.Equal("42", identifier.Name);
+        Assert.Equal("SN-4711", identifier.Value);
+    }
+
+    [Fact]
+    public void ParseToDomainModel_WhenValueIsNumericJsonValue_CoercesToStringAndReturnsFilter()
+    {
+        const string header = "[{\"name\":\"serialNumber\",\"value\":4711}]";
+
+        var result = _sut.ParseToDomainModel(header);
+
+        Assert.NotNull(result);
+        var identifier = Assert.Single(result!.Identifiers);
+        Assert.Equal("serialNumber", identifier.Name);
+        Assert.Equal("4711", identifier.Value);
     }
 }
