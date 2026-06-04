@@ -1,213 +1,5 @@
 [
   {
-    "column": "dbo.ContactInformation.RoleOfContactPerson",
-    "semanticId": [ "0173-1#02-AAO204#003" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Language",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language" ]
-  },
-  {
-    "column": "dbo.ContactInformation.TimeZone",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/TimeZone" ]
-  },
-  {
-    "column": "dbo.ContactInformation.AddressOfAdditionalLink",
-    "semanticId": [ "0173-1#02-AAQ326#002" ]
-  },
-  {
-    "column": "dbo.ContactInformation.NationalCode_en",
-    "semanticId": [ "0173-1#02-AAO134#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.NationalCode_de",
-    "semanticId": [ "0173-1#02-AAO134#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.CityTown_en",
-    "semanticId": [ "0173-1#02-AAO132#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.CityTown_de",
-    "semanticId": [ "0173-1#02-AAO132#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Company_en",
-    "semanticId": [ "0173-1#02-AAW001#001_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Company_de",
-    "semanticId": [ "0173-1#02-AAW001#001_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Department_en",
-    "semanticId": [ "0173-1#02-AAO127#003_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Department_de",
-    "semanticId": [ "0173-1#02-AAO127#003_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Street_en",
-    "semanticId": [ "0173-1#02-AAO128#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Street_de",
-    "semanticId": [ "0173-1#02-AAO128#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Zipcode_en",
-    "semanticId": [ "0173-1#02-AAO129#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Zipcode_de",
-    "semanticId": [ "0173-1#02-AAO129#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.POBox_en",
-    "semanticId": [ "0173-1#02-AAO130#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.POBox_de",
-    "semanticId": [ "0173-1#02-AAO130#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.ZipCodeOfPOBox_en",
-    "semanticId": [ "0173-1#02-AAO131#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.ZipCodeOfPOBox_de",
-    "semanticId": [ "0173-1#02-AAO131#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.StateCounty_en",
-    "semanticId": [ "0173-1#02-AAO133#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.StateCounty_de",
-    "semanticId": [ "0173-1#02-AAO133#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.NameOfContact_en",
-    "semanticId": [ "0173-1#02-AAO205#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.NameOfContact_de",
-    "semanticId": [ "0173-1#02-AAO205#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.FirstName_en",
-    "semanticId": [ "0173-1#02-AAO206#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.FirstName_de",
-    "semanticId": [ "0173-1#02-AAO206#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.MiddleNames_en",
-    "semanticId": [ "0173-1#02-AAO207#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.MiddleNames_de",
-    "semanticId": [ "0173-1#02-AAO207#002_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Title_en",
-    "semanticId": [ "0173-1#02-AAO208#003_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.Title_de",
-    "semanticId": [ "0173-1#02-AAO208#003_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.AcademicTitle_en",
-    "semanticId": [ "0173-1#02-AAO209#003_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.AcademicTitle_de",
-    "semanticId": [ "0173-1#02-AAO209#003_de" ]
-  },
-  {
-    "column": "dbo.ContactInformation.FurtherDetailsOfContact_en",
-    "semanticId": [ "0173-1#02-AAO210#002_en" ]
-  },
-  {
-    "column": "dbo.ContactInformation.FurtherDetailsOfContact_de",
-    "semanticId": [ "0173-1#02-AAO210#002_de" ]
-  },
-  {
-    "column": "dbo.Phone.TelephoneNumber_en",
-    "semanticId": [ "0173-1#02-AAO136#002_en" ]
-  },
-  {
-    "column": "dbo.Phone.TelephoneNumber_de",
-    "semanticId": [ "0173-1#02-AAO136#002_de" ]
-  },
-  {
-    "column": "dbo.Phone.AvailableTime_en",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en" ]
-  },
-  {
-    "column": "dbo.Phone.AvailableTime_de",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_de" ]
-  },
-  {
-    "column": "dbo.Phone.TypeOfTelephone",
-    "semanticId": [ "0173-1#02-AAO137#003" ]
-  },
-  {
-    "column": "dbo.Fax.FaxNumber_en",
-    "semanticId": [ "0173-1#02-AAO195#002_en" ]
-  },
-  {
-    "column": "dbo.Fax.FaxNumber_de",
-    "semanticId": [ "0173-1#02-AAO195#002_de" ]
-  },
-  {
-    "column": "dbo.Fax.TypeOfFaxNumber",
-    "semanticId": [ "0173-1#02-AAO196#003" ]
-  },
-  {
-    "column": "dbo.Email.EmailAddress",
-    "semanticId": [ "0173-1#02-AAO198#002" ]
-  },
-  {
-    "column": "dbo.Email.TypeOfEmailAddress",
-    "semanticId": [ "0173-1#02-AAO199#003" ]
-  },
-  {
-    "column": "dbo.Email.PublicKey_en",
-    "semanticId": [ "0173-1#02-AAO200#002_en" ]
-  },
-  {
-    "column": "dbo.Email.PublicKey_de",
-    "semanticId": [ "0173-1#02-AAO200#002_de" ]
-  },
-  {
-    "column": "dbo.Email.TypeOfPublicKey_en",
-    "semanticId": [ "0173-1#02-AAO201#002_en" ]
-  },
-  {
-    "column": "dbo.Email.TypeOfPublicKey_de",
-    "semanticId": [ "0173-1#02-AAO201#002_de" ]
-  },
-  {
-    "column": "dbo.IPCommunication.AddressOfAdditionalLink",
-    "semanticId": [ "0173-1#02-AAQ326#002" ]
-  },
-  {
-    "column": "dbo.IPCommunication.TypeOfCommunication",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication" ]
-  },
-  {
-    "column": "dbo.IPCommunication.AvailableTime_en",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en" ]
-  },
-  {
-    "column": "dbo.IPCommunication.AvailableTime_de",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_de" ]
-  },
-  {
     "column": "dbo.Asset.URIOfTheProduct",
     "semanticId": [ "0112/2///61987#ABN590#002" ]
   },
@@ -316,28 +108,8 @@
     "semanticId": [ "0112/2///61987#ABO100#002" ]
   },
   {
-    "column": "dbo.ContactInformation",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation" ]
-  },
-  {
     "column": "dbo.Nameplate",
     "semanticId": [ "https://admin-shell.io/idta/nameplate/3/0/Nameplate" ]
-  },
-  {
-    "column": "dbo.Phone",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Phone" ]
-  },
-  {
-    "column": "dbo.Fax",
-    "semanticId": [ "0173-1#02-AAQ834#005" ]
-  },
-  {
-    "column": "dbo.Email",
-    "semanticId": [ "0173-1#02-AAQ836#005" ]
-  },
-  {
-    "column": "dbo.IPCommunication",
-    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/" ]
   },
   {
     "column": "dbo.Marking",
@@ -574,5 +346,368 @@
   {
     "column": "dbo.DocumentVersion.PreviewFile",
     "semanticId": [ "0173-1#02-ABK127#002" ]
+  },
+
+
+
+  {
+    "column": "dbo.Asset.MaintenanceFreeAsset",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancefreeasset/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenanceinstructionsforspecificinterval/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.MaintenanceID",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenanceid/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.NameOfMaintenance_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/nameofmaintenance/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.NameOfMaintenance_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/nameofmaintenance/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.SourceOfMaintenanceInstructions_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sourceofmaintenanceinstructions/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.SourceOfMaintenanceInstructions_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sourceofmaintenanceinstructions/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.RelatedStandardsLawsRegulations_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/relatedstandardslawsregulations/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.RelatedStandardsLawsRegulations_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/relatedstandardslawsregulations/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.SafetyRegulationsToBeObserved_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.SafetyRegulationsToBeObserved_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.MaintenanceIntervalValue",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenanceintervalvalue/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.MaintenanceIntervalUnit",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenanceintervalunit/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.FlowChartOfMaintenanceSteps",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/flowchartofmaintenancesteps/1/0" ]
+  },
+  {
+    "column": "dbo.Alarm",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/alarm/1/0" ]
+  },
+  {
+    "column": "dbo.Alarm.AlarmName_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/alarmname/1/0_en" ]
+  },
+  {
+    "column": "dbo.Alarm.AlarmName_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/alarmname/1/0_de" ]
+  },
+  {
+    "column": "dbo.Alarm.WarningLimitRelativeValue",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/warninglimitrelativevalue/1/0" ]
+  },
+  {
+    "column": "dbo.Alarm.WarningLimitSeverity",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/warninglimitseverity/1/0" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Company_en",
+    "semanticId": [ "0173-1#02-AAW001#001_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Company_de",
+    "semanticId": [ "0173-1#02-AAW001#001_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Department_en",
+    "semanticId": [ "0173-1#02-AAO127#003_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Department_de",
+    "semanticId": [ "0173-1#02-AAO127#003_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Title_en",
+    "semanticId": [ "0173-1#02-AAO208#003_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Title_de",
+    "semanticId": [ "0173-1#02-AAO208#003_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.AcademicTitle_en",
+    "semanticId": [ "0173-1#02-AAO209#003_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.AcademicTitle_de",
+    "semanticId": [ "0173-1#02-AAO209#003_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.NameOfContact_en",
+    "semanticId": [ "0173-1#02-AAO205#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.NameOfContact_de",
+    "semanticId": [ "0173-1#02-AAO205#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.FirstName_en",
+    "semanticId": [ "0173-1#02-AAO206#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.FirstName_de",
+    "semanticId": [ "0173-1#02-AAO206#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.MiddleNames_en",
+    "semanticId": [ "0173-1#02-AAO207#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.MiddleNames_de",
+    "semanticId": [ "0173-1#02-AAO207#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Street_en",
+    "semanticId": [ "0173-1#02-AAO128#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Street_de",
+    "semanticId": [ "0173-1#02-AAO128#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Zipcode_en",
+    "semanticId": [ "0173-1#02-AAO129#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.Zipcode_de",
+    "semanticId": [ "0173-1#02-AAO129#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.CityTown_en",
+    "semanticId": [ "0173-1#02-AAO132#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.CityTown_de",
+    "semanticId": [ "0173-1#02-AAO132#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.NationalCode_en",
+    "semanticId": [ "0173-1#02-AAO134#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.NationalCode_de",
+    "semanticId": [ "0173-1#02-AAO134#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.StateCounty_en",
+    "semanticId": [ "0173-1#02-AAO133#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.StateCounty_de",
+    "semanticId": [ "0173-1#02-AAO133#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.FurtherDetailsOfContact_en",
+    "semanticId": [ "0173-1#02-AAO210#002_en" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.FurtherDetailsOfContact_de",
+    "semanticId": [ "0173-1#02-AAO210#002_de" ]
+  },
+  {
+    "column": "dbo.ContactForMaintenanceAuthorization.RoleOfContactPerson",
+    "semanticId": [ "0173-1#02-AAO204#003" ]
+  },
+  {
+    "column": "dbo.Email",
+    "semanticId": [ "0173-1#02-AAQ836#005" ]
+  },
+  {
+    "column": "dbo.Email.EmailAddress",
+    "semanticId": [ "0173-1#02-AAO198#002" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfEmailAddress",
+    "semanticId": [ "0173-1#02-AAO199#003" ]
+  },
+  {
+    "column": "dbo.Email.PublicKey_en",
+    "semanticId": [ "0173-1#02-AAO200#002_en" ]
+  },
+  {
+    "column": "dbo.Email.PublicKey_de",
+    "semanticId": [ "0173-1#02-AAO200#002_de" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfPublicKey_en",
+    "semanticId": [ "0173-1#02-AAO201#002_en" ]
+  },
+  {
+    "column": "dbo.Email.TypeOfPublicKey_de",
+    "semanticId": [ "0173-1#02-AAO201#002_de" ]
+  },
+  {
+    "column": "dbo.Phone",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Phone" ]
+  },
+  {
+    "column": "dbo.Phone.TelephoneNumber_en",
+    "semanticId": [ "0173-1#02-AAO136#002_en" ]
+  },
+  {
+    "column": "dbo.Phone.TelephoneNumber_de",
+    "semanticId": [ "0173-1#02-AAO136#002_de" ]
+  },
+  {
+    "column": "dbo.Phone.AvailableTime_en",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_en" ]
+  },
+  {
+    "column": "dbo.Phone.AvailableTime_de",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/_de" ]
+  },
+  {
+    "column": "dbo.Phone.TypeOfTelephone",
+    "semanticId": [ "0173-1#02-AAO137#003" ]
+  },
+  {
+    "column": "dbo.Fax",
+    "semanticId": [ "0173-1#02-AAQ834#005" ]
+  },
+  {
+    "column": "dbo.Fax.FaxNumber_en",
+    "semanticId": [ "0173-1#02-AAO195#002_en" ]
+  },
+  {
+    "column": "dbo.Fax.FaxNumber_de",
+    "semanticId": [ "0173-1#02-AAO195#002_de" ]
+  },
+  {
+    "column": "dbo.Fax.TypeOfFaxNumber",
+    "semanticId": [ "0173-1#02-AAO196#003" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.NumberOfRequiredTechnicians",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/numberofrequiredtechnicians/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.RequiredQualification_en",
+    "semanticId": [ "0173-1#02-BAF831#002_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.RequiredQualification_de",
+    "semanticId": [ "0173-1#02-BAF831#002_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.ValueTotalEstimatedWorkingTime",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/valuetotalestimatedworkingtime/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceInstructionsForSpecificInterval.UnitValueTotalEstimatedWorkingTime",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitvaluetotalestimatedworkingtime/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.MaintenanceStepID",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancestepid/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.QuantityOfSparePartForMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityofsparepartformaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.QuantityOfConsumablesForMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityofconsumablesformaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.UnitForQuantityOfConsumablesForMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitforquantityofconsumablesformaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.QuantityOfToolsForMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityoftoolsformaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.DocumentationSignatureMandatory",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/documentationsignaturemandatory/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.EndOfMaintenance",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/endofmaintenance/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.MaintenanceStepName_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancestepname/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.MaintenanceStepName_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancestepname/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.LocalizationDescription_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/localizationdescription/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.LocalizationDescription_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/localizationdescription/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.InstructionMaintenanceStep_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/instructionmaintenancestep/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.InstructionMaintenanceStep_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/instructionmaintenancestep/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.ConditionForNextMaintenanceStep_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/conditionfornextmaintenancestep/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.ConditionForNextMaintenanceStep_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/conditionfornextmaintenancestep/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.ConditionForAlternativeNextStep_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/conditionforalternativenextstep/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.ConditionForAlternativeNextStep_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/conditionforalternativenextstep/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.RelatedDocumentOrFileMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/relateddocumentorfilemaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.ValueEstimatedDurationTimeMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/valueestimateddurationtimemaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceStep.UnitEstimatedDurationTimeMaintenanceStep",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitestimateddurationtimemaintenancestep/1/0" ]
   }
 ]
