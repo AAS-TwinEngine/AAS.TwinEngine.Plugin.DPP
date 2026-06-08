@@ -31,7 +31,7 @@ env:
   DATAENGINE_REPO_PATH: dataengine-repo
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
-  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'main' }}
+  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'develop' }}
 
 jobs:
   playwright-tests:
