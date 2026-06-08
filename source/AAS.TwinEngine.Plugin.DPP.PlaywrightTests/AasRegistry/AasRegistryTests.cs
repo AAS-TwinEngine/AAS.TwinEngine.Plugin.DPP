@@ -81,4 +81,40 @@ public class AasRegistryTests : ApiTestBase
 
         await CompareJsonAsync(actualDoc, Path.Combine(Directory.GetCurrentDirectory(), "AasRegistry", "TestData", "GetShellDescriptorById_Expected.json"));
     }
+
+    [Fact]
+    public async Task GetShellDescriptorById_Product2_ShouldReturnSuccess()
+    {
+        // Arrange
+        var url = $"/shell-descriptors/{AasIdentifier2}";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorById_Product3_ShouldReturnSuccess()
+    {
+        // Arrange
+        var url = $"/shell-descriptors/{AasIdentifier3}";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+    }
 }
