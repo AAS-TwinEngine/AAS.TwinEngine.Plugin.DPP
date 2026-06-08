@@ -28,6 +28,7 @@ env:
   BUILD_CONFIGURATION: "Release"
   SOLUTION_PATH: source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
   PLAYWRIGHT_TEST_PROJECT: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
+  DATAENGINE_REPO_PATH: dataengine-repo
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
   DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'main' }}
@@ -54,7 +55,7 @@ jobs:
         with:
           repository: AAS-TwinEngine/AAS.TwinEngine.DataEngine
           ref: ${{ env.DATAENGINE_REF }}
-          path: dataengine-repo
+          path: ${{ env.DATAENGINE_REPO_PATH }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
@@ -99,9 +100,9 @@ jobs:
       - name: Build DataEngine Docker Image
         run: |
           docker build \
-            -f dataengine-repo/source/AAS.TwinEngine.DataEngine/Dockerfile \
+            -f ${{ env.DATAENGINE_REPO_PATH }}/source/AAS.TwinEngine.DataEngine/Dockerfile \
             -t ${{ steps.image-tags.outputs.dataengine_image }} \
-            dataengine-repo/source
+            ${{ env.DATAENGINE_REPO_PATH }}/source
 
       - name: Start Docker Compose services
         run: |
