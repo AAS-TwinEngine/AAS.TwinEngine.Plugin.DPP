@@ -63,10 +63,10 @@ public class AasRegistryTests : ApiTestBase
     }
 
     [Fact]
-    public async Task GetShellDescriptorById_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetShellDescriptorById_Product1_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/shell-descriptors/{AasIdentifier}";
+        var url = $"/shell-descriptors/{AasIdentifier1}";
 
         // Act
         var response = await ApiContext.GetAsync(url);
@@ -79,11 +79,11 @@ public class AasRegistryTests : ApiTestBase
         var actualDoc = JsonDocument.Parse(content);
         Assert.NotNull(actualDoc);
 
-        await CompareJsonAsync(actualDoc, Path.Combine(Directory.GetCurrentDirectory(), "AasRegistry", "TestData", "GetShellDescriptorById_Expected.json"));
+        await CompareJsonAsync(actualDoc, Path.Combine(Directory.GetCurrentDirectory(), "AasRegistry", "TestData", "GetShellDescriptorById_Product1_Expected.json"));
     }
 
     [Fact]
-    public async Task GetShellDescriptorById_Product2_ShouldReturnSuccess()
+    public async Task GetShellDescriptorById_Product2_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shell-descriptors/{AasIdentifier2}";
@@ -98,10 +98,12 @@ public class AasRegistryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRegistry", "TestData", "GetShellDescriptorById_Product2_Expected.json"));
     }
 
     [Fact]
-    public async Task GetShellDescriptorById_Product3_ShouldReturnSuccess()
+    public async Task GetShellDescriptorById_Product3_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shell-descriptors/{AasIdentifier3}";
@@ -116,5 +118,7 @@ public class AasRegistryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRegistry", "TestData", "GetShellDescriptorById_Product3_Expected.json"));
     }
 }

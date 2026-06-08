@@ -12,7 +12,7 @@ public class SerializationTests : ApiTestBase
     {
         // Arrange
         var url = $"/serialization" +
-                  $"?aasIds={AasIdentifier}" +
+                  $"?aasIds={AasIdentifier1}" +
                   $"&submodelIds={SubmodelIdentifierContact}" +
                   $"&submodelIds={SubmodelIdentifierHandoverDocumentation}" +
                   $"&submodelIds={SubmodelIdentifierNameplate}" +

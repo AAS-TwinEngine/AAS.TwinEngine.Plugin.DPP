@@ -16,7 +16,7 @@ public abstract class ApiTestBase : IAsyncLifetime
     protected string BaseUrl { get; private set; } = Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost:8080";
 
     // Base64 encoded identifiers
-    protected string AasIdentifier { get; private set; } = null!;
+    protected string AasIdentifier1 { get; private set; } = null!;
     protected string AasIdentifier2 { get; private set; } = null!;
     protected string AasIdentifier3 { get; private set; } = null!;
     protected string SubmodelIdentifierContact { get; private set; } = null!;
@@ -42,7 +42,7 @@ public abstract class ApiTestBase : IAsyncLifetime
         });
 
         // Initialize base64 encoded identifiers
-        AasIdentifier = Base64EncodeUrl("https://mm-software.com/ids/aas/000-001");
+        AasIdentifier1 = Base64EncodeUrl("https://mm-software.com/ids/aas/000-001");
         AasIdentifier2 = Base64EncodeUrl("https://mm-software.com/ids/aas/000-002");
         AasIdentifier3 = Base64EncodeUrl("https://mm-software.com/ids/aas/001-001");
         SubmodelIdentifierContact = Base64EncodeUrl("https://mm-software.com/submodel/000-001/ContactInformation");

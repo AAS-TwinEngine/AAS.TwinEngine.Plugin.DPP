@@ -1,0 +1,27 @@
+{
+                    "description": null,
+                    "displayName": null,
+                    "extensions": null,
+                    "administration": null,
+                    "assetKind": "Instance",
+                    "assetType": null,
+                    "endpoints": [
+                                        {
+                                                            "interface": "AAS-3.0",
+                                                            "protocolInformation": {
+                                                                                "href": "http://localhost:8080/shells/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vaWRzL2Fhcy8wMDEtMDAx",
+                                                                                "endpointProtocol": "http",
+                                                                                "endpointProtocolVersion": null,
+                                                                                "subprotocol": null,
+                                                                                "subprotocolBody": null,
+                                                                                "subprotocolBodyEncoding": null,
+                                                                                "securityAttributes": null
+                                                            }
+                                        }
+                    ],
+                    "globalAssetId": "https://mm-software.com/ids/assets/001-001",
+                    "idShort": "Product3",
+                    "id": "https://mm-software.com/ids/aas/001-001",
+                    "specificAssetIds": [],
+                    "submodelDescriptors": null
+}

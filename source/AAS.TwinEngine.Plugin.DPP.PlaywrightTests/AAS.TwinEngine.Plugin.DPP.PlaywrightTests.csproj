@@ -29,16 +29,40 @@
     <None Update="AasRegistry\TestData\GetAllShellDescriptors_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AasRegistry\TestData\GetShellDescriptorById_Expected.json">
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product1_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AasRepository\TestData\GetAssetInformationById_Expected.json">
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product2_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AasRepository\TestData\GetShellById_Expected.json">
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product3_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AasRepository\TestData\GetSubmodelRefById_Expected.json">
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product3_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_Contact_Expected.json">

@@ -8,10 +8,10 @@ namespace AAS.TwinEngine.Plugin.DPP.PlaywrightTests.AasRepository;
 public class AasRepositoryTests : ApiTestBase
 {
     [Fact]
-    public async Task GetShellById_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetShellById_Product1_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/shells/{AasIdentifier}";
+        var url = $"/shells/{AasIdentifier1}";
 
         // Act
         var response = await ApiContext.GetAsync(url);
@@ -25,14 +25,14 @@ public class AasRepositoryTests : ApiTestBase
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
 
-        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetShellById_Expected.json"));
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetShellById_Product1_Expected.json"));
     }
 
     [Fact]
-    public async Task GetAssetInformationById_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetAssetInformationById_Product1_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/shells/{AasIdentifier}/asset-information";
+        var url = $"/shells/{AasIdentifier1}/asset-information";
 
         // Act
         var response = await ApiContext.GetAsync(url);
@@ -45,14 +45,14 @@ public class AasRepositoryTests : ApiTestBase
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
 
-        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetAssetInformationById_Expected.json"));
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetAssetInformationById_Product1_Expected.json"));
     }
 
     [Fact]
-    public async Task GetSubmodelRefById_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetSubmodelRefById_Product1_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/shells/{AasIdentifier}/submodel-refs";
+        var url = $"/shells/{AasIdentifier1}/submodel-refs";
 
         // Act
         var response = await ApiContext.GetAsync(url);
@@ -65,11 +65,11 @@ public class AasRepositoryTests : ApiTestBase
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
 
-        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetSubmodelRefById_Expected.json"));
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetSubmodelRefById_Product1_Expected.json"));
     }
 
     [Fact]
-    public async Task GetShellById_Product2_ShouldReturnSuccess()
+    public async Task GetShellById_Product2_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier2}";
@@ -84,10 +84,12 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetShellById_Product2_Expected.json"));
     }
 
     [Fact]
-    public async Task GetAssetInformationById_Product2_ShouldReturnSuccess()
+    public async Task GetAssetInformationById_Product2_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier2}/asset-information";
@@ -102,10 +104,12 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetAssetInformationById_Product2_Expected.json"));
     }
 
     [Fact]
-    public async Task GetSubmodelRefById_Product2_ShouldReturnSuccess()
+    public async Task GetSubmodelRefById_Product2_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier2}/submodel-refs";
@@ -120,10 +124,12 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetSubmodelRefById_Product2_Expected.json"));
     }
 
     [Fact]
-    public async Task GetShellById_Product3_ShouldReturnSuccess()
+    public async Task GetShellById_Product3_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier3}";
@@ -138,10 +144,12 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetShellById_Product3_Expected.json"));
     }
 
     [Fact]
-    public async Task GetAssetInformationById_Product3_ShouldReturnSuccess()
+    public async Task GetAssetInformationById_Product3_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier3}/asset-information";
@@ -156,10 +164,12 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetAssetInformationById_Product3_Expected.json"));
     }
 
     [Fact]
-    public async Task GetSubmodelRefById_Product3_ShouldReturnSuccess()
+    public async Task GetSubmodelRefById_Product3_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shells/{AasIdentifier3}/submodel-refs";
@@ -174,6 +184,8 @@ public class AasRepositoryTests : ApiTestBase
 
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "AasRepository", "TestData", "GetSubmodelRefById_Product3_Expected.json"));
     }
 }
 
