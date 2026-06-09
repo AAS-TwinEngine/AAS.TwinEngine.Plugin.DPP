@@ -13,9 +13,13 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
-    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
     {
-        var jsonResult = await queryExecutor.ExecuteQueryAsync(query, cancellationToken).ConfigureAwait(false);
+        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, Create);
+
+        var jsonResult = parameters.Count == 0
+            ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)
+            : await queryExecutor.ExecuteQueryAsync(filteredQuery, parameters, cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(jsonResult))
         {

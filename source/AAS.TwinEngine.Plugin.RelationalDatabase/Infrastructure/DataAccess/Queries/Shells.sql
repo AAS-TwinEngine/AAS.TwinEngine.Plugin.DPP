@@ -14,4 +14,5 @@ SELECT json_agg(
                                 )
     )
 )
-FROM "Asset" A;
+FROM "Asset" A
+{{__ASSET_FILTER__}};

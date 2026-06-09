@@ -12,6 +12,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
 {
     private readonly bool _hasShellDescriptor = capabilities.Value.HasShellDescriptor;
     private readonly bool _hasAssetInformation = capabilities.Value.HasAssetInformation;
+    private readonly bool _hasAssetIdSearch = capabilities.Value.HasAssetIdSearch;
 
     public ManifestData GetManifestData()
     {
@@ -22,7 +23,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
             var manifestData = new ManifestData
             {
                 SupportedSemanticIds = supportedSemanticIds,
-                Capabilities = new CapabilitiesData { HasAssetInformation = _hasAssetInformation, HasShellDescriptor = _hasShellDescriptor }
+                Capabilities = new CapabilitiesData { HasAssetInformation = _hasAssetInformation, HasShellDescriptor = _hasShellDescriptor, HasAssetIdSearch = _hasAssetIdSearch }
             };
             return manifestData;
         }

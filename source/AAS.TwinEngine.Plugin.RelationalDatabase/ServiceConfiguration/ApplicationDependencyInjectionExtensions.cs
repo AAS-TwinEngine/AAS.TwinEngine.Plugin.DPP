@@ -2,6 +2,7 @@
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions;
@@ -26,6 +27,7 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<IManifestHandler, ManifestHandler>();
 
         _ = services.AddScoped<IMetaDataHandler, MetaDataHandler>();
+        _ = services.AddScoped<IAssetIdsFilterHeaderValidation, AssetIdsFilterHeaderValidation>();
         _ = services.AddScoped<IMetaDataService, MetaDataService>();
 
         _ = services.AddScoped<IResponseSemanticTreeNodeResolver, ResponseSemanticTreeNodeResolver>();

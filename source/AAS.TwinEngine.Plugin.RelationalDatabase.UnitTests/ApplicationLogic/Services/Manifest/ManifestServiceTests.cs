@@ -20,7 +20,7 @@ public class ManifestServiceTests
     {
         _manifestProvider = Substitute.For<IManifestProvider>();
         _options = Substitute.For<IOptions<Capabilities>>();
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true });
         _manifestProvider.GetSupportedSemanticIds().Returns(supportedSemanticIds);
         _sut = new ManifestService(_manifestProvider, _options);
     }
@@ -38,17 +38,22 @@ public class ManifestServiceTests
         Assert.NotNull(result.Capabilities);
         Assert.True(result.Capabilities.HasShellDescriptor);
         Assert.True(result.Capabilities.HasAssetInformation);
+        Assert.True(result.Capabilities.HasAssetIdSearch);
     }
 
     [Theory]
-    [InlineData(true, true)]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    [InlineData(false, false)]
-    public void GetManifestData_ReflectsCapabilities_FromOptions(bool hasShellDescriptor, bool hasAssetInformation)
+    [InlineData(true, true, true)]
+    [InlineData(true, false, true)]
+    [InlineData(false, true, true)]
+    [InlineData(false, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, false, false)]
+    [InlineData(false, true, false)]
+    [InlineData(false, false, false)]
+    public void GetManifestData_ReflectsCapabilities_FromOptions(bool hasShellDescriptor, bool hasAssetInformation, bool hasAssetIdSearch)
     {
         _manifestProvider.GetSupportedSemanticIds().Returns(Array.Empty<string>());
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = hasShellDescriptor, HasAssetInformation = hasAssetInformation });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = hasShellDescriptor, HasAssetInformation = hasAssetInformation, HasAssetIdSearch = hasAssetIdSearch });
         _sut = new ManifestService(_manifestProvider, _options);
 
         var result = _sut.GetManifestData();
@@ -57,6 +62,7 @@ public class ManifestServiceTests
         Assert.NotNull(result.Capabilities);
         Assert.Equal(hasShellDescriptor, result.Capabilities.HasShellDescriptor);
         Assert.Equal(hasAssetInformation, result.Capabilities.HasAssetInformation);
+        Assert.Equal(hasAssetIdSearch, result.Capabilities.HasAssetIdSearch);
         Assert.Empty(result.SupportedSemanticIds);
     }
 
@@ -64,7 +70,7 @@ public class ManifestServiceTests
     public void GetManifestData_WhenProviderReturnsEmpty_ReturnsEmptySemanticIds()
     {
         _manifestProvider.GetSupportedSemanticIds().Returns(Array.Empty<string>());
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false });
         _sut = new ManifestService(_manifestProvider, _options);
 
         var result = _sut.GetManifestData();
@@ -73,6 +79,7 @@ public class ManifestServiceTests
         Assert.Empty(result.SupportedSemanticIds);
         Assert.False(result.Capabilities.HasShellDescriptor);
         Assert.False(result.Capabilities.HasAssetInformation);
+        Assert.False(result.Capabilities.HasAssetIdSearch);
     }
 
     [Fact]
@@ -89,14 +96,15 @@ public class ManifestServiceTests
     [Fact]
     public void Capabilities_AreCapturedAtConstructionTime()
     {
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true });
         _sut = new ManifestService(_manifestProvider, _options);
 
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false });
 
         var result = _sut.GetManifestData();
 
         Assert.True(result.Capabilities.HasShellDescriptor);
         Assert.True(result.Capabilities.HasAssetInformation);
+        Assert.True(result.Capabilities.HasAssetIdSearch);
     }
 }
