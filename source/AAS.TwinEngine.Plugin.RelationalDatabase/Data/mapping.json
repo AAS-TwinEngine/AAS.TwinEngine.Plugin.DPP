@@ -49,7 +49,7 @@
   },
   {
     "column": "dbo.Asset.ManufacturerName",
-    "semanticId": [ "0112/2///61987#ABA565#009_en", "0112/2///61987#ABA565#009_de", "0173-1#02-AAO677#002" ]
+    "semanticId": [ "0112/2///61987#ABA565#009_en", "0112/2///61987#ABA565#009_de", "0173-1#02-AAO677#004" ]
   },
   {
     "column": "dbo.Asset.ManufacturerName_de",
@@ -57,11 +57,11 @@
   },
   {
     "column": "dbo.Asset.ManufacturerProductDesignation_en",
-    "semanticId": [ "0112/2///61987#ABA567#009_en", "0173-1#02-AAW338#001_en" ]
+    "semanticId": [ "0112/2///61987#ABA567#009_en", "0173-1#02-AAW338#003_en" ]
   },
   {
     "column": "dbo.Asset.ManufacturerProductDesignation_de",
-    "semanticId": [ "0112/2///61987#ABA567#009_de", "0173-1#02-AAW338#001_de" ]
+    "semanticId": [ "0112/2///61987#ABA567#009_de", "0173-1#02-AAW338#003_de" ]
   },
   {
     "column": "dbo.Asset.ManufacturerProductRoot_en",
@@ -81,7 +81,7 @@
   },
   {
     "column": "dbo.Asset.CompanyLogo",
-    "semanticId": [ "0112/2///61987#ABP463#001" ]
+    "semanticId": [ "0112/2///61987#ABP463#001", "0173-1#02-ABI776#002" ]
   },
   {
     "column": "dbo.Marking.MarkingName",
@@ -121,47 +121,76 @@
   },
   {
     "column": "dbo.Asset.ManufacturerArticleNumber",
-    "semanticId": [ "0173-1#02-AAO676#003" ]
+    "semanticId": [ "0173-1#02-AAO676#005" ]
   },
   {
     "column": "dbo.Asset.ManufacturerOrderCode",
-    "semanticId": [ "0173-1#02-AAO227#002" ]
+    "semanticId": [ "0173-1#02-AAO227#004" ]
   },
   {
-    "column": "dbo.Asset.ManufacturerLogo",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerLogo/1/1" ]
+    "column": "dbo.ProductImage",
+    "semanticId": [ "0173-1#02-ABM220#001/0173-1#01-AHY911#001" ]
   },
   {
-    "column": "dbo.Asset.ProductImage",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductImage/1/1" ]
+    "column": "dbo.ProductImage.ImageFile",
+    "semanticId": [ "0173-1#02-ABK291#002" ]
   },
+  {
+    "column": "dbo.ProductImage.ImageNote_en",
+    "semanticId": [ "0173-1#02-ABL423#001_en" ]
+  },
+  {
+    "column": "dbo.ProductImage.ImageNote_de",
+    "semanticId": [ "0173-1#02-ABL423#001_de" ]
+  },
+
   {
     "column": "dbo.Asset.TextStatement_en",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_en" ]
+    "semanticId": [ "0173-1#02-ABK134#002_en" ]
   },
   {
     "column": "dbo.Asset.TextStatement_de",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/TextStatement/1/1_de" ]
+    "semanticId": [ "0173-1#02-ABK134#002_de" ]
   },
   {
     "column": "dbo.Asset.ValidDate",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1" ]
+    "semanticId": [ "0173-1#02-ABL775#001" ]
   },
   {
-    "column": "dbo.ProductClassificationItem",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationItem/1/1" ]
+    "column": "dbo.ProductClassifications",
+    "semanticId": [ "0173-1#02-ABK162#002/0173-1#01-AHX839#002" ]
   },
   {
-    "column": "dbo.ProductClassificationItem.ProductClassificationSystem",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationSystem/1/1" ]
+    "column": "dbo.ProductClassifications.ClassificationSystem",
+    "semanticId": [ "0173-1#02-ABL424#001" ]
   },
   {
-    "column": "dbo.ProductClassificationItem.ClassificationSystemVersion",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ClassificationSystemVersion/1/1" ]
+    "column": "dbo.ProductClassifications.ClassificationSystemVersion",
+    "semanticId": [ "0173-1#02-AAR710#003" ]
   },
   {
-    "column": "dbo.ProductClassificationItem.ProductClassId",
-    "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/ProductClassId/1/1" ]
+    "column": "dbo.ProductClassifications.ClassificationSystemUrl",
+    "semanticId": [ "https://admin-shell.io/IDTA/TechnicalData/ProductClassifications/ProduktClassification/ClassificationSystemUrl/2/0" ]
+  },
+  {
+    "column": "dbo.ProductClassifications.ProductClassCodedName",
+    "semanticId": [ "0173-1#02-ABK128#002" ]
+  },
+  {
+    "column": "dbo.ProductClassifications.ProductClassId",
+    "semanticId": [ "0173-1#02-ABG776#003" ]
+  },
+  {
+    "column": "dbo.ProductClassifications.ProductClassCodedName",
+    "semanticId": [ "0173-1#02-ABK128#002" ]
+  },
+  {
+    "column": "dbo.ProductClassifications.ProductClassName_en",
+    "semanticId": [ "0173-1#02-ABK273#002" ]
+  },
+  {
+    "column": "dbo.ProductClassifications.ProductClassName_de",
+    "semanticId": [ "0173-1#02-ABK273#003" ]
   },
   {
     "column": "dbo.CarbonFootprint",
@@ -709,5 +738,157 @@
   {
     "column": "dbo.MaintenanceStep.UnitEstimatedDurationTimeMaintenanceStep",
     "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitestimateddurationtimemaintenancestep/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenancetool/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.ToolID",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/toolid/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.OrderCodeOfManufacturer",
+    "semanticId": [ "0112/2///61987#ABA950#008" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.AddressOfAdditionalLink",
+    "semanticId": [ "0173-1#02-AAQ326#004" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.ToolName_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/toolname/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.ToolName_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/toolname/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.CompanyNameToolSupplier_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynametoolsupplier/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.CompanyNameToolSupplier_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynametoolsupplier/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.ToolDescription_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/tooldescription/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.ToolDescription_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/tooldescription/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceTool.MaxQuantityOfTool",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maxquantityoftool/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/maintenanceconsumable/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.ConsumableID",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/consumableid/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.UnitMaxQuantityOfConsumable",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitmaxquantityofconsumable/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.OrderCodeOfManufacturer",
+    "semanticId": [ "0112/2///61987#ABA950#008" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.AddressOfAdditionalLink",
+    "semanticId": [ "0173-1#02-AAQ326#004" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.ConsumableName_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/consumablename/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.ConsumableName_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/consumablename/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.CompanyNameSupplierConsumable_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynamesupplierconsumable/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.CompanyNameSupplierConsumable_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynamesupplierconsumable/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.ConsumableDescription_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/consumabledescription/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.ConsumableDescription_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/consumabledescription/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.DisposalInstructionsForConsumable_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/disposalinstructionsforconsumable/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.DisposalInstructionsForConsumable_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/disposalinstructionsforconsumable/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceConsumable.QuantityOfConsumable",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityofconsumable/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart",
+    "semanticId": [ "htthttps://admin-shell.io/idta/maintenanceinstructions/maintenancesparepart/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.SparePartID",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartid/1/0" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.OrderCodeOfManufacturer",
+    "semanticId": [ "0112/2///61987#ABA950#008" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.AddressOfAdditionalLink",
+    "semanticId": [ "0173-1#02-AAQ326#004" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.SparePartName_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartname/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.SparePartName_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartname/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.CompanyNameSupplierSparePart_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynamesuppliersparepart/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.CompanyNameSupplierSparePart_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/companynamesuppliersparepart/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.SparePartDescription_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartdescription/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.SparePartDescription_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartdescription/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.DisposalInstructionsForSparePart_en",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/disposalinstructionsforsparepart/1/0_en" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.DisposalInstructionsForSparePart_de",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/disposalinstructionsforsparepart/1/0_de" ]
+  },
+  {
+    "column": "dbo.MaintenanceSparePart.QuantityOfSparePart",
+    "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityofsparepart/1/0" ]
   }
 ]

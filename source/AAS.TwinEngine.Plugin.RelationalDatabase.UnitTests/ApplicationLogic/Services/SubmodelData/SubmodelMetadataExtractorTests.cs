@@ -434,16 +434,6 @@ public class SubmodelMetadataExtractorTests
         => Assert.Throws<InvalidUserInputException>(() => _sut.ExtractSubmodelMetadata("   "));
 
     [Fact]
-    public void ExtractSubmodelMetadata_ContactInformationSubmodel_ReturnsCorrectSubmodelName()
-    {
-        const string submodelId = "product456/ContactInformation/info";
-
-        var result = _sut.ExtractSubmodelMetadata(submodelId);
-
-        Assert.Equal(SubmodelName.ContactInformation, result.SubmodelName);
-    }
-
-    [Fact]
     public void ExtractSubmodelMetadata_CaseInsensitiveSubmodelName_ReturnsCorrectResult()
     {
         const string submodelId = "product789/NAMEPLATE/data";
@@ -548,17 +538,17 @@ public class SubmodelMetadataExtractorTests
             ProductIdExtractionRules = CreateDefaultProductIdRules(),
             SubmodelNameExtractionRules = new List<SubmodelNameExtractionRules>
             {
-                new() { SubmodelName = "ContactInformation", Pattern = new List<string> { ".*Contact.*" } },
+                new() { SubmodelName = "MaintenanceInstructions", Pattern = new List<string> { ".*Maintenance.*" } },
                 new() { SubmodelName = "Nameplate", Pattern = new List<string> { ".*Nameplate.*" } }
             }
         };
         _extractionRulesOptions.Value.Returns(rules);
         _sut = new SubmodelMetadataExtractor(_extractionRulesOptions, _logger);
-        const string submodelId = "product/ContactInfo/data";
+        const string submodelId = "product/MaintenanceInstructions/data";
 
         var result = _sut.ExtractSubmodelMetadata(submodelId);
 
-        Assert.Equal(SubmodelName.ContactInformation, result.SubmodelName);
+        Assert.Equal(SubmodelName.MaintenanceInstructions, result.SubmodelName);
     }
 
     private static ExtractionRules CreateDefaultExtractionRules()
