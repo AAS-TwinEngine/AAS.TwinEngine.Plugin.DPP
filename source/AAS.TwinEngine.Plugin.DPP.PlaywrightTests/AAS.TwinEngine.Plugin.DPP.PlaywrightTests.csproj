@@ -65,7 +65,7 @@
     <None Update="AasRepository\TestData\GetSubmodelRefById_Product3_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_Contact_Expected.json">
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_MaintenanceInstructions_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_HandoverDocumentation_Expected.json">
@@ -80,7 +80,7 @@
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRepository\TestData\GetSubmodelElement_ContactInfo_ContactInformation_Expected.json">
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_MaintenanceInstructions_MaintenanceToolList_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_DocumentVersions0_Language0.json">
@@ -95,7 +95,7 @@
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRepository\TestData\GetSubmodel_ContactInfo_Expected.json">
+    <None Update="SubmodelRepository\TestData\GetSubmodel_MaintenanceInstructions_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Expected.json">

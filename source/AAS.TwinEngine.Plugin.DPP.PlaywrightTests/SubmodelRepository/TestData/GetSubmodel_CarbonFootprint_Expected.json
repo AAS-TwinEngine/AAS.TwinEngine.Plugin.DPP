@@ -68,7 +68,7 @@
           "value": "One"
         }
       ],
-      "orderRelevant": true,
+      "orderRelevant": false,
       "semanticIdListElement": {
         "type": "ExternalReference",
         "keys": [
@@ -81,7 +81,6 @@
       "typeValueListElement": "SubmodelElementCollection",
       "value": [
         {
-          "idShort": "ProductCarbonFootprint",
           "displayName": [
             {
               "language": "de",
@@ -107,6 +106,14 @@
               }
             ]
           },
+          "qualifiers": [
+            {
+              "kind": "ConceptQualifier",
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
           "value": [
             {
               "idShort": "PcfCalculationMethods",
@@ -147,7 +154,7 @@
                   "value": "One"
                 }
               ],
-              "orderRelevant": true,
+              "orderRelevant": false,
               "semanticIdListElement": {
                 "type": "ExternalReference",
                 "keys": [
@@ -162,7 +169,6 @@
               "value": [
                 {
                   "category": "PARAMETER",
-                  "idShort": "PcfCalculationMethod",
                   "displayName": [
                     {
                       "language": "de",
@@ -242,7 +248,7 @@
                   "value": "One"
                 }
               ],
-              "orderRelevant": true,
+              "orderRelevant": false,
               "semanticIdListElement": {
                 "type": "ExternalReference",
                 "keys": [
@@ -257,7 +263,6 @@
               "value": [
                 {
                   "category": "PARAMETER",
-                  "idShort": "LifeCyclePhase",
                   "displayName": [
                     {
                       "language": "de",
@@ -641,7 +646,7 @@
           "value": "ZeroToOne"
         }
       ],
-      "orderRelevant": true,
+      "orderRelevant": false,
       "semanticIdListElement": {
         "type": "ExternalReference",
         "keys": [
@@ -654,17 +659,6 @@
       "typeValueListElement": "SubmodelElementCollection",
       "value": [
         {
-          "idShort": "ProductOrSectorSpecificCarbonFootprint",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "Produkt CO2-Fußabdruck"
-            },
-            {
-              "language": "en",
-              "text": "Product carbon footprint"
-            }
-          ],
           "description": [
             {
               "language": "en",
@@ -680,6 +674,14 @@
               }
             ]
           },
+          "qualifiers": [
+            {
+              "kind": "ConceptQualifier",
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "ZeroToOne"
+            }
+          ],
           "value": [
             {
               "idShort": "PcfCalculationMethods",
@@ -720,7 +722,7 @@
                   "value": "One"
                 }
               ],
-              "orderRelevant": true,
+              "orderRelevant": false,
               "semanticIdListElement": {
                 "type": "ExternalReference",
                 "keys": [
@@ -735,7 +737,6 @@
               "value": [
                 {
                   "category": "PARAMETER",
-                  "idShort": "PcfCalculationMethod",
                   "displayName": [
                     {
                       "language": "de",

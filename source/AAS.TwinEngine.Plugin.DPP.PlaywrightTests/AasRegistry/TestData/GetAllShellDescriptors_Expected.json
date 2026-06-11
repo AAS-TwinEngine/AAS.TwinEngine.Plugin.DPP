@@ -31,15 +31,22 @@
         {
           "semanticId": null,
           "supplementalSemanticIds": null,
-          "name": "product1.0",
-          "value": "M&M - 001",
+          "name": "SerialNumber",
+          "value": "SN-FMABC1234-9804820",
           "externalSubjectId": null
         },
         {
           "semanticId": null,
           "supplementalSemanticIds": null,
-          "name": "product1.1",
-          "value": "M&M - 002",
+          "name": "BatchId",
+          "value": "BATCH-2022-001",
+          "externalSubjectId": null
+        },
+        {
+          "semanticId": null,
+          "supplementalSemanticIds": null,
+          "name": "LotNumber",
+          "value": "LOT-DE-77881",
           "externalSubjectId": null
         }
       ],
@@ -73,8 +80,22 @@
         {
           "semanticId": null,
           "supplementalSemanticIds": null,
-          "name": "product2",
-          "value": "M&M - 003",
+          "name": "SerialNumber",
+          "value": "SN-FMABC1238-9804821",
+          "externalSubjectId": null
+        },
+        {
+          "semanticId": null,
+          "supplementalSemanticIds": null,
+          "name": "BatchId",
+          "value": "BATCH-2022-001",
+          "externalSubjectId": null
+        },
+        {
+          "semanticId": null,
+          "supplementalSemanticIds": null,
+          "name": "LotNumber",
+          "value": "LOT-IN-77882",
           "externalSubjectId": null
         }
       ],
@@ -104,7 +125,22 @@
       "globalAssetId": "https://mm-software.com/ids/assets/001-001",
       "idShort": "Product3",
       "id": "https://mm-software.com/ids/aas/001-001",
-      "specificAssetIds": [],
+      "specificAssetIds": [
+        {
+          "semanticId": null,
+          "supplementalSemanticIds": null,
+          "name": "SerialNumber",
+          "value": "SN-TMABC1680-9804760",
+          "externalSubjectId": null
+        },
+        {
+          "semanticId": null,
+          "supplementalSemanticIds": null,
+          "name": "BatchId",
+          "value": "BATCH-2022-001",
+          "externalSubjectId": null
+        }
+      ],
       "submodelDescriptors": null
     }
   ]

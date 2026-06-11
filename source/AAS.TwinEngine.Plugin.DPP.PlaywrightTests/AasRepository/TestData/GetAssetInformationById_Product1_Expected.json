@@ -3,12 +3,16 @@
   "globalAssetId": "https://mm-software.com/ids/assets/000-001",
   "specificAssetIds": [
     {
-      "name": "product1.0",
-      "value": "M&M - 001"
+      "name": "SerialNumber",
+      "value": "SN-FMABC1234-9804820"
     },
     {
-      "name": "product1.1",
-      "value": "M&M - 002"
+      "name": "BatchId",
+      "value": "BATCH-2022-001"
+    },
+    {
+      "name": "LotNumber",
+      "value": "LOT-DE-77881"
     }
   ],
   "defaultThumbnail": {
