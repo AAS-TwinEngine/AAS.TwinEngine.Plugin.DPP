@@ -1,0 +1,338 @@
+{
+  "idShort": "GeneralInformation",
+  "description": [
+    {
+      "language": "en",
+      "text": "General information, for example ordering and manufacturer information."
+    }
+  ],
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/ZVEI/TechnicalData/GeneralInformation/1/1"
+      }
+    ]
+  },
+  "qualifiers": [
+    {
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+          }
+        ]
+      },
+      "kind": "ConceptQualifier",
+      "type": "Cardinality",
+      "valueType": "xs:string",
+      "value": "One"
+    }
+  ],
+  "value": [
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerName",
+      "description": [
+        {
+          "language": "en",
+          "text": "Legally valid designation of the natural or judicial body which is directly responsible for the design, production, packaging and labeling of a product in respect to its being brought into the market."
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO677#002"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        },
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "ExampleValue",
+          "valueType": "xs:string",
+          "value": "Example Company"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "M&M Germany",
+      "modelType": "Property"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerArticleNumber",
+      "description": [
+        {
+          "language": "en",
+          "text": "unique product identifier of the manufacturer "
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO676#003"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        },
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "ExampleValue",
+          "valueType": "xs:string",
+          "value": "A123-456"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "123456",
+      "modelType": "Property"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerOrderCode",
+      "description": [
+        {
+          "language": "en",
+          "text": "By manufactures issued unique combination of numbers and letters used to identify the device for ordering"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO227#002"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        },
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "ExampleValue",
+          "valueType": "xs:string",
+          "value": "EEA-EX-200-S/47-Q3"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "EEA-EX-200-S/47-Q3",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "ManufacturerLogo",
+      "description": [
+        {
+          "language": "en",
+          "text": "Imagefile for logo of manufacturer provided in common format (.png, .jpg)."
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerLogo/1/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToOne"
+        }
+      ],
+      "value": "https://mmsoftwaregmbh.sharepoint.com/_api/siteiconmanager/getsitelogo?type=%271%27&hash=638518734598723853",
+      "contentType": "image/png",
+      "modelType": "File"
+    },
+    {
+      "idShort": "ProductImage",
+      "description": [
+        {
+          "language": "en",
+          "text": "Image file for associated product provided in common format (.png, .jpg)."
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/ZVEI/TechnicalData/ProductImage/1/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToMany"
+        }
+      ],
+      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+      "contentType": "image/png",
+      "modelType": "File"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerProductDesignation",
+      "description": [
+        {
+          "language": "en",
+          "text": "Product designation as given by the mnaufacturer. Short description of the product, product group or function (short text) in common language."
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAW338#001"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        },
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "ExampleValue",
+          "valueType": "xs:string",
+          "value": "Electrical energy accelerator@en"
+        }
+      ],
+      "value": [
+        {
+          "language": "en",
+          "text": "FM-ABC-1234"
+        },
+        {
+          "language": "de",
+          "text": "ABC-123"
+        }
+      ],
+      "modelType": "MultiLanguageProperty"
+    }
+  ],
+  "modelType": "SubmodelElementCollection"
+}

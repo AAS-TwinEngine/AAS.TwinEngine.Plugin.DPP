@@ -1,0 +1,65 @@
+{
+  "idShort": "AddressInformation",
+  "description": [
+    {
+      "language": "en",
+      "text": "Note: this set of information is defined by SMT drop-in \"Address Information\""
+    }
+  ],
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation"
+      }
+    ]
+  },
+  "supplementalSemanticIds": [
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "https://admin-shell.io/smt-dropin/smt-dropin-use/1/0"
+        }
+      ]
+    },
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "0112/2///61360_7#AAS002#001"
+        }
+      ]
+    },
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "0173-1#02-AAQ837#008/0173-1#01-ADR448#008"
+        }
+      ]
+    }
+  ],
+  "qualifiers": [
+    {
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+          }
+        ]
+      },
+      "kind": "TemplateQualifier",
+      "type": "SMT/Cardinality",
+      "valueType": "xs:string",
+      "value": "One"
+    }
+  ],
+  "modelType": "SubmodelElementCollection"
+}
