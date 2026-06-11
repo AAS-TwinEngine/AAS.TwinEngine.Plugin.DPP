@@ -186,11 +186,11 @@
   },
   {
     "column": "dbo.ProductClassifications.ProductClassName_en",
-    "semanticId": [ "0173-1#02-ABK273#002" ]
+    "semanticId": [ "0173-1#02-ABK273#002_en" ]
   },
   {
     "column": "dbo.ProductClassifications.ProductClassName_de",
-    "semanticId": [ "0173-1#02-ABK273#003" ]
+    "semanticId": [ "0173-1#02-ABK273#002_de" ]
   },
   {
     "column": "dbo.CarbonFootprint",
