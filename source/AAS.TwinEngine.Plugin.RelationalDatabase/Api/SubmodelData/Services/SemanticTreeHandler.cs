@@ -103,11 +103,23 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
 
         if (ShouldCreateArrayOfBranchObjects(analysis))
         {
-            branchNode.Children
+            var convertedChildNodes = branchNode.Children
                 .Cast<SemanticBranchNode>()
                 .Select(ConvertTreeNodeToJson)
-                .ToList()
-                .ForEach(jsonArray.Add);
+                .ToList();
+
+            if (convertedChildNodes.All(node => node is JsonArray))
+            {
+                var childSemanticId = branchNode.Children[0].SemanticId;
+                jsonArray.Add(new JsonObject
+                {
+                    [childSemanticId] = MergeJsonArrays(convertedChildNodes)
+                });
+
+                return jsonArray;
+            }
+
+            convertedChildNodes.ForEach(jsonArray.Add);
 
             return jsonArray;
         }

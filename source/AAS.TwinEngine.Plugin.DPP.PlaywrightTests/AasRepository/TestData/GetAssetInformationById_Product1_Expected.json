@@ -3,12 +3,43 @@
   "globalAssetId": "https://mm-software.com/ids/assets/000-001",
   "specificAssetIds": [
     {
-      "name": "product1.0",
-      "value": "M&M - 001"
+      "name": "SerialNumber",
+      "value": "SN-FMABC1234-9804820",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/serial-number"
+          }
+        ]
+      }
     },
     {
-      "name": "product1.1",
-      "value": "M&M - 002"
+      "name": "BatchId",
+      "value": "BATCH-2022-001",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/batch-id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LotNumber",
+      "value": "LOT-DE-77881",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/lot-number"
+          }
+        ]
+      }
     }
   ],
   "defaultThumbnail": {

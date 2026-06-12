@@ -19,7 +19,7 @@ public abstract class ApiTestBase : IAsyncLifetime
     protected string AasIdentifier1 { get; private set; } = null!;
     protected string AasIdentifier2 { get; private set; } = null!;
     protected string AasIdentifier3 { get; private set; } = null!;
-    protected string SubmodelIdentifierContact { get; private set; } = null!;
+    protected string SubmodelIdentifierMaintenanceInstructions { get; private set; } = null!;
     protected string SubmodelIdentifierHandoverDocumentation { get; private set; } = null!;
     protected string SubmodelIdentifierNameplate { get; private set; } = null!;
     protected string SubmodelIdentifierCarbonFootprint { get; private set; } = null!;
@@ -45,7 +45,7 @@ public abstract class ApiTestBase : IAsyncLifetime
         AasIdentifier1 = Base64EncodeUrl("https://mm-software.com/ids/aas/000-001");
         AasIdentifier2 = Base64EncodeUrl("https://mm-software.com/ids/aas/000-002");
         AasIdentifier3 = Base64EncodeUrl("https://mm-software.com/ids/aas/001-001");
-        SubmodelIdentifierContact = Base64EncodeUrl("https://mm-software.com/submodel/000-001/ContactInformation");
+        SubmodelIdentifierMaintenanceInstructions = Base64EncodeUrl("https://mm-software.com/submodel/000-001/MaintenanceInstructions");
         SubmodelIdentifierHandoverDocumentation = Base64EncodeUrl("https://mm-software.com/submodel/000-001/HandoverDocumentation");
         SubmodelIdentifierNameplate = Base64EncodeUrl("https://mm-software.com/submodel/000-001/Nameplate");
         SubmodelIdentifierCarbonFootprint = Base64EncodeUrl("https://mm-software.com/submodel/000-001/CarbonFootprint");

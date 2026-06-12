@@ -577,6 +577,10 @@
         {
           "language": "de",
           "text": "M&M Germany"
+        },
+        {
+          "language": "en",
+          "text": "M&M Germany"
         }
       ],
       "modelType": "MultiLanguageProperty"
@@ -624,6 +628,10 @@
         {
           "language": "en",
           "text": "FM-ABC-1234"
+        },
+        {
+          "language": "de",
+          "text": "ABC-123"
         }
       ],
       "modelType": "MultiLanguageProperty"
@@ -671,6 +679,10 @@
         {
           "language": "en",
           "text": "Camera"
+        },
+        {
+          "language": "de",
+          "text": "Kamera"
         }
       ],
       "valueId": {
@@ -727,6 +739,10 @@
         {
           "language": "en",
           "text": "Electronics"
+        },
+        {
+          "language": "de",
+          "text": "Elektronik"
         }
       ],
       "modelType": "MultiLanguageProperty"
@@ -853,7 +869,7 @@
               "value": "ZeroToOne"
             }
           ],
-          "orderRelevant": true,
+          "orderRelevant": false,
           "typeValueListElement": "SubmodelElementCollection",
           "value": [
             {
@@ -979,11 +995,10 @@
           "value": "ZeroToOne"
         }
       ],
-      "orderRelevant": true,
+      "orderRelevant": false,
       "typeValueListElement": "SubmodelElementCollection",
       "value": [
         {
-          "idShort": "Marking",
           "description": [
             {
               "language": "en",
@@ -1308,7 +1323,6 @@
           "modelType": "SubmodelElementCollection"
         },
         {
-          "idShort": "Marking",
           "description": [
             {
               "language": "en",

@@ -74,9 +74,9 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 The DPP Plugin provides data for the following submodels that are part of the **Digital Product Passport (DPP)**:
 
 - **Nameplate v3.0.1**
-- **ContactInformation v1.0**
+- **MaintenanceInstructions v1.0**
 - **HandoverDocumentation v2.0.1**
-- **TechnicalData v1.2.1**
+- **TechnicalData v2.0**
 - **CarbonFootprint v1.0.1**
 
 Data is modeled using **AAS Submodels**, and this Plugin provides the **actual values** for those models.

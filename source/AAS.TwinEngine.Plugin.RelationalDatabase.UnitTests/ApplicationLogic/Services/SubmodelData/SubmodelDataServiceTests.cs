@@ -240,7 +240,7 @@ public class SubmodelDataServiceTests
 
     [Theory]
     [InlineData(SubmodelName.Nameplate)]
-    [InlineData(SubmodelName.ContactInformation)]
+    [InlineData(SubmodelName.MaintenanceInstructions)]
     public async Task GetValuesBySemanticIds_DifferentSubmodelNames_QueriesCorrectSubmodel(SubmodelName submodelName)
     {
         var jsonSchema = CreateValidJsonSchema();
