@@ -22,7 +22,7 @@
 		<PackageReference Include="Asp.Versioning.Http" Version="[10.0.0]" />
 		<PackageReference Include="Asp.Versioning.Mvc" Version="[10.0.0]" />
 		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="[10.0.0]" />
-		<PackageReference Include="JsonSchema.Net" Version="[7.4.0]" />
+		<PackageReference Include="JsonSchema.Net" Version="[9.2.1]" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.8]" />
 		<PackageReference Include="Npgsql" Version="[10.0.3]" />
 		<PackageReference Include="NSwag.AspNetCore" Version="[14.7.1]" />
