@@ -4,15 +4,42 @@
   "specificAssetIds": [
     {
       "name": "SerialNumber",
-      "value": "SN-FMABC1238-9804821"
+      "value": "SN-FMABC1238-9804821",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/serial-number"
+          }
+        ]
+      }
     },
     {
       "name": "BatchId",
-      "value": "BATCH-2022-001"
+      "value": "BATCH-2022-001",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/batch-id"
+          }
+        ]
+      }
     },
     {
       "name": "LotNumber",
-      "value": "LOT-IN-77882"
+      "value": "LOT-IN-77882",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/lot-number"
+          }
+        ]
+      }
     }
   ],
   "defaultThumbnail": {
