@@ -102,7 +102,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
    Open your browser and navigate to:
    ```
    http://localhost:8080/aas-ui/
-
+   ```
 - For more info : [TwinEngine Demonstrator Setup WIth DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/develop/example/README.md)
 
 ---
