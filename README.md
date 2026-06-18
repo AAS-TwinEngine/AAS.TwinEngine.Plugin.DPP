@@ -71,13 +71,15 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 ### Supported DPP Submodels
 
-The DPP Plugin provides data for the following submodels that are part of the **Digital Product Passport (DPP)**:
+The table below lists the AAS submodels supported per DPP version. **Plugin v1.0.0** shipped with **DPP v3**; the current version targets **DPP v4.0**.
 
-- **Nameplate v3.0.1**
-- **MaintenanceInstructions v1.0**
-- **HandoverDocumentation v2.0.1**
-- **TechnicalData v2.0**
-- **CarbonFootprint v1.0.1**
+| DPP v1.0 *(Plugin v1.0.0)* | DPP v4.0 *(current)* |
+|---|---|
+| Nameplate v3.0.1 | Nameplate (v3.0.1) |
+| ContactInformation v1.0 | MaintenanceInstructions (v1.0) |
+| HandoverDocumentation (v2.0.1) | HandoverDocumentation (v2.0.1) |
+| TechnicalData v1.2.1 | TechnicalData (v2.0) |
+| CarbonFootprint (v1.0.1) | CarbonFootprint (v1.0.1) |
 
 Data is modeled using **AAS Submodels**, and this Plugin provides the **actual values** for those models.
 
@@ -112,7 +114,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/AAS-TwinEngine/AAS.TwinEngine.Plugin.RelationalDatabase.git
+git clone https://github.com/AAS-TwinEngine/AAS.TwinEngine.Plugin.DPP.git
 cd source/Aas.TwinEngine.Plugin.RelationalDatabase
 ```
 
