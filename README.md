@@ -71,9 +71,9 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 ### Supported DPP Submodels
 
-The table below lists the AAS submodels supported per DPP version. **Plugin v1.0.0** shipped with **DPP v1.0**; the current version targets **DPP v4.0**.
+The table below lists the AAS submodels supported per DPP version. The current version targets **DPP v4.0**.
 
-| DPP v1.0 *(Plugin v1.0.0)* | DPP v4.0 *(Plugin v1.1.0 - current)* |
+| *(DPP Plugin v1.0.0)* | *(DPP Plugin v1.1.0 - current)* |
 |---|---|
 | Nameplate v3.0.1 | Nameplate (v3.0.1) |
 | ContactInformation v1.0 | MaintenanceInstructions (v1.0) |
