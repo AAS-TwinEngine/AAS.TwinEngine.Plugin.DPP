@@ -1,14 +1,49 @@
 {
-                    "assetKind": "Instance",
-                    "globalAssetId": "https://mm-software.com/ids/assets/000-002",
-                    "specificAssetIds": [
-                                        {
-                                                            "name": "product2",
-                                                            "value": "M&M - 003"
-                                        }
-                    ],
-                    "defaultThumbnail": {
-                                        "path": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product2.jpg",
-                                        "contentType": "image/jpeg"
-                    }
+  "assetKind": "Instance",
+  "globalAssetId": "https://mm-software.com/ids/assets/000-002",
+  "specificAssetIds": [
+    {
+      "name": "SerialNumber",
+      "value": "SN-FMABC1238-9804821",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/serial-number"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BatchId",
+      "value": "BATCH-2022-001",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/batch-id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LotNumber",
+      "value": "LOT-IN-77882",
+      "externalSubjectId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://example.com/subjects/lot-number"
+          }
+        ]
+      }
+    }
+  ],
+  "defaultThumbnail": {
+    "path": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product2.jpg",
+    "contentType": "image/jpeg"
+  }
 }

@@ -1,57 +1,57 @@
 {
-                    "paging_metadata": {
-                                        "cursor": null
-                    },
-                    "result": [
-                                        {
-                                                            "type": "ModelReference",
-                                                            "referredSemanticId": null,
-                                                            "keys": [
-                                                                                {
-                                                                                                    "type": "Submodel",
-                                                                                                    "value": "https://mm-software.com/submodel/001-001/Nameplate"
-                                                                                }
-                                                            ]
-                                        },
-                                        {
-                                                            "type": "ModelReference",
-                                                            "referredSemanticId": null,
-                                                            "keys": [
-                                                                                {
-                                                                                                    "type": "Submodel",
-                                                                                                    "value": "https://mm-software.com/submodel/001-001/ContactInformation"
-                                                                                }
-                                                            ]
-                                        },
-                                        {
-                                                            "type": "ModelReference",
-                                                            "referredSemanticId": null,
-                                                            "keys": [
-                                                                                {
-                                                                                                    "type": "Submodel",
-                                                                                                    "value": "https://mm-software.com/submodel/001-001/TechnicalData"
-                                                                                }
-                                                            ]
-                                        },
-                                        {
-                                                            "type": "ModelReference",
-                                                            "referredSemanticId": null,
-                                                            "keys": [
-                                                                                {
-                                                                                                    "type": "Submodel",
-                                                                                                    "value": "https://mm-software.com/submodel/001-001/CarbonFootprint"
-                                                                                }
-                                                            ]
-                                        },
-                                        {
-                                                            "type": "ModelReference",
-                                                            "referredSemanticId": null,
-                                                            "keys": [
-                                                                                {
-                                                                                                    "type": "Submodel",
-                                                                                                    "value": "https://mm-software.com/submodel/001-001/HandoverDocumentation"
-                                                                                }
-                                                            ]
-                                        }
-                    ]
+  "paging_metadata": {
+    "cursor": null
+  },
+  "result": [
+    {
+      "type": "ModelReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/001-001/Nameplate"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/001-001/MaintenanceInstructions"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/001-001/TechnicalData"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/001-001/CarbonFootprint"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/001-001/HandoverDocumentation"
+        }
+      ]
+    }
+  ]
 }

@@ -10,10 +10,10 @@ namespace AAS.TwinEngine.Plugin.DPP.PlaywrightTests.SubmodelRepository;
 public class SubmodelTests : ApiTestBase
 {
     [Fact]
-    public async Task GetSubmodel_ContactInfo_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetSubmodel_MaintenanceInstructions_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/submodels/{SubmodelIdentifierContact}/";
+        var url = $"/submodels/{SubmodelIdentifierMaintenanceInstructions}/";
 
         // Act
         var response = await ApiContext.GetAsync(url);
@@ -26,7 +26,7 @@ public class SubmodelTests : ApiTestBase
         var json = JsonDocument.Parse(content);
         Assert.NotNull(json);
 
-        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRepository", "TestData", "GetSubmodel_ContactInfo_Expected.json"));
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRepository", "TestData", "GetSubmodel_MaintenanceInstructions_Expected.json"));
     }
 
     [Fact]

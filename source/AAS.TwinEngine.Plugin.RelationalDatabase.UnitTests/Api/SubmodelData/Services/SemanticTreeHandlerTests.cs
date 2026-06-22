@@ -148,6 +148,41 @@ public class SemanticTreeHandlerTests
     }
 
     [Fact]
+    public void GetJson_WithArrayChildrenThatSerializeToArrays_KeepsChildSemanticIdAndMergesChildren()
+    {
+        var parentArray = new SemanticBranchNode("items", DataType.Array);
+
+        var childArray1 = new SemanticBranchNode("itemGroup", DataType.Array);
+        var childObject1 = new SemanticBranchNode("entry", DataType.Object);
+        childObject1.AddChild(new SemanticLeafNode("name", DataType.String, "Item1"));
+        childArray1.AddChild(childObject1);
+
+        var childArray2 = new SemanticBranchNode("itemGroup", DataType.Array);
+        var childObject2 = new SemanticBranchNode("entry", DataType.Object);
+        childObject2.AddChild(new SemanticLeafNode("name", DataType.String, "Item2"));
+        childArray2.AddChild(childObject2);
+
+        parentArray.AddChild(childArray1);
+        parentArray.AddChild(childArray2);
+
+        var result = _sut.GetJson(parentArray, _testSchema);
+
+        Assert.NotNull(result);
+        var itemsArray = result["items"]?.AsArray();
+        Assert.NotNull(itemsArray);
+        Assert.Single(itemsArray);
+
+        var groupedObject = itemsArray[0]?.AsObject();
+        Assert.NotNull(groupedObject);
+
+        var itemGroupArray = groupedObject["itemGroup"]?.AsArray();
+        Assert.NotNull(itemGroupArray);
+        Assert.Equal(2, itemGroupArray.Count);
+        Assert.Equal("Item1", itemGroupArray[0]?["entry"]?["name"]?.GetValue<string>());
+        Assert.Equal("Item2", itemGroupArray[1]?["entry"]?["name"]?.GetValue<string>());
+    }
+
+    [Fact]
     public void GetJson_WithArrayOfLeaves_SameSemanticId_CreatesJsonArray()
     {
         var arrayBranch = new SemanticBranchNode("tags", DataType.Array);

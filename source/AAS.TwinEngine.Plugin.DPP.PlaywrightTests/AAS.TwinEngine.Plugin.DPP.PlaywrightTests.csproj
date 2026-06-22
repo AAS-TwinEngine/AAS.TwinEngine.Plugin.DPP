@@ -9,16 +9,17 @@
     <IsTestProject>true</IsTestProject>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <NoWarn>IDE1006, IDE0058</NoWarn>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="10.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.7" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
-    <PackageReference Include="Microsoft.Playwright" Version="1.59.0" />
-    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.59.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageReference Include="coverlet.collector" Version="[10.0.1]" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.9]" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.6.0]" />
+    <PackageReference Include="Microsoft.Playwright" Version="[1.60.0]" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="[1.60.0]" />
+    <PackageReference Include="xunit" Version="[2.9.3]" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.5]" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,7 +66,7 @@
     <None Update="AasRepository\TestData\GetSubmodelRefById_Product3_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_Contact_Expected.json">
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_MaintenanceInstructions_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_HandoverDocumentation_Expected.json">
@@ -80,7 +81,7 @@
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRepository\TestData\GetSubmodelElement_ContactInfo_ContactInformation_Expected.json">
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_MaintenanceInstructions_MaintenanceToolList_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_DocumentVersions0_Language0.json">
@@ -95,7 +96,7 @@
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SubmodelRepository\TestData\GetSubmodel_ContactInfo_Expected.json">
+    <None Update="SubmodelRepository\TestData\GetSubmodel_MaintenanceInstructions_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Expected.json">

@@ -20,6 +20,9 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        _ = builder.Configuration.AddJsonFile("/config/dpp-env.json", optional: true, reloadOnChange: true);
+
         _ = builder.Host.UseSerilog();
         builder.ConfigureLogging(builder.Configuration);
         builder.ConfigureCorsServices();
