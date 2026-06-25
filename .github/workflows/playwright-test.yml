@@ -71,6 +71,14 @@ jobs:
       - name: Build Playwright test project
         run: dotnet build ${{ env.PLAYWRIGHT_TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
+      - name: Prepare plugin source for Docker Compose
+        run: |
+          mkdir -p AAS.TwinEngine.Plugin.DPP
+          ln -s "$GITHUB_WORKSPACE/source" "$GITHUB_WORKSPACE/AAS.TwinEngine.Plugin.DPP/source"
+
+          echo "Verifying..."
+          ls -la "$GITHUB_WORKSPACE/AAS.TwinEngine.Plugin.DPP"
+
       - name: Start and build Docker Compose services
         run: |
           cd ${{ env.DOCKER_COMPOSE_PATH }}
