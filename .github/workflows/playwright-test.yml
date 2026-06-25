@@ -6,7 +6,7 @@ on:
       dataengine_ref:
         description: "DataEngine branch, tag, or SHA"
         required: false
-        default: "827-playwright"
+        default: "develop"
         type: string
   pull_request:
     branches:
@@ -31,7 +31,7 @@ env:
   DATAENGINE_REPO_PATH: dataengine-repo
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
-  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'develop' }}
+  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || '827-playwright' }}
 
 jobs:
   playwright-tests:
@@ -194,5 +194,5 @@ jobs:
         run: |
           cd ${{ env.DOCKER_COMPOSE_PATH }}
           docker compose down -v
-          
+
  
