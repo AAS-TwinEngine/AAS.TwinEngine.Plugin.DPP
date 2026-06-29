@@ -105,7 +105,7 @@ jobs:
 
             UNHEALTHY=$(docker compose ps --format json 2>/dev/null | jq -r 'select(.Health != "" and .Health != "healthy") | .Service' 2>/dev/null | wc -l)
 
-            if [ $RUNNING -ge 6 ] && [ $UNHEALTHY -eq 0 ]; then
+            if [ "$TOTAL" -gt 0 ] && [ "$RUNNING" -eq "$TOTAL" ] && [ "$UNHEALTHY" -eq 0 ]; then
               echo "Services are up and running!"
               docker compose ps
               break
@@ -173,7 +173,7 @@ jobs:
 
       - name: Publish Test Results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
-        if: always() && github.event.pull_request.head.repo.fork == false
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           name: Playwright Test Results
           path: "**/playwright_test_results.trx"
