@@ -1,29 +1,34 @@
 {
   "description": [
     {
-      "language": null,
-      "text": null
+      "language": "de",
+      "text": "Submodell zur Übermittlung aller wartungsrelevanten Informatationen"
     },
     {
-      "language": null,
-      "text": null
+      "language": "en",
+      "text": "The Submodel defines a set of maintenance instructions and additional details, files or documents related to the maintenance of an asset"
     }
   ],
   "displayName": null,
   "extensions": null,
   "administration": {
     "embeddedDataSpecifications": null,
-    "version": null,
-    "revision": null,
+    "version": "1",
+    "revision": "0",
     "creator": null,
-    "templateId": null
+    "templateId": "https://admin-shell-io/idta-02018"
   },
   "idShort": "MaintenanceInstructions",
   "id": "https://mm-software.com/submodel/000-001/MaintenanceInstructions",
   "semanticId": {
-    "type": "ExternalReference",
+    "type": "ModelReference",
     "referredSemanticId": null,
-    "keys": null
+    "keys": [
+      {
+        "type": "Submodel",
+        "value": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0"
+      }
+    ]
   },
   "supplementalSemanticId": null,
   "endpoints": [
