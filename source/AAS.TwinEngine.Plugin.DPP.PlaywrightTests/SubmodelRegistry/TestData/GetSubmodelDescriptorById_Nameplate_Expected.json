@@ -1,25 +1,30 @@
 {
   "description": [
     {
-      "language": null,
-      "text": null
+      "language": "en",
+      "text": "Contains the nameplate information attached to the product"
     }
   ],
   "displayName": null,
   "extensions": null,
   "administration": {
     "embeddedDataSpecifications": null,
-    "version": null,
-    "revision": null,
+    "version": "3",
+    "revision": "0",
     "creator": null,
-    "templateId": null
+    "templateId": "https://admin-shell.io/idta-02006-3-0"
   },
   "idShort": "Nameplate",
   "id": "https://mm-software.com/submodel/000-001/Nameplate",
   "semanticId": {
     "type": "ExternalReference",
     "referredSemanticId": null,
-    "keys": null
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/idta/nameplate/3/0/Nameplate"
+      }
+    ]
   },
   "supplementalSemanticId": null,
   "endpoints": [

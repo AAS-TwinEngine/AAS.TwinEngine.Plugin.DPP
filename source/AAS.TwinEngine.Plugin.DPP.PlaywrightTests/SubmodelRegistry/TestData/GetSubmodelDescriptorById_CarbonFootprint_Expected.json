@@ -1,34 +1,39 @@
 {
   "description": [
     {
-      "language": null,
-      "text": null
+      "language": "en",
+      "text": "The Submodel provides the means to access the Carbon Footprint of the asset."
     }
   ],
   "displayName": [
     {
-      "language": null,
-      "text": null
+      "language": "de",
+      "text": "C02 Footprint"
     },
     {
-      "language": null,
-      "text": null
+      "language": "en",
+      "text": "Carbon Footprint"
     }
   ],
   "extensions": null,
   "administration": {
     "embeddedDataSpecifications": null,
-    "version": null,
-    "revision": null,
+    "version": "1",
+    "revision": "0",
     "creator": null,
-    "templateId": null
+    "templateId": "https://admin-shell.io/IDTA 02023-1-0"
   },
   "idShort": "CarbonFootprint",
   "id": "https://mm-software.com/submodel/000-001/CarbonFootprint",
   "semanticId": {
     "type": "ExternalReference",
     "referredSemanticId": null,
-    "keys": null
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0"
+      }
+    ]
   },
   "supplementalSemanticId": null,
   "endpoints": [
