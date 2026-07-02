@@ -24,16 +24,11 @@ on:
 permissions:
   contents: read
 
-
-defaults:
-  run:
-    working-directory: AAS.TwinEngine.Plugin.DPP
-
 env:
   BUILD_CONFIGURATION: "Release"
   PLUGIN_REPO_PATH: AAS.TwinEngine.Plugin.DPP
-  SOLUTION_PATH: source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
-  PLAYWRIGHT_TEST_PROJECT: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
+  SOLUTION_PATH: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
+  PLAYWRIGHT_TEST_PROJECT: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
   DATAENGINE_REPO_PATH: dataengine-repo
   DOCKER_COMPOSE_PATH: dataengine-repo/example
   BASE_URL: "http://localhost:8080"
@@ -177,7 +172,7 @@ jobs:
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           name: Playwright Test Results
-          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
+          path: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
           reporter: dotnet-trx
           fail-on-error: true
 
