@@ -172,7 +172,7 @@ jobs:
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           name: Playwright Test Results
-          path: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
+          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
           reporter: dotnet-trx
           working-directory: ${{ env.PLUGIN_REPO_PATH }}
           fail-on-error: true
