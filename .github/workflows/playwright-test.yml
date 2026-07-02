@@ -49,6 +49,8 @@ jobs:
       # Main repository (plugin repo)
       - name: Checkout Plugin Repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: AAS.TwinEngine.Plugin.DPP
 
       # Secondary repository
       - name: Checkout DataEngine Repo
@@ -165,18 +167,12 @@ jobs:
         env:
           BASE_URL: ${{ env.BASE_URL }}
 
-      - name: List TRX files
-        if: always()
-        run: |
-          echo "Searching for TRX files..."
-          find . -type f -name "*.trx" -print
-
       - name: Publish Test Results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           name: Playwright Test Results
-          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/**/*.trx
+          path: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
           reporter: dotnet-trx
           fail-on-error: true
 
