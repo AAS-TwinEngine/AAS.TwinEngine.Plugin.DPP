@@ -159,17 +159,24 @@ jobs:
           dotnet test ${{ env.PLAYWRIGHT_TEST_PROJECT }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
             --no-build \
+            --results-directory source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults \
             --logger "trx;LogFileName=playwright_test_results.trx" \
             --verbosity normal
         env:
           BASE_URL: ${{ env.BASE_URL }}
+
+      - name: List TRX files
+        if: always()
+        run: |
+          echo "Searching for TRX files..."
+          find . -type f -name "*.trx" -print
 
       - name: Publish Test Results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
         with:
           name: Playwright Test Results
-          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
+          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/**/*.trx
           reporter: dotnet-trx
           fail-on-error: true
 
