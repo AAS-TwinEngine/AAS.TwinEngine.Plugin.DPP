@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Responses;
@@ -74,7 +74,24 @@ public class MetaDataControllerTests
             Arg.Any<CancellationToken>())
             .Returns(expectedShells);
 
-        var result = await _sut.GetShellDescriptorsAsync(null, null, header, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(null, null, header, null, CancellationToken.None);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<ShellDescriptorsDto>(okResult.Value);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WithIdShortHeader_BuildsRequestWithIdShort()
+    {
+        const string idShort = "M&M03";
+        var expectedShells = new ShellDescriptorsDto();
+
+        _handler.GetShellDescriptors(
+            Arg.Is<GetShellDescriptorsRequest>(r => r.IdShortFilter == idShort),
+            Arg.Any<CancellationToken>())
+            .Returns(expectedShells);
+
+        var result = await _sut.GetShellDescriptorsAsync(null, null, null, idShort, CancellationToken.None);
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.IsType<ShellDescriptorsDto>(okResult.Value);

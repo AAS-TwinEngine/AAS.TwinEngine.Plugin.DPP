@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
@@ -27,9 +27,10 @@ public class MetaDataController(
         [FromQuery] int? limit,
         [FromQuery] string? cursor,
         [FromHeader(Name = "aastwinengine-assetids")] string? assetIdsFilter = null,
+        [FromHeader(Name = "aastwinengine-idshort")] string? idShortFilter = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter);
+        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter, idShortFilter);
 
         var response = await metaDataHandler.GetShellDescriptors(request, cancellationToken).ConfigureAwait(false);
 
