@@ -1,0 +1,203 @@
+name: Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataengine_ref:
+        description: "DataEngine branch or SHA"
+        required: false
+        default: 'develop'
+        type: string
+  pull_request:
+    branches: 
+    - 'main'
+    - 'develop'
+    - 'release/**'
+    - 'hotfix/**'
+  push:
+    branches: 
+    - 'main'
+    - 'develop'
+    - 'release/**'
+    - 'hotfix/**'
+
+permissions:
+  contents: read
+
+env:
+  BUILD_CONFIGURATION: "Release"
+  PLUGIN_REPO_PATH: AAS.TwinEngine.Plugin.DPP
+  SOLUTION_PATH: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.RelationalDatabase.sln
+  PLAYWRIGHT_TEST_PROJECT: AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/AAS.TwinEngine.Plugin.DPP.PlaywrightTests.csproj
+  DATAENGINE_REPO_PATH: dataengine-repo
+  DOCKER_COMPOSE_PATH: dataengine-repo/example
+  BASE_URL: "http://localhost:8080"
+  DATAENGINE_REF: ${{ github.event.inputs.dataengine_ref || 'develop' }}
+
+jobs:
+  playwright-tests:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      # Main repository (plugin repo)
+      - name: Checkout Plugin Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: ${{ env.PLUGIN_REPO_PATH }}
+
+      # Secondary repository
+      - name: Checkout DataEngine Repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: AAS-TwinEngine/AAS.TwinEngine.DataEngine
+          ref: ${{ env.DATAENGINE_REF }}
+          path: ${{ env.DATAENGINE_REPO_PATH }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION_PATH }} --locked-mode
+
+      - name: Build solution
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+      - name: Build Playwright test project
+        run: dotnet build ${{ env.PLAYWRIGHT_TEST_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+      - name: Start and build Docker Compose services
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+          docker compose up -d --build
+        env:
+          COMPOSE_HTTP_TIMEOUT: 300
+
+      - name: Wait for services to be healthy
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+
+          echo "Waiting for services to be healthy..."
+
+          MAX_WAIT=300
+          ELAPSED=0
+          INTERVAL=10
+
+          while [ $ELAPSED -lt $MAX_WAIT ]; do
+
+            RUNNING=$(docker compose ps --status running --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
+            TOTAL=$(docker compose ps --format json 2>/dev/null | jq -s 'length' 2>/dev/null || echo "0")
+
+            echo "Running containers: $RUNNING/$TOTAL"
+
+            UNHEALTHY=$(docker compose ps --format json 2>/dev/null | jq -r 'select(.Health != "" and .Health != "healthy") | .Service' 2>/dev/null | wc -l)
+
+            if [ "$TOTAL" -gt 0 ] && [ "$RUNNING" -eq "$TOTAL" ] && [ "$UNHEALTHY" -eq 0 ]; then
+              echo "Services are up and running!"
+              docker compose ps
+              break
+            fi
+
+            echo "Waiting for services... ($ELAPSED/$MAX_WAIT seconds)"
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
+          done
+
+          if [ $ELAPSED -ge $MAX_WAIT ]; then
+            echo "Timeout waiting for services to be ready"
+
+            echo "Current service status:"
+            docker compose ps
+
+            echo "Service logs:"
+            docker compose logs --tail=100
+
+            exit 1
+          fi
+
+          echo "Waiting additional 20 seconds for services to stabilize..."
+          sleep 20
+
+          echo "Checking DataEngine endpoint..."
+
+          for i in {1..15}; do
+            if curl -f -s -o /dev/null ${{ env.BASE_URL }}/shell-descriptors 2>&1; then
+              echo "DataEngine is responding!"
+              break
+            fi
+
+            if [ $i -eq 15 ]; then
+              echo "DataEngine is not responding after 15 attempts"
+              docker compose logs twinengine-dataengine --tail=50
+              exit 1
+            fi
+
+            echo "Attempt $i: DataEngine not ready yet..."
+            sleep 5
+          done
+
+          echo "All services are ready for testing!"
+
+      - name: Show running containers
+        if: always()
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+          docker compose ps
+
+          echo "---"
+
+          docker compose logs --tail=50
+
+      - name: Run Playwright Tests
+        run: |
+          dotnet test ${{ env.PLAYWRIGHT_TEST_PROJECT }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --no-build \
+            --results-directory AAS.TwinEngine.Plugin.DPP/source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults \
+            --logger "trx;LogFileName=playwright_test_results.trx" \
+            --verbosity normal
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
+        with:
+          name: Playwright Test Results
+          path: source/AAS.TwinEngine.Plugin.DPP.PlaywrightTests/TestResults/playwright_test_results.trx
+          reporter: dotnet-trx
+          working-directory: ${{ env.PLUGIN_REPO_PATH }}
+          fail-on-error: true
+
+      - name: Upload TRX as artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-test-results
+          path: "**/*playwright_test_results.trx"
+
+      - name: Capture Docker Compose Logs
+        if: always()
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+
+          mkdir -p logs
+
+          docker compose logs > logs/docker-compose-full.log 2>&1 || true
+          docker compose ps > logs/docker-compose-status.txt 2>&1 || true
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: |
+          cd ${{ env.DOCKER_COMPOSE_PATH }}
+          docker compose down -v
+
+ 
