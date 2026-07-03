@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       dataengine_ref:
-        description: "DataEngine branch, tag, or SHA"
+        description: "DataEngine branch or SHA"
         required: false
         default: 'develop'
         type: string
