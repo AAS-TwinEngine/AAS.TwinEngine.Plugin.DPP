@@ -6,20 +6,20 @@ on:
       dataengine_ref:
         description: "DataEngine branch, tag, or SHA"
         required: false
-        default: "develop"
+        default: 'develop'
         type: string
   pull_request:
-    branches:
-      - "main"
-      - "develop"
-      - "release/**"
-      - "hotfix/**"
+    branches: 
+    - 'main'
+    - 'develop'
+    - 'release/**'
+    - 'hotfix/**'
   push:
-    branches:
-      - "main"
-      - "develop"
-      - "release/**"
-      - "hotfix/**"
+    branches: 
+    - 'main'
+    - 'develop'
+    - 'release/**'
+    - 'hotfix/**'
 
 permissions:
   contents: read
