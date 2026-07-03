@@ -1,29 +1,34 @@
 {
   "description": [
     {
-      "language": null,
-      "text": null
+      "language": "en",
+      "text": "Submodel containing technical data of the asset and associated product classificatons"
     },
     {
-      "language": null,
-      "text": null
+      "language": "de",
+      "text": "Teilmodell, das die technischen Daten des Assets und die zugehörigen Produktklassifizierungen enthält"
     }
   ],
   "displayName": null,
   "extensions": null,
   "administration": {
     "embeddedDataSpecifications": null,
-    "version": null,
-    "revision": null,
+    "version": "2",
+    "revision": "0",
     "creator": null,
-    "templateId": null
+    "templateId": "https://admin-shell.io/idta-02003-2-0"
   },
   "idShort": "TechnicalData",
   "id": "https://mm-software.com/submodel/000-001/TechnicalData",
   "semanticId": {
-    "type": "ExternalReference",
+    "type": "ModelReference",
     "referredSemanticId": null,
-    "keys": null
+    "keys": [
+      {
+        "type": "Submodel",
+        "value": "0173-1#01-AHX837#002"
+      }
+    ]
   },
   "supplementalSemanticId": null,
   "endpoints": [
