@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
+namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 public class Capabilities
 {
@@ -11,4 +11,7 @@ public class Capabilities
 
     [Required]
     public bool HasAssetInformation { get; set; }
+
+    [Required]
+    public bool HasAssetIdSearch { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Microsoft.Extensions.Options;
@@ -9,7 +9,7 @@ public class ResponseSemanticTreeNodeResolver(IOptions<Semantics> semanticsOptio
 {
     private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
-    public string? GetColumnName(string semanticId, Dictionary<string, string> columnMapping)
+    public ColumnMapping? GetColumnMapping(string semanticId, Dictionary<string, ColumnMapping> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(columnMapping);
 
@@ -18,9 +18,9 @@ public class ResponseSemanticTreeNodeResolver(IOptions<Semantics> semanticsOptio
             return null;
         }
 
-        _ = columnMapping.TryGetValue(semanticId, out var columnName);
+        _ = columnMapping.TryGetValue(semanticId, out var mapping);
 
-        return columnName;
+        return mapping;
     }
 
     public IList<SemanticLeafNode> FindMatchingLeafNodes(SemanticTreeNode root, string semanticId)

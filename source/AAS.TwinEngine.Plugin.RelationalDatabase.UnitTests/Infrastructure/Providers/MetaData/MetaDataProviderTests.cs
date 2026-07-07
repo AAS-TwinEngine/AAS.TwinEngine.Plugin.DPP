@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData;
@@ -8,6 +9,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData
 using Microsoft.Extensions.Logging;
 
 using NSubstitute;
+using NSubstitute.Core;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Providers.MetaData;
 
@@ -32,7 +34,7 @@ public class MetaDataProviderTests
     {
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(string.Empty);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result.Result!);
@@ -40,7 +42,7 @@ public class MetaDataProviderTests
     }
 
     [Fact]
-    public async Task GetShellDescriptorsAsync_WhenValidJson_ReturnsProcessedItems()
+    public async Task GetShellDescriptorsAsync_WhenValidJson_ExcludesInvalidIdItems_AndLogsError()
     {
         var items = new List<ShellDescriptorData>
         {
@@ -53,16 +55,27 @@ public class MetaDataProviderTests
                 [
                     new SpecificAssetIdsData { Name = null, Value = "VAL1" }
                 ]
+            },
+            new()
+            {
+                GlobalAssetId = "asset-2",
+                Id = "shell-2",
+                IdShort = "Shell2",
+                SpecificAssetIds =
+                [
+                    new SpecificAssetIdsData { Name = null, Value = "VAL2" }
+                ]
             }
         };
         var json = JsonSerializer.Serialize(items);
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(json);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
 
         var item = Assert.Single(result!.Result!);
-        Assert.Equal("asset-1", item.Id); // fallback
-        Assert.Equal("VAL1", item.SpecificAssetIds![0].Name);
+        Assert.Equal("shell-2", item.Id);
+        Assert.Equal("VAL2", item.SpecificAssetIds![0].Name);
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "ShellDescriptor with null/empty Id excluded from response"));
     }
 
     [Fact]
@@ -75,6 +88,7 @@ public class MetaDataProviderTests
             query: "query",
             limit: null,
             cursor: null,
+            filter: null,
             cancellationToken: CancellationToken.None);
 
         Assert.NotNull(result);
@@ -84,20 +98,112 @@ public class MetaDataProviderTests
         Assert.Empty(result.Result);
     }
 
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterMatchesSpecificAssetId_ReturnsOnlyMatchingItems()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new()
+            {
+                GlobalAssetId = "asset-1",
+                Id = "shell-1",
+                IdShort = "Shell1",
+                SpecificAssetIds =
+                [
+                    new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
+                ]
+            }
+        };
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        var matched = Assert.Single(result!.Result!);
+        Assert.Equal("shell-1", matched.Id);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)
+                                    && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterHasNoMatches_ReturnsEmptyResult()
+    {
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns("[]");
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-NOMATCH" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.Empty(result!.Result!);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)),
+            Arg.Any<IEnumerable<DbParameter>>(),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenFilterHasGlobalAssetId_ReturnsMatchingGlobalAssetItem()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "https://mm-software.com/ids/assets/000-002", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] }
+        };
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdsData { Name = "globalAssetId", Value = "https://mm-software.com/ids/assets/000-002" }
+            ]
+        };
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+
+        var matched = Assert.Single(result!.Result!);
+        Assert.Equal("shell-2", matched.Id);
+
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("A.\"GlobalAssetId\" = @f_value_0", StringComparison.Ordinal)
+                                    && !query.Contains("EXISTS", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 1),
+            Arg.Any<CancellationToken>());
+    }
+
     #endregion
 
     #region GetShellDescriptorAsync
 
     [Fact]
-    public async Task GetShellDescriptorAsync_WhenEmptyResult_ReturnsEmptyObject()
+    public async Task GetShellDescriptorAsync_WhenEmptyResult_ReturnsNull()
     {
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<List<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(string.Empty);
 
         var result = await _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None);
 
-        Assert.NotNull(result);
-        Assert.Null(result.Id);
-        Assert.Null(result.GlobalAssetId);
+        Assert.Null(result);
     }
 
     [Fact]
@@ -106,7 +212,7 @@ public class MetaDataProviderTests
         var item = new ShellDescriptorData
         {
             GlobalAssetId = "asset-1",
-            Id = null!,
+            Id = "shell-1",
             IdShort = "Shell1",
             SpecificAssetIds =
             [
@@ -118,12 +224,12 @@ public class MetaDataProviderTests
 
         var result = await _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None);
 
-        Assert.Equal("asset-1", result!.Id);
+        Assert.Equal("shell-1", result!.Id);
         Assert.Equal("VAL1", result.SpecificAssetIds![0].Name);
     }
 
     [Fact]
-    public async Task GetShellDescriptorAsync_WhenJsonIsNullLiteral_ReturnsEmptyShellDescriptor()
+    public async Task GetShellDescriptorAsync_WhenJsonIsNullLiteral_ReturnsNull()
     {
         var jsonNullLiteral = "null";
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<List<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(jsonNullLiteral);
@@ -133,10 +239,26 @@ public class MetaDataProviderTests
             aasIdentifier: "aas-1",
             cancellationToken: CancellationToken.None);
 
-        Assert.NotNull(result);
-        Assert.Null(result.Id);
-        Assert.Null(result.GlobalAssetId);
-        Assert.Null(result.IdShort);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorAsync_WhenIdIsInvalid_ThrowsValidationFailedException_AndLogsError()
+    {
+        var json = """
+            {
+              "globalAssetId": "asset-1",
+              "id": "",
+              "idShort": "Shell1"
+            }
+            """;
+
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<List<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+
+        await Assert.ThrowsAsync<ValidationFailedException>(() =>
+            _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None));
+
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Id is null or empty"));
     }
 
     #endregion
@@ -176,4 +298,21 @@ public class MetaDataProviderTests
     }
 
     #endregion
+
+    private static bool HasLogged(IEnumerable<ICall> calls, LogLevel level, string messageFragment)
+        => calls.Any(call =>
+        {
+            if (call.GetMethodInfo().Name != "Log")
+            {
+                return false;
+            }
+
+            var args = call.GetArguments();
+            if (args.Length < 3 || args[0] is not LogLevel actualLevel || actualLevel != level)
+            {
+                return false;
+            }
+
+            return args[2]?.ToString()?.Contains(messageFragment, StringComparison.Ordinal) == true;
+        });
 }

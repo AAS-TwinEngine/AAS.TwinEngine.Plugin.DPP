@@ -1,0 +1,712 @@
+{
+  "idShort": "GeneralInformation",
+  "displayName": [
+    {
+      "language": "en",
+      "text": "General information"
+    },
+    {
+      "language": "de",
+      "text": "Allgemeine Informationen"
+    }
+  ],
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "0173-1#02-ABK161#002/0173-1#01-AHX838#002"
+      }
+    ]
+  },
+  "supplementalSemanticIds": [
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "https://api.eclass-cdp.com/ 0173-1-02-ABK161-002/0173-1-01-AHX838-002"
+        }
+      ]
+    }
+  ],
+  "qualifiers": [
+    {
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+          }
+        ]
+      },
+      "kind": "ConceptQualifier",
+      "type": "SMT/Cardinality",
+      "valueType": "xs:string",
+      "value": "One"
+    }
+  ],
+  "value": [
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerName",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer name"
+        },
+        {
+          "language": "de",
+          "text": "Herstellername"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO677#004"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAO677-004"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "M&M Germany",
+      "modelType": "Property"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerArticleNumber",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer article number"
+        },
+        {
+          "language": "de",
+          "text": "Herstellerartikelnummer"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO676#005"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAO676-005"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "123456",
+      "modelType": "Property"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerOrderCode",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer order code"
+        },
+        {
+          "language": "de",
+          "text": "Bestellcode des Herstellers"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO227#004"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAO227-004"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "EEA-EX-200-S/47-Q3",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "CompanyLogo",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Company logo"
+        },
+        {
+          "language": "de",
+          "text": "Firmenlogo"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-ABI776#002"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-ABI776-002"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToOne"
+        }
+      ],
+      "value": "https://mmsoftwaregmbh.sharepoint.com/_api/siteiconmanager/getsitelogo?type=%271%27&hash=638518734598723853",
+      "contentType": "image/png",
+      "modelType": "File"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerProductDesignation",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer product designation"
+        },
+        {
+          "language": "de",
+          "text": "Herstellerproduktbezeichnung"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAW338#003"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAW338-003"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "ConceptQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "value": [
+        {
+          "language": "en",
+          "text": "FM-ABC-1234"
+        },
+        {
+          "language": "de",
+          "text": "ABC-123"
+        }
+      ],
+      "modelType": "MultiLanguageProperty"
+    },
+    {
+      "idShort": "ProductImages",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Product images"
+        },
+        {
+          "language": "de",
+          "text": "Produktbilder"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-ABM220#001"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-ABM220-001"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "TemplateQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToMany"
+        }
+      ],
+      "orderRelevant": false,
+      "semanticIdListElement": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-ABM220#001/0173-1#01-AHY911#001"
+          }
+        ]
+      },
+      "typeValueListElement": "SubmodelElementCollection",
+      "value": [
+        {
+          "displayName": [
+            {
+              "language": "en",
+              "text": "Product image"
+            },
+            {
+              "language": "de",
+              "text": "Produktbild"
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABM220#001/0173-1#01-AHY911#001"
+              }
+            ]
+          },
+          "supplementalSemanticIds": [
+            {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "0173-1#02-ABM220#001~0/0173-1#01-AHY911#001"
+                },
+                {
+                  "type": "GlobalReference",
+                  "value": "https://api.eclass-cdp.com/0173-1-02-ABM220-001/0173-1-01-AHY911-001"
+                }
+              ]
+            }
+          ],
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                  }
+                ]
+              },
+              "kind": "ConceptQualifier",
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "ZeroToMany"
+            }
+          ],
+          "value": [
+            {
+              "idShort": "ImageFile",
+              "displayName": [
+                {
+                  "language": "en",
+                  "text": "Product image"
+                },
+                {
+                  "language": "de",
+                  "text": "Bildname Sachaufnahme"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-ABK291#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "kind": "ConceptQualifier",
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+              "contentType": "image/png",
+              "modelType": "File"
+            },
+            {
+              "idShort": "ImageNote",
+              "displayName": [
+                {
+                  "language": "en",
+                  "text": "Image note"
+                },
+                {
+                  "language": "de",
+                  "text": "Bildhinweis"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-ABL423#001"
+                  }
+                ]
+              },
+              "supplementalSemanticIds": [
+                {
+                  "type": "ExternalReference",
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "https://api.eclass-cdp.com/0173-1-02-ABL423-001"
+                    }
+                  ]
+                }
+              ],
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "kind": "ConceptQualifier",
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "ZeroToOne"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "Front view of the machine showing external and structure"
+                },
+                {
+                  "language": "de",
+                  "text": "Frontansicht der Maschine, die äußere und strukturelle Ansicht zeigt"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            }
+          ],
+          "modelType": "SubmodelElementCollection"
+        },
+        {
+          "displayName": [
+            {
+              "language": "en",
+              "text": "Product image"
+            },
+            {
+              "language": "de",
+              "text": "Produktbild"
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABM220#001/0173-1#01-AHY911#001"
+              }
+            ]
+          },
+          "supplementalSemanticIds": [
+            {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "0173-1#02-ABM220#001~0/0173-1#01-AHY911#001"
+                },
+                {
+                  "type": "GlobalReference",
+                  "value": "https://api.eclass-cdp.com/0173-1-02-ABM220-001/0173-1-01-AHY911-001"
+                }
+              ]
+            }
+          ],
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                  }
+                ]
+              },
+              "kind": "ConceptQualifier",
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "ZeroToMany"
+            }
+          ],
+          "value": [
+            {
+              "idShort": "ImageFile",
+              "displayName": [
+                {
+                  "language": "en",
+                  "text": "Product image"
+                },
+                {
+                  "language": "de",
+                  "text": "Bildname Sachaufnahme"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-ABK291#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "kind": "ConceptQualifier",
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/example/data/product1-1.png",
+              "contentType": "image/png",
+              "modelType": "File"
+            },
+            {
+              "idShort": "ImageNote",
+              "displayName": [
+                {
+                  "language": "en",
+                  "text": "Image note"
+                },
+                {
+                  "language": "de",
+                  "text": "Bildhinweis"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-ABL423#001"
+                  }
+                ]
+              },
+              "supplementalSemanticIds": [
+                {
+                  "type": "ExternalReference",
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "https://api.eclass-cdp.com/0173-1-02-ABL423-001"
+                    }
+                  ]
+                }
+              ],
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "kind": "ConceptQualifier",
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "ZeroToOne"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "Side view of the machine showing external and structure"
+                },
+                {
+                  "language": "de",
+                  "text": "Seitenansicht der Maschine, die äußere und strukturelle Ansicht zeigt"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            }
+          ],
+          "modelType": "SubmodelElementCollection"
+        }
+      ],
+      "modelType": "SubmodelElementList"
+    }
+  ],
+  "modelType": "SubmodelElementCollection"
+}

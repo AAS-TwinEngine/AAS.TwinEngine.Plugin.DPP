@@ -7,8 +7,15 @@ name: Docker
 
 on:
   workflow_dispatch:
+    inputs:
+      build_arm64:
+        description: 'Build and publish ARM64 image (multi-arch manifest)'
+        type: boolean
+        default: false
+
   push:
     branches: 
+      - 'main'
       - 'develop'
       - 'release/**'
       - 'hotfix/**'
@@ -42,19 +49,40 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      # Set up QEMU for ARM64 cross-compilation on AMD64 runners
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      # ARM64 is included for main, develop, hotfix, release branches, version tags, and manual trigger.
+      # Pull requests (e.g. feature → develop) build AMD64 only; ARM64 is built on merge (push event).
+      - name: Determine build platforms
+        id: platforms
+        run: |
+          PLATFORMS="linux/amd64"
+          if [[ "${{ github.ref }}" == refs/heads/main ]] || \
+             [[ "${{ github.ref }}" == refs/heads/develop ]] || \
+             [[ "${{ github.ref }}" == refs/heads/hotfix/* ]] || \
+             [[ "${{ github.ref }}" == refs/heads/release/* ]] || \
+             [[ "${{ github.ref }}" == refs/tags/v* ]] || \
+             [[ "${{ inputs.build_arm64 }}" == "true" ]]; then
+            PLATFORMS="linux/amd64,linux/arm64"
+          fi
+          echo "platforms=$PLATFORMS" >> $GITHUB_OUTPUT
+          echo "include_arm64=$([ "$PLATFORMS" = "linux/amd64,linux/arm64" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -64,29 +92,32 @@ jobs:
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
+        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
           tags: |
             type=semver,pattern={{raw}}
-            type=raw,value=develop-{{sha}},enable=${{startsWith(github.ref, 'refs/heads/develop')}}
-            type=raw,value=rc-{{branch}}-{{sha}},enable=${{startsWith(github.ref, 'refs/heads/release/')}}
-            type=raw,value={{branch}}-{{sha}},enable=${{startsWith(github.ref, 'refs/heads/hotfix/')}}
+            # Priority is set to ensure the develop-{{sha}} tag is preferred over other tags for the develop branch
+            type=raw,value=develop-{{sha}},enable=${{startsWith(github.ref,'refs/heads/develop')}},priority=201
+            type=raw,value=develop,enable=${{startsWith(github.ref,'refs/heads/develop')}}
+            type=raw,value=rc-{{branch}}-{{sha}},enable=${{startsWith(github.ref,'refs/heads/release/')}}
+            # The following tag is only applied to regular branches except 'develop' and 'release/*' (i.e., not for tags or PRs)
+            type=raw,value={{branch}}-{{sha}},enable=${{startsWith(github.ref,'refs/heads/') && !startsWith(github.ref,'refs/heads/develop') && !startsWith(github.ref,'refs/heads/release/')}}
             type=ref,event=pr
-            type=raw,value=manual-{{branch}}-{{sha}},enable=${{github.event_name == 'workflow_dispatch'}}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           sbom: true
           provenance: mode=max
           context: ${{ env.BUILD_CONTEXT }}
           file: ${{ env.DOCKERFILE_PATH }}
+          platforms: ${{ steps.platforms.outputs.platforms }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -97,7 +128,7 @@ jobs:
       # This automaticaly re-uses the previously generated stage from cache, so we get the exact sbom from previous build step
       - name: Export Application SBOM from artifact stage
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: ${{ env.BUILD_CONTEXT }}
           file: ${{ env.DOCKERFILE_PATH }}
@@ -105,20 +136,43 @@ jobs:
           push: false
           outputs: type=local,dest=sbom-output
 
+      # Extract the tag with the highest priority from the list for Trivy scanning
+      - name: Get highest priority image tag
+        if: ${{ github.event_name != 'pull_request' }}
+        id: highest-priority-tag
+        run: |
+          # The first tag in the list is the one with the highest priority
+          echo "value=$(echo '${{ steps.meta.outputs.tags }}' | head -n1)" >> $GITHUB_OUTPUT
+
       # Generate container SBOM. 
       - name: Run Trivy in GitHub SBOM mode to generate CycloneDX SBOM for container
         if: ${{ github.event_name != 'pull_request' }}
-        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # 0.33.1
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # 0.36.0
+        env:
+          TRIVY_PLATFORM: linux/amd64
         with:
           scan-type: 'image'
           format: 'cyclonedx'
-          output: 'sbom-output/sbom_container.cyclonedx.json'
-          image-ref: ${{ steps.meta.outputs.tags }}
-          skip-dirs: '/App' # Skip the /app directory as we handle the content of the application in a seperate SBOM for easier vulnerability management and because trivy misses important fields
-          
+          output: 'sbom-output/sbom_container_amd64.cyclonedx.json'
+          image-ref: ${{ steps.highest-priority-tag.outputs.value }}
+          skip-dirs: '/App' # Skip the /app directory as we handle the content of the application in a separate SBOM for easier vulnerability management and because trivy misses important fields
+
+      # Scan ARM64 image separately when a multi-arch build was produced
+      - name: Run Trivy scan for ARM64 image
+        if: ${{ github.event_name != 'pull_request' && steps.platforms.outputs.include_arm64 == 'true' }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # 0.36.0
+        env:
+          TRIVY_PLATFORM: linux/arm64
+        with:
+          scan-type: 'image'
+          format: 'cyclonedx'
+          output: 'sbom-output/sbom_container_arm64.cyclonedx.json'
+          image-ref: ${{ steps.highest-priority-tag.outputs.value }}
+          skip-dirs: '/App'
+
       - name: Upload trivy/container AND application SBOMs as a Github artifact
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: sbom
           path: '${{ github.workspace }}/sbom-output/'

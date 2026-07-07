@@ -8,6 +8,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 
 public static class Base64UrlExtensions
 {
+    private const int MaxIdentifierLength = 2048;
     private const int MaxBase64UrlLength = 256;
 
     /// <summary>
@@ -36,7 +37,22 @@ public static class Base64UrlExtensions
         try
         {
             var bytes = WebEncoders.Base64UrlDecode(encoded);
-            return Encoding.UTF8.GetString(bytes);
+            var decoded = Encoding.UTF8.GetString(bytes);
+
+            if (decoded.Length > MaxIdentifierLength)
+            {
+                logger?.LogError("Decoded identifier exceeds maximum length of {MaxLength} characters: actual length {ActualLength}",
+                                 MaxIdentifierLength, decoded.Length);
+                throw new InvalidUserInputException();
+            }
+
+            if (decoded.IsValidIdentifier(logger))
+            {
+                return decoded;
+            }
+
+            logger?.LogError("Decoded identifier contains malicious patterns.");
+            throw new InvalidUserInputException();
         }
         catch (Exception ex)
         {

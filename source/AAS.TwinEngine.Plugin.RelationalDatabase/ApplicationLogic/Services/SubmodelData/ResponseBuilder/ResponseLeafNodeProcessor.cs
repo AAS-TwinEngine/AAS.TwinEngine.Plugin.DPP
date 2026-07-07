@@ -4,10 +4,10 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver responseSemanticTreeNodeResolver) : IResponseLeafNodeProcessor
 {
-    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, string> columnMapping)
+    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestLeaf);
-        var columnName = responseSemanticTreeNodeResolver.GetColumnName(requestLeaf.SemanticId, columnMapping);
+        var columnName = responseSemanticTreeNodeResolver.GetColumnMapping(requestLeaf.SemanticId, columnMapping)?.LeafColumn;
 
         if (string.IsNullOrEmpty(columnName))
         {

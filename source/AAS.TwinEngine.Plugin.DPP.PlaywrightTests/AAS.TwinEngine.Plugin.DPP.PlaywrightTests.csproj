@@ -1,0 +1,116 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <NoWarn>IDE1006, IDE0058</NoWarn>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="[10.0.1]" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.9]" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.6.0]" />
+    <PackageReference Include="Microsoft.Playwright" Version="[1.60.0]" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="[1.60.0]" />
+    <PackageReference Include="xunit" Version="[2.9.3]" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.5]" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AasRegistry\TestData\GetAllShellDescriptors_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRegistry\TestData\GetShellDescriptorById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAssetInformationById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShellById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product2_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetSubmodelRefById_Product3_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_MaintenanceInstructions_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_HandoverDocumentation_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_CarbonFootprint_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_TechnicalData_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_MaintenanceInstructions_MaintenanceToolList_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_DocumentVersions0_Language0.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_CarbonFootprint_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_TechnicalData_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_MaintenanceInstructions_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_CarbonFootprint_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_TechnicalData_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

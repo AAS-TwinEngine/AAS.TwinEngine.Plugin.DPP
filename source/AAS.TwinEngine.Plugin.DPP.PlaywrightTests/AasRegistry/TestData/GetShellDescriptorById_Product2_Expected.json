@@ -1,0 +1,49 @@
+{
+  "description": null,
+  "displayName": null,
+  "extensions": null,
+  "administration": null,
+  "assetKind": "Instance",
+  "assetType": null,
+  "endpoints": [
+    {
+      "interface": "AAS-3.0",
+      "protocolInformation": {
+        "href": "http://localhost:8080/shells/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vaWRzL2Fhcy8wMDAtMDAy",
+        "endpointProtocol": "http",
+        "endpointProtocolVersion": null,
+        "subprotocol": null,
+        "subprotocolBody": null,
+        "subprotocolBodyEncoding": null,
+        "securityAttributes": null
+      }
+    }
+  ],
+  "globalAssetId": "https://mm-software.com/ids/assets/000-002",
+  "idShort": "Product2",
+  "id": "https://mm-software.com/ids/aas/000-002",
+  "specificAssetIds": [
+    {
+      "semanticId": null,
+      "supplementalSemanticIds": null,
+      "name": "SerialNumber",
+      "value": "SN-FMABC1238-9804821",
+      "externalSubjectId": null
+    },
+    {
+      "semanticId": null,
+      "supplementalSemanticIds": null,
+      "name": "BatchId",
+      "value": "BATCH-2022-001",
+      "externalSubjectId": null
+    },
+    {
+      "semanticId": null,
+      "supplementalSemanticIds": null,
+      "name": "LotNumber",
+      "value": "LOT-IN-77882",
+      "externalSubjectId": null
+    }
+  ],
+  "submodelDescriptors": null
+}

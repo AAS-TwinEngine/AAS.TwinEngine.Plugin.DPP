@@ -1,5 +1,6 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
@@ -14,15 +15,18 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.Api.MetaData.Handle
 public class MetaDataHandlerTests
 {
     private readonly ILogger<MetaDataHandler> _logger = Substitute.For<ILogger<MetaDataHandler>>();
+    private readonly IAssetIdsFilterHeaderValidation _assetIdsFilterHeaderService = Substitute.For<IAssetIdsFilterHeaderValidation>();
     private readonly IMetaDataService _metaDataService = Substitute.For<IMetaDataService>();
     private readonly MetaDataHandler _sut;
 
-    public MetaDataHandlerTests() => _sut = new MetaDataHandler(_logger, _metaDataService);
+    public MetaDataHandlerTests() => _sut = new MetaDataHandler(_logger, _assetIdsFilterHeaderService, _metaDataService);
 
     [Fact]
     public async Task GetShellDescriptors_ReturnsShellDescriptorsDto_WhenDescriptorsExist()
     {
-        var request = new GetShellDescriptorsRequest(10, "cursor1234");
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==");
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+
         var shellDescriptorsData = new ShellDescriptorsData
         {
             PagingMetaData = new PagingMetaData { Cursor = "nextCursor" },
@@ -33,7 +37,7 @@ public class MetaDataHandlerTests
             ]
         };
         _metaDataService
-            .GetShellDescriptorsAsync(Arg.Is<int?>(10), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(Arg.Is<int?>(10), Arg.Any<string>(), null, Arg.Any<CancellationToken>())
             .Returns(shellDescriptorsData);
 
         var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
@@ -44,7 +48,7 @@ public class MetaDataHandlerTests
         Assert.Equal("desc2", result.Result![1].Id);
         Assert.Equal("nextCursor", result.PagingMetaData!.Cursor);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, Arg.Any<CancellationToken>());
         _logger.Received().Log(
             LogLevel.Information,
             Arg.Any<EventId>(),
@@ -66,15 +70,47 @@ public class MetaDataHandlerTests
     }
 
     [Fact]
+    public async Task GetShellDescriptors_PassesHeaderToFilterService_AndUsesReturnedFilter()
+    {
+        var header = "[{\"name\":\"serialNumber\",\"value\":\"SN-4711\"}]";
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", header);
+        var filter = new AssetIdFilterHeader
+        {
+            Identifiers =
+            [
+                new SpecificAssetIdsData { Name = "serialNumber", Value = "SN-4711" }
+            ]
+        };
+
+        _assetIdsFilterHeaderService.ParseToDomainModel(header).Returns(filter);
+        _metaDataService
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Any<CancellationToken>())
+            .Returns(new ShellDescriptorsData
+            {
+                PagingMetaData = new PagingMetaData { Cursor = null },
+                Result = []
+            });
+
+        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
+
+        Assert.NotNull(result);
+        _assetIdsFilterHeaderService.Received(1).ParseToDomainModel(header);
+        await _metaDataService.Received(1)
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task GetShellDescriptors_ShouldWork_WhenRequestIsNull()
     {
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+
         var shellDescriptorsData = new ShellDescriptorsData
         {
             PagingMetaData = new PagingMetaData { Cursor = "nextCursor" },
             Result = [new() { Id = "desc1" }]
         };
         _metaDataService
-            .GetShellDescriptorsAsync(null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(null, null, null, Arg.Any<CancellationToken>())
             .Returns(shellDescriptorsData);
 
         var result = await _sut.GetShellDescriptors(null!, CancellationToken.None);
@@ -84,15 +120,17 @@ public class MetaDataHandlerTests
         Assert.Equal("desc1", result.Result![0].Id);
         Assert.Equal("nextCursor", result.PagingMetaData!.Cursor);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(null, null, Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(null, null, null, Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public async Task GetShellDescriptors_ThrowsNotFound_WhenServiceReturnsNull()
     {
-        var request = new GetShellDescriptorsRequest(10, "cursor1234");
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==");
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+
         _metaDataService
-            .GetShellDescriptorsAsync(Arg.Any<int?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(Arg.Any<int?>(), Arg.Any<string?>(), Arg.Any<AssetIdFilterHeader?>(), Arg.Any<CancellationToken>())
             .Returns((ShellDescriptorsData)null!);
 
         var ex = await Assert.ThrowsAsync<NotFoundException>(() =>

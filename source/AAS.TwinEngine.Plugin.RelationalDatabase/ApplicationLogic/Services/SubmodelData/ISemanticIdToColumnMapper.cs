@@ -4,5 +4,5 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public interface ISemanticIdToColumnMapper
 {
-    Dictionary<string, string> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode);
+    Dictionary<string, ColumnMapping> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode);
 }

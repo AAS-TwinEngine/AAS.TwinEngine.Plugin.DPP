@@ -1,5 +1,4 @@
-﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
-
+﻿namespace AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 public class Semantics
 {
     public const string Section = "Semantics";

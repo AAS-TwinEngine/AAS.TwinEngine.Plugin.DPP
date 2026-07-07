@@ -47,7 +47,7 @@ public class SubmodelDataServiceTests
         var extractionResult = new SubmodelIdExtractionResult(productId, SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("responseSemanticId", DataType.String, "responseValue");
         var expectedResult = new SemanticLeafNode("resultSemanticId", DataType.String, "finalValue");
-        var columnMapping = new Dictionary<string, string> { ["requestSemanticId"] = "columnName" };
+        var columnMapping = new Dictionary<string, ColumnMapping> { ["requestSemanticId"] = new ColumnMapping("columnName", "columnName") };
         _submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>()).Returns(columnMapping);
         _queryProvider.GetQuery(SubmodelName.Nameplate.ToString()).Returns(sqlQuery);
@@ -72,13 +72,13 @@ public class SubmodelDataServiceTests
         var extractionResult = new SubmodelIdExtractionResult(ProductId, SubmodelName.Nameplate);
         var responseNode = new SemanticLeafNode("response", DataType.String, "value");
         var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
-        var columnMapping = new Dictionary<string, string>();
+        var columnMapping = new Dictionary<string, ColumnMapping>();
         _submodelMetadataExtractor.ExtractSubmodelMetadata(SubmodelId).Returns(extractionResult);
         _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>()).Returns(columnMapping);
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
-        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
+        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, ColumnMapping>>())
             .Returns(resultNode);
 
         await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None);
@@ -189,7 +189,7 @@ public class SubmodelDataServiceTests
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
-        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
+        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, ColumnMapping>>())
             .Throws(new InvalidOperationException("Response builder failed"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None));
@@ -230,7 +230,7 @@ public class SubmodelDataServiceTests
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
-        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
+        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, ColumnMapping>>())
             .Returns(resultNode);
 
         await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, cts.Token);
@@ -240,7 +240,7 @@ public class SubmodelDataServiceTests
 
     [Theory]
     [InlineData(SubmodelName.Nameplate)]
-    [InlineData(SubmodelName.ContactInformation)]
+    [InlineData(SubmodelName.MaintenanceInstructions)]
     public async Task GetValuesBySemanticIds_DifferentSubmodelNames_QueriesCorrectSubmodel(SubmodelName submodelName)
     {
         var jsonSchema = CreateValidJsonSchema();
@@ -255,7 +255,7 @@ public class SubmodelDataServiceTests
         _queryProvider.GetQuery(Arg.Any<string>()).Returns(SqlQuery);
         _submodelDataProvider.GetSubmodelValuesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<SemanticTreeNode>(responseNode));
-        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>())
+        _semanticTreeResponseBuilder.BuildResponse(Arg.Any<SemanticTreeNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, ColumnMapping>>())
             .Returns(resultNode);
 
         await _sut.GetValuesBySemanticIds(jsonSchema, SubmodelId, CancellationToken.None);

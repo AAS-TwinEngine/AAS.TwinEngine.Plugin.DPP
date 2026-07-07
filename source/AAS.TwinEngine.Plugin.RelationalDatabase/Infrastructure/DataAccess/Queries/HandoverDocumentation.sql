@@ -33,7 +33,6 @@ SELECT COALESCE(
                                                                                                     ),
                                                                         'DocumentVersion',          COALESCE(
                                                                                                         (SELECT json_agg(json_build_object(
-                                                                                                                    'en',                           dv."en",
                                                                                                                     'DigitalFile',                  dv."DigitalFile",
                                                                                                                     'Version',                      dv."Version",
                                                                                                                     'StatusSetDate',                dv."StatusSetDate",
@@ -48,6 +47,15 @@ SELECT COALESCE(
                                                                                                                     'Description_de',               dv."Description_de",
                                                                                                                     'KeyWords_en',                  dv."KeyWords_en",
                                                                                                                     'KeyWords_de',                  dv."KeyWords_de",
+                                                                                                                    'Languages',                    COALESCE(
+                                                                                                                                                        (SELECT json_agg(json_build_object(
+                                                                                                                                                                    'Language',     l."Language"
+                                                                                                                                                                ) ORDER BY l."Index")
+                                                                                                                                                         FROM "DocumentVersionLanguages" dvl
+                                                                                                                                                         JOIN "Languages" l ON l."Id" = dvl."LanguageId"
+                                                                                                                                                         WHERE dvl."DocumentVersionId" = dv."Id"),
+                                                                                                                                                        '[]'::json
+                                                                                                                                                    ),
                                                                                                                     'PreviewFile',                  dv."PreviewFile"
                                                                                                                 ) ORDER BY dv."Index")
                                                                                                          FROM "DocumentDocumentVersion" ddv

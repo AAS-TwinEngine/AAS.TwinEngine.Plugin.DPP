@@ -1,7 +1,12 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
+﻿using System.IO.Compression;
+
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Monitoring;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Shared;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration;
 
 using Asp.Versioning;
+
+using Microsoft.AspNetCore.ResponseCompression;
 
 using Serilog;
 
@@ -16,6 +21,8 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        _ = builder.Configuration.AddJsonFile("/config/dpp-env.json", optional: true, reloadOnChange: true);
+
         _ = builder.Host.UseSerilog();
         builder.ConfigureLogging(builder.Configuration);
         builder.ConfigureCorsServices();
@@ -23,7 +30,9 @@ public static class Program
         _ = builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureInfrastructure(builder.Configuration);
         builder.Services.ConfigureApplication();
+        builder.Services.ConfigureResponseCompression();
 
+        _ = builder.Services.AddHealthChecks().AddCheck<DatabaseAvailabilityHealthCheck>("database");
         _ = builder.Services.AddControllers();
 
         _ = builder.Services.AddEndpointsApiExplorer();
@@ -44,6 +53,8 @@ public static class Program
 
         var app = builder.Build();
 
+        _ = app.MapHealthChecks("/healthz");
+
         using (var scope = app.Services.CreateScope())
         {
             var initializer = scope.ServiceProvider.GetRequiredService<MappingDataInitializer>();
@@ -51,6 +62,7 @@ public static class Program
         }
 
         _ = app.UseExceptionHandler();
+        _ = app.UseResponseCompression();
         _ = app.UseHttpsRedirection();
 
         app.UseCorsServices();

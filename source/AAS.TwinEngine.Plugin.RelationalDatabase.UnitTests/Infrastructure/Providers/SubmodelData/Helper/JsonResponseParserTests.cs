@@ -1,5 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData.Helper;
 
@@ -543,11 +543,11 @@ public class JsonResponseParserTests
         Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(invalidJson));
 
         _logger.Received(1).Log(
-            LogLevel.Error,
-            Arg.Any<EventId>(),
-            Arg.Is<object>(o => o.ToString()!.Contains("Invalid JSON received from database")),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
+                                LogLevel.Error,
+                                Arg.Any<EventId>(),
+                                Arg.Is<object>(o => o.ToString()!.Contains("Invalid JSON received from database")),
+                                Arg.Any<Exception>(),
+                                Arg.Any<Func<object, Exception?, string>>());
     }
 
     [Fact]
@@ -559,13 +559,12 @@ public class JsonResponseParserTests
 
         var exception = Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(json.Trim()));
 
-        Assert.NotNull(exception);
-        _logger.Received(1).Log(
-            LogLevel.Error,
-            Arg.Any<EventId>(),
-            Arg.Any<object>(),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
+        Assert.NotNull(exception); _logger.Received(1).Log(
+                                                           LogLevel.Error,
+                                                           Arg.Any<EventId>(),
+                                                           Arg.Any<object>(),
+                                                           Arg.Any<Exception>(),
+                                                           Arg.Any<Func<object, Exception?, string>>());
     }
 
     [Fact]
@@ -574,23 +573,23 @@ public class JsonResponseParserTests
         Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(null!));
 
         _logger.Received(1).Log(
-            LogLevel.Error,
-            Arg.Any<EventId>(),
-            Arg.Any<object>(),
-            Arg.Any<Exception>(),
-            Arg.Any<Func<object, Exception?, string>>());
+                                LogLevel.Error,
+                                Arg.Any<EventId>(),
+                                Arg.Any<object>(),
+                                Arg.Any<Exception>(),
+                                Arg.Any<Func<object, Exception?, string>>());
     }
 
     [Fact]
     public void ParseJson_TruncatedJson_ThrowsResponseParsingException()
     {
-        const string truncatedJson = """
+        const string TruncatedJson = """
         {
             "root": {
                 "property": "value"
         """;
 
-        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(truncatedJson));
+        Assert.Throws<ResponseParsingException>(() => _sut.ParseJson(TruncatedJson));
     }
 
     [Fact]

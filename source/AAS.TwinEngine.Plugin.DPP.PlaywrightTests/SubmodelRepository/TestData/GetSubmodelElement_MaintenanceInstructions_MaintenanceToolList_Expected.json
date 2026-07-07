@@ -1,0 +1,45 @@
+{
+  "category": "CONSTANT",
+  "idShort": "OrderCodeToolOfManufacturer",
+  "description": [
+    {
+      "language": "de",
+      "text": "Eine vom Hersteller vergebene eindeutige Kombination aus Zahlen und Buchstaben, die zur Identifizierung des Werkzeugs bei der Bestellung verwendet wird"
+    },
+    {
+      "language": "en",
+      "text": "unique combination of numbers and letters issued by the manufacturer that is used to identify the tool for ordering"
+    }
+  ],
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "0112/2///61987#ABA950#008"
+      }
+    ]
+  },
+  "supplementalSemanticIds": [
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "0173-1#02-AAO227#004"
+        }
+      ]
+    }
+  ],
+  "qualifiers": [
+    {
+      "kind": "ConceptQualifier",
+      "type": "SMT/Cardinality",
+      "valueType": "xs:string",
+      "value": "ZeroToOne"
+    }
+  ],
+  "valueType": "xs:string",
+  "value": "BOSCH-TRX-T20",
+  "modelType": "Property"
+}

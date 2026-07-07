@@ -1,8 +1,8 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.Manifest;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Microsoft.Extensions.Options;
 
@@ -12,6 +12,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
 {
     private readonly bool _hasShellDescriptor = capabilities.Value.HasShellDescriptor;
     private readonly bool _hasAssetInformation = capabilities.Value.HasAssetInformation;
+    private readonly bool _hasAssetIdSearch = capabilities.Value.HasAssetIdSearch;
 
     public ManifestData GetManifestData()
     {
@@ -22,7 +23,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
             var manifestData = new ManifestData
             {
                 SupportedSemanticIds = supportedSemanticIds,
-                Capabilities = new CapabilitiesData { HasAssetInformation = _hasAssetInformation, HasShellDescriptor = _hasShellDescriptor }
+                Capabilities = new CapabilitiesData { HasAssetInformation = _hasAssetInformation, HasShellDescriptor = _hasShellDescriptor, HasAssetIdSearch = _hasAssetIdSearch }
             };
             return manifestData;
         }

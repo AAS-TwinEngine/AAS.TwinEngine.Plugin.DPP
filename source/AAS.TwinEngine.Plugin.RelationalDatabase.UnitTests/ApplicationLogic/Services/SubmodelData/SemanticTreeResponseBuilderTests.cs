@@ -1,5 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
@@ -30,7 +30,7 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_WithNullRequestNode_ThrowsArgumentNullException()
     {
         var responseNode = new SemanticLeafNode("test", DataType.String, "value");
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         Assert.Throws<ArgumentNullException>(() => _sut.BuildResponse(null!, responseNode, mapping));
     }
@@ -49,12 +49,12 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_WithNullResponseNode_ReturnsRequestNodeUnmodified()
     {
         var requestNode = new SemanticLeafNode("Product.Name", DataType.String, "OriginalValue");
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
         Assert.Equal("OriginalValue", ((SemanticLeafNode)result).Value);
-        _responseLeafNodeProcessor.DidNotReceive().FillLeafNode(Arg.Any<SemanticLeafNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, string>>());
+        _responseLeafNodeProcessor.DidNotReceive().FillLeafNode(Arg.Any<SemanticLeafNode>(), Arg.Any<SemanticTreeNode>(), Arg.Any<Dictionary<string, ColumnMapping>>());
     }
 
     [Fact]
@@ -62,9 +62,9 @@ public class SemanticTreeResponseBuilderTests
     {
         var requestNode = new SemanticLeafNode("Product.Name", DataType.String, string.Empty);
         var responseNode = new SemanticLeafNode("ProductName", DataType.String, "Laptop");
-        var mapping = new Dictionary<string, string>
+        var mapping = new Dictionary<string, ColumnMapping>
         {
-            { "Product.Name", "ProductName" }
+            { "Product.Name", new ColumnMapping("Product", "ProductName") }
         };
 
         _sut.BuildResponse(requestNode, responseNode, mapping);
@@ -77,9 +77,9 @@ public class SemanticTreeResponseBuilderTests
     {
         var requestNode = new SemanticBranchNode("Product", DataType.Object);
         var responseNode = new SemanticBranchNode("Product", DataType.Object);
-        var mapping = new Dictionary<string, string>
+        var mapping = new Dictionary<string, ColumnMapping>
         {
-            { "Product", "Product" }
+            { "Product", new ColumnMapping("Product", "Product") }
         };
 
         _sut.BuildResponse(requestNode, responseNode, mapping);
@@ -95,7 +95,7 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_RemovesIndexPrefixFromLeafNode()
     {
         var requestNode = new SemanticLeafNode($"Product{IndexPrefix}0", DataType.String, "Laptop");
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
@@ -106,7 +106,7 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_RemovesIndexPrefixFromBranchNode()
     {
         var requestNode = new SemanticBranchNode($"Items{IndexPrefix}0", DataType.Array);
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
@@ -121,7 +121,7 @@ public class SemanticTreeResponseBuilderTests
         var nameLeaf = new SemanticLeafNode($"Name{IndexPrefix}0", DataType.String, "Product");
         itemsBranch.AddChild(nameLeaf);
         requestNode.AddChild(itemsBranch);
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
@@ -136,7 +136,7 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_WithoutIndexPrefix_LeavesSemanticIdUnchanged()
     {
         var requestNode = new SemanticLeafNode("Product", DataType.String, "Laptop");
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
@@ -147,7 +147,7 @@ public class SemanticTreeResponseBuilderTests
     public void BuildResponse_RemovesOnlyFirstIndexPrefix()
     {
         var requestNode = new SemanticLeafNode($"Product{IndexPrefix}0.Items{IndexPrefix}1", DataType.String, "value");
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, null, mapping);
 
@@ -163,9 +163,9 @@ public class SemanticTreeResponseBuilderTests
         var nameLeaf = new SemanticLeafNode($"Name{IndexPrefix}0", DataType.String, string.Empty);
         requestNode.AddChild(nameLeaf);
         var responseNode = new SemanticBranchNode("Product", DataType.Object);
-        var mapping = new Dictionary<string, string>
+        var mapping = new Dictionary<string, ColumnMapping>
         {
-            { "Product", "Product" }
+            { "Product", new ColumnMapping("Product", "Product") }
         };
 
         var result = _sut.BuildResponse(requestNode, responseNode, mapping);
@@ -185,7 +185,7 @@ public class SemanticTreeResponseBuilderTests
         customerBranch.AddChild(nameLeaf);
         requestNode.AddChild(customerBranch);
         var responseNode = new SemanticBranchNode("Order", DataType.Object);
-        var mapping = new Dictionary<string, string>();
+        var mapping = new Dictionary<string, ColumnMapping>();
 
         var result = _sut.BuildResponse(requestNode, responseNode, mapping);
 

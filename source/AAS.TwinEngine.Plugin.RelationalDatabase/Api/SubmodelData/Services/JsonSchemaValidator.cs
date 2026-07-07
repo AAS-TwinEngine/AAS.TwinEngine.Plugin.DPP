@@ -1,9 +1,11 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Json.Schema;
 
@@ -11,15 +13,15 @@ using Microsoft.Extensions.Options;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 
-public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSchemaValidator> logger) : IJsonSchemaValidator
+public class JsonSchemaValidator(IOptions<Semantics> semantics,
+                                 ILogger<JsonSchemaValidator> logger,
+                                 IJsonSchemaSecurityValidator securityValidator) : IJsonSchemaValidator
 {
     private readonly string _contextPrefix = semantics.Value.IndexContextPrefix;
-    private const string DefinitionsPrefix = "#/definitions/";
-    private const int MaxSchemaDepth = 10;
     private const int MaxSchemaSize = 1_048_576; // 1MB
-    private const int MaxProperties = 1000;
+    private const string DefinitionsPrefix = "#/definitions/";
 
-    private static readonly JsonSerializerOptions Serialization = new()
+    private static readonly JsonSerializerOptions SerializationOptions = new()
     {
         WriteIndented = false,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -30,37 +32,38 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
     {
         if (!TrySerializeSchema(schema!, out var schemaText, out var serializationError))
         {
-            LogAndThrowException($"Schema serialization failed: {serializationError}");
+            LogAndThrowRequestException($"Schema serialization failed: {serializationError}");
         }
 
         if (schemaText.Length > MaxSchemaSize)
         {
-            LogAndThrowException($"Schema size exceeds the maximum allowed size of {MaxSchemaSize} bytes.");
+            LogAndThrowRequestException($"Schema size exceeds the maximum allowed size of {MaxSchemaSize} bytes.");
         }
 
         if (!TryParseSchemaNode(schemaText, out var schemaNode, out var parseError))
         {
-            LogAndThrowException($"Schema JSON is invalid: {parseError}");
+            LogAndThrowRequestException($"Schema JSON is invalid: {parseError}");
         }
 
         if (schemaNode == null)
         {
-            LogAndThrowException("Serialized schema resulted in null JsonNode.");
+            LogAndThrowRequestException("Serialized schema resulted in null JsonNode.");
         }
 
-        ValidateSchemaComplexity(schemaNode!);
+        securityValidator.ValidateSchemaComplexity(schemaNode!);
+        securityValidator.ValidateSchemaContent(schemaNode!);
 
         try
         {
             var result = MetaSchemas.Draft7.Evaluate(schemaNode, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
-                LogAndThrowException("Schema is not valid against Draft-7.");
+                LogAndThrowRequestException("Schema is not valid against Draft-7.");
             }
         }
         catch (Exception ex)
         {
-            LogAndThrowException("Draft-7 evaluation failed.", ex);
+            LogAndThrowRequestException("Draft-7 evaluation failed.", ex);
         }
     }
 
@@ -68,22 +71,29 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
     {
         if (string.IsNullOrWhiteSpace(responseJson))
         {
-            LogAndThrowException("Response JSON is empty.");
+            LogAndThrowResponseException("Response JSON is empty.");
         }
 
         if (!TryParseJson(responseJson, out var responseDoc, out var parseError))
         {
-            LogAndThrowException($"Failed to parse response JSON: {parseError}");
+            LogAndThrowResponseException($"Failed to parse response JSON: {parseError}");
         }
 
-        if (!TryNormalizeSchema(requestSchema, out var normalizedSchema, out var normalizeError))
+        JsonObject normalizedSchema;
+
+        try
         {
-            LogAndThrowException($"Failed to normalize request schema: {normalizeError}");
+            normalizedSchema = NormalizeSchema(requestSchema);
+        }
+        catch (Exception ex)
+        {
+            LogAndThrowResponseException($"Failed to normalize request schema: Schema normalization failed: {ex.Message}");
+            return;
         }
 
         if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
         {
-            LogAndThrowException($"Failed to register schema: {registerError}");
+            LogAndThrowResponseException($"Failed to register schema: {registerError}");
         }
 
         try
@@ -92,16 +102,17 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             var result = schema.Evaluate(responseDoc!.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
-                LogAndThrowException("Response did not validate against schema.");
+                LogAndThrowResponseException("Response did not validate against schema.");
             }
         }
         catch (Exception ex)
         {
-            LogAndThrowException("Exception occurred during response validation.", ex);
+            LogAndThrowResponseException("Exception occurred during response validation.", ex);
         }
     }
 
-    private void LogAndThrowException(string logMessage, Exception? ex = null)
+    [DoesNotReturn]
+    private void LogAndThrowRequestException(string logMessage, Exception? ex = null)
     {
         if (ex != null)
         {
@@ -112,7 +123,22 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             logger.LogError(logMessage);
         }
 
-        throw new NotFoundException();
+        throw new InvalidUserInputException(logMessage);
+    }
+
+    [DoesNotReturn]
+    private void LogAndThrowResponseException(string logMessage, Exception? ex = null)
+    {
+        if (ex != null)
+        {
+            logger.LogError(ex, logMessage);
+        }
+        else
+        {
+            logger.LogError(logMessage);
+        }
+
+        throw new NotFoundException(logMessage);
     }
 
     private static bool TrySerializeSchema(JsonSchema schema, out string schemaText, out string? error)
@@ -122,7 +148,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
 
         try
         {
-            schemaText = JsonSerializer.Serialize(schema, Serialization);
+            schemaText = JsonSerializer.Serialize(schema, SerializationOptions);
             return true;
         }
         catch (Exception ex)
@@ -136,6 +162,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
     {
         error = null;
         node = null;
+
         try
         {
             node = JsonNode.Parse(schemaText);
@@ -165,46 +192,17 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
         }
     }
 
-    private bool TryNormalizeSchema(JsonSchema schema, out JsonObject normalized, out string? error)
+    private JsonObject NormalizeSchema(JsonSchema schema)
     {
-        error = null;
-        normalized = [];
+        var json = JsonSerializer.Serialize(schema, SerializationOptions);
 
-        try
-        {
-            var json = JsonSerializer.Serialize(schema, Serialization);
-
-            normalized = JsonNode.Parse(json)?.AsObject()
+        var normalized = JsonNode.Parse(json)?.AsObject()
             ?? throw new ArgumentException("Failed to parse schema JSON.");
 
-            EscapeJsonReferencePointers(normalized);
-            normalized["$id"] = normalized["$id"]?.GetValue<string>() ?? $"urn:uuid:{Guid.NewGuid():D}";
+        EscapeJsonReferencePointers(normalized);
+        normalized["$id"] = normalized["$id"]?.GetValue<string>() ?? $"urn:uuid:{Guid.NewGuid():D}";
 
-            return true;
-        }
-        catch (Exception ex)
-        {
-            error = $"Schema normalization failed: {ex.Message}";
-            return false;
-        }
-    }
-
-    private static bool TryRegisterJsonSchema(JsonObject schemaJsonObject, out string? registrationErrorMessage)
-    {
-        registrationErrorMessage = null;
-
-        try
-        {
-            var jsonSchema = JsonSchema.FromText(schemaJsonObject.ToJsonString());
-            var schemaIdentifierUri = new Uri(schemaJsonObject["$id"]!.GetValue<string>()!);
-            SchemaRegistry.Global.Register(schemaIdentifierUri, jsonSchema);
-            return true;
-        }
-        catch (Exception exception)
-        {
-            registrationErrorMessage = $"Schema registration failed: {exception.Message}";
-            return false;
-        }
+        return normalized;
     }
 
     private void EscapeJsonReferencePointers(JsonNode? currentNode)
@@ -244,11 +242,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             RemoveContextSuffixFromRequiredProperties(requiredPropertiesArray);
         }
 
-        foreach (var property in jsonObject.ToList())
+        foreach (var (propertyName, propertyValue) in jsonObject.ToList())
         {
-            var propertyName = property.Key;
-            var propertyValue = property.Value;
-
             if (propertyName == "$ref" &&
                 propertyValue is JsonValue referenceValue &&
                 referenceValue.TryGetValue<string>(out var referenceString) &&
@@ -259,56 +254,6 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
             else
             {
                 EscapeJsonReferencePointers(propertyValue);
-            }
-        }
-    }
-
-    private static void ValidateSchemaComplexity(JsonNode root)
-    {
-        var stack = new Stack<(JsonNode node, int depth)>();
-        stack.Push((root, 0));
-
-        var totalPropertiesCount = 0;
-
-        while (stack.Count > 0)
-        {
-            var (current, depth) = stack.Pop();
-
-            if (depth > MaxSchemaDepth)
-            {
-                throw new BadRequestException($"Schema nesting too deep. Maximum allowed depth is {MaxSchemaDepth}.");
-            }
-
-            switch (current)
-            {
-                case JsonObject obj:
-                    if (obj.TryGetPropertyValue("properties", out var propsNode) && propsNode is JsonObject propsObj)
-                    {
-                        totalPropertiesCount += propsObj.Count;
-                        if (totalPropertiesCount > MaxProperties)
-                        {
-                            throw new BadRequestException($"Schema contains too many properties. Maximum allowed is {MaxProperties}.");
-                        }
-                    }
-
-                    foreach (var kv in obj)
-                    {
-                        if (kv.Value != null)
-                        {
-                            stack.Push((kv.Value, depth + 1));
-                        }
-                    }
-                    break;
-
-                case JsonArray arr:
-                    foreach (var item in arr)
-                    {
-                        if (item != null)
-                        {
-                            stack.Push((item, depth + 1));
-                        }
-                    }
-                    break;
             }
         }
     }
@@ -327,10 +272,10 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
     private string BuildEscapedReferencePath(string originalReferencePath)
     {
         var referenceWithoutPrefix = originalReferencePath[DefinitionsPrefix.Length..];
-
         var strippedReference = RemoveContextSuffix(referenceWithoutPrefix);
-
-        var escapedReference = strippedReference.Replace("~", "~0", StringComparison.OrdinalIgnoreCase).Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
+        var escapedReference = strippedReference
+            .Replace("~", "~0", StringComparison.OrdinalIgnoreCase)
+            .Replace("/", "~1", StringComparison.OrdinalIgnoreCase);
 
         return DefinitionsPrefix + escapedReference;
     }
@@ -351,5 +296,23 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics, ILogger<JsonSche
         var propertyValue = jsonObject[oldPropertyName];
         _ = jsonObject.Remove(oldPropertyName);
         jsonObject[newPropertyName] = propertyValue!;
+    }
+
+    private static bool TryRegisterJsonSchema(JsonObject schemaJsonObject, out string? registrationErrorMessage)
+    {
+        registrationErrorMessage = null;
+
+        try
+        {
+            var jsonSchema = JsonSchema.FromText(schemaJsonObject.ToJsonString());
+            var schemaIdentifierUri = new Uri(schemaJsonObject["$id"]!.GetValue<string>()!);
+            SchemaRegistry.Global.Register(schemaIdentifierUri, jsonSchema);
+            return true;
+        }
+        catch (Exception exception)
+        {
+            registrationErrorMessage = $"Schema registration failed: {exception.Message}";
+            return false;
+        }
     }
 }
