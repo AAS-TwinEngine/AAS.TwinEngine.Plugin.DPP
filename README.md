@@ -1,5 +1,9 @@
 # DPP Plugin
 
+[![Made by M&M Software](https://img.shields.io/badge/Made_by_M%26M_Software-364955?style=flat-square)](https://www.mm-software.com/)
+[![Apache License](https://img.shields.io/badge/License-Apache-364955.svg?style=flat-square)](https://www.apache.org/licenses/)
+[![.NET 10.0](https://img.shields.io/badge/.NET-10.0-512BD4)](https://learn.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-10.0)
+
 ## Overview
 
 The **DPP Plugin** is a demonstration plugin that provides data for **Asset Administration Shell (AAS)** submodels that are mandatory elements of **Digital Product Passports (DPP)** .
@@ -30,6 +34,7 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 > The Plugin does **not** need to understand AAS internals it works only with **schemas and data**.
 
+> For additional details about the Plugin contract, request/response structure, and integration requirements, see the **[Plugin Documentation](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/wiki/Plugin)**.
 ---
 
 ## Features Overview
