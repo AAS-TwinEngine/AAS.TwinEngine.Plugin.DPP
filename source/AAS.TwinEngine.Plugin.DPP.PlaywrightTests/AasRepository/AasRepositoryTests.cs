@@ -236,7 +236,7 @@ public class AasRepositoryTests : ApiTestBase
     public async Task GetAllShells_ByIdShort()
     {
         // Arrange
-        var idShort = "Product1";
+        var idShort = "Product2";
         var url = $"/shells?idShort={idShort}";
 
         // Act
