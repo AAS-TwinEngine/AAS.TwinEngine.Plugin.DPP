@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -360,19 +360,16 @@ public class AasRepositoryTests : ApiTestBase
     }
 
     [Fact]
-    public async Task GetAllShells_WithUnknownCursorValue_ShouldReturnInternalServerError()
+    public async Task GetAllShells_WithUnknownCursorValue_ShouldReturnBadRequest()
     {
         // Arrange
-        const string firstPageUrl = "/shells?limit=1";
-        var unknownCursor = EncodeBase64Url("https://mm-software.com/ids/aas/000-004");
+        var unknownCursor = "https://mm-software.com/ids/aas/000-004";
 
         // Act
-        var firstPageResponse = await ApiContext.GetAsync(firstPageUrl);
         var unknownCursorResponse = await ApiContext.GetAsync($"/shells?limit=1&cursor={unknownCursor}");
 
         // Assert
-        AssertSuccessResponse(firstPageResponse);
-        Assert.Equal(500, unknownCursorResponse.Status);
+        Assert.Equal(400, unknownCursorResponse.Status);
     }
 
     private static async Task<JsonElement> ParseResponseRootAsync(Microsoft.Playwright.IAPIResponse response)

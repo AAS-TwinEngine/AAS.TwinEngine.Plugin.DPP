@@ -114,7 +114,7 @@
     <None Update="AasRepository\TestData\GetAllShells_ByAssetId_And_ByIdShort_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="AasRepository\TestData\GetAllShells_ByAssetId_Expected.json">
+    <None Update="AasRepository\TestData\GetAllShells_ByAssetIds_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="AasRepository\TestData\GetAllShells_ByIdShort_Expected.json">
@@ -127,6 +127,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="AasRepository\TestData\GetAllShells_WithCursor_And_Limit_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetAllShells_WithLimit_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
