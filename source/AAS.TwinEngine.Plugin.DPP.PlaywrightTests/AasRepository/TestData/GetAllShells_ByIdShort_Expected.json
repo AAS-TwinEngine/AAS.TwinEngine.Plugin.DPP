@@ -1,0 +1,298 @@
+{
+  "paging_metadata": {
+    "cursor": null
+  },
+  "result": [
+    {
+      "idShort": "Product1",
+      "id": "https://mm-software.com/ids/aas/000-001",
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://mm-software.com/ids/assets/000-001",
+        "specificAssetIds": [
+          {
+            "name": "SerialNumber",
+            "value": "SN-FMABC1234-9804820",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/serial-number"
+                }
+              ]
+            }
+          },
+          {
+            "name": "BatchId",
+            "value": "BATCH-2022-001",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/batch-id"
+                }
+              ]
+            }
+          },
+          {
+            "name": "LotNumber",
+            "value": "LOT-DE-77881",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/lot-number"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-001/Nameplate"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-001/MaintenanceInstructions"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-001/TechnicalData"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-001/CarbonFootprint"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-001/HandoverDocumentation"
+            }
+          ]
+        }
+      ],
+      "modelType": "AssetAdministrationShell"
+    },
+    {
+      "idShort": "Product2",
+      "id": "https://mm-software.com/ids/aas/000-002",
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://mm-software.com/ids/assets/000-002",
+        "specificAssetIds": [
+          {
+            "name": "SerialNumber",
+            "value": "SN-FMABC1238-9804821",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/serial-number"
+                }
+              ]
+            }
+          },
+          {
+            "name": "BatchId",
+            "value": "BATCH-2022-001",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/batch-id"
+                }
+              ]
+            }
+          },
+          {
+            "name": "LotNumber",
+            "value": "LOT-IN-77882",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/lot-number"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/Nameplate"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/MaintenanceInstructions"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/TechnicalData"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/CarbonFootprint"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/HandoverDocumentation"
+            }
+          ]
+        }
+      ],
+      "modelType": "AssetAdministrationShell"
+    },
+    {
+      "idShort": "Product3",
+      "id": "https://mm-software.com/ids/aas/001-001",
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://mm-software.com/ids/assets/001-001",
+        "specificAssetIds": [
+          {
+            "name": "SerialNumber",
+            "value": "SN-TMABC1680-9804760",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/serial-number"
+                }
+              ]
+            }
+          },
+          {
+            "name": "BatchId",
+            "value": "BATCH-2022-001",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/batch-id"
+                }
+              ]
+            }
+          },
+          {
+            "name": "LotNumber",
+            "value": "LOT-DE-84572",
+            "externalSubjectId": {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://example.com/subjects/lot-number"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/001-001/Nameplate"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/001-001/MaintenanceInstructions"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/001-001/TechnicalData"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/001-001/CarbonFootprint"
+            }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/001-001/HandoverDocumentation"
+            }
+          ]
+        }
+      ],
+      "modelType": "AssetAdministrationShell"
+    }
+  ]
+}
