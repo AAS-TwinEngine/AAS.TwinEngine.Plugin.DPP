@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
@@ -13,9 +13,9 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
-    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
-        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, Create);
+        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, Create);
 
         var jsonResult = parameters.Count == 0
             ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)

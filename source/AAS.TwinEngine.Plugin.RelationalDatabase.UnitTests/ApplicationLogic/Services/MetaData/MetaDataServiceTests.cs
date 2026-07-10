@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
@@ -44,10 +44,10 @@ public class MetaDataServiceTests
         };
         _queryProvider.GetQuery("Shells").Returns(query);
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, 10, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, 10, null, null, null, Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        var result = await _sut.GetShellDescriptorsAsync(10, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(10, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Equal("next", result.PagingMetaData?.Cursor);
@@ -59,7 +59,7 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("Shells").Returns((string?)null);
 
         await Assert.ThrowsAsync<QueryNotAvailableException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, null, CancellationToken.None));
     }
 
     [Fact]
@@ -68,11 +68,11 @@ public class MetaDataServiceTests
         var query = "SELECT * FROM shells";
         _queryProvider.GetQuery("Shells").Returns(query);
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<ShellDescriptorsData?>(null));
 
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, null, CancellationToken.None));
     }
 
     [Fact]
@@ -93,14 +93,36 @@ public class MetaDataServiceTests
         };
         _queryProvider.GetQuery("Shells").Returns(query);
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, 10, null, filter, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, 10, null, filter, null, Arg.Any<CancellationToken>())
             .Returns(expected);
 
-        var result = await _sut.GetShellDescriptorsAsync(10, null, filter, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(10, null, filter, null, CancellationToken.None);
 
         Assert.NotNull(result);
         await _metaDataProvider.Received(1)
-            .GetShellDescriptorsAsync(query, 10, null, filter, Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(query, 10, null, filter, null, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenIdShortProvided_PassesIdShortToProvider()
+    {
+        var query = "SELECT * FROM shells";
+        const string idShort = "M&M03";
+        var expected = new ShellDescriptorsData
+        {
+            PagingMetaData = new PagingMetaData { Cursor = null },
+            Result = []
+        };
+        _queryProvider.GetQuery("Shells").Returns(query);
+        _metaDataProvider
+            .GetShellDescriptorsAsync(query, null, null, null, idShort, Arg.Any<CancellationToken>())
+            .Returns(expected);
+
+        var result = await _sut.GetShellDescriptorsAsync(null, null, null, idShort, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataProvider.Received(1)
+            .GetShellDescriptorsAsync(query, null, null, null, idShort, Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -116,11 +138,11 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("Shells").Returns(query);
 
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns(response);
 
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, null, CancellationToken.None));
     }
 
     [Fact]
@@ -131,12 +153,12 @@ public class MetaDataServiceTests
         _queryProvider.GetQuery("Shells").Returns(query);
 
         _metaDataProvider
-            .GetShellDescriptorsAsync(query, null, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(query, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns<Task<ShellDescriptorsData?>>(_ =>
                 throw new ResourceNotFoundException("not found"));
 
         await Assert.ThrowsAsync<ShellMetaDataNotFoundException>(() =>
-            _sut.GetShellDescriptorsAsync(null, null, null, CancellationToken.None));
+            _sut.GetShellDescriptorsAsync(null, null, null, null, CancellationToken.None));
     }
 
     [Fact]

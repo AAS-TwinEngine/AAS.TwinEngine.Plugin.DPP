@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
@@ -11,12 +11,12 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Met
 
 public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider metaDataProvider, ILogger<MetaDataService> logger, IOptions<MetaDataEndpoints> metaDataEndpoints) : IMetaDataService
 {
-    public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shells);
-            var result = await metaDataProvider.GetShellDescriptorsAsync(query, limit, cursor, filter, cancellationToken).ConfigureAwait(false);
+            var result = await metaDataProvider.GetShellDescriptorsAsync(query, limit, cursor, filter, idShort, cancellationToken).ConfigureAwait(false);
             if (result?.Result != null)
             {
                 return result;

@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.MappingProfiles;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.MappingProfiles;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Responses;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
@@ -21,7 +21,7 @@ public class MetaDataHandler(
 
         return GetResourceAsync(
             "shell-descriptors",
-            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, filter, cancellationToken)!,
+            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, filter, request?.IdShortFilter, cancellationToken)!,
             descriptors => descriptors.ToDto()
         );
     }

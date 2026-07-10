@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
@@ -12,27 +12,42 @@ public static class ShellsFilterQueryBuilder
     public static (string Query, List<DbParameter> Parameters) Build(
         string baseQuery,
         AssetIdFilterHeader? filter,
+        string? idShort,
         Func<string, object?, DbParameter> parameterFactory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(baseQuery);
         ArgumentNullException.ThrowIfNull(parameterFactory);
 
-        if (filter == null || filter.Identifiers.Count == 0)
+        var hasAssetFilter = filter != null && filter.Identifiers.Count > 0;
+        var hasIdShort = !string.IsNullOrEmpty(idShort);
+
+        if (!hasAssetFilter && !hasIdShort)
         {
             return (ReplaceMarker(baseQuery, string.Empty), []);
         }
 
-        var whereClauses = new List<string>(filter.Identifiers.Count);
-        var parameters = new List<DbParameter>(filter.Identifiers.Count * 2);
+        var whereClauses = new List<string>();
+        var parameters = new List<DbParameter>();
 
-        for (var index = 0; index < filter.Identifiers.Count; index++)
+        if (hasAssetFilter)
         {
-            var identifier = filter.Identifiers[index];
+            parameters = new List<DbParameter>(filter!.Identifiers.Count * 2);
 
-            whereClauses.Add(
-                IsGlobalAssetId(identifier.Name)
-                    ? BuildGlobalAssetIdClause(index, identifier, parameterFactory, parameters)
-                    : BuildSpecificAssetIdClause(index, identifier, parameterFactory, parameters));
+            for (var index = 0; index < filter.Identifiers.Count; index++)
+            {
+                var identifier = filter.Identifiers[index];
+
+                whereClauses.Add(
+                    IsGlobalAssetId(identifier.Name)
+                        ? BuildGlobalAssetIdClause(index, identifier, parameterFactory, parameters)
+                        : BuildSpecificAssetIdClause(index, identifier, parameterFactory, parameters));
+            }
+        }
+
+        if (hasIdShort)
+        {
+            whereClauses.Add($"A.\"IdShort\" = @idShort");
+            parameters.Add(parameterFactory("@idShort", idShort));
         }
 
         var whereClause = "WHERE " + string.Join(" AND ", whereClauses);

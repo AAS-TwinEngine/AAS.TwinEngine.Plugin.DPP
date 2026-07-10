@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
@@ -34,7 +34,7 @@ public class MetaDataProviderTests
     {
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(string.Empty);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result.Result!);
@@ -70,7 +70,7 @@ public class MetaDataProviderTests
         var json = JsonSerializer.Serialize(items);
         _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(json);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, null, CancellationToken.None);
 
         var item = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", item.Id);
@@ -89,6 +89,7 @@ public class MetaDataProviderTests
             limit: null,
             cursor: null,
             filter: null,
+            idShort: null,
             cancellationToken: CancellationToken.None);
 
         Assert.NotNull(result);
@@ -125,7 +126,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-1", matched.Id);
@@ -134,6 +135,31 @@ public class MetaDataProviderTests
             Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)
                                     && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)),
             Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenIdShortProvided_FiltersByIdShort()
+    {
+        const string idShort = "M&M03";
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "M&M03", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-2", Id = "shell-2", IdShort = "OtherShell", SpecificAssetIds = [] }
+        };
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, idShort, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("A.\"IdShort\" = @idShort", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters =>
+                parameters.Count() == 1 &&
+                parameters.First().ParameterName == "@idShort" &&
+                parameters.First().Value!.ToString() == idShort),
             Arg.Any<CancellationToken>());
     }
 
@@ -151,7 +177,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result!.Result!);
@@ -180,7 +206,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", matched.Id);
