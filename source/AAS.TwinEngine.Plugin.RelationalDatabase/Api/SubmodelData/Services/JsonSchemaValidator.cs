@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Json.Schema;
@@ -30,6 +31,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateRequestSchema(JsonSchema schema)
     {
+        using var span = PluginTracing.StartValidatingRequest("schema");
         if (!TrySerializeSchema(schema!, out var schemaText, out var serializationError))
         {
             LogAndThrowRequestException($"Schema serialization failed: {serializationError}");

@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.ConnectionFactory;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.Validators;
 
@@ -27,6 +28,7 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
         IEnumerable<DbParameter>? parameters,
         CancellationToken cancellationToken)
     {
+        using var span = PluginTracing.StartQueryExecution("Database");
         logger.LogDebug("Executing query");
 
         ValidateQuery(query);

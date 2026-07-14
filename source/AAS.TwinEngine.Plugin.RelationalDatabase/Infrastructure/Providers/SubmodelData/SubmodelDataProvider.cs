@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
@@ -14,6 +15,8 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
 {
     public async Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken)
     {
+        using var querySpan = PluginTracing.StartQueryExecution(productId);
+
         var parameters = new List<DbParameter>
         {
             Create(productId)

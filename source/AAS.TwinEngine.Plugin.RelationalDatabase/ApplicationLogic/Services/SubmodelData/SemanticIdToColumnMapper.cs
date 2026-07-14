@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Shared;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
@@ -28,6 +29,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
 
     public Dictionary<string, ColumnMapping> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
+        using var span = PluginTracing.StartMappingExecution(requestNode.SemanticId);
         ArgumentNullException.ThrowIfNull(requestNode);
 
         var mappingData = _cachedMappingData.Value;

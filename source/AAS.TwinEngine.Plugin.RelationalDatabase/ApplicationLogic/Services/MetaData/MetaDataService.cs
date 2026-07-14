@@ -1,5 +1,6 @@
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
@@ -13,6 +14,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
+        using var span = PluginTracing.StartFetchingShellMetadata(idShort ?? "all");
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shells);
@@ -22,17 +24,20 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
+            span.RecordError($"Shell descriptors not found for limit: {limit}, cursor: {cursor}");
             logger.LogError("Shell descriptors not found for limit: {Limit}, cursor: {Cursor}", limit, cursor);
             throw new ShellMetaDataNotFoundException();
         }
         catch (Exception ex)
         {
+            span.RecordError(ex);
             throw HandleMetaDataException(ex, inner => new ShellMetaDataNotFoundException(inner));
         }
     }
 
     public async Task<ShellDescriptorData> GetShellDescriptorAsync(string aasIdentifier, CancellationToken cancellationToken)
     {
+        using var span = PluginTracing.StartFetchingShellMetadata(aasIdentifier);
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shell);
@@ -42,17 +47,20 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
+            span.RecordError($"Shell descriptor not found for AAS Identifier: {aasIdentifier}");
             logger.LogError("Shell descriptor not found for AAS Identifier: {AasIdentifier}", aasIdentifier);
             throw new ShellMetaDataNotFoundException();
         }
         catch (Exception ex)
         {
+            span.RecordError(ex);
             throw HandleMetaDataException(ex, inner => new ShellMetaDataNotFoundException(inner));
         }
     }
 
     public async Task<AssetData> GetAssetAsync(string assetIdentifier, CancellationToken cancellationToken)
     {
+        using var span = PluginTracing.StartFetchingAssetMetadata(assetIdentifier);
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Asset);
@@ -62,11 +70,13 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
                 return result;
             }
 
-            logger.LogError("Asset not found for Asset Identifier: {AssetIdentifier}", assetIdentifier);
+            span.RecordError($"Asset not found for identifier: {assetIdentifier}");
+            logger.LogError("Asset not found for identifier: {AssetIdentifier}", assetIdentifier);
             throw new AssetMetaDataNotFoundException();
         }
         catch (Exception ex)
         {
+            span.RecordError(ex);
             throw HandleMetaDataException(ex, inner => new AssetMetaDataNotFoundException(inner));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
@@ -12,6 +13,7 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions, I
 
     public SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode? responseNode, Dictionary<string, ColumnMapping> semanticIdToColumnMapping)
     {
+        using var span = PluginTracing.StartFillingDataFromDatabase(requestNode.SemanticId);
         ArgumentNullException.ThrowIfNull(requestNode);
         ArgumentNullException.ThrowIfNull(semanticIdToColumnMapping);
 
