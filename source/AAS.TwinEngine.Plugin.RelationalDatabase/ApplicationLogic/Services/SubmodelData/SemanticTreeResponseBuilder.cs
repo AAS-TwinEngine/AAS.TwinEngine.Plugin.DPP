@@ -13,9 +13,9 @@ public class SemanticTreeResponseBuilder(IOptions<Semantics> semanticsOptions, I
 
     public SemanticTreeNode BuildResponse(SemanticTreeNode requestNode, SemanticTreeNode? responseNode, Dictionary<string, ColumnMapping> semanticIdToColumnMapping)
     {
-        using var span = PluginTracing.StartFillingDataFromDatabase(requestNode.SemanticId);
         ArgumentNullException.ThrowIfNull(requestNode);
         ArgumentNullException.ThrowIfNull(semanticIdToColumnMapping);
+        using var span = PluginTracing.StartFillingDataFromDatabase(requestNode.SemanticId);
 
         if (responseNode is not null)
         {

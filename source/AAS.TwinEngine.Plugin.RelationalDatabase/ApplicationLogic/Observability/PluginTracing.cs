@@ -23,7 +23,6 @@ public static class PluginTracing
     {
         public const string SubmodelId = "aas.submodel_id";
         public const string ShellId = "aas.shell_id";
-        public const string ProductId = "aas.product_id";
         public const string RequestId = "db.request_id";
     }
 
@@ -35,12 +34,7 @@ public static class PluginTracing
     }
 
 
-    public static Activity? StartQueryExecution(string productId)
-    {
-        var activity = Source.StartActivity(Spans.QueryExecution);
-        _ = activity?.SetTag(Attributes.ProductId, productId);
-        return activity;
-    }
+    public static Activity? StartQueryExecution() => Source.StartActivity(Spans.QueryExecution);
 
     public static Activity? StartDatabaseConnection()
     {

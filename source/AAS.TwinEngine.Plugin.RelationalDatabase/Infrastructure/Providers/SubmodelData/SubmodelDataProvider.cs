@@ -15,8 +15,6 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
 {
     public async Task<SemanticTreeNode> GetSubmodelValuesAsync(string sqlQuery, string productId, CancellationToken cancellationToken)
     {
-        using var querySpan = PluginTracing.StartQueryExecution(productId);
-
         var parameters = new List<DbParameter>
         {
             Create(productId)

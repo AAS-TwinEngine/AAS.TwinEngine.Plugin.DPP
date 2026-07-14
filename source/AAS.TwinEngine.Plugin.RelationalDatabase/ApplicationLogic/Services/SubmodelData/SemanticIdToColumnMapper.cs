@@ -29,8 +29,8 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
 
     public Dictionary<string, ColumnMapping> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
-        using var span = PluginTracing.StartMappingExecution(requestNode.SemanticId);
         ArgumentNullException.ThrowIfNull(requestNode);
+        using var span = PluginTracing.StartMappingExecution(requestNode.SemanticId);
 
         var mappingData = _cachedMappingData.Value;
         return BuildSemanticIdToColumnMapping(requestNode, mappingData);

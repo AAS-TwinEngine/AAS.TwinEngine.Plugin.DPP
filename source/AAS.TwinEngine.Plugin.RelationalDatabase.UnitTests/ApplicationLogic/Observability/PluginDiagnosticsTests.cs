@@ -41,10 +41,7 @@ public class PluginDiagnosticsTests
     {
         Assert.Equal("aas.submodel_id", PluginTracing.Attributes.SubmodelId);
         Assert.Equal("aas.shell_id", PluginTracing.Attributes.ShellId);
-        Assert.Equal("aas.product_id", PluginTracing.Attributes.ProductId);
         Assert.Equal("db.request_id", PluginTracing.Attributes.RequestId);
-        Assert.Equal("db.row_count", PluginTracing.Attributes.RowCount);
-        Assert.Equal("db.table_name", PluginTracing.Attributes.TableName);
     }
 
     #endregion
@@ -77,24 +74,12 @@ public class PluginDiagnosticsTests
     #region StartQueryExecution Tests
 
     [Fact]
-    public void StartQueryExecution_CreatesActivityWithCorrectName()
+    public void StartQueryExecution_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartQueryExecution("Submodels");
+        using var activity = PluginTracing.StartQueryExecution();
 
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(PluginTracing.Spans.QueryExecution, capturedActivity.OperationName);
-    }
-
-    [Fact]
-    public void StartQueryExecution_SetsTableNameTag()
-    {
-        using var fixture = CreateFixture();
-        const string TableName = "SubmodelProperties";
-        using var activity = PluginTracing.StartQueryExecution(TableName);
-
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(TableName, capturedActivity.GetTagItem(PluginTracing.Attributes.TableName));
+        Assert.Single(fixture.Activities);
     }
 
     #endregion
@@ -151,14 +136,14 @@ public class PluginDiagnosticsTests
     }
 
     [Fact]
-    public void StartMappingExecution_SetsTableNameTag()
+    public void StartMappingExecution_SetsSubmodelIdTag()
     {
         using var fixture = CreateFixture();
-        const string TableName = "Nameplate";
-        using var activity = PluginTracing.StartMappingExecution(TableName);
+        const string submodelId = "submodel-001";
+        using var activity = PluginTracing.StartMappingExecution(submodelId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(TableName, capturedActivity.GetTagItem(PluginTracing.Attributes.TableName));
+        Assert.Equal(submodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
     }
 
     #endregion

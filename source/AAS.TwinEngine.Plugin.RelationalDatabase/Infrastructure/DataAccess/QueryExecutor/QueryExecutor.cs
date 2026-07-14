@@ -28,7 +28,7 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
         IEnumerable<DbParameter>? parameters,
         CancellationToken cancellationToken)
     {
-        using var span = PluginTracing.StartQueryExecution("Database");
+        using var span = PluginTracing.StartQueryExecution();
         logger.LogDebug("Executing query");
 
         ValidateQuery(query);
