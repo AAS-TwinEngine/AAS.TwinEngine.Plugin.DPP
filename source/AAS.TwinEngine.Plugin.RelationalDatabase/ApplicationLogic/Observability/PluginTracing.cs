@@ -24,37 +24,13 @@ public static class PluginTracing
         public const string ShellId = "aas.shell_id";
     }
 
-    public static Activity? StartValidatingRequest() => Source.StartActivity(Spans.ValidatingRequest);
+    public static Activity? StartSpan(string spanName)
+        => Source.StartActivity(spanName);
 
-    public static Activity? StartQueryExecution() => Source.StartActivity(Spans.QueryExecution);
-
-    public static Activity? StartFillingDataFromDatabase(string submodelId)
+    public static Activity? StartSpan(string spanName, string tagName, object? tagValue)
     {
-        var activity = Source.StartActivity(Spans.FillingDataFromDatabase);
-        _ = activity?.SetTag(Attributes.SubmodelId, submodelId);
-        return activity;
-    }
-
-    public static Activity? StartMappingExecution(string submodelId)
-    {
-        var activity = Source.StartActivity(Spans.CreateMappingFormRequest);
-        _ = activity?.SetTag(Attributes.SubmodelId, submodelId);
-        return activity;
-    }
-
-    public static Activity? StartValidatingResponse() => Source.StartActivity(Spans.ValidatingResponse);
-
-    public static Activity? StartFetchingShellMetadata(string shellId)
-    {
-        var activity = Source.StartActivity(Spans.FetchingShellMetadata);
-        _ = activity?.SetTag(Attributes.ShellId, shellId);
-        return activity;
-    }
-
-    public static Activity? StartFetchingAssetMetadata(string assetId)
-    {
-        var activity = Source.StartActivity(Spans.FetchingAssetMetadata);
-        _ = activity?.SetTag(Attributes.ShellId, assetId);
+        var activity = Source.StartActivity(spanName);
+        _ = activity?.SetTag(tagName, tagValue);
         return activity;
     }
 

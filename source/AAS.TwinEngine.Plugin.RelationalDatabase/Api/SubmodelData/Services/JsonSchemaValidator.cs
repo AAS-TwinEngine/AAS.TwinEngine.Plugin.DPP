@@ -31,7 +31,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateRequestSchema(JsonSchema schema)
     {
-        using var span = PluginTracing.StartValidatingRequest();
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingRequest);
         if (!TrySerializeSchema(schema!, out var schemaText, out var serializationError))
         {
             LogAndThrowRequestException($"Schema serialization failed: {serializationError}");
@@ -71,7 +71,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateResponseContent(string responseJson, JsonSchema requestSchema)
     {
-        using var span = PluginTracing.StartValidatingResponse();
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingResponse);
         if (string.IsNullOrWhiteSpace(responseJson))
         {
             LogAndThrowResponseException("Response JSON is empty.");

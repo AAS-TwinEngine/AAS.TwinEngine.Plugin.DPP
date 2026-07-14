@@ -14,7 +14,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 {
     public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
-        using var span = PluginTracing.StartFetchingShellMetadata(idShort ?? "all");
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.FetchingShellMetadata, PluginTracing.Attributes.ShellId, idShort ?? "all");
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shells);
@@ -37,7 +37,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 
     public async Task<ShellDescriptorData> GetShellDescriptorAsync(string aasIdentifier, CancellationToken cancellationToken)
     {
-        using var span = PluginTracing.StartFetchingShellMetadata(aasIdentifier);
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.FetchingShellMetadata, PluginTracing.Attributes.ShellId, aasIdentifier);
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shell);
@@ -60,7 +60,7 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 
     public async Task<AssetData> GetAssetAsync(string assetIdentifier, CancellationToken cancellationToken)
     {
-        using var span = PluginTracing.StartFetchingAssetMetadata(assetIdentifier);
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.FetchingAssetMetadata, PluginTracing.Attributes.ShellId, assetIdentifier);
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Asset);

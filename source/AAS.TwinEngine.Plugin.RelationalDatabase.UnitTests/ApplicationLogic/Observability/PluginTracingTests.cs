@@ -4,7 +4,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Observability;
 
-public class PluginDiagnosticsTests
+public class PluginTracingTests
 {
     [Fact]
     public void SourceName_ReturnsExpectedValue() => Assert.Equal("RelationalDatabasePlugin", PluginTracing.SourceName);
@@ -37,80 +37,80 @@ public class PluginDiagnosticsTests
     }
 
     [Fact]
-    public void StartValidatingRequest_CreatesActivity()
+    public void StartSpan_ValidatingRequest_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartValidatingRequest();
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingRequest);
 
         Assert.Single(fixture.Activities);
     }
 
     [Fact]
-    public void StartQueryExecution_CreatesActivity()
+    public void StartSpan_QueryExecution_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartQueryExecution();
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.QueryExecution);
 
         Assert.Single(fixture.Activities);
     }
 
     [Fact]
-    public void StartFillingDataFromDatabase_CreatesActivityWithCorrectName()
+    public void StartSpan_FillingDataFromDatabase_CreatesActivityWithCorrectName()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartFillingDataFromDatabase("submodel-001");
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.FillingDataFromDatabase, PluginTracing.Attributes.SubmodelId, "submodel-001");
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(PluginTracing.Spans.FillingDataFromDatabase, capturedActivity.OperationName);
     }
 
     [Fact]
-    public void StartFillingDataFromDatabase_SetsSubmodelIdTag()
+    public void StartSpan_FillingDataFromDatabase_SetsSubmodelIdTag()
     {
         using var fixture = CreateFixture();
         const string SubmodelId = "submodel-db-123";
-        using var activity = PluginTracing.StartFillingDataFromDatabase(SubmodelId);
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.FillingDataFromDatabase, PluginTracing.Attributes.SubmodelId, SubmodelId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(SubmodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
     }
 
     [Fact]
-    public void StartMappingExecution_CreatesActivityWithCorrectName()
+    public void StartSpan_MappingExecution_CreatesActivityWithCorrectName()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartMappingExecution("Nameplate");
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFormRequest, PluginTracing.Attributes.SubmodelId, "Nameplate");
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(PluginTracing.Spans.CreateMappingFormRequest, capturedActivity.OperationName);
     }
 
     [Fact]
-    public void StartMappingExecution_SetsSubmodelIdTag()
+    public void StartSpan_MappingExecution_SetsSubmodelIdTag()
     {
         using var fixture = CreateFixture();
         const string submodelId = "submodel-001";
-        using var activity = PluginTracing.StartMappingExecution(submodelId);
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFormRequest, PluginTracing.Attributes.SubmodelId, submodelId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(submodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
     }
 
     [Fact]
-    public void StartValidatingResponse_CreatesActivity()
+    public void StartSpan_ValidatingResponse_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartValidatingResponse();
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingResponse);
 
         Assert.Single(fixture.Activities);
     }
 
     [Fact]
-    public void StartFetchingShellMetadata_CreatesActivityWithShellIdTag()
+    public void StartSpan_FetchingShellMetadata_CreatesActivityWithShellIdTag()
     {
         using var fixture = CreateFixture();
         const string shellId = "shell-meta-001";
-        using var activity = PluginTracing.StartFetchingShellMetadata(shellId);
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.FetchingShellMetadata, PluginTracing.Attributes.ShellId, shellId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(PluginTracing.Spans.FetchingShellMetadata, capturedActivity.OperationName);
@@ -118,11 +118,11 @@ public class PluginDiagnosticsTests
     }
 
     [Fact]
-    public void StartFetchingAssetMetadata_CreatesActivityWithShellIdTag()
+    public void StartSpan_FetchingAssetMetadata_CreatesActivityWithShellIdTag()
     {
         using var fixture = CreateFixture();
         const string assetId = "asset-meta-001";
-        using var activity = PluginTracing.StartFetchingAssetMetadata(assetId);
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.FetchingAssetMetadata, PluginTracing.Attributes.ShellId, assetId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(PluginTracing.Spans.FetchingAssetMetadata, capturedActivity.OperationName);
