@@ -71,6 +71,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateResponseContent(string responseJson, JsonSchema requestSchema)
     {
+        using var span = PluginTracing.StartValidatingResponse("schema");
         if (string.IsNullOrWhiteSpace(responseJson))
         {
             LogAndThrowResponseException("Response JSON is empty.");
