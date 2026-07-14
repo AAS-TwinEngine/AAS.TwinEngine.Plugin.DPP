@@ -17,8 +17,6 @@ public class PluginDiagnosticsTests
 
     private ActivityListenerFixture CreateFixture() => new();
 
-    #region Span Name Constants
-
     [Fact]
     public void SpanNames_AreCorrect()
     {
@@ -26,52 +24,26 @@ public class PluginDiagnosticsTests
         Assert.Equal("Query execution", PluginTracing.Spans.QueryExecution);
         Assert.Equal("Filling data from database", PluginTracing.Spans.FillingDataFromDatabase);
         Assert.Equal("Validating response", PluginTracing.Spans.ValidatingResponse);
-        Assert.Equal("Database connection", PluginTracing.Spans.DatabaseConnection);
         Assert.Equal("Create mapping form request", PluginTracing.Spans.CreateMappingFormRequest);
         Assert.Equal("Fetching shell metadata", PluginTracing.Spans.FetchingShellMetadata);
         Assert.Equal("Fetching asset metadata", PluginTracing.Spans.FetchingAssetMetadata);
     }
-
-    #endregion
-
-    #region Attribute Name Constants
 
     [Fact]
     public void AttributeNames_AreCorrect()
     {
         Assert.Equal("aas.submodel_id", PluginTracing.Attributes.SubmodelId);
         Assert.Equal("aas.shell_id", PluginTracing.Attributes.ShellId);
-        Assert.Equal("db.request_id", PluginTracing.Attributes.RequestId);
-    }
-
-    #endregion
-
-    #region StartValidatingRequest Tests
-
-    [Fact]
-    public void StartValidatingRequest_CreatesActivityWithCorrectName()
-    {
-        using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartValidatingRequest("request-001");
-
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(PluginTracing.Spans.ValidatingRequest, capturedActivity.OperationName);
     }
 
     [Fact]
-    public void StartValidatingRequest_SetsRequestIdTag()
+    public void StartValidatingRequest_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        const string RequestId = "req-12345";
-        using var activity = PluginTracing.StartValidatingRequest(RequestId);
+        using var activity = PluginTracing.StartValidatingRequest();
 
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(RequestId, capturedActivity.GetTagItem(PluginTracing.Attributes.RequestId));
+        Assert.Single(fixture.Activities);
     }
-
-    #endregion
-
-    #region StartQueryExecution Tests
 
     [Fact]
     public void StartQueryExecution_CreatesActivity()
@@ -81,24 +53,6 @@ public class PluginDiagnosticsTests
 
         Assert.Single(fixture.Activities);
     }
-
-    #endregion
-
-    #region StartDatabaseConnection Tests
-
-    [Fact]
-    public void StartDatabaseConnection_CreatesActivityWithCorrectName()
-    {
-        using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartDatabaseConnection();
-
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(PluginTracing.Spans.DatabaseConnection, capturedActivity.OperationName);
-    }
-
-    #endregion
-
-    #region StartFillingDataFromDatabase Tests
 
     [Fact]
     public void StartFillingDataFromDatabase_CreatesActivityWithCorrectName()
@@ -121,10 +75,6 @@ public class PluginDiagnosticsTests
         Assert.Equal(SubmodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
     }
 
-    #endregion
-
-    #region StartMappingExecution Tests
-
     [Fact]
     public void StartMappingExecution_CreatesActivityWithCorrectName()
     {
@@ -146,34 +96,14 @@ public class PluginDiagnosticsTests
         Assert.Equal(submodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
     }
 
-    #endregion
-
-    #region StartValidatingResponse Tests
-
     [Fact]
-    public void StartValidatingResponse_CreatesActivityWithCorrectName()
+    public void StartValidatingResponse_CreatesActivity()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartValidatingResponse("submodel-response");
+        using var activity = PluginTracing.StartValidatingResponse();
 
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(PluginTracing.Spans.ValidatingResponse, capturedActivity.OperationName);
+        Assert.Single(fixture.Activities);
     }
-
-    [Fact]
-    public void StartValidatingResponse_SetsSubmodelIdTag()
-    {
-        using var fixture = CreateFixture();
-        const string SubmodelId = "submodel-resp-111";
-        using var activity = PluginTracing.StartValidatingResponse(SubmodelId);
-
-        var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(SubmodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
-    }
-
-    #endregion
-
-    #region Metadata Span Tests
 
     [Fact]
     public void StartFetchingShellMetadata_CreatesActivityWithShellIdTag()
@@ -199,10 +129,6 @@ public class PluginDiagnosticsTests
         Assert.Equal(assetId, capturedActivity.GetTagItem(PluginTracing.Attributes.ShellId));
     }
 
-    #endregion
-
-    #region RecordError Extension Method Tests
-
     [Fact]
     public void RecordError_WithException_SetsErrorStatusWithExceptionMessage()
     {
@@ -224,7 +150,7 @@ public class PluginDiagnosticsTests
 
         // Should not throw
         activity.RecordError(ex);
-        Assert.True(true); // Explicit assertion that execution reached here
+        Assert.True(true);
     }
 
     [Fact]
@@ -248,8 +174,6 @@ public class PluginDiagnosticsTests
 
         // Should not throw
         activity.RecordError(ErrorDescription);
-        Assert.True(true); // Explicit assertion that execution reached here
+        Assert.True(true);
     }
-
-    #endregion
 }

@@ -13,7 +13,6 @@ public static class PluginTracing
         public const string QueryExecution = "Query execution";
         public const string FillingDataFromDatabase = "Filling data from database";
         public const string ValidatingResponse = "Validating response";
-        public const string DatabaseConnection = "Database connection";
         public const string CreateMappingFormRequest = "Create mapping form request";
         public const string FetchingShellMetadata = "Fetching shell metadata";
         public const string FetchingAssetMetadata = "Fetching asset metadata";
@@ -23,24 +22,11 @@ public static class PluginTracing
     {
         public const string SubmodelId = "aas.submodel_id";
         public const string ShellId = "aas.shell_id";
-        public const string RequestId = "db.request_id";
     }
 
-    public static Activity? StartValidatingRequest(string requestId)
-    {
-        var activity = Source.StartActivity(Spans.ValidatingRequest);
-        _ = activity?.SetTag(Attributes.RequestId, requestId);
-        return activity;
-    }
-
+    public static Activity? StartValidatingRequest() => Source.StartActivity(Spans.ValidatingRequest);
 
     public static Activity? StartQueryExecution() => Source.StartActivity(Spans.QueryExecution);
-
-    public static Activity? StartDatabaseConnection()
-    {
-        var activity = Source.StartActivity(Spans.DatabaseConnection);
-        return activity;
-    }
 
     public static Activity? StartFillingDataFromDatabase(string submodelId)
     {
@@ -56,12 +42,7 @@ public static class PluginTracing
         return activity;
     }
 
-    public static Activity? StartValidatingResponse(string submodelId)
-    {
-        var activity = Source.StartActivity(Spans.ValidatingResponse);
-        _ = activity?.SetTag(Attributes.SubmodelId, submodelId);
-        return activity;
-    }
+    public static Activity? StartValidatingResponse() => Source.StartActivity(Spans.ValidatingResponse);
 
     public static Activity? StartFetchingShellMetadata(string shellId)
     {
