@@ -7,7 +7,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Ob
 public class PluginTracingTests
 {
     [Fact]
-    public void SourceName_ReturnsExpectedValue() => Assert.Equal("RelationalDatabasePlugin", PluginTracing.SourceName);
+    public void SourceName_ReturnsExpectedValue() => Assert.Equal("DPP-Plugin", PluginTracing.SourceName);
 
     [Fact]
     public void Source_IsNotNull() => Assert.NotNull(PluginTracing.Source);
