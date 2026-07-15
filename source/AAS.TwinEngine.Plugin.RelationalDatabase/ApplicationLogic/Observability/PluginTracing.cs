@@ -4,7 +4,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observabilit
 
 public static class PluginTracing
 {
-    public const string SourceName = "RelationalDatabasePlugin";
+    public const string SourceName = "DPP-Plugin";
     public static readonly ActivitySource Source = new(SourceName);
 
     public static class Spans
