@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 

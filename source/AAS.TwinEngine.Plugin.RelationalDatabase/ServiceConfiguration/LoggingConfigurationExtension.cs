@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Logging;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
@@ -54,6 +55,7 @@ internal static class LoggingConfigurationExtension
                 _ = tracerProvider
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
+                    .AddSource(PluginTracing.SourceName)
                     .AddOtlpExporter(otlp => otlp.Endpoint = new Uri(otelSettings.OtlpEndpoint));
             })
             .WithMetrics(metricsProvider =>

@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
 
 using Json.Schema;
@@ -30,6 +31,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateRequestSchema(JsonSchema schema)
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingRequest);
         if (!TrySerializeSchema(schema!, out var schemaText, out var serializationError))
         {
             LogAndThrowRequestException($"Schema serialization failed: {serializationError}");
@@ -69,6 +71,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
 
     public void ValidateResponseContent(string responseJson, JsonSchema requestSchema)
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ValidatingResponse);
         if (string.IsNullOrWhiteSpace(responseJson))
         {
             LogAndThrowResponseException("Response JSON is empty.");
