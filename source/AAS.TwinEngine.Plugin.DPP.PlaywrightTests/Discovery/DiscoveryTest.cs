@@ -79,6 +79,7 @@ public class DiscoveryTests : ApiTestBase
     public async Task GetSpecificAssetIdByAasIdentifier_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
+        var AasIdentifier = Base64EncodeUrl("https://mm-software.com/ids/aas/000-001");
         var url = $"/lookup/shells/{AasIdentifier}";
 
         // Act
