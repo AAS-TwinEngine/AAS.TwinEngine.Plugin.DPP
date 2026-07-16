@@ -140,7 +140,16 @@
     </None>
     <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>  
+    </None> 
+    <None Update="Discovery\TestData\GetSpecificAssetIdByAasIdentifier_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Discovery\TestData\SearchShellByAssetLink_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Discovery\TestData\SearchShellByAssetLinksMultipleFilters_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
 
   </ItemGroup>
 
