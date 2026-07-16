@@ -132,6 +132,15 @@
     <None Update="AasRepository\TestData\GetAllShells_WithLimit_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithoutParameters_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+     </None>
+    <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithLimitOne_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithCursor_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>  
 
   </ItemGroup>
 
