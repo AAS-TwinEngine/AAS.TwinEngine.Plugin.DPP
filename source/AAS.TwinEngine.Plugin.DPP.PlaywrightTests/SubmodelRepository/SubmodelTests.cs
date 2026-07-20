@@ -34,6 +34,7 @@ public class SubmodelTests : ApiTestBase
     {
         // Arrange
         var semanticId = EncodeBase64Url("https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0");
+        
         var url = $"/submodels?semanticId={semanticId}";
 
         // Act
