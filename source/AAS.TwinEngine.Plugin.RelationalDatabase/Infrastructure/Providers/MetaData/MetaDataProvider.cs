@@ -1,4 +1,4 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
@@ -43,7 +43,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         var (pagedItems, pagingMetaData) = Paginator.GetPagedResult(
             allItems,
-            getId: x => x.GlobalAssetId,
+            getId: x => x.Id,
             limit,
             cursor
         );
