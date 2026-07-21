@@ -141,6 +141,15 @@
     <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>  
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_By_SemanticId_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_ByIdShort_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
 
   </ItemGroup>
 
