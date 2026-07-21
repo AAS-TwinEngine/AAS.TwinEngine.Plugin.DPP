@@ -6,6 +6,7 @@ WITH filtered_assets AS (
         A."AasId"
     FROM "Asset" A
     {{__ASSET_FILTER__}}
+    {{__PAGINATION__}}
 ),
 specific_asset_ids AS (
     SELECT
@@ -28,7 +29,7 @@ SELECT json_agg(
         'Id',               fa."AasId",
         'SpecificAssetIds', COALESCE(sai."SpecificAssetIds", '[]'::json)
     )
-    ORDER BY fa."Id"
+    ORDER BY fa."AasId"
 )
 FROM filtered_assets fa
 LEFT JOIN specific_asset_ids sai ON sai."AssetId" = fa."Id";

@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
@@ -216,6 +217,49 @@ public class MetaDataProviderTests
                                     && !query.Contains("EXISTS", StringComparison.Ordinal)),
             Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 1),
             Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResultContainsMoreThanPageSize_ReturnsLimitedItems_AndNextCursor()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-2", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-3", Id = "shell-3", IdShort = "Shell3", SpecificAssetIds = [] }
+        };
+
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync("query", 2, null, null, null, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Result);
+        Assert.Equal(2, result.Result.Count);
+        Assert.Equal("shell-1", result.Result[0].Id);
+        Assert.Equal("shell-2", result.Result[1].Id);
+        Assert.Equal("shell-2".EncodeBase64(), result.PagingMetaData?.Cursor);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResultFitsWithinPageSize_ReturnsAllItems_AndNullCursor()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-2", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] }
+        };
+
+        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync("query", 2, null, null, null, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Result);
+        Assert.Equal(2, result.Result.Count);
+        Assert.Null(result.PagingMetaData?.Cursor);
     }
 
     #endregion

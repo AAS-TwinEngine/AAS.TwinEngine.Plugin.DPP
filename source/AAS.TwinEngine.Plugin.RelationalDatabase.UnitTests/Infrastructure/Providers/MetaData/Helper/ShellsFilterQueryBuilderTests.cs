@@ -1,5 +1,6 @@
 using System.Data.Common;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
 
@@ -267,5 +268,48 @@ public class ShellsFilterQueryBuilderTests
         Assert.DoesNotContain("IdShort", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Empty(parameters);
+    }
+
+    [Fact]
+    public void Build_WhenPaginationMarkerExistsAndLimitProvided_AppendsOrderAndLimitPlusOne()
+    {
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter, null, 10);
+
+        Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
+        Assert.DoesNotContain("{{__PAGINATION__}}", resultQuery, StringComparison.Ordinal);
+
+        Assert.Single(parameters);
+        AssertParameter(parameters[0], "@p_page_size", 11);
+    }
+
+    [Fact]
+    public void Build_WhenPaginationMarkerExistsAndLimitMissing_UsesDefaultPageSizePlusOne()
+    {
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter);
+
+        Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
+
+        Assert.Single(parameters);
+        AssertParameter(parameters[0], "@p_page_size", 101);
+    }
+
+    [Fact]
+    public void Build_WhenCursorProvided_AddsKeysetCursorClauseAndDecodedParameter()
+    {
+        const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
+        var cursor = "aas-002".EncodeBase64();
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter, cursor, 5);
+
+        Assert.Contains("WHERE A.\"AasId\" > @p_cursor", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
+
+        Assert.Equal(2, parameters.Count);
+        AssertParameter(parameters[0], "@p_cursor", "aas-002");
+        AssertParameter(parameters[1], "@p_page_size", 6);
     }
 }
