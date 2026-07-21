@@ -150,7 +150,6 @@
     <None Update="SubmodelRepository\TestData\GetAllSubmodels_ByIdShort_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    </None> 
     <None Update="Discovery\TestData\GetSpecificAssetIdByAasIdentifier_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
