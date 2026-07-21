@@ -140,6 +140,16 @@
     </None>
     <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>  
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_By_SemanticId_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_ByIdShort_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     </None> 
     <None Update="Discovery\TestData\GetSpecificAssetIdByAasIdentifier_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
