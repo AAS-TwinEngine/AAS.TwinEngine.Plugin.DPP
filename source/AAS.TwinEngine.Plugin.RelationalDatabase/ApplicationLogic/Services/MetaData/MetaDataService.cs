@@ -85,6 +85,8 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(endpointName, nameof(endpointName));
 
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.GetQuery);
+
         var query = queryProvider.GetQuery(endpointName);
         if (string.IsNullOrWhiteSpace(query))
         {

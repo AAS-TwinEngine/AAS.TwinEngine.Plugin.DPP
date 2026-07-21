@@ -1,5 +1,6 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifest.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.Manifest;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
@@ -16,6 +17,8 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
 
     public ManifestData GetManifestData()
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.CollectingSupportedSemanticIds);
+
         try
         {
             var supportedSemanticIds = manifestProvider.GetSupportedSemanticIds();
@@ -29,6 +32,7 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
         }
         catch (ResponseParsingException ex)
         {
+            span.RecordError(ex);
             throw new InternalDataProcessingException(ex);
         }
     }
