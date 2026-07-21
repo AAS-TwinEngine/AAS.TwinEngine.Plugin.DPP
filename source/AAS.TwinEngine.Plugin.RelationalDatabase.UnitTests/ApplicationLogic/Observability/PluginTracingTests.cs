@@ -27,7 +27,7 @@ public class PluginTracingTests
         Assert.Equal("Create mapping from request", PluginTracing.Spans.CreateMappingFromRequest);
         Assert.Equal("Fetching shell metadata", PluginTracing.Spans.FetchingShellMetadata);
         Assert.Equal("Fetching asset metadata", PluginTracing.Spans.FetchingAssetMetadata);
-        Assert.Equal("Resolving submodel data", PluginTracing.Spans.FetchingData);
+        Assert.Equal("Fetching submodel data", PluginTracing.Spans.FetchingData);
         Assert.Equal("Extracting values from request", PluginTracing.Spans.ExtractingValuesFromRequest);
         Assert.Equal("Get query", PluginTracing.Spans.GetQuery);
         Assert.Equal("Collecting supported semantic IDs", PluginTracing.Spans.CollectingSupportedSemanticIds);
