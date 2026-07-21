@@ -16,6 +16,8 @@ public abstract class ApiTestBase : IAsyncLifetime
     protected string BaseUrl { get; private set; } = Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost:8080";
 
     // Base64 encoded identifiers
+
+    protected string AasIdentifier { get; private set; } = null!;
     protected string AasIdentifier1 { get; private set; } = null!;
     protected string AasIdentifier2 { get; private set; } = null!;
     protected string AasIdentifier3 { get; private set; } = null!;
