@@ -7,7 +7,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.ApplicationLogic.Ob
 public class PluginTracingTests
 {
     [Fact]
-    public void SourceName_ReturnsExpectedValue() => Assert.Equal("DPP-Plugin", PluginTracing.SourceName);
+    public void SourceName_ReturnsExpectedValue() => Assert.Equal("Plugin.RelationalDatabase", PluginTracing.SourceName);
 
     [Fact]
     public void Source_IsNotNull() => Assert.NotNull(PluginTracing.Source);
@@ -24,9 +24,13 @@ public class PluginTracingTests
         Assert.Equal("Query execution", PluginTracing.Spans.QueryExecution);
         Assert.Equal("Filling data from database", PluginTracing.Spans.FillingDataFromDatabase);
         Assert.Equal("Validating response", PluginTracing.Spans.ValidatingResponse);
-        Assert.Equal("Create mapping form request", PluginTracing.Spans.CreateMappingFormRequest);
+        Assert.Equal("Create mapping from request", PluginTracing.Spans.CreateMappingFromRequest);
         Assert.Equal("Fetching shell metadata", PluginTracing.Spans.FetchingShellMetadata);
         Assert.Equal("Fetching asset metadata", PluginTracing.Spans.FetchingAssetMetadata);
+        Assert.Equal("Fetching submodel data", PluginTracing.Spans.FetchingData);
+        Assert.Equal("Extracting values from request", PluginTracing.Spans.ExtractingValuesFromRequest);
+        Assert.Equal("Get query", PluginTracing.Spans.GetQuery);
+        Assert.Equal("Collecting supported semantic IDs", PluginTracing.Spans.CollectingSupportedSemanticIds);
     }
 
     [Fact]
@@ -34,6 +38,7 @@ public class PluginTracingTests
     {
         Assert.Equal("aas.submodel_id", PluginTracing.Attributes.SubmodelId);
         Assert.Equal("aas.shell_id", PluginTracing.Attributes.ShellId);
+        Assert.Equal("aas.product_id", PluginTracing.Attributes.ProductId);
     }
 
     [Fact]
@@ -79,10 +84,10 @@ public class PluginTracingTests
     public void StartSpan_MappingExecution_CreatesActivityWithCorrectName()
     {
         using var fixture = CreateFixture();
-        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFormRequest, PluginTracing.Attributes.SubmodelId, "Nameplate");
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFromRequest, PluginTracing.Attributes.SubmodelId, "Nameplate");
 
         var capturedActivity = Assert.Single(fixture.Activities);
-        Assert.Equal(PluginTracing.Spans.CreateMappingFormRequest, capturedActivity.OperationName);
+        Assert.Equal(PluginTracing.Spans.CreateMappingFromRequest, capturedActivity.OperationName);
     }
 
     [Fact]
@@ -90,7 +95,7 @@ public class PluginTracingTests
     {
         using var fixture = CreateFixture();
         const string submodelId = "submodel-001";
-        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFormRequest, PluginTracing.Attributes.SubmodelId, submodelId);
+        using var activity = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFromRequest, PluginTracing.Attributes.SubmodelId, submodelId);
 
         var capturedActivity = Assert.Single(fixture.Activities);
         Assert.Equal(submodelId, capturedActivity.GetTagItem(PluginTracing.Attributes.SubmodelId));
