@@ -69,7 +69,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
             if (string.IsNullOrWhiteSpace(item.Id))
             {
-                LogDescriptorExcludedBecauseIdMissing(item);
+                LogDescriptorIdMissing(item);
                 continue;
             }
 
@@ -120,7 +120,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(item.Id))
         {
-            LogDescriptorRejectedBecauseIdMissing(item);
+            LogDescriptorIdMissing(item);
             throw new ValidationFailedException("Shell Id is null or empty.");
         }
 
@@ -161,18 +161,12 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         }
     }
 
-    private void LogDescriptorExcludedBecauseIdMissing(ShellDescriptorData item)
+    private void LogDescriptorIdMissing(ShellDescriptorData item)
     {
         var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
         var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
-        logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
-    }
 
-    private void LogDescriptorRejectedBecauseIdMissing(ShellDescriptorData item)
-    {
-        var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
-        var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
-        logger.LogError("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
+        logger.LogError("Metadata-Shell has null or empty Id. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
     }
 
     public static DbParameter Create(string name, object? value) => new NpgsqlParameter(name, value ?? DBNull.Value);

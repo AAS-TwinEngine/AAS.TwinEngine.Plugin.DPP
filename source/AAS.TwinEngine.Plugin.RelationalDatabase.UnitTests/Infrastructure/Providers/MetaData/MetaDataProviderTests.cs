@@ -76,7 +76,7 @@ public class MetaDataProviderTests
         var item = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", item.Id);
         Assert.Equal("VAL2", item.SpecificAssetIds![0].Name);
-        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "ShellDescriptor with null/empty Id excluded from response"));
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Metadata-Shell has null or empty Id."));
     }
 
     [Fact]
@@ -328,7 +328,7 @@ public class MetaDataProviderTests
         await Assert.ThrowsAsync<ValidationFailedException>(() =>
             _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None));
 
-        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Id is null or empty"));
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Metadata-Shell has null or empty Id."));
     }
 
     #endregion
