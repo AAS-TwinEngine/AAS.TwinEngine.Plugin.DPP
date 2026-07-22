@@ -1,4 +1,4 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
@@ -22,7 +22,6 @@ public static class ShellsFilterQueryBuilder
         ArgumentException.ThrowIfNullOrWhiteSpace(baseQuery);
         ArgumentNullException.ThrowIfNull(parameterFactory);
 
-        var hasAssetFilter = filter != null && filter.Identifiers.Count > 0;
         var hasIdShort = !string.IsNullOrEmpty(idShort);
         var hasCursor = !string.IsNullOrEmpty(cursor);
         var hasPaginationMarker = baseQuery.Contains(PaginationMarker, StringComparison.Ordinal);
@@ -30,11 +29,11 @@ public static class ShellsFilterQueryBuilder
         var whereClauses = new List<string>();
         var parameters = new List<DbParameter>();
 
-        if (hasAssetFilter)
+        if (filter?.Identifiers is { Count: > 0 } identifiers)
         {
-            for (var index = 0; index < filter!.Identifiers.Count; index++)
+            for (var index = 0; index < identifiers.Count; index++)
             {
-                var identifier = filter.Identifiers[index];
+                var identifier = identifiers[index];
 
                 whereClauses.Add(
                     IsGlobalAssetId(identifier.Name)
@@ -62,14 +61,27 @@ public static class ShellsFilterQueryBuilder
 
         var query = ReplaceMarker(baseQuery, whereClause);
 
-        if (hasPaginationMarker)
-        {
-            var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
-            parameters.Add(parameterFactory("@p_page_size", pageSize));
-            query = query.Replace(PaginationMarker, "ORDER BY A.\"AasId\" LIMIT @p_page_size", StringComparison.Ordinal);
-        }
+        query = BuildPaginationClause(query, hasPaginationMarker, limit, parameterFactory, parameters);
 
         return (query, parameters);
+    }
+
+    private static string BuildPaginationClause(
+        string query,
+        bool hasPaginationMarker,
+        int? limit,
+        Func<string, object?, DbParameter> parameterFactory,
+        ICollection<DbParameter> parameters)
+    {
+        if (!hasPaginationMarker)
+        {
+            return query;
+        }
+
+        var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
+        parameters.Add(parameterFactory("@p_page_size", pageSize));
+
+        return query.Replace(PaginationMarker, "ORDER BY A.\"AasId\" LIMIT @p_page_size", StringComparison.Ordinal);
     }
 
     private static string BuildGlobalAssetIdClause(
@@ -140,6 +152,6 @@ public static class ShellsFilterQueryBuilder
             ? trimmed[..^1].TrimEnd()
             : trimmed;
     }
-    private static bool IsGlobalAssetId(string identifierName)
+    private static bool IsGlobalAssetId(string? identifierName)
         => string.Equals(identifierName, GlobalAssetId, StringComparison.Ordinal);
 }

@@ -15,8 +15,6 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
     private const int DefaultPageSize = 100;
-    private const string ExcludedDescriptorMissingIdLogMessage = "ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}";
-    private const string RejectedDescriptorMissingIdLogMessage = "Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}";
 
     public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
@@ -167,14 +165,14 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
     {
         var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
         var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
-        logger.LogError(ExcludedDescriptorMissingIdLogMessage, globalAssetId, idShort);
+        logger.LogError("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
     }
 
     private void LogDescriptorRejectedBecauseIdMissing(ShellDescriptorData item)
     {
         var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
         var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
-        logger.LogError(RejectedDescriptorMissingIdLogMessage, globalAssetId, idShort);
+        logger.LogError("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
     }
 
     public static DbParameter Create(string name, object? value) => new NpgsqlParameter(name, value ?? DBNull.Value);
