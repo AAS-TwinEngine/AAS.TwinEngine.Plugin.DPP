@@ -41,7 +41,6 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         }
         catch (Exception ex)
         {
-            span.RecordError(ex);
             throw HandleSubmodelDataException(ex);
         }
     }

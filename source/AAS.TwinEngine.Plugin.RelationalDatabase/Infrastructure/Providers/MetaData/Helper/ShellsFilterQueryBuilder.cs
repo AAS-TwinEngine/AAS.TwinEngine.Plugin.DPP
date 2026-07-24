@@ -24,7 +24,6 @@ public static class ShellsFilterQueryBuilder
 
         var hasIdShort = !string.IsNullOrEmpty(idShort);
         var hasCursor = !string.IsNullOrEmpty(cursor);
-        var hasPaginationMarker = baseQuery.Contains(PaginationMarker, StringComparison.Ordinal);
 
         var whereClauses = new List<string>();
         var parameters = new List<DbParameter>();
@@ -61,23 +60,17 @@ public static class ShellsFilterQueryBuilder
 
         var query = ReplaceMarker(baseQuery, whereClause);
 
-        query = BuildPaginationClause(query, hasPaginationMarker, limit, parameterFactory, parameters);
+        query = BuildPaginationClause(query, limit, parameterFactory, parameters);
 
         return (query, parameters);
     }
 
     private static string BuildPaginationClause(
         string query,
-        bool hasPaginationMarker,
         int? limit,
         Func<string, object?, DbParameter> parameterFactory,
         ICollection<DbParameter> parameters)
     {
-        if (!hasPaginationMarker)
-        {
-            return query;
-        }
-
         var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
         parameters.Add(parameterFactory("@p_page_size", pageSize));
 

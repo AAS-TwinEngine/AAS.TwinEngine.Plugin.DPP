@@ -22,7 +22,6 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         if (string.IsNullOrWhiteSpace(submodelId))
         {
             logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
-            span.RecordError("Submodel identifier is empty.");
             throw new InvalidUserInputException();
         }
 
@@ -42,7 +41,6 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         }
 
         logger.LogError("Submodel name '{SubmodelName}' is not recognized.", submodelName);
-        span.RecordError("Submodel name is not recognized.");
         throw new InvalidUserInputException();
     }
 

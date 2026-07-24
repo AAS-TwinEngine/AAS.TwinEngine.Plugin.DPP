@@ -32,7 +32,6 @@ public class ManifestService(IManifestProvider manifestProvider, IOptions<Capabi
         }
         catch (ResponseParsingException ex)
         {
-            span.RecordError(ex);
             throw new InternalDataProcessingException(ex);
         }
     }
