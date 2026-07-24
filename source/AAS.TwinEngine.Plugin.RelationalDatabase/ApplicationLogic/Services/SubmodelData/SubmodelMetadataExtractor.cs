@@ -17,6 +17,8 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
 
     public SubmodelIdExtractionResult ExtractSubmodelMetadata(string submodelId)
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ExtractingValuesFromRequest, PluginTracing.Attributes.SubmodelId, submodelId);
+
         if (string.IsNullOrWhiteSpace(submodelId))
         {
             logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
@@ -34,6 +36,7 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
 
         if (Enum.TryParse<SubmodelName>(submodelName, ignoreCase: true, result: out var parsedSubmodelName))
         {
+            _ = span?.SetTag(PluginTracing.Attributes.ProductId, productId);
             return new SubmodelIdExtractionResult(productId, parsedSubmodelName);
         }
 

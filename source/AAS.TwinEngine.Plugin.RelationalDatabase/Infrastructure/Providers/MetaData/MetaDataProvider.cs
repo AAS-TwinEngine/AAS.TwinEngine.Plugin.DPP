@@ -1,6 +1,7 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
@@ -13,9 +14,12 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 
 public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor queryExecutor) : IMetaDataProvider
 {
+    private const int DefaultPageSize = 100;
+
     public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
     {
-        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, Create);
+        var pageSize = limit ?? DefaultPageSize;
+        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, Create, cursor, pageSize);
 
         var jsonResult = parameters.Count == 0
             ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)
@@ -41,16 +45,11 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
             };
         }
 
-        var (pagedItems, pagingMetaData) = Paginator.GetPagedResult(
-            allItems,
-            getId: x => x.GlobalAssetId,
-            limit,
-            cursor
-        );
+        var (pagedItems, nextCursor) = BuildPagedResult(allItems, pageSize);
 
         return new ShellDescriptorsData
         {
-            PagingMetaData = pagingMetaData,
+            PagingMetaData = new PagingMetaData { Cursor = nextCursor },
             Result = pagedItems
         };
     }
@@ -70,7 +69,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
             if (string.IsNullOrWhiteSpace(item.Id))
             {
-                LogDescriptorWithMissingId("ShellDescriptor with null/empty Id excluded from response. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", item);
+                LogDescriptorIdMissing(item);
                 continue;
             }
 
@@ -78,6 +77,20 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         }
 
         return validItems;
+    }
+
+    private static (IList<ShellDescriptorData> Items, string? NextCursor) BuildPagedResult(IList<ShellDescriptorData> allItems, int pageSize)
+    {
+        var hasMore = allItems.Count > pageSize;
+        var pagedItems = allItems.Take(pageSize).ToList();
+
+        if (!hasMore)
+        {
+            return (pagedItems, null);
+        }
+
+        var lastItem = pagedItems.LastOrDefault();
+        return (pagedItems, lastItem?.Id.EncodeBase64());
     }
 
     public async Task<ShellDescriptorData?> GetShellDescriptorAsync(string query, string aasIdentifier, CancellationToken cancellationToken)
@@ -107,7 +120,7 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 
         if (string.IsNullOrWhiteSpace(item.Id))
         {
-            LogDescriptorWithMissingId("Rejecting metadata-shells because the descriptor Id is null or empty. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", item);
+            LogDescriptorIdMissing(item);
             throw new ValidationFailedException("Shell Id is null or empty.");
         }
 
@@ -148,11 +161,12 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
         }
     }
 
-    private void LogDescriptorWithMissingId(string messageTemplate, ShellDescriptorData item)
+    private void LogDescriptorIdMissing(ShellDescriptorData item)
     {
         var globalAssetId = string.IsNullOrWhiteSpace(item.GlobalAssetId) ? "<null>" : item.GlobalAssetId;
         var idShort = string.IsNullOrWhiteSpace(item.IdShort) ? "<null>" : item.IdShort;
-        logger.LogError(messageTemplate, globalAssetId, idShort);
+
+        logger.LogError("Metadata-Shell has null or empty Id. GlobalAssetId: {GlobalAssetId}, IdShort: {IdShort}", globalAssetId, idShort);
     }
 
     public static DbParameter Create(string name, object? value) => new NpgsqlParameter(name, value ?? DBNull.Value);

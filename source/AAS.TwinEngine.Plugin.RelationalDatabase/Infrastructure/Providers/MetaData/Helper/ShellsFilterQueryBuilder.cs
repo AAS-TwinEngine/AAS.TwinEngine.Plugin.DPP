@@ -1,5 +1,6 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.MetaData.Helper;
@@ -7,35 +8,31 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.Meta
 public static class ShellsFilterQueryBuilder
 {
     private const string FilterMarker = "{{__ASSET_FILTER__}}";
+    private const string PaginationMarker = "{{__PAGINATION__}}";
     private const string GlobalAssetId = "globalAssetId";
 
     public static (string Query, List<DbParameter> Parameters) Build(
         string baseQuery,
         AssetIdFilterHeader? filter,
         string? idShort,
-        Func<string, object?, DbParameter> parameterFactory)
+        Func<string, object?, DbParameter> parameterFactory,
+        string? cursor = null,
+        int? limit = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(baseQuery);
         ArgumentNullException.ThrowIfNull(parameterFactory);
 
-        var hasAssetFilter = filter != null && filter.Identifiers.Count > 0;
         var hasIdShort = !string.IsNullOrEmpty(idShort);
-
-        if (!hasAssetFilter && !hasIdShort)
-        {
-            return (ReplaceMarker(baseQuery, string.Empty), []);
-        }
+        var hasCursor = !string.IsNullOrEmpty(cursor);
 
         var whereClauses = new List<string>();
         var parameters = new List<DbParameter>();
 
-        if (hasAssetFilter)
+        if (filter?.Identifiers is { Count: > 0 } identifiers)
         {
-            parameters = new List<DbParameter>(filter!.Identifiers.Count * 2);
-
-            for (var index = 0; index < filter.Identifiers.Count; index++)
+            for (var index = 0; index < identifiers.Count; index++)
             {
-                var identifier = filter.Identifiers[index];
+                var identifier = identifiers[index];
 
                 whereClauses.Add(
                     IsGlobalAssetId(identifier.Name)
@@ -50,8 +47,34 @@ public static class ShellsFilterQueryBuilder
             parameters.Add(parameterFactory("@idShort", idShort));
         }
 
-        var whereClause = "WHERE " + string.Join(" AND ", whereClauses);
-        return (ReplaceMarker(baseQuery, whereClause), parameters);
+        if (hasCursor)
+        {
+            var decodedCursor = cursor.DecodeBase64();
+            parameters.Add(parameterFactory("@p_cursor", decodedCursor));
+            whereClauses.Add("A.\"AasId\" > @p_cursor");
+        }
+
+        var whereClause = whereClauses.Count > 0
+            ? "WHERE " + string.Join(" AND ", whereClauses)
+            : string.Empty;
+
+        var query = ReplaceMarker(baseQuery, whereClause);
+
+        query = BuildPaginationClause(query, limit, parameterFactory, parameters);
+
+        return (query, parameters);
+    }
+
+    private static string BuildPaginationClause(
+        string query,
+        int? limit,
+        Func<string, object?, DbParameter> parameterFactory,
+        ICollection<DbParameter> parameters)
+    {
+        var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
+        parameters.Add(parameterFactory("@p_page_size", pageSize));
+
+        return query.Replace(PaginationMarker, "ORDER BY A.\"AasId\" LIMIT @p_page_size", StringComparison.Ordinal);
     }
 
     private static string BuildGlobalAssetIdClause(
@@ -122,6 +145,6 @@ public static class ShellsFilterQueryBuilder
             ? trimmed[..^1].TrimEnd()
             : trimmed;
     }
-    private static bool IsGlobalAssetId(string identifierName)
+    private static bool IsGlobalAssetId(string? identifierName)
         => string.Equals(identifierName, GlobalAssetId, StringComparison.Ordinal);
 }

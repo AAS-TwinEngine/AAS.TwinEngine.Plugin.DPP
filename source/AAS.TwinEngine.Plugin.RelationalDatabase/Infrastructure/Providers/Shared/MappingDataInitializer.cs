@@ -27,7 +27,8 @@ public class MappingDataInitializer(IHostEnvironment env, ILogger<MappingDataIni
         try
         {
             var jsonContent = File.ReadAllText(filePath);
-            return JsonDocument.Parse(jsonContent).RootElement;
+            using var document = JsonDocument.Parse(jsonContent);
+            return document.RootElement.Clone();
         }
         catch (JsonException jex)
         {

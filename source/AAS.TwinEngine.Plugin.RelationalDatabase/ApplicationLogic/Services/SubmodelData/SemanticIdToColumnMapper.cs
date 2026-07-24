@@ -30,7 +30,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
     public Dictionary<string, ColumnMapping> GetSemanticIdToColumnMapping(SemanticTreeNode requestNode)
     {
         ArgumentNullException.ThrowIfNull(requestNode);
-        using var span = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFormRequest, PluginTracing.Attributes.SubmodelId, requestNode.SemanticId);
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.CreateMappingFromRequest, PluginTracing.Attributes.SubmodelId, requestNode.SemanticId);
 
         var mappingData = _cachedMappingData.Value;
         return BuildSemanticIdToColumnMapping(requestNode, mappingData);

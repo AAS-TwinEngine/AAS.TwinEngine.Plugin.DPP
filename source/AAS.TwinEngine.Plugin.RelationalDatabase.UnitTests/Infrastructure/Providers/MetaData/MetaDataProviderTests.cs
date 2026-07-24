@@ -1,6 +1,7 @@
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Text.Json;
 
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
@@ -15,6 +16,8 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.UnitTests.Infrastructure.Prov
 
 public class MetaDataProviderTests
 {
+    private const string QueryWithMarkers = "query\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
+
     private readonly IQueryExecutor _queryExecutor;
     private readonly ILogger<MetaDataProvider> _logger;
     private readonly MetaDataProvider _sut;
@@ -32,9 +35,11 @@ public class MetaDataProviderTests
     [Fact]
     public async Task GetShellDescriptorsAsync_WhenQueryReturnsEmpty_ReturnsEmptyResult()
     {
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(string.Empty);
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(string.Empty);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result.Result!);
@@ -68,24 +73,28 @@ public class MetaDataProviderTests
             }
         };
         var json = JsonSerializer.Serialize(items);
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(json);
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(json);
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, CancellationToken.None);
 
         var item = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", item.Id);
         Assert.Equal("VAL2", item.SpecificAssetIds![0].Name);
-        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "ShellDescriptor with null/empty Id excluded from response"));
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Metadata-Shell has null or empty Id."));
     }
 
     [Fact]
     public async Task GetShellDescriptorsAsync_WhenJsonDeserializesToEmptyList_ReturnsEmptyResult()
     {
         var emptyJsonArray = "[]";
-        _queryExecutor.ExecuteQueryAsync("query", Arg.Any<CancellationToken>()).Returns(emptyJsonArray);
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(emptyJsonArray);
 
         var result = await _sut.GetShellDescriptorsAsync(
-            query: "query",
+            query: QueryWithMarkers,
             limit: null,
             cursor: null,
             filter: null,
@@ -126,7 +135,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-1", matched.Id);
@@ -134,7 +143,7 @@ public class MetaDataProviderTests
         await _queryExecutor.Received(1).ExecuteQueryAsync(
             Arg.Is<string>(query => query.Contains("WHERE EXISTS", StringComparison.Ordinal)
                                     && query.Contains("FROM \"SpecificAssetIds\" sai", StringComparison.Ordinal)),
-            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 3),
             Arg.Any<CancellationToken>());
     }
 
@@ -151,13 +160,13 @@ public class MetaDataProviderTests
             .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(JsonSerializer.Serialize(items));
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, null, idShort, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, idShort, CancellationToken.None);
 
         Assert.NotNull(result);
         await _queryExecutor.Received(1).ExecuteQueryAsync(
             Arg.Is<string>(query => query.Contains("A.\"IdShort\" = @idShort", StringComparison.Ordinal)),
             Arg.Is<IEnumerable<DbParameter>>(parameters =>
-                parameters.Count() == 1 &&
+                parameters.Count() == 2 &&
                 parameters.First().ParameterName == "@idShort" &&
                 parameters.First().Value!.ToString() == idShort),
             Arg.Any<CancellationToken>());
@@ -177,7 +186,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result!.Result!);
@@ -206,7 +215,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync("query", null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", matched.Id);
@@ -214,8 +223,51 @@ public class MetaDataProviderTests
         await _queryExecutor.Received(1).ExecuteQueryAsync(
             Arg.Is<string>(query => query.Contains("A.\"GlobalAssetId\" = @f_value_0", StringComparison.Ordinal)
                                     && !query.Contains("EXISTS", StringComparison.Ordinal)),
-            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 1),
+            Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Count() == 2),
             Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResultContainsMoreThanPageSize_ReturnsLimitedItems_AndNextCursor()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-2", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-3", Id = "shell-3", IdShort = "Shell3", SpecificAssetIds = [] }
+        };
+
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Result);
+        Assert.Equal(2, result.Result.Count);
+        Assert.Equal("shell-1", result.Result[0].Id);
+        Assert.Equal("shell-2", result.Result[1].Id);
+        Assert.Equal("shell-2".EncodeBase64(), result.PagingMetaData?.Cursor);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenResultFitsWithinPageSize_ReturnsAllItems_AndNullCursor()
+    {
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", SpecificAssetIds = [] },
+            new() { GlobalAssetId = "asset-2", Id = "shell-2", IdShort = "Shell2", SpecificAssetIds = [] }
+        };
+
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Result);
+        Assert.Equal(2, result.Result.Count);
+        Assert.Null(result.PagingMetaData?.Cursor);
     }
 
     #endregion
@@ -284,7 +336,7 @@ public class MetaDataProviderTests
         await Assert.ThrowsAsync<ValidationFailedException>(() =>
             _sut.GetShellDescriptorAsync("query", "aas-1", CancellationToken.None));
 
-        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Id is null or empty"));
+        Assert.True(HasLogged(_logger.ReceivedCalls(), LogLevel.Error, "Metadata-Shell has null or empty Id."));
     }
 
     #endregion
