@@ -49,7 +49,7 @@ public static class ShellsFilterQueryBuilder
 
         if (hasCursor)
         {
-            var decodedCursor = cursor!.DecodeBase64();
+            var decodedCursor = cursor.DecodeBase64();
             parameters.Add(parameterFactory("@p_cursor", decodedCursor));
             whereClauses.Add("A.\"AasId\" > @p_cursor");
         }

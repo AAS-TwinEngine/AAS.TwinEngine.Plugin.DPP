@@ -99,7 +99,7 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         try
         {
             var schema = JsonSchema.FromText(normalizedSchema.ToJsonString());
-            var result = schema.Evaluate(parsedResponse!.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
+            var result = schema.Evaluate(parsedResponse.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
                 LogAndThrowResponseException("Response did not validate against schema.");
