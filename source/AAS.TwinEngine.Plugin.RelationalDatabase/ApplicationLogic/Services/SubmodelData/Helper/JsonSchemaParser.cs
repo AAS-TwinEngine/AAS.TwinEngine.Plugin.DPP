@@ -1,4 +1,5 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using Json.Schema;
@@ -11,6 +12,8 @@ public static class JsonSchemaParser
 
     public static SemanticTreeNode ParseJsonSchema(JsonSchema schema, ILogger logger)
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.ExtractingTreeNodeFromRequest);
+
         ArgumentNullException.ThrowIfNull(schema);
 
         return BuildSemanticTree(schema, logger);

@@ -82,6 +82,8 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             LogAndThrowResponseException($"Failed to parse response JSON: {parseError}");
         }
 
+        using var parsedResponse = responseDoc;
+
         JsonObject normalizedSchema;
 
         try
@@ -94,15 +96,10 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
             return;
         }
 
-        if (!TryRegisterJsonSchema(normalizedSchema, out var registerError))
-        {
-            LogAndThrowResponseException($"Failed to register schema: {registerError}");
-        }
-
         try
         {
             var schema = JsonSchema.FromText(normalizedSchema.ToJsonString());
-            var result = schema.Evaluate(responseDoc!.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
+            var result = schema.Evaluate(parsedResponse.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (!result.IsValid)
             {
                 LogAndThrowResponseException("Response did not validate against schema.");
@@ -301,21 +298,4 @@ public class JsonSchemaValidator(IOptions<Semantics> semantics,
         jsonObject[newPropertyName] = propertyValue!;
     }
 
-    private static bool TryRegisterJsonSchema(JsonObject schemaJsonObject, out string? registrationErrorMessage)
-    {
-        registrationErrorMessage = null;
-
-        try
-        {
-            var jsonSchema = JsonSchema.FromText(schemaJsonObject.ToJsonString());
-            var schemaIdentifierUri = new Uri(schemaJsonObject["$id"]!.GetValue<string>()!);
-            SchemaRegistry.Global.Register(schemaIdentifierUri, jsonSchema);
-            return true;
-        }
-        catch (Exception exception)
-        {
-            registrationErrorMessage = $"Schema registration failed: {exception.Message}";
-            return false;
-        }
-    }
 }

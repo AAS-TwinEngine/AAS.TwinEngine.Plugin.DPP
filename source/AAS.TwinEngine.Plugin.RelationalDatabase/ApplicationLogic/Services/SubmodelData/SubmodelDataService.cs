@@ -20,11 +20,14 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
 {
     public async Task<SemanticTreeNode> GetValuesBySemanticIds(JsonSchema jsonSchema, string submodelId, CancellationToken cancellationToken)
     {
+        using var span = PluginTracing.StartSpan(PluginTracing.Spans.FetchingData, PluginTracing.Attributes.SubmodelId, submodelId);
+
         try
         {
             var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
 
             var extractionResult = submodelMetadataExtractor.ExtractSubmodelMetadata(submodelId);
+            _ = span?.SetTag(PluginTracing.Attributes.ProductId, extractionResult.ProductId);
 
             var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(requestSemanticTreeNode);
 
