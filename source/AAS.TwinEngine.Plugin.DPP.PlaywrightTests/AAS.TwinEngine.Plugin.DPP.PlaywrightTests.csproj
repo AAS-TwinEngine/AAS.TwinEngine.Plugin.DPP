@@ -147,6 +147,18 @@
     <None Update="SubmodelRepository\TestData\GetAllSubmodels_By_SemanticId_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodels_Submodel_Identifiers_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodels_Submodel_Identifiers_Limit_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodels_Submodel_Identifiers_Limit_And_Cursor_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodels_Submodel_Identifiers_Cursor_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SubmodelRepository\TestData\GetAllSubmodels_ByIdShort_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
