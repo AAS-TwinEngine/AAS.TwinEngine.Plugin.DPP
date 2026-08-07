@@ -1,0 +1,50 @@
+{
+  "paging_metadata": {
+    "cursor": "TWFudWZhY3R1cmVyUHJvZHVjdFR5cGU"
+  },
+  "result": [
+    {
+      "idShort": "ManufacturerProductType",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0112/2///61987#ABA300#008"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "0173-1#02-AAO057#004"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "kind": "TemplateQualifier",
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToOne"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "FM-ABC-1234",
+      "modelType": "Property"
+    }
+  ]
+}
