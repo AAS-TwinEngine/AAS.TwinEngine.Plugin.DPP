@@ -39,7 +39,7 @@ public class MetaDataProviderTests
             .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(string.Empty);
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result.Result!);
@@ -77,7 +77,7 @@ public class MetaDataProviderTests
             .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(json);
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, null, null, CancellationToken.None);
 
         var item = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", item.Id);
@@ -99,6 +99,8 @@ public class MetaDataProviderTests
             cursor: null,
             filter: null,
             idShort: null,
+            assetKind: null,
+            assetType: null,
             cancellationToken: CancellationToken.None);
 
         Assert.NotNull(result);
@@ -135,7 +137,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, null, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-1", matched.Id);
@@ -160,7 +162,7 @@ public class MetaDataProviderTests
             .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(JsonSerializer.Serialize(items));
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, idShort, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, idShort, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         await _queryExecutor.Received(1).ExecuteQueryAsync(
@@ -186,7 +188,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Empty(result!.Result!);
@@ -215,7 +217,7 @@ public class MetaDataProviderTests
             ]
         };
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, filter, null, null, null, CancellationToken.None);
 
         var matched = Assert.Single(result!.Result!);
         Assert.Equal("shell-2", matched.Id);
@@ -240,7 +242,7 @@ public class MetaDataProviderTests
         _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(JsonSerializer.Serialize(items));
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Result);
@@ -262,12 +264,60 @@ public class MetaDataProviderTests
         _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
             .Returns(JsonSerializer.Serialize(items));
 
-        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, 2, null, null, null, null, null, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Result);
         Assert.Equal(2, result.Result.Count);
         Assert.Null(result.PagingMetaData?.Cursor);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenAssetKindProvided_FiltersByAssetKind()
+    {
+        const string assetKind = "Instance";
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", AssetKind = "Instance", SpecificAssetIds = [] }
+        };
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, assetKind, null, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("A.\"AssetKind\" = @assetKind", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters =>
+                parameters.Count() == 2 &&
+                parameters.First().ParameterName == "@assetKind" &&
+                parameters.First().Value!.ToString() == assetKind),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WhenAssetTypeProvided_FiltersByAssetType()
+    {
+        const string assetType = "SomeType";
+        var items = new List<ShellDescriptorData>
+        {
+            new() { GlobalAssetId = "asset-1", Id = "shell-1", IdShort = "Shell1", AssetType = "SomeType", SpecificAssetIds = [] }
+        };
+        _queryExecutor
+            .ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>())
+            .Returns(JsonSerializer.Serialize(items));
+
+        var result = await _sut.GetShellDescriptorsAsync(QueryWithMarkers, null, null, null, null, null, assetType, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _queryExecutor.Received(1).ExecuteQueryAsync(
+            Arg.Is<string>(query => query.Contains("A.\"AssetType\" = @assetType", StringComparison.Ordinal)),
+            Arg.Is<IEnumerable<DbParameter>>(parameters =>
+                parameters.Count() == 2 &&
+                parameters.First().ParameterName == "@assetType" &&
+                parameters.First().Value!.ToString() == assetType),
+            Arg.Any<CancellationToken>());
     }
 
     #endregion

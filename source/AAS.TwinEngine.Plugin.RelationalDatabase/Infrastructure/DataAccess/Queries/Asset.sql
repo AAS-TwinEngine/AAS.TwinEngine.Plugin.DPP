@@ -9,7 +9,7 @@ SELECT json_build_object(
                                         'Value', sai."Value"
                                     ))
                              FROM "SpecificAssetIds" sai
-                             WHERE sai."AssetId" = A."Id")
+                             WHERE sai."ProductId" = A."ProductId")
 )
 FROM "Asset" A
 WHERE A."AasId" = @AasId;

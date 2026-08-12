@@ -21,7 +21,7 @@ public class MetaDataHandler(
 
         return GetResourceAsync(
             "shell-descriptors",
-            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, filter, request?.IdShortFilter, cancellationToken)!,
+            () => metaDataService.GetShellDescriptorsAsync(request?.Limit, request?.Cursor, filter, request?.IdShortFilter, request?.AssetKindFilter, request?.AssetTypeFilter, cancellationToken)!,
             descriptors => descriptors.ToDto()
         );
     }
