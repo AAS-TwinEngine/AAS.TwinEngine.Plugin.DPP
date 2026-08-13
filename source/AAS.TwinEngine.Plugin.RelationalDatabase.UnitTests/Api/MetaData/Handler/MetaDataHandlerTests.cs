@@ -121,6 +121,40 @@ public class MetaDataHandlerTests
     }
 
     [Fact]
+    public async Task GetShellDescriptors_PassesAssetKindToService()
+    {
+        const string assetKind = "Instance";
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, assetKind);
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+        _metaDataService
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
+            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
+
+        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataService.Received(1)
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptors_PassesAssetTypeToService()
+    {
+        const string assetType = "SomeType";
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, null, assetType);
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+        _metaDataService
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>())
+            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
+
+        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataService.Received(1)
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task GetShellDescriptors_ShouldWork_WhenRequestIsNull()
     {
         _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
@@ -267,37 +301,4 @@ public class MetaDataHandlerTests
         );
     }
 
-    [Fact]
-    public async Task GetShellDescriptors_PassesAssetKindToService()
-    {
-        const string assetKind = "Instance";
-        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, assetKind);
-        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
-        _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
-            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
-
-        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
-
-        Assert.NotNull(result);
-        await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
-    public async Task GetShellDescriptors_PassesAssetTypeToService()
-    {
-        const string assetType = "SomeType";
-        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, null, assetType);
-        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
-        _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>())
-            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
-
-        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
-
-        Assert.NotNull(result);
-        await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>());
-    }
 }
