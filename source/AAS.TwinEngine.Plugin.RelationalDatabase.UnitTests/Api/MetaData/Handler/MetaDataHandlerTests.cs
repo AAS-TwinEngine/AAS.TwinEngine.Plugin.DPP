@@ -1,4 +1,4 @@
-using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
@@ -127,14 +127,14 @@ public class MetaDataHandlerTests
         var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, assetKind);
         _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
         _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetKind), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
             .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
 
         var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
 
         Assert.NotNull(result);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, assetKind, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetKind), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -144,14 +144,14 @@ public class MetaDataHandlerTests
         var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, null, assetType);
         _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
         _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetType), Arg.Any<CancellationToken>())
             .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
 
         var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
 
         Assert.NotNull(result);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, null, Arg.Is<string?>(x => x == null), assetType, Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetType), Arg.Any<CancellationToken>());
     }
 
     [Fact]
