@@ -53,7 +53,7 @@ public class AasRepositoryTests : ApiTestBase
     public async Task GetThumbnailById_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
-        var url = $"/shells/{AasIdentifier}/asset-information/thumbnail";
+        var url = $"/shells/{AasIdentifier1}/asset-information/thumbnail";
 
         // Act
         var response = await ApiContext.GetAsync(url);
