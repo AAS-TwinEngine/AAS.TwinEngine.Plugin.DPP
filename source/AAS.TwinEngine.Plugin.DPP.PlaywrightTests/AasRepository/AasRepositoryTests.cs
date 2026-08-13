@@ -50,6 +50,22 @@ public class AasRepositoryTests : ApiTestBase
     }
 
     [Fact]
+    public async Task GetThumbnailById_ShouldReturnSuccess_ContentAsExpected()
+    {
+        // Arrange
+        var url = $"/shells/{AasIdentifier}/asset-information/thumbnail";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var bytes = await response.BodyAsync();
+        Assert.NotNull(bytes);
+        Assert.True(bytes.Length > 0);
+    }
+
+    [Fact]
     public async Task GetSubmodelRefById_Product1_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
