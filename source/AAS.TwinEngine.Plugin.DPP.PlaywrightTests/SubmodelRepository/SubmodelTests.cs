@@ -182,6 +182,28 @@ public class SubmodelTests : ApiTestBase
         await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRepository", "TestData", "GetSubmodel_Nameplate_Expected.json"));
     }
 
+    [Fact]
+    public async Task GetAllSubmodels_WithTwoFieldCursor_ShouldReturnSuccess_ContentAsExpected()
+    {
+
+        // Arrange
+        var url = "/submodels?limit=2&cursor=aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9OYW1lcGxhdGV8aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vaWRzL2Fhcy8wMDAtMDAx";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRepository", "TestData", "GetAllSubmodels_WithTwoFieldCursor_Expected.json"));
+
+    }
+
     private static string EncodeBase64Url(string plainText)
     {
         var bytes = System.Text.Encoding.UTF8.GetBytes(plainText);

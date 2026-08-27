@@ -168,5 +168,28 @@ public class SubmodelRegistryTests : ApiTestBase
         await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRegistry", "TestData", "GetSubmodelDescriptorById_TechnicalData_Expected.json"));
     }
 
+    [Fact]
+
+    public async Task GetAllSubmodelDescriptors_WithTwoFieldCursor_ShouldReturnSuccess_ContentAsExpected()
+    {
+
+        // Arrange
+        var url = "/submodel-descriptors?limit=2&cursor=aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9OYW1lcGxhdGV8aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vaWRzL2Fhcy8wMDAtMDAx";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRegistry", "TestData", "GetAllSubmodelDescriptors_WithTwoFieldCursor_Expected.json"));
+
+    }
+
 }
 
