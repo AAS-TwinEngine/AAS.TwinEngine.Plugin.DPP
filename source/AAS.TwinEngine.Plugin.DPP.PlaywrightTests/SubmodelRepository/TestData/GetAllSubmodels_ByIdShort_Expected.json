@@ -16,7 +16,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/idta-02006-3-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/DigitalNameplate/3/0",
+      "id": "https://mm-software.com/submodel/000-002/Nameplate",
       "kind": "Instance",
       "semanticId": {
         "type": "ExternalReference",
@@ -1674,7 +1674,7 @@
         "revision": "0",
         "templateId": "https://admin-shell-io/idta-02018"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0",
+      "id": "https://mm-software.com/submodel/000-002/MaintenanceInstructions",
       "kind": "Instance",
       "semanticId": {
         "type": "ModelReference",
@@ -8525,7 +8525,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/idta-02003-2-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/TechnicalData/2/0",
+      "id": "https://mm-software.com/submodel/000-002/TechnicalData",
       "kind": "Instance",
       "semanticId": {
         "type": "ModelReference",
@@ -10027,7 +10027,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/IDTA 02023-1-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/CarbonFootprint/1/0",
+      "id": "https://mm-software.com/submodel/000-002/CarbonFootprint",
       "kind": "Instance",
       "semanticId": {
         "type": "ExternalReference",
@@ -11184,7 +11184,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/idta-02004-2-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/HandoverDocumentation/2/0",
+      "id": "https://mm-software.com/submodel/000-002/HandoverDocumentation",
       "kind": "Instance",
       "semanticId": {
         "type": "ModelReference",

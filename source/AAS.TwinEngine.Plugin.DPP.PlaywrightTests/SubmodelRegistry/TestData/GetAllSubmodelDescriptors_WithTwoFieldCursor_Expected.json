@@ -1,8 +1,56 @@
 {
   "paging_metadata": {
-    "cursor": "aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9DYXJib25Gb290cHJpbnR8"
+    "cursor": "aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9UZWNobmljYWxEYXRhfGh0dHBzOi8vbW0tc29mdHdhcmUuY29tL2lkcy9hYXMvMDAwLTAwMQ"
   },
   "result": [
+    {
+      "description": [
+        {
+          "language": "de",
+          "text": "Submodell zur Übermittlung aller wartungsrelevanten Informatationen"
+        },
+        {
+          "language": "en",
+          "text": "The Submodel defines a set of maintenance instructions and additional details, files or documents related to the maintenance of an asset"
+        }
+      ],
+      "displayName": null,
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "1",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell-io/idta-02018"
+      },
+      "idShort": "MaintenanceInstructions",
+      "id": "https://mm-software.com/submodel/000-002/MaintenanceInstructions",
+      "semanticId": {
+        "type": "ModelReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9NYWludGVuYW5jZUluc3RydWN0aW9ucw",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    },
     {
       "description": [
         {
@@ -24,7 +72,7 @@
         "templateId": "https://admin-shell.io/idta-02003-2-0"
       },
       "idShort": "TechnicalData",
-      "id": "https://mm-software.com/submodel/000-001/TechnicalData",
+      "id": "https://mm-software.com/submodel/000-002/TechnicalData",
       "semanticId": {
         "type": "ModelReference",
         "referredSemanticId": null,
@@ -40,60 +88,7 @@
         {
           "interface": "SUBMODEL-3.0",
           "protocolInformation": {
-            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9UZWNobmljYWxEYXRh",
-            "endpointProtocol": "http",
-            "endpointProtocolVersion": null,
-            "subprotocol": null,
-            "subprotocolBody": null,
-            "subprotocolBodyEncoding": null,
-            "securityAttributes": null
-          }
-        }
-      ]
-    },
-    {
-      "description": [
-        {
-          "language": "en",
-          "text": "The Submodel provides the means to access the Carbon Footprint of the asset."
-        }
-      ],
-      "displayName": [
-        {
-          "language": "de",
-          "text": "C02 Footprint"
-        },
-        {
-          "language": "en",
-          "text": "Carbon Footprint"
-        }
-      ],
-      "extensions": null,
-      "administration": {
-        "embeddedDataSpecifications": null,
-        "version": "1",
-        "revision": "0",
-        "creator": null,
-        "templateId": "https://admin-shell.io/IDTA 02023-1-0"
-      },
-      "idShort": "CarbonFootprint",
-      "id": "https://mm-software.com/submodel/000-001/CarbonFootprint",
-      "semanticId": {
-        "type": "ExternalReference",
-        "referredSemanticId": null,
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0"
-          }
-        ]
-      },
-      "supplementalSemanticId": null,
-      "endpoints": [
-        {
-          "interface": "SUBMODEL-3.0",
-          "protocolInformation": {
-            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9DYXJib25Gb290cHJpbnQ",
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9UZWNobmljYWxEYXRh",
             "endpointProtocol": "http",
             "endpointProtocolVersion": null,
             "subprotocol": null,

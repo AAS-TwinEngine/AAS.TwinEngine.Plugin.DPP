@@ -26,7 +26,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/IDTA 02023-1-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/CarbonFootprint/1/0",
+      "id": "https://mm-software.com/submodel/000-001/CarbonFootprint",
       "kind": "Instance",
       "semanticId": {
         "type": "ExternalReference",
@@ -1193,7 +1193,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/IDTA 02023-1-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/CarbonFootprint/1/0",
+      "id": "https://mm-software.com/submodel/000-002/CarbonFootprint",
       "kind": "Instance",
       "semanticId": {
         "type": "ExternalReference",
@@ -2360,7 +2360,7 @@
         "revision": "0",
         "templateId": "https://admin-shell.io/IDTA 02023-1-0"
       },
-      "id": "https://admin-shell.io/idta/SubmodelTemplate/CarbonFootprint/1/0",
+      "id": "https://mm-software.com/submodel/001-001/CarbonFootprint",
       "kind": "Instance",
       "semanticId": {
         "type": "ExternalReference",
