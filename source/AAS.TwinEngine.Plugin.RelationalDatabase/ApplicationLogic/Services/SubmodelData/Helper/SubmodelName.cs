@@ -6,5 +6,6 @@ public enum SubmodelName
     MaintenanceInstructions,
     HandoverDocumentation,
     CarbonFootprint,
-    TechnicalData
+    TechnicalData,
+    DppMetadata
 }

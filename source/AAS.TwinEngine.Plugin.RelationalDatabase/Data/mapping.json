@@ -890,5 +890,41 @@
   {
     "column": "dbo.MaintenanceSparePart.QuantityOfSparePart",
     "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/quantityofsparepart/1/0" ]
+  },
+  {
+    "column": "dbo.Asset.GlobalAssetId",
+    "semanticId": [ "https://admin-shell.io/idta/cds/digitalProductPassportId/1" ]
+  },
+  {
+    "column": "dbo.Asset.AasId",
+    "semanticId": [ "https://admin-shell.io/idta/cds/uniqueProductIdentifier/1" ]
+  },
+  {
+    "column": "dbo.Asset.dppSchemaVersion",
+    "semanticId": [ "https://admin-shell.io/idta/cds/dppSchemaVersion/1" ]
+  },
+  {
+    "column": "dbo.Asset.dppStatus",
+    "semanticId": [ "https://admin-shell.io/idta/cds/dppStatus/1" ]
+  },
+  {
+    "column": "dbo.Asset.facilityId",
+    "semanticId": [ "https://admin-shell.io/idta/cds/facilityId/1" ]
+  },
+  {
+    "column": "dbo.Asset.economicOperatorId",
+    "semanticId": [ "https://admin-shell.io/idta/cds/economicOperatorId/1" ]
+  },
+  {
+    "column": "dbo.Asset.granularity",
+    "semanticId": [ "https://admin-shell.io/idta/cds/granularity/1" ]
+  },
+  {
+    "column": "dbo.Asset.lastUpdate",
+    "semanticId": [ "https://admin-shell.io/idta/cds/lastUpdate/1" ]
+  },
+  {
+    "column": "dbo.Asset.ContentSpecificationId",
+    "semanticId": [ "https://admin-shell.io/idta/cds/contentSpecificationId/1" ]
   }
 ]
