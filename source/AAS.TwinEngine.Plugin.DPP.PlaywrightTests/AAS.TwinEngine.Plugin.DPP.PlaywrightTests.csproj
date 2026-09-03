@@ -97,6 +97,9 @@
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithTwoFieldCursor_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None> 
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_MaintenanceInstructions_MaintenanceToolList_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -176,6 +179,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetAllSubmodels_ByIdShort_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_WithTwoFieldCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Discovery\TestData\GetSpecificAssetIdByAasIdentifier_Expected.json">
