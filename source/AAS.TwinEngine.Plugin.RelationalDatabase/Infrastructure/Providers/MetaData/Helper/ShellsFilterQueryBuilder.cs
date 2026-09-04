@@ -122,7 +122,7 @@ public static class ShellsFilterQueryBuilder
             EXISTS (
                 SELECT 1
                 FROM "SpecificAssetIds" sai
-                WHERE sai."AssetId" = A."Id"
+                WHERE sai."ProductId" = A."ProductId"
                 AND sai."Name" =
             """
             + $"{nameParameter} "

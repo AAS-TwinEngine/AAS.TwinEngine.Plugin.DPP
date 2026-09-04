@@ -1,4 +1,6 @@
 SELECT json_build_object(
+    'AssetKind',           A."AssetKind",
+    'AssetType',           A."AssetType",
     'GlobalAssetId',        A."GlobalAssetId",
     'DefaultThumbnail',     json_build_object(
                                 'Path',        A."ThumbnailPath",
