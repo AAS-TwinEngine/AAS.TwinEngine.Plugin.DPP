@@ -15,6 +15,8 @@ public static class ShellsFilterQueryBuilder
         string baseQuery,
         AssetIdFilterHeader? filter,
         string? idShort,
+        string? assetKind,
+        string? assetType,
         Func<string, object?, DbParameter> parameterFactory,
         string? cursor = null,
         int? limit = null)
@@ -24,6 +26,8 @@ public static class ShellsFilterQueryBuilder
 
         var hasIdShort = !string.IsNullOrEmpty(idShort);
         var hasCursor = !string.IsNullOrEmpty(cursor);
+        var hasAssetKind = !string.IsNullOrEmpty(assetKind);
+        var hasAssetType = !string.IsNullOrEmpty(assetType);
 
         var whereClauses = new List<string>();
         var parameters = new List<DbParameter>();
@@ -45,6 +49,18 @@ public static class ShellsFilterQueryBuilder
         {
             whereClauses.Add($"A.\"IdShort\" = @idShort");
             parameters.Add(parameterFactory("@idShort", idShort));
+        }
+
+        if (hasAssetKind)
+        {
+            whereClauses.Add("A.\"AssetKind\" = @assetKind");
+            parameters.Add(parameterFactory("@assetKind", assetKind));
+        }
+
+        if (hasAssetType)
+        {
+            whereClauses.Add("A.\"AssetType\" = @assetType");
+            parameters.Add(parameterFactory("@assetType", assetType));
         }
 
         if (hasCursor)
@@ -106,7 +122,7 @@ public static class ShellsFilterQueryBuilder
             EXISTS (
                 SELECT 1
                 FROM "SpecificAssetIds" sai
-                WHERE sai."AssetId" = A."Id"
+                WHERE sai."ProductId" = A."ProductId"
                 AND sai."Name" =
             """
             + $"{nameParameter} "

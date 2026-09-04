@@ -16,10 +16,10 @@ public class MetaDataProvider(ILogger<MetaDataProvider> logger, IQueryExecutor q
 {
     private const int DefaultPageSize = 100;
 
-    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData?> GetShellDescriptorsAsync(string query, int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, string? assetKind, string? assetType, CancellationToken cancellationToken)
     {
         var pageSize = limit ?? DefaultPageSize;
-        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, Create, cursor, pageSize);
+        var (filteredQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, assetKind, assetType, Create, cursor, pageSize);
 
         var jsonResult = parameters.Count == 0
             ? await queryExecutor.ExecuteQueryAsync(filteredQuery, cancellationToken).ConfigureAwait(false)
