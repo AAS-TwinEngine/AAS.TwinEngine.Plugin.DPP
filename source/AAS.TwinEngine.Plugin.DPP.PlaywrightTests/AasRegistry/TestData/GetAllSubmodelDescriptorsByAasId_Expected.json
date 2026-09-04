@@ -1,0 +1,244 @@
+{
+  "paging_metadata": {
+    "cursor": null
+  },
+  "result": [
+    {
+      "description": [
+        {
+          "language": "en",
+          "text": "Contains the nameplate information attached to the product"
+        }
+      ],
+      "displayName": null,
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "3",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell.io/idta-02006-3-0"
+      },
+      "idShort": "Nameplate",
+      "id": "https://mm-software.com/submodel/000-001/Nameplate",
+      "semanticId": {
+        "type": "ExternalReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/nameplate/3/0/Nameplate"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9OYW1lcGxhdGU",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    },
+    {
+      "description": [
+        {
+          "language": "de",
+          "text": "Submodell zur Übermittlung aller wartungsrelevanten Informatationen"
+        },
+        {
+          "language": "en",
+          "text": "The Submodel defines a set of maintenance instructions and additional details, files or documents related to the maintenance of an asset"
+        }
+      ],
+      "displayName": null,
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "1",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell-io/idta-02018"
+      },
+      "idShort": "MaintenanceInstructions",
+      "id": "https://mm-software.com/submodel/000-001/MaintenanceInstructions",
+      "semanticId": {
+        "type": "ModelReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9NYWludGVuYW5jZUluc3RydWN0aW9ucw",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    },
+    {
+      "description": [
+        {
+          "language": "en",
+          "text": "Submodel containing technical data of the asset and associated product classificatons"
+        },
+        {
+          "language": "de",
+          "text": "Teilmodell, das die technischen Daten des Assets und die zugehörigen Produktklassifizierungen enthält"
+        }
+      ],
+      "displayName": null,
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "2",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell.io/idta-02003-2-0"
+      },
+      "idShort": "TechnicalData",
+      "id": "https://mm-software.com/submodel/000-001/TechnicalData",
+      "semanticId": {
+        "type": "ModelReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "0173-1#01-AHX837#002"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9UZWNobmljYWxEYXRh",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    },
+    {
+      "description": [
+        {
+          "language": "en",
+          "text": "The Submodel provides the means to access the Carbon Footprint of the asset."
+        }
+      ],
+      "displayName": [
+        {
+          "language": "de",
+          "text": "C02 Footprint"
+        },
+        {
+          "language": "en",
+          "text": "Carbon Footprint"
+        }
+      ],
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "1",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell.io/IDTA 02023-1-0"
+      },
+      "idShort": "CarbonFootprint",
+      "id": "https://mm-software.com/submodel/000-001/CarbonFootprint",
+      "semanticId": {
+        "type": "ExternalReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9DYXJib25Gb290cHJpbnQ",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    },
+    {
+      "description": [
+        {
+          "language": "en",
+          "text": "The Submodel defines a set meta data for the handover of documentation from the manufacturer to the operator for industrial equipment"
+        }
+      ],
+      "displayName": null,
+      "extensions": null,
+      "administration": {
+        "embeddedDataSpecifications": null,
+        "version": "2",
+        "revision": "0",
+        "creator": null,
+        "templateId": "https://admin-shell.io/idta-02004-2-0"
+      },
+      "idShort": "HandoverDocumentation",
+      "id": "https://mm-software.com/submodel/000-001/HandoverDocumentation",
+      "semanticId": {
+        "type": "ModelReference",
+        "referredSemanticId": null,
+        "keys": [
+          {
+            "type": "Submodel",
+            "value": "0173-1#01-AHF578#003"
+          }
+        ]
+      },
+      "supplementalSemanticId": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMS9IYW5kb3ZlckRvY3VtZW50YXRpb24",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
+    }
+  ]
+}
