@@ -2,6 +2,20 @@ WITH asset_cte AS (
     SELECT *
     FROM "Asset"
     WHERE "ProductId" = @ProductId
+), product_specific_footprint_cte AS (
+    SELECT
+        ps."AssetId",
+        json_build_object(
+            'PcfCalculationMethod', ps."PcfCalculationMethod",
+            'PcfRuleOperator', ps."PcfRuleOperator",
+            'PcfRuleName', ps."PcfRuleName",
+            'PcfRuleVersion', ps."PcfRuleVersion",
+            'PcfRuleOnlineReference', ps."PcfRuleOnlineReference",
+            'PcfApiEndpoint', ps."PcfApiEndpoint",
+            'PcfApiQuery', ps."PcfApiQuery"
+        ) AS "ProductOrSectorSpecificCarbonFootprint"
+    FROM "ProductOrSectorSpecificCarbonFootprint" ps
+    JOIN asset_cte a ON a."Id" = ps."AssetId"
 )
 SELECT COALESCE(
     json_build_object(
@@ -20,17 +34,7 @@ SELECT COALESCE(
                                                                                                                 ),
                                                                 'ProductOrSectorSpecificCarbonFootprints',      json_build_object(
                                                                                                                     'ProductOrSectorSpecificCarbonFootprint',   COALESCE(
-                                                                                                                                                                    (SELECT json_build_object(
-                                                                                                                                                                                'PcfCalculationMethod',         ps."PcfCalculationMethod",
-                                                                                                                                                                                'PcfRuleOperator',              ps."PcfRuleOperator",
-                                                                                                                                                                                'PcfRuleName',                  ps."PcfRuleName",
-                                                                                                                                                                                'PcfRuleVersion',               ps."PcfRuleVersion",
-                                                                                                                                                                                'PcfRuleOnlineReference',       ps."PcfRuleOnlineReference",
-                                                                                                                                                                                'PcfApiEndpoint',               ps."PcfApiEndpoint",
-                                                                                                                                                                                'PcfApiQuery',                  ps."PcfApiQuery"
-                                                                                                                                                                            )
-                                                                                                                                                                     FROM "ProductOrSectorSpecificCarbonFootprint" ps
-                                                                                                                                                                     WHERE ps."AssetId" = a."Id"),
+                                                                                                                                                                    ps."ProductOrSectorSpecificCarbonFootprint",
                                                                                                                                                                     '{}'::json
                                                                                                                                                                 )
                                                                                                                 )
@@ -38,4 +42,5 @@ SELECT COALESCE(
     ),
     '{}'::json
 ) AS "Result"
-FROM asset_cte a;
+FROM asset_cte a
+LEFT JOIN product_specific_footprint_cte ps ON ps."AssetId" = a."Id";

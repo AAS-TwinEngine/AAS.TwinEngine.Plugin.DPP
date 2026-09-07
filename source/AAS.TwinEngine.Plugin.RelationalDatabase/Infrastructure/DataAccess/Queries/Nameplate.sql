@@ -1,7 +1,22 @@
 WITH asset_cte AS (
-    SELECT "Id"
+    SELECT *
     FROM "Asset"
     WHERE "ProductId" = @ProductId
+), markings_cte AS (
+    SELECT
+        am."AssetId",
+        json_agg(json_build_object(
+            'MarkingName', m."MarkingName",
+            'DesignationOfCertificateOrApproval', m."DesignationOfCertificateOrApproval",
+            'IssueDate', m."IssueDate",
+            'ExpiryDate', m."ExpiryDate",
+            'MarkingAdditionalText', m."MarkingAdditionalText",
+            'MarkingFile', m."MarkingFile"
+        )) AS "Marking"
+    FROM "AssetMarking" am
+    JOIN "Marking" m ON m."Id" = am."MarkingId"
+    JOIN asset_cte a ON a."Id" = am."AssetId"
+    GROUP BY am."AssetId"
 )
 SELECT COALESCE(
     (SELECT json_build_object(
@@ -27,24 +42,11 @@ SELECT COALESCE(
                                             'ManufacturerProductFamily_de',             a."ManufacturerProductFamily_de",
                                             'CompanyLogo',                              a."CompanyLogo",
                                             'Markings',                                 json_build_object(
-                                                                                                        'Marking',  COALESCE(
-                                                                                                                        (SELECT json_agg(json_build_object(
-                                                                                                                                    'MarkingName',                          m."MarkingName",
-                                                                                                                                    'DesignationOfCertificateOrApproval',   m."DesignationOfCertificateOrApproval",
-                                                                                                                                    'IssueDate',                            m."IssueDate",
-                                                                                                                                    'ExpiryDate',                           m."ExpiryDate",
-                                                                                                                                    'MarkingAdditionalText',                m."MarkingAdditionalText",
-                                                                                                                                    'MarkingFile',                          m."MarkingFile"
-                                                                                                                                ))
-                                                                                                                         FROM "AssetMarking" am
-                                                                                                                         JOIN "Marking" m ON m."Id" = am."MarkingId"
-                                                                                                                         WHERE am."AssetId" = a."Id"),
-                                                                                                                        '[]'::json
-                                                                                                                    )
+                                                                                                        'Marking',  COALESCE(mc."Marking", '[]'::json)
                                                                                                     )
                                                     )
     )
-     FROM "Asset" a
-     WHERE a."Id" = (SELECT "Id" FROM asset_cte)),
+    FROM asset_cte a
+    LEFT JOIN markings_cte mc ON mc."AssetId" = a."Id"),
     '{}'::json
 ) AS "Result";
