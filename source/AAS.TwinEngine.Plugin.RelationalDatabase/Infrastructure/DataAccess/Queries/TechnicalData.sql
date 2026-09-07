@@ -1,62 +1,75 @@
-WITH asset_cte AS (
-    SELECT *
-    FROM "Asset"
-    WHERE "ProductId" = @ProductId
-), product_images_cte AS (
+WITH raw_data AS (
     SELECT
-        api."AssetId",
-        json_agg(
-            json_build_object(
-                'ImageFile', pi."ImageFile",
-                'ImageNote_en', pi."ImageNote_en",
-                'ImageNote_de', pi."ImageNote_de"
-            ) ORDER BY pi."Index"
-        ) AS "ProductImage"
-    FROM "AssetProductImage" api
-    JOIN "ProductImage" pi ON pi."Id" = api."ProductImageId"
-    JOIN asset_cte a ON a."Id" = api."AssetId"
-    GROUP BY api."AssetId"
-), product_classifications_cte AS (
-    SELECT
-        apci."AssetId",
-        json_agg(
-            json_build_object(
-                'ClassificationSystem', pci."ClassificationSystem",
-                'ClassificationSystemVersion', pci."ClassificationSystemVersion",
-                'ClassificationSystemUrl', pci."ClassificationSystemUrl",
-                'ProductClassId', pci."ProductClassId",
-                'ProductClassCodedName', pci."ProductClassCodedName",
-                'ProductClassName_en', pci."ProductClassName_en",
-                'ProductClassName_de', pci."ProductClassName_de"
-            ) ORDER BY pci."Index"
-        ) AS "ProductClassifications"
-    FROM "AssetProductClassifications" apci
-    JOIN "ProductClassifications" pci ON pci."Id" = apci."ProductClassificationsId"
-    JOIN asset_cte a ON a."Id" = apci."AssetId"
-    GROUP BY apci."AssetId"
+        a.*,
+        pi."Id" AS "ProductImageId",
+        pi."ImageFile",
+        pi."ImageNote_en",
+        pi."ImageNote_de",
+        pi."Index" AS "ProductImageIndex",
+        pci."Id" AS "ProductClassificationId",
+        pci."ClassificationSystem",
+        pci."ClassificationSystemVersion",
+        pci."ClassificationSystemUrl",
+        pci."ProductClassId",
+        pci."ProductClassCodedName",
+        pci."ProductClassName_en",
+        pci."ProductClassName_de",
+        pci."Index" AS "ProductClassificationIndex"
+    FROM "Asset" a
+    LEFT JOIN "AssetProductImage" api ON api."AssetId" = a."Id"
+    LEFT JOIN "ProductImage" pi ON pi."Id" = api."ProductImageId"
+    LEFT JOIN "AssetProductClassifications" apci ON apci."AssetId" = a."Id"
+    LEFT JOIN "ProductClassifications" pci ON pci."Id" = apci."ProductClassificationsId"
+    WHERE a."ProductId" = @ProductId
 )
 SELECT COALESCE(
     json_build_object(
         'TechnicalData', json_build_object(
             'GeneralInformation', json_build_object(
-                'ManufacturerName', a."ManufacturerName",
-                'ManufacturerArticleNumber', a."ManufacturerArticleNumber",
-                'ManufacturerOrderCode', a."ManufacturerOrderCode",
-                'CompanyLogo', a."CompanyLogo",
-                'ManufacturerProductDesignation_en', a."ManufacturerProductDesignation_en",
-                'ManufacturerProductDesignation_de', a."ManufacturerProductDesignation_de",
-                'ProductImage', COALESCE(pi."ProductImage", '[]'::json)
+                'ManufacturerName', d."ManufacturerName",
+                'ManufacturerArticleNumber', d."ManufacturerArticleNumber",
+                'ManufacturerOrderCode', d."ManufacturerOrderCode",
+                'CompanyLogo', d."CompanyLogo",
+                'ManufacturerProductDesignation_en', d."ManufacturerProductDesignation_en",
+                'ManufacturerProductDesignation_de', d."ManufacturerProductDesignation_de",
+                'ProductImage', COALESCE((
+                    SELECT json_agg(json_build_object(
+                        'ImageFile', x."ImageFile",
+                        'ImageNote_en', x."ImageNote_en",
+                        'ImageNote_de', x."ImageNote_de"
+                    ) ORDER BY x."ProductImageIndex")
+                    FROM (
+                        SELECT DISTINCT "ProductImageId", "ImageFile", "ImageNote_en", "ImageNote_de", "ProductImageIndex"
+                        FROM raw_data
+                        WHERE "ProductImageId" IS NOT NULL
+                    ) x
+                ), '[]'::json)
             ),
-            'ProductClassifications', COALESCE(pc."ProductClassifications", '[]'::json),
+            'ProductClassifications', COALESCE((
+                SELECT json_agg(json_build_object(
+                    'ClassificationSystem', x."ClassificationSystem",
+                    'ClassificationSystemVersion', x."ClassificationSystemVersion",
+                    'ClassificationSystemUrl', x."ClassificationSystemUrl",
+                    'ProductClassId', x."ProductClassId",
+                    'ProductClassCodedName', x."ProductClassCodedName",
+                    'ProductClassName_en', x."ProductClassName_en",
+                    'ProductClassName_de', x."ProductClassName_de"
+                ) ORDER BY x."ProductClassificationIndex")
+                FROM (
+                    SELECT DISTINCT "ProductClassificationId", "ClassificationSystem", "ClassificationSystemVersion",
+                                    "ClassificationSystemUrl", "ProductClassId", "ProductClassCodedName",
+                                    "ProductClassName_en", "ProductClassName_de", "ProductClassificationIndex"
+                    FROM raw_data
+                    WHERE "ProductClassificationId" IS NOT NULL
+                ) x
+            ), '[]'::json),
             'FurtherInformation', json_build_object(
-                'TextStatement_en', a."TextStatement_en",
-                'TextStatement_de', a."TextStatement_de",
-                'ValidDate', a."ValidDate"
+                'TextStatement_en', d."TextStatement_en",
+                'TextStatement_de', d."TextStatement_de",
+                'ValidDate', d."ValidDate"
             )
         )
     ),
     '{}'::json
 ) AS "Result"
-FROM asset_cte a
-LEFT JOIN product_images_cte pi ON pi."AssetId" = a."Id"
-LEFT JOIN product_classifications_cte pc ON pc."AssetId" = a."Id";
+FROM (SELECT DISTINCT ON ("Id") * FROM raw_data ORDER BY "Id") d;
