@@ -14,6 +14,8 @@ public static class ShellDescriptorProfile
             GlobalAssetId = data.GlobalAssetId,
             IdShort = data.IdShort,
             Id = data.Id,
+            AssetKind = data.AssetKind,
+            AssetType = data.AssetType,
             SpecificAssetIds = data.SpecificAssetIds?
                                  .Select(x => new SpecificAssetIdsDto
                                  {
