@@ -1,6 +1,7 @@
 ﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.MetaData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ServiceConfiguration.Config;
@@ -12,13 +13,14 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Met
 
 public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider metaDataProvider, ILogger<MetaDataService> logger, IOptions<MetaDataEndpoints> metaDataEndpoints) : IMetaDataService
 {
-    public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, CancellationToken cancellationToken)
+    public async Task<ShellDescriptorsData> GetShellDescriptorsAsync(int? limit, string? cursor, AssetIdFilterHeader? filter, string? idShort, string? assetKind, string? assetType, CancellationToken cancellationToken)
     {
         using var span = PluginTracing.StartSpan(PluginTracing.Spans.FetchingShellMetadata, PluginTracing.Attributes.ShellId, idShort ?? "all");
         try
         {
             var query = GetValidatedQuery(metaDataEndpoints.Value.Shells);
-            var result = await metaDataProvider.GetShellDescriptorsAsync(query, limit, cursor, filter, idShort, cancellationToken).ConfigureAwait(false);
+            var result = await metaDataProvider.GetShellDescriptorsAsync(query, limit, cursor, filter, idShort, assetKind, assetType, cancellationToken).ConfigureAwait(false);
+            validateAssetKind(result?.Result);
             if (result?.Result != null)
             {
                 return result;
@@ -111,5 +113,22 @@ public class MetaDataService(IQueryProvider queryProvider, IMetaDataProvider met
 
             _ => exception
         };
+    }
+
+    private void validateAssetKind(IList<ShellDescriptorData>? shellDescriptors)
+    {
+        if (shellDescriptors == null)
+        {
+            return;
+        }
+
+        foreach (var shellDescriptor in shellDescriptors)
+        {
+            if (!Enum.TryParse<AssetKind>(shellDescriptor.AssetKind, true, out _))
+            {
+                logger.LogError("Invalid AssetKind value: {AssetKind} for ShellDescriptor with Id: {ShellDescriptorId}", shellDescriptor.AssetKind, shellDescriptor.Id);
+                throw new InternalDataProcessingException();
+            }
+        }
     }
 }

@@ -85,7 +85,7 @@
       "extensions": null,
       "administration": null,
       "assetKind": "Instance",
-      "assetType": null,
+      "assetType": "ElectronicDevice",
       "endpoints": [
         {
           "interface": "AAS-3.0",
@@ -160,7 +160,7 @@
       "displayName": null,
       "extensions": null,
       "administration": null,
-      "assetKind": "Instance",
+      "assetKind": "Type",
       "assetType": null,
       "endpoints": [
         {
