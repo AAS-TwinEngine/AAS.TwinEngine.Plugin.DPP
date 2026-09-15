@@ -5,4 +5,6 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 public interface ISubmodelMetadataExtractor
 {
     SubmodelIdExtractionResult ExtractSubmodelMetadata(string submodelId);
+
+    string ExtractProductId(string submodelId);
 }

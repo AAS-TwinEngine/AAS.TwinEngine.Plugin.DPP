@@ -44,8 +44,14 @@ public class SubmodelMetadataExtractor(IOptions<ExtractionRules> options, ILogge
         throw new InvalidUserInputException();
     }
 
-    private string ExtractProductId(string submodelId)
+    public string ExtractProductId(string submodelId)
     {
+        if (string.IsNullOrWhiteSpace(submodelId))
+        {
+            logger.LogError("ProductId could not be extracted from the provided submodel Identifier.");
+            throw new InvalidUserInputException();
+        }
+
         foreach (var rule in _productIdExtractionRules)
         {
             var extracted = rule.Strategy switch

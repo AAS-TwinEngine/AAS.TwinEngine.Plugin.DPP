@@ -5,19 +5,23 @@
 -- so none is added here either -- row sets are equivalent, order is
 -- whatever the join/scan order produces, same as before.
 --
--- If a matching Asset row isn't found for @ProductId, this returns ZERO
--- ROWS, matching the original's "FROM asset_cte a" behavior (the original's
+-- If no requested Asset row is found, this returns an empty JSON object,
+-- matching the original's no-data behavior (the original's
 -- outer COALESCE to '{}'::json was effectively unreachable dead code).
 
-WITH params AS (
-    SELECT "Id" AS asset_id, "MaintenanceFreeAsset" AS maintenance_free_asset
-    FROM "Asset"
-    WHERE "ProductId" = @ProductId
+WITH requested_products AS (
+    SELECT unnest(@ProductIds::text[]) AS product_id
+),
+params AS (
+    SELECT "ProductId" AS product_id, "Id" AS asset_id, "MaintenanceFreeAsset" AS maintenance_free_asset
+    FROM "Asset" a
+    INNER JOIN requested_products rp ON rp.product_id = a."ProductId"
 ),
 
 -- MaintenanceSparePart[]
 spare_part_agg AS (
     SELECT
+        p.product_id,
         json_agg(
             json_build_object(
                 'SparePartID',                         msp."SparePartID",
@@ -34,14 +38,16 @@ spare_part_agg AS (
                 'QuantityOfSparePart',                  msp."QuantityOfSparePart"
             )
         ) AS spare_parts
-    FROM "AssetMaintenanceSparePart" amsp
+    FROM params p
+    INNER JOIN "AssetMaintenanceSparePart" amsp ON amsp."AssetId" = p.asset_id
     JOIN "MaintenanceSparePart" msp ON msp."Id" = amsp."MaintenanceSparePartId"
-    WHERE amsp."AssetId" = (SELECT asset_id FROM params)
+    GROUP BY p.product_id
 ),
 
 -- MaintenanceConsumable[]
 consumable_agg AS (
     SELECT
+        p.product_id,
         json_agg(
             json_build_object(
                 'ConsumableID',                          mc."ConsumableID",
@@ -59,14 +65,16 @@ consumable_agg AS (
                 'QuantityOfConsumable',                   mc."QuantityOfConsumable"
             )
         ) AS consumables
-    FROM "AssetMaintenanceConsumable" amc
+    FROM params p
+    INNER JOIN "AssetMaintenanceConsumable" amc ON amc."AssetId" = p.asset_id
     JOIN "MaintenanceConsumable" mc ON mc."Id" = amc."MaintenanceConsumableId"
-    WHERE amc."AssetId" = (SELECT asset_id FROM params)
+    GROUP BY p.product_id
 ),
 
 -- MaintenanceTool[]
 tool_agg AS (
     SELECT
+        p.product_id,
         json_agg(
             json_build_object(
                 'ToolID',                          mt."ToolID",
@@ -81,22 +89,24 @@ tool_agg AS (
                 'MaxQuantityOfTool',               mt."MaxQuantityOfTool"
             )
         ) AS tools
-    FROM "AssetMaintenanceTool" amt
+    FROM params p
+    INNER JOIN "AssetMaintenanceTool" amt ON amt."AssetId" = p.asset_id
     JOIN "MaintenanceTool" mt ON mt."Id" = amt."MaintenanceToolId"
-    WHERE amt."AssetId" = (SELECT asset_id FROM params)
+    GROUP BY p.product_id
 ),
 
 -- Maintenance instructions linked to this asset. Referenced multiple times
 -- below, so Postgres will materialize it (computed once).
 asset_mi AS (
-    SELECT DISTINCT ami."MaintenanceInstructionId" AS mi_id
-    FROM "AssetMaintenanceInstruction" ami
-    WHERE ami."AssetId" = (SELECT asset_id FROM params)
+    SELECT DISTINCT p.product_id, ami."MaintenanceInstructionId" AS mi_id
+    FROM params p
+    INNER JOIN "AssetMaintenanceInstruction" ami ON ami."AssetId" = p.asset_id
 ),
 
 -- Alarm[] per maintenance instruction
 alarm_agg AS (
     SELECT
+        asset_mi.product_id,
         mia."MaintenanceInstructionId" AS mi_id,
         json_agg(
             json_build_object(
@@ -109,7 +119,7 @@ alarm_agg AS (
     FROM "MaintenanceInstructionAlarm" mia
     JOIN asset_mi ON asset_mi.mi_id = mia."MaintenanceInstructionId"
     JOIN "Alarm" al ON al."Id" = mia."AlarmId"
-    GROUP BY mia."MaintenanceInstructionId"
+    GROUP BY asset_mi.product_id, mia."MaintenanceInstructionId"
 ),
 
 -- ContactForMaintenanceAuthorization[] per maintenance instruction.
@@ -118,6 +128,7 @@ alarm_agg AS (
 -- produce multiple array entries, same cross-product as before.
 contact_agg AS (
     SELECT
+        asset_mi.product_id,
         mic."MaintenanceInstructionId" AS mi_id,
         json_agg(
             json_build_object(
@@ -176,12 +187,13 @@ contact_agg AS (
     LEFT JOIN "Email" e ON e."ContactForMaintenanceAuthorizationId" = c."Id"
     LEFT JOIN "Phone" p ON p."ContactForMaintenanceAuthorizationId" = c."Id"
     LEFT JOIN "Fax" f ON f."ContactForMaintenanceAuthorizationId" = c."Id"
-    GROUP BY mic."MaintenanceInstructionId"
+    GROUP BY asset_mi.product_id, mic."MaintenanceInstructionId"
 ),
 
 -- MaintenanceStep[] per maintenance instruction
 step_agg AS (
     SELECT
+        asset_mi.product_id,
         mims."MaintenanceInstructionsForSpecificIntervalId" AS mi_id,
         json_agg(
             json_build_object(
@@ -210,12 +222,13 @@ step_agg AS (
     FROM "MaintenanceInstructionsForSpecificIntervalMaintenanceStep" mims
     JOIN asset_mi ON asset_mi.mi_id = mims."MaintenanceInstructionsForSpecificIntervalId"
     JOIN "MaintenanceStep" ms ON ms."Id" = mims."MaintenanceStepId"
-    GROUP BY mims."MaintenanceInstructionsForSpecificIntervalId"
+    GROUP BY asset_mi.product_id, mims."MaintenanceInstructionsForSpecificIntervalId"
 ),
 
 -- MaintenanceInstructionsForSpecificInterval[] -- assembles Alarm/Contact/Step per instruction
 mi_agg AS (
     SELECT
+        am.product_id,
         json_agg(
             json_build_object(
                 'MaintenanceID',                            mi."MaintenanceID",
@@ -242,13 +255,13 @@ mi_agg AS (
         ) AS instructions
     FROM asset_mi am
     JOIN "MaintenanceInstructionsForSpecificInterval" mi ON mi."Id" = am.mi_id
-    LEFT JOIN alarm_agg   aa ON aa.mi_id = mi."Id"
-    LEFT JOIN contact_agg ca ON ca.mi_id = mi."Id"
-    LEFT JOIN step_agg    sa ON sa.mi_id = mi."Id"
+    LEFT JOIN alarm_agg   aa ON aa.product_id = am.product_id AND aa.mi_id = mi."Id"
+    LEFT JOIN contact_agg ca ON ca.product_id = am.product_id AND ca.mi_id = mi."Id"
+    LEFT JOIN step_agg    sa ON sa.product_id = am.product_id AND sa.mi_id = mi."Id"
+    GROUP BY am.product_id
 )
 
-SELECT COALESCE(
-    json_build_object(
+SELECT COALESCE(json_object_agg(p.product_id, json_build_object(
         'MaintenanceInstructions', json_build_object(
             'MaintenanceFreeAsset',       p.maintenance_free_asset,
             'MaintenanceSparePartList',   json_build_object(
@@ -262,11 +275,11 @@ SELECT COALESCE(
                                            ),
             'MaintenanceInstructionsForSpecificInterval', COALESCE(mia.instructions, '[]'::json)
         )
-    ),
+    ) ORDER BY p.product_id),
     '{}'::json
 ) AS "Result"
 FROM params p
-LEFT JOIN spare_part_agg   spa ON true
-LEFT JOIN consumable_agg   cma ON true
-LEFT JOIN tool_agg         tla ON true
-LEFT JOIN mi_agg           mia ON true;
+LEFT JOIN spare_part_agg   spa ON spa.product_id = p.product_id
+LEFT JOIN consumable_agg   cma ON cma.product_id = p.product_id
+LEFT JOIN tool_agg         tla ON tla.product_id = p.product_id
+LEFT JOIN mi_agg           mia ON mia.product_id = p.product_id;

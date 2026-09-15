@@ -1,7 +1,9 @@
 ﻿using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Responses;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Base;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Extensions;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData;
@@ -34,6 +36,77 @@ public class SubmodelDataHandler(
             },
             (semanticTree) => semanticTreeHandler.GetJson(semanticTree, request.dataQuery)
         );
+    }
+
+    public async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> GetSubmodelDataAsync(
+        IReadOnlyCollection<GetSubmodelDataBatchRequest> requests,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(requests);
+
+        if (requests.Count == 0)
+        {
+            throw new InvalidUserInputException();
+        }
+
+        var groupTasks = requests.Select(request => ProcessBatchGroupAsync(request, cancellationToken));
+        var groupedResponses = await Task.WhenAll(groupTasks).ConfigureAwait(false);
+
+        return groupedResponses.SelectMany(group => group).ToArray();
+    }
+
+    private async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> ProcessBatchGroupAsync(
+        GetSubmodelDataBatchRequest request,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        jsonSchemaValidator.ValidateRequestSchema(request.Schema);
+
+        var decodedIds = DecodeAndDeduplicateIds(request.SubmodelIds);
+        var semanticTrees = await submodelDataService
+            .GetValuesBySemanticIds(request.Schema, decodedIds, cancellationToken)
+            .ConfigureAwait(false);
+
+        var responseTasks = decodedIds.Select(submodelId => Task.Run(() =>
+        {
+            if (!semanticTrees.TryGetValue(submodelId, out var semanticTree))
+            {
+                throw new SubmodelDataNotFoundException();
+            }
+
+            return new GetSubmodelDataBatchResponse(
+                submodelId,
+                semanticTreeHandler.GetJson(semanticTree, request.Schema));
+        }, cancellationToken));
+
+        return await Task.WhenAll(responseTasks).ConfigureAwait(false);
+    }
+
+    private IReadOnlyList<string> DecodeAndDeduplicateIds(IReadOnlyCollection<string> encodedIds)
+    {
+        ArgumentNullException.ThrowIfNull(encodedIds);
+
+        var decodedIds = new List<string>(encodedIds.Count);
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var encodedId in encodedIds)
+        {
+            var decodedId = encodedId.DecodeBase64(logger);
+            if (!seenIds.Add(decodedId))
+            {
+                logger.LogWarning("Skipping duplicate submodel ID in batch group: {SubmodelId}", decodedId);
+                continue;
+            }
+
+            decodedIds.Add(decodedId);
+        }
+
+        if (decodedIds.Count == 0)
+        {
+            throw new InvalidUserInputException();
+        }
+
+        return decodedIds;
     }
 
     private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(

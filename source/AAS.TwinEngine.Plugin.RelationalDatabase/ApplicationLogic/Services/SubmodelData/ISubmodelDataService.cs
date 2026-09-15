@@ -7,4 +7,9 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 public interface ISubmodelDataService
 {
     Task<SemanticTreeNode> GetValuesBySemanticIds(JsonSchema jsonSchema, string submodelId, CancellationToken cancellationToken);
+
+    Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetValuesBySemanticIds(
+        JsonSchema jsonSchema,
+        IReadOnlyList<string> submodelIds,
+        CancellationToken cancellationToken);
 }

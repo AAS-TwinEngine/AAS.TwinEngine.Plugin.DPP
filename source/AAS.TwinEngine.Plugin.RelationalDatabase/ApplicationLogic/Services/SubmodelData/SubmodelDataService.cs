@@ -45,6 +45,68 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         }
     }
 
+    public async Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetValuesBySemanticIds(
+        JsonSchema jsonSchema,
+        IReadOnlyList<string> submodelIds,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(jsonSchema);
+        ArgumentNullException.ThrowIfNull(submodelIds);
+
+        if (submodelIds.Count == 0)
+        {
+            throw new InvalidUserInputException();
+        }
+
+        using var span = PluginTracing.StartSpan(
+            PluginTracing.Spans.FetchingData,
+            PluginTracing.Attributes.SubmodelId,
+            submodelIds[0]);
+
+        try
+        {
+            var firstMetadata = submodelMetadataExtractor.ExtractSubmodelMetadata(submodelIds[0]);
+            var requestSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
+            var semanticIdToColumnMapping = semanticIdToColumnMapper.GetSemanticIdToColumnMapping(requestSemanticTreeNode);
+            var sqlQuery = GetSqlQueryForSubmodel(firstMetadata.SubmodelName.ToString());
+
+            var productIds = submodelIds
+                .Select(submodelMetadataExtractor.ExtractProductId)
+                .Distinct(StringComparer.Ordinal)
+                .ToArray();
+
+            var responseSemanticTreeNodes = await submodelDataProvider
+                .GetSubmodelValuesAsync(sqlQuery, productIds, cancellationToken)
+                .ConfigureAwait(false);
+
+            var resultTasks = submodelIds.Select(submodelId => Task.Run(() =>
+            {
+                var productId = submodelMetadataExtractor.ExtractProductId(submodelId);
+                if (!responseSemanticTreeNodes.TryGetValue(productId, out var responseSemanticTreeNode))
+                {
+                    throw new ResourceNotValidException();
+                }
+
+                var resultSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
+                return new
+                {
+                    SubmodelId = submodelId,
+                    Result = semanticTreeResponseBuilder.BuildResponse(
+                        resultSemanticTreeNode,
+                        responseSemanticTreeNode,
+                        semanticIdToColumnMapping)
+                };
+            }, cancellationToken));
+
+            var results = await Task.WhenAll(resultTasks).ConfigureAwait(false);
+            return results.ToDictionary(result => result.SubmodelId, result => result.Result, StringComparer.Ordinal);
+        }
+        catch (Exception ex)
+        {
+            throw HandleSubmodelDataException(ex);
+        }
+    }
+
     private string GetSqlQueryForSubmodel(string submodelName)
     {
         var sqlQuery = queryProvider.GetQuery(submodelName);
