@@ -13,6 +13,8 @@ public class ShellDescriptorProfileTests
             Id = "shell-001",
             GlobalAssetId = "asset-001",
             IdShort = "Shell001",
+            AssetKind = "Instance",
+            AssetType = "SomeType",
             SpecificAssetIds =
             [
                 new SpecificAssetIdsData { Name = "SerialNumber", Value = "SN001" },
@@ -26,6 +28,8 @@ public class ShellDescriptorProfileTests
         Assert.Equal("shell-001", result.Id);
         Assert.Equal("asset-001", result.GlobalAssetId);
         Assert.Equal("Shell001", result.IdShort);
+        Assert.Equal("Instance", result.AssetKind);
+        Assert.Equal("SomeType", result.AssetType);
         Assert.Equal(2, result.SpecificAssetIds!.Count);
         Assert.Equal("SerialNumber", result.SpecificAssetIds[0].Name);
         Assert.Equal("SN001", result.SpecificAssetIds[0].Value);

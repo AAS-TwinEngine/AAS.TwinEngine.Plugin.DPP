@@ -28,9 +28,11 @@ public class MetaDataController(
         [FromQuery] string? cursor,
         [FromHeader(Name = "aastwinengine-assetids")] string? assetIdsFilter = null,
         [FromHeader(Name = "aastwinengine-idshort")] string? idShortFilter = null,
+        [FromHeader(Name = "aastwinengine-assetkind")] string? assetKindFilter = null,
+        [FromHeader(Name = "aastwinengine-assettype")] string? assetTypeFilter = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter, idShortFilter);
+        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter, idShortFilter, assetKindFilter, assetTypeFilter);
 
         var response = await metaDataHandler.GetShellDescriptors(request, cancellationToken).ConfigureAwait(false);
 

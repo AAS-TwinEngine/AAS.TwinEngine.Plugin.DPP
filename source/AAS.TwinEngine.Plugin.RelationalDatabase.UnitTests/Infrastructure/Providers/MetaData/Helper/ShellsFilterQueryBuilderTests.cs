@@ -16,7 +16,7 @@ public class ShellsFilterQueryBuilderTests
     public void Build_WhenBaseQueryIsNull_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ShellsFilterQueryBuilder.Build(null!, null, null, CreateParameter));
+            ShellsFilterQueryBuilder.Build(null!, null, null, null, null, CreateParameter));
     }
 
     [Theory]
@@ -25,14 +25,14 @@ public class ShellsFilterQueryBuilderTests
     public void Build_WhenBaseQueryIsEmptyOrWhitespace_ThrowsArgumentException(string baseQuery)
     {
         Assert.Throws<ArgumentException>(() =>
-            ShellsFilterQueryBuilder.Build(baseQuery, null, null, CreateParameter));
+            ShellsFilterQueryBuilder.Build(baseQuery, null, null, null, null, CreateParameter));
     }
 
     [Fact]
     public void Build_WhenParameterFactoryIsNull_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() =>
-            ShellsFilterQueryBuilder.Build("SELECT 1;", null, null, null!));
+            ShellsFilterQueryBuilder.Build("SELECT 1;", null, null, null, null, null!));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class ShellsFilterQueryBuilderTests
     {
         const string query = QueryWithFilterAndPaginationMarker;
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, null, null, CreateParameter);
 
         Assert.DoesNotContain("{{__ASSET_FILTER__}}", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
@@ -54,7 +54,7 @@ public class ShellsFilterQueryBuilderTests
         const string query = QueryWithFilterAndPaginationMarker;
         var filter = new AssetIdFilterHeader { Identifiers = [] };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.DoesNotContain("{{__ASSET_FILTER__}}", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
@@ -74,7 +74,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -99,7 +99,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Contains("A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -122,7 +122,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Contains("A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -147,7 +147,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("A.\"GlobalAssetId\"", resultQuery, StringComparison.Ordinal);
@@ -164,7 +164,7 @@ public class ShellsFilterQueryBuilderTests
         const string query = "SELECT * FROM \"Asset\" A;";
         var filter = new AssetIdFilterHeader { Identifiers = [] };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Equal(query, resultQuery);
         Assert.Single(parameters);
@@ -183,7 +183,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.StartsWith("SELECT * FROM \"Asset\" A", resultQuery, StringComparison.Ordinal);
         Assert.EndsWith(";", resultQuery, StringComparison.Ordinal);
@@ -206,7 +206,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, null, null, null, CreateParameter);
 
         Assert.Contains("WHERE A.\"GlobalAssetId\" = @f_value_0", resultQuery, StringComparison.Ordinal);
         Assert.EndsWith(";", resultQuery, StringComparison.Ordinal);
@@ -231,7 +231,7 @@ public class ShellsFilterQueryBuilderTests
         const string query = QueryWithFilterAndPaginationMarker;
         const string idShort = "M&M03";
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, idShort, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, idShort, null, null, CreateParameter);
 
         Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Contains("A.\"IdShort\" = @idShort", resultQuery, StringComparison.Ordinal);
@@ -255,7 +255,7 @@ public class ShellsFilterQueryBuilderTests
             ]
         };
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, filter, idShort, null, null, CreateParameter);
 
         Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
         Assert.Contains("EXISTS", resultQuery, StringComparison.Ordinal);
@@ -276,7 +276,7 @@ public class ShellsFilterQueryBuilderTests
     {
         const string query = QueryWithFilterAndPaginationMarker;
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, idShort, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, idShort, null, null, CreateParameter);
 
         Assert.DoesNotContain("IdShort", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("WHERE", resultQuery, StringComparison.Ordinal);
@@ -289,7 +289,7 @@ public class ShellsFilterQueryBuilderTests
     {
         const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter, null, 10);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, null, null, CreateParameter, null, 10);
 
         Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
         Assert.DoesNotContain("{{__PAGINATION__}}", resultQuery, StringComparison.Ordinal);
@@ -303,7 +303,7 @@ public class ShellsFilterQueryBuilderTests
     {
         const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, null, null, CreateParameter);
 
         Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
 
@@ -317,7 +317,7 @@ public class ShellsFilterQueryBuilderTests
         const string query = "SELECT * FROM \"Asset\" A\n{{__ASSET_FILTER__}}\n{{__PAGINATION__}};";
         var cursor = "aas-002".EncodeBase64();
 
-        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, CreateParameter, cursor, 5);
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, null, null, CreateParameter, cursor, 5);
 
         Assert.Contains("WHERE A.\"AasId\" > @p_cursor", resultQuery, StringComparison.Ordinal);
         Assert.Contains("ORDER BY A.\"AasId\" LIMIT @p_page_size", resultQuery, StringComparison.Ordinal);
@@ -325,5 +325,59 @@ public class ShellsFilterQueryBuilderTests
         Assert.Equal(2, parameters.Count);
         AssertParameter(parameters[0], "@p_cursor", "aas-002");
         AssertParameter(parameters[1], "@p_page_size", 6);
+    }
+
+    [Fact]
+    public void Build_WhenAssetKindIsProvided_AppendsAssetKindClause()
+    {
+        const string query = QueryWithFilterAndPaginationMarker;
+        const string assetKind = "Instance";
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, assetKind, null, CreateParameter);
+
+        Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("A.\"AssetKind\" = @assetKind", resultQuery, StringComparison.Ordinal);
+        Assert.DoesNotContain("EXISTS", resultQuery, StringComparison.Ordinal);
+
+        Assert.Equal(2, parameters.Count);
+        AssertParameter(parameters[0], "@assetKind", assetKind);
+        AssertParameter(parameters[1], "@p_page_size", 101);
+    }
+
+    [Fact]
+    public void Build_WhenAssetTypeIsProvided_AppendsAssetTypeClause()
+    {
+        const string query = QueryWithFilterAndPaginationMarker;
+        const string assetType = "SomeType";
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, null, assetType, CreateParameter);
+
+        Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("A.\"AssetType\" = @assetType", resultQuery, StringComparison.Ordinal);
+        Assert.DoesNotContain("EXISTS", resultQuery, StringComparison.Ordinal);
+
+        Assert.Equal(2, parameters.Count);
+        AssertParameter(parameters[0], "@assetType", assetType);
+        AssertParameter(parameters[1], "@p_page_size", 101);
+    }
+
+    [Fact]
+    public void Build_WhenBothAssetKindAndAssetTypeProvided_AppendsBothClauses()
+    {
+        const string query = QueryWithFilterAndPaginationMarker;
+        const string assetKind = "Instance";
+        const string assetType = "SomeType";
+
+        var (resultQuery, parameters) = ShellsFilterQueryBuilder.Build(query, null, null, assetKind, assetType, CreateParameter);
+
+        Assert.Contains("WHERE", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("A.\"AssetKind\" = @assetKind", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("A.\"AssetType\" = @assetType", resultQuery, StringComparison.Ordinal);
+        Assert.Contains("AND", resultQuery, StringComparison.Ordinal);
+
+        Assert.Equal(3, parameters.Count);
+        AssertParameter(parameters[0], "@assetKind", assetKind);
+        AssertParameter(parameters[1], "@assetType", assetType);
+        AssertParameter(parameters[2], "@p_page_size", 101);
     }
 }

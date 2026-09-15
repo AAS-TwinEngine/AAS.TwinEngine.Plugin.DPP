@@ -1,4 +1,4 @@
-using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
+﻿using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Requests;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Services;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Application;
@@ -37,7 +37,7 @@ public class MetaDataHandlerTests
             ]
         };
         _metaDataService
-            .GetShellDescriptorsAsync(Arg.Is<int?>(10), Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(Arg.Is<int?>(10), Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
             .Returns(shellDescriptorsData);
 
         var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
@@ -48,7 +48,7 @@ public class MetaDataHandlerTests
         Assert.Equal("desc2", result.Result![1].Id);
         Assert.Equal("nextCursor", result.PagingMetaData!.Cursor);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
         _logger.Received().Log(
             LogLevel.Information,
             Arg.Any<EventId>(),
@@ -84,7 +84,7 @@ public class MetaDataHandlerTests
 
         _assetIdsFilterHeaderService.ParseToDomainModel(header).Returns(filter);
         _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
             .Returns(new ShellDescriptorsData
             {
                 PagingMetaData = new PagingMetaData { Cursor = null },
@@ -96,7 +96,7 @@ public class MetaDataHandlerTests
         Assert.NotNull(result);
         _assetIdsFilterHeaderService.Received(1).ParseToDomainModel(header);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), filter, Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class MetaDataHandlerTests
         var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, idShort);
         _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
         _metaDataService
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, idShort, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, idShort, Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
             .Returns(new ShellDescriptorsData
             {
                 PagingMetaData = new PagingMetaData { Cursor = null },
@@ -117,7 +117,41 @@ public class MetaDataHandlerTests
 
         Assert.NotNull(result);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, idShort, Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), null, idShort, Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptors_PassesAssetKindToService()
+    {
+        const string assetKind = "Instance";
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, assetKind);
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+        _metaDataService
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetKind), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>())
+            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
+
+        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataService.Received(1)
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetKind), Arg.Is<string?>(x => x == null), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GetShellDescriptors_PassesAssetTypeToService()
+    {
+        const string assetType = "SomeType";
+        var request = new GetShellDescriptorsRequest(10, "Y3Vyc29yMTIzNA==", null, null, null, assetType);
+        _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
+        _metaDataService
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetType), Arg.Any<CancellationToken>())
+            .Returns(new ShellDescriptorsData { PagingMetaData = new PagingMetaData { Cursor = null }, Result = [] });
+
+        var result = await _sut.GetShellDescriptors(request, CancellationToken.None);
+
+        Assert.NotNull(result);
+        await _metaDataService.Received(1)
+            .GetShellDescriptorsAsync(10, Arg.Any<string>(), Arg.Is<AssetIdFilterHeader?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == null), Arg.Is<string?>(x => x == assetType), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -131,7 +165,7 @@ public class MetaDataHandlerTests
             Result = [new() { Id = "desc1" }]
         };
         _metaDataService
-            .GetShellDescriptorsAsync(null, null, null, null, Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(null, null, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns(shellDescriptorsData);
 
         var result = await _sut.GetShellDescriptors(null!, CancellationToken.None);
@@ -141,7 +175,7 @@ public class MetaDataHandlerTests
         Assert.Equal("desc1", result.Result![0].Id);
         Assert.Equal("nextCursor", result.PagingMetaData!.Cursor);
         await _metaDataService.Received(1)
-            .GetShellDescriptorsAsync(null, null, null, null, Arg.Any<CancellationToken>());
+            .GetShellDescriptorsAsync(null, null, null, null, null, null, Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -151,7 +185,7 @@ public class MetaDataHandlerTests
         _assetIdsFilterHeaderService.ParseToDomainModel(null).Returns((AssetIdFilterHeader?)null);
 
         _metaDataService
-            .GetShellDescriptorsAsync(Arg.Any<int?>(), Arg.Any<string?>(), Arg.Any<AssetIdFilterHeader?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .GetShellDescriptorsAsync(Arg.Any<int?>(), Arg.Any<string?>(), Arg.Any<AssetIdFilterHeader?>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns((ShellDescriptorsData)null!);
 
         var ex = await Assert.ThrowsAsync<NotFoundException>(() =>
@@ -266,4 +300,5 @@ public class MetaDataHandlerTests
             Arg.Any<Func<object, Exception?, string>>()
         );
     }
+
 }
