@@ -87,7 +87,7 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
                     throw new ResourceNotValidException();
                 }
 
-                var resultSemanticTreeNode = JsonSchemaParser.ParseJsonSchema(jsonSchema, logger);
+                var resultSemanticTreeNode = CloneSemanticTree(requestSemanticTreeNode);
                 return new
                 {
                     SubmodelId = submodelId,
@@ -105,6 +105,27 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         {
             throw HandleSubmodelDataException(ex);
         }
+    }
+
+    private static SemanticTreeNode CloneSemanticTree(SemanticTreeNode node)
+    {
+        return node switch
+        {
+            SemanticLeafNode leaf => new SemanticLeafNode(leaf.SemanticId, leaf.DataType, leaf.Value),
+            SemanticBranchNode branch => CloneBranchNode(branch),
+            _ => throw new InvalidOperationException($"Unsupported semantic tree node type: {node.GetType().Name}")
+        };
+    }
+
+    private static SemanticBranchNode CloneBranchNode(SemanticBranchNode node)
+    {
+        var clone = new SemanticBranchNode(node.SemanticId, node.DataType);
+        foreach (var child in node.Children)
+        {
+            clone.AddChild(CloneSemanticTree(child));
+        }
+
+        return clone;
     }
 
     private string GetSqlQueryForSubmodel(string submodelName)
