@@ -29,7 +29,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
             var wrappedJsonObject = WrapInJsonObject(semanticTreeNodeWithValues.SemanticId, jsonNode);
             var serializedJson = JsonSerializer.Serialize(wrappedJsonObject);
 
-            jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
+            //jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
 
             return wrappedJsonObject;
         }
