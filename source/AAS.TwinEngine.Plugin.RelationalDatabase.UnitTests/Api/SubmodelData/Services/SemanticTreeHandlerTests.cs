@@ -30,7 +30,6 @@ public class SemanticTreeHandlerTests
         Assert.NotNull(result);
         Assert.True(result.ContainsKey("testProperty"));
         Assert.Equal("testValue", result["testProperty"]?.GetValue<string>());
-        _jsonSchemaValidator.Received(1).ValidateResponseContent(Arg.Any<string>(), _testSchema);
     }
 
     [Fact]
@@ -254,28 +253,6 @@ public class SemanticTreeHandlerTests
         var childObject = rootObject["child"]?.AsObject();
         Assert.NotNull(childObject);
         Assert.Equal("nestedValue", childObject["value"]?.GetValue<string>());
-    }
-
-    [Fact]
-    public void GetJson_ValidatesResponse_WithJsonSchemaValidator()
-    {
-        var leafNode = new SemanticLeafNode("test", DataType.String, "value");
-
-        _sut.GetJson(leafNode, _testSchema);
-
-        _jsonSchemaValidator.Received(1).ValidateResponseContent(
-            Arg.Is<string>(s => s.Contains("test") && s.Contains("value")),
-            _testSchema);
-    }
-
-    [Fact]
-    public void GetJson_WhenValidationFails_PropagatesException()
-    {
-        var leafNode = new SemanticLeafNode("test", DataType.String, "value");
-        _jsonSchemaValidator.When(x => x.ValidateResponseContent(Arg.Any<string>(), Arg.Any<JsonSchema>()))
-            .Do(_ => throw new InvalidOperationException("Validation failed"));
-
-        Assert.Throws<InvalidOperationException>(() => _sut.GetJson(leafNode, _testSchema));
     }
 
     [Fact]

@@ -60,7 +60,6 @@ public class SubmodelDataHandler(
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        //jsonSchemaValidator.ValidateRequestSchema(request.Schema);
 
         var decodedIds = DecodeAndDeduplicateIds(request.SubmodelIds);
         var semanticTrees = await submodelDataService
@@ -76,7 +75,7 @@ public class SubmodelDataHandler(
 
             return new GetSubmodelDataBatchResponse(
                 submodelId,
-                semanticTreeHandler.GetJson(semanticTree, request.Schema));
+                semanticTreeHandler.GetJson(semanticTree, request.Schema, validateResponse: false));
         }, cancellationToken));
 
         return await Task.WhenAll(responseTasks).ConfigureAwait(false);

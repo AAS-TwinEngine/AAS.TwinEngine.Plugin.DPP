@@ -2,15 +2,12 @@
 using System.Text.Json;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Exceptions.Infrastructure;
-using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Observability;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Helper;
 using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.Providers;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.DataAccess.QueryExecutor;
 
 using Npgsql;
-
-using NpgsqlTypes;
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Infrastructure.Providers.SubmodelData;
 
@@ -65,8 +62,5 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
         return results;
     }
 
-    public static DbParameter CreateProductIds(IEnumerable<string> productIds) => new NpgsqlParameter("@ProductIds", productIds.ToArray())
-    {
-        NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Text
-    };
+    public static DbParameter CreateProductIds(IEnumerable<string> productIds) => new NpgsqlParameter("@ProductIds", productIds.ToArray());
 }
