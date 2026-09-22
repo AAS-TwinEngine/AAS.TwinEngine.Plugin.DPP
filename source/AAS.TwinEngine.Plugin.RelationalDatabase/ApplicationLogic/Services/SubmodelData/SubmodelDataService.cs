@@ -45,10 +45,7 @@ public class SubmodelDataService(ISubmodelMetadataExtractor submodelMetadataExtr
         }
     }
 
-    public async Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetValuesBySemanticIds(
-        JsonSchema jsonSchema,
-        IReadOnlyList<string> submodelIds,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetValuesBySemanticIds(JsonSchema jsonSchema, IReadOnlyList<string> submodelIds, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(jsonSchema);
         ArgumentNullException.ThrowIfNull(submodelIds);

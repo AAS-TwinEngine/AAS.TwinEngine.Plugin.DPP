@@ -17,17 +17,14 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 [ApiController]
 [Route("")]
 [ApiVersion(1)]
-public class SubmodelDataController(
-    ISubmodelDataHandler submodelDataHandler) : ControllerBase
+public class SubmodelDataController(ISubmodelDataHandler submodelDataHandler) : ControllerBase
 {
     [HttpPost("data")]
     [ProducesResponseType(typeof(IReadOnlyList<GetSubmodelDataBatchResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IReadOnlyList<GetSubmodelDataBatchResponse>>> RetrieveBatchDataAsync(
-        [FromBody] IReadOnlyCollection<GetSubmodelDataBatchRequest> requests,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyList<GetSubmodelDataBatchResponse>>> RetrieveBatchDataAsync([FromBody] IReadOnlyCollection<GetSubmodelDataBatchRequest> requests, CancellationToken cancellationToken)
     {
         var result = await submodelDataHandler
             .GetSubmodelDataAsync(requests, cancellationToken)

@@ -20,10 +20,7 @@ public class SubmodelDataProvider(ILogger<SubmodelDataProvider> logger, IJsonRes
         return results[productId];
     }
 
-    public async Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetSubmodelValuesAsync(
-        string sqlQuery,
-        IReadOnlyCollection<string> productIds,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyDictionary<string, SemanticTreeNode>> GetSubmodelValuesAsync(string sqlQuery, IReadOnlyCollection<string> productIds, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(productIds);
 

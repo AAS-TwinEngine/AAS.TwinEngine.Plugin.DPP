@@ -12,21 +12,13 @@ public class QueryExecutor(ILogger<QueryExecutor> logger, IDbConnectionFactory c
     private const int DefaultCommandTimeout = 30;
     private const int MaxQueryLength = 100000; // 100KB
 
-    public Task<string?> ExecuteQueryAsync(
-       string query,
-       CancellationToken cancellationToken)
+    public Task<string?> ExecuteQueryAsync(string query, CancellationToken cancellationToken)
        => ExecuteInternalAsync(query, null, cancellationToken);
 
-    public Task<string?> ExecuteQueryAsync(
-        string query,
-        IEnumerable<DbParameter> parameters,
-        CancellationToken cancellationToken)
+    public Task<string?> ExecuteQueryAsync(string query, IEnumerable<DbParameter> parameters, CancellationToken cancellationToken)
         => ExecuteInternalAsync(query, parameters, cancellationToken);
 
-    private async Task<string?> ExecuteInternalAsync(
-        string query,
-        IEnumerable<DbParameter>? parameters,
-        CancellationToken cancellationToken)
+    private async Task<string?> ExecuteInternalAsync(string query, IEnumerable<DbParameter>? parameters, CancellationToken cancellationToken)
     {
         using var span = PluginTracing.StartSpan(PluginTracing.Spans.QueryExecution);
         logger.LogDebug("Executing query");

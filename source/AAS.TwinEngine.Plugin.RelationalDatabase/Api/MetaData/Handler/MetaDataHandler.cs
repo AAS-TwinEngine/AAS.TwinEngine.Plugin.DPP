@@ -8,10 +8,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.MetaDat
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
 
-public class MetaDataHandler(
-    ILogger<MetaDataHandler> logger,
-    IAssetIdsFilterHeaderValidation assetIdsFilterHeaderService,
-    IMetaDataService metaDataService) : IMetaDataHandler
+public class MetaDataHandler(ILogger<MetaDataHandler> logger, IAssetIdsFilterHeaderValidation assetIdsFilterHeaderService, IMetaDataService metaDataService) : IMetaDataHandler
 {
     public Task<ShellDescriptorsDto> GetShellDescriptors(GetShellDescriptorsRequest request, CancellationToken cancellationToken)
     {
@@ -42,10 +39,7 @@ public class MetaDataHandler(
             asset => asset.ToDto()
         );
 
-    private async Task<TDto> GetResourceAsync<TModel, TDto>(
-        string resourceName,
-        Func<Task<TModel?>> fetchFunc,
-        Func<TModel, TDto> mapFunc)
+    private async Task<TDto> GetResourceAsync<TModel, TDto>(string resourceName, Func<Task<TModel?>> fetchFunc, Func<TModel, TDto> mapFunc)
     {
         logger.LogInformation("Start executing get request for {ResourceName}", resourceName);
 
@@ -55,11 +49,7 @@ public class MetaDataHandler(
         return mapFunc(result!);
     }
 
-    private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(
-        string? encodedId,
-        string resourceName,
-        Func<string, Task<TModel?>> fetchFunc,
-        Func<TModel, TDto> mapFunc)
+    private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(string? encodedId, string resourceName, Func<string, Task<TModel?>> fetchFunc, Func<TModel, TDto> mapFunc)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(encodedId, nameof(encodedId));
 

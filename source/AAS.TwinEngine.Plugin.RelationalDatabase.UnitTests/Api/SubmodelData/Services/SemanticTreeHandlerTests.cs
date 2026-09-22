@@ -308,4 +308,65 @@ public class SemanticTreeHandlerTests
         Assert.NotNull(itemsArray);
         Assert.Equal(2, itemsArray.Count);
     }
+
+    [Fact]
+    public void GetJson_ByDefault_ValidatesResponseContentAgainstSchema()
+    {
+        var leafNode = new SemanticLeafNode("testProperty", DataType.String, "testValue");
+
+        var result = _sut.GetJson(leafNode, _testSchema);
+
+        _jsonSchemaValidator.Received(1).ValidateResponseContent(
+            Arg.Is<string>(json => json.Contains("testProperty") && json.Contains("testValue")),
+            _testSchema);
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void GetJson_WithValidateResponseExplicitlyTrue_ValidatesResponseContent()
+    {
+        var leafNode = new SemanticLeafNode("testProperty", DataType.String, "testValue");
+
+        _sut.GetJson(leafNode, _testSchema, validateResponse: true);
+
+        _jsonSchemaValidator.Received(1).ValidateResponseContent(Arg.Any<string>(), _testSchema);
+    }
+
+    [Fact]
+    public void GetJson_WithValidateResponseFalse_SkipsSchemaValidation()
+    {
+        var leafNode = new SemanticLeafNode("testProperty", DataType.String, "testValue");
+
+        var result = _sut.GetJson(leafNode, _testSchema, validateResponse: false);
+
+        _jsonSchemaValidator.DidNotReceiveWithAnyArgs().ValidateResponseContent(default!, default!);
+        Assert.NotNull(result);
+        Assert.Equal("testValue", result["testProperty"]?.GetValue<string>());
+    }
+
+    [Fact]
+    public void GetJson_WhenSchemaValidationFails_WrapsExceptionAsInvalidOperationException()
+    {
+        var leafNode = new SemanticLeafNode("testProperty", DataType.String, "testValue");
+        _jsonSchemaValidator
+            .When(v => v.ValidateResponseContent(Arg.Any<string>(), Arg.Any<JsonSchema>()))
+            .Do(_ => throw new InvalidOperationException("schema mismatch"));
+
+        var ex = Assert.Throws<InvalidOperationException>(() => _sut.GetJson(leafNode, _testSchema));
+        Assert.Contains("testProperty", ex.Message);
+    }
+
+    [Fact]
+    public void GetJson_WithNullSemanticTreeNode_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => _sut.GetJson(null!, _testSchema));
+    }
+
+    [Fact]
+    public void GetJson_WithNullSchema_ThrowsArgumentNullException()
+    {
+        var leafNode = new SemanticLeafNode("testProperty", DataType.String, "testValue");
+
+        Assert.Throws<ArgumentNullException>(() => _sut.GetJson(leafNode, null!));
+    }
 }

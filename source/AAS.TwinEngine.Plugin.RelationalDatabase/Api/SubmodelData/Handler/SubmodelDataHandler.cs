@@ -10,11 +10,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Submode
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 
-public class SubmodelDataHandler(
-    ILogger<SubmodelDataHandler> logger,
-    ISubmodelDataService submodelDataService,
-    IJsonSchemaValidator jsonSchemaValidator,
-    ISemanticTreeHandler semanticTreeHandler) : ISubmodelDataHandler
+public class SubmodelDataHandler(ILogger<SubmodelDataHandler> logger, ISubmodelDataService submodelDataService, IJsonSchemaValidator jsonSchemaValidator, ISemanticTreeHandler semanticTreeHandler) : ISubmodelDataHandler
 {
     public Task<JsonObject> GetSubmodelData(GetSubmodelDataRequest request, CancellationToken cancellationToken)
     {
@@ -38,9 +34,7 @@ public class SubmodelDataHandler(
         );
     }
 
-    public async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> GetSubmodelDataAsync(
-        IReadOnlyCollection<GetSubmodelDataBatchRequest> requests,
-        CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> GetSubmodelDataAsync(IReadOnlyCollection<GetSubmodelDataBatchRequest> requests, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(requests);
 
@@ -49,15 +43,13 @@ public class SubmodelDataHandler(
             throw new InvalidUserInputException();
         }
 
-        var groupTasks = requests.Select(request => ProcessBatchGroupAsync(request, cancellationToken));
-        var groupedResponses = await Task.WhenAll(groupTasks).ConfigureAwait(false);
+        var batchGroupProcessingTasks = requests.Select(request => ProcessBatchGroupAsync(request, cancellationToken));
+        var responsesPerBatchGroup = await Task.WhenAll(batchGroupProcessingTasks).ConfigureAwait(false);
 
-        return groupedResponses.SelectMany(group => group).ToArray();
+        return responsesPerBatchGroup.SelectMany(group => group).ToArray();
     }
 
-    private async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> ProcessBatchGroupAsync(
-        GetSubmodelDataBatchRequest request,
-        CancellationToken cancellationToken)
+    private async Task<IReadOnlyList<GetSubmodelDataBatchResponse>> ProcessBatchGroupAsync(GetSubmodelDataBatchRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -108,11 +100,7 @@ public class SubmodelDataHandler(
         return decodedIds;
     }
 
-    private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(
-        string? encodedId,
-        string resourceName,
-        Func<string, Task<TModel?>> fetchFunc,
-        Func<TModel, TDto> mapFunc)
+    private async Task<TDto> GetResourceByIdAsync<TModel, TDto>(string? encodedId, string resourceName, Func<string, Task<TModel?>> fetchFunc, Func<TModel, TDto> mapFunc)
     {
         var decodedId = encodedId?.DecodeBase64(logger);
         logger.LogInformation("Start executing get request for {ResourceName}. Identifier: {DecodedId}", resourceName, decodedId);
