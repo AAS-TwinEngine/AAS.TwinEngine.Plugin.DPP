@@ -1,9 +1,11 @@
 -- Optimized version: same JSON output shape as the original, including the
 -- Email/Phone/Fax cross-multiplication behavior on Contact (preserved as-is
 -- since it's a plain LEFT JOIN, not an aggregate, in the original).
--- No explicit ORDER BY was present in the original for any of these lists,
--- so none is added here either -- row sets are equivalent, order is
--- whatever the join/scan order produces, same as before.
+-- Each json_agg below is explicitly ordered by the child table's "Index"
+-- column so array order is deterministic and consistent across the batch
+-- (/data) and single-submodel (/data/{id}) endpoints -- without an ORDER BY,
+-- Postgres row order for an aggregate is plan-dependent and can differ
+-- between query shapes even for identical data.
 --
 -- If no requested Asset row is found, this returns an empty JSON object,
 -- matching the original's no-data behavior (the original's
@@ -36,7 +38,7 @@ spare_part_agg AS (
                 'DisposalInstructionsForSparePart_en',  msp."DisposalInstructionsForSparePart_en",
                 'DisposalInstructionsForSparePart_de',  msp."DisposalInstructionsForSparePart_de",
                 'QuantityOfSparePart',                  msp."QuantityOfSparePart"
-            )
+            ) ORDER BY msp."Index"
         ) AS spare_parts
     FROM params p
     INNER JOIN "AssetMaintenanceSparePart" amsp ON amsp."AssetId" = p.asset_id
@@ -63,7 +65,7 @@ consumable_agg AS (
                 'DisposalInstructionsForConsumable_en',   mc."DisposalInstructionsForConsumable_en",
                 'DisposalInstructionsForConsumable_de',   mc."DisposalInstructionsForConsumable_de",
                 'QuantityOfConsumable',                   mc."QuantityOfConsumable"
-            )
+            ) ORDER BY mc."Index"
         ) AS consumables
     FROM params p
     INNER JOIN "AssetMaintenanceConsumable" amc ON amc."AssetId" = p.asset_id
@@ -87,7 +89,7 @@ tool_agg AS (
                 'ToolDescription_en',              mt."ToolDescription_en",
                 'ToolDescription_de',              mt."ToolDescription_de",
                 'MaxQuantityOfTool',               mt."MaxQuantityOfTool"
-            )
+            ) ORDER BY mt."Index"
         ) AS tools
     FROM params p
     INNER JOIN "AssetMaintenanceTool" amt ON amt."AssetId" = p.asset_id
@@ -114,7 +116,7 @@ alarm_agg AS (
                 'AlarmName_de',              al."AlarmName_de",
                 'WarningLimitRelativeValue', al."WarningLimitRelativeValue",
                 'WarningLimitSeverity',      al."WarningLimitSeverity"
-            )
+            ) ORDER BY al."Index"
         ) AS alarms
     FROM "MaintenanceInstructionAlarm" mia
     JOIN asset_mi ON asset_mi.mi_id = mia."MaintenanceInstructionId"
@@ -179,7 +181,7 @@ contact_agg AS (
                     'FaxNumber_de',    f."FaxNumber_de",
                     'TypeOfFaxNumber', f."TypeOfFaxNumber"
                 )
-            )
+            ) ORDER BY c."Index"
         ) AS contacts
     FROM "MaintenanceInstructionContactForMaintenanceAuthorization" mic
     JOIN asset_mi ON asset_mi.mi_id = mic."MaintenanceInstructionId"
@@ -217,7 +219,7 @@ step_agg AS (
                 'RelatedDocumentOrFileMaintenanceStep',             ms."RelatedDocumentOrFileMaintenanceStep",
                 'ValueEstimatedDurationTimeMaintenanceStep',        ms."ValueEstimatedDurationTimeMaintenanceStep",
                 'UnitEstimatedDurationTimeMaintenanceStep',         ms."UnitEstimatedDurationTimeMaintenanceStep"
-            )
+            ) ORDER BY ms."Index"
         ) AS steps
     FROM "MaintenanceInstructionsForSpecificIntervalMaintenanceStep" mims
     JOIN asset_mi ON asset_mi.mi_id = mims."MaintenanceInstructionsForSpecificIntervalId"
@@ -251,7 +253,7 @@ mi_agg AS (
                 'Alarm',                                    COALESCE(aa.alarms, '[]'::json),
                 'ContactForMaintenanceAuthorization',       COALESCE(ca.contacts, '[]'::json),
                 'MaintenanceStep',                          COALESCE(sa.steps, '[]'::json)
-            )
+            ) ORDER BY mi."Index"
         ) AS instructions
     FROM asset_mi am
     JOIN "MaintenanceInstructionsForSpecificInterval" mi ON mi."Id" = am.mi_id

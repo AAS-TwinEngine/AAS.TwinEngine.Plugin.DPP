@@ -9,7 +9,7 @@ SELECT json_build_object(
                                 (SELECT json_agg(json_build_object(
                                             'Name',  sai."Name",
                                             'Value', sai."Value"
-                                        ))
+                                        ) ORDER BY sai."Id")
                                  FROM "SpecificAssetIds" sai
                                  WHERE sai."ProductId" = A."ProductId"),
                                 '[]'::json

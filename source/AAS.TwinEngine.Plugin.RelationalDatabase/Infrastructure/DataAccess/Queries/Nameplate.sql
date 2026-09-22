@@ -6,6 +6,7 @@ raw_data AS (
         a."ProductId" AS product_id,
         a.*,
         m."Id" AS "MarkingId",
+        m."Index" AS "MarkingIndex",
         m."MarkingName",
         m."DesignationOfCertificateOrApproval",
         m."IssueDate",
@@ -51,9 +52,9 @@ product_results AS (
                             'ExpiryDate', x."ExpiryDate",
                             'MarkingAdditionalText', x."MarkingAdditionalText",
                             'MarkingFile', x."MarkingFile"
-                        ))
+                        ) ORDER BY x."MarkingIndex")
                         FROM (
-                            SELECT DISTINCT "MarkingId", "MarkingName", "DesignationOfCertificateOrApproval",
+                            SELECT DISTINCT "MarkingId", "MarkingIndex", "MarkingName", "DesignationOfCertificateOrApproval",
                                             "IssueDate", "ExpiryDate", "MarkingAdditionalText", "MarkingFile"
                             FROM raw_data
                             WHERE "ProductId" = d."ProductId" AND "MarkingId" IS NOT NULL
