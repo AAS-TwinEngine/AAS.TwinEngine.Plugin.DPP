@@ -1,16 +1,22 @@
 {
   "paging_metadata": {
-    "cursor": "VVJJT2ZUaGVQcm9kdWN0"
+    "cursor": "QWRkcmVzc0luZm9ybWF0aW9u"
   },
   "result": [
     {
-      "idShort": "URIOfTheProduct",
+      "idShort": "AddressInformation",
+      "description": [
+        {
+          "language": "en",
+          "text": "Note: this set of information is defined by SMT drop-in \"Address Information\""
+        }
+      ],
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
           {
             "type": "GlobalReference",
-            "value": "0112/2///61987#ABN590#002"
+            "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation"
           }
         ]
       },
@@ -20,7 +26,25 @@
           "keys": [
             {
               "type": "GlobalReference",
-              "value": "0173-1#02-ABH173#003"
+              "value": "https://admin-shell.io/smt-dropin/smt-dropin-use/1/0"
+            }
+          ]
+        },
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "0112/2///61360_7#AAS002#001"
+            }
+          ]
+        },
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "0173-1#02-AAQ837#008/0173-1#01-ADR448#008"
             }
           ]
         }
@@ -42,9 +66,7 @@
           "value": "One"
         }
       ],
-      "valueType": "xs:anyURI",
-      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
-      "modelType": "Property"
+      "modelType": "SubmodelElementCollection"
     }
   ]
 }
