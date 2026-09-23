@@ -27,13 +27,11 @@
   },
   "qualifiers": [
     {
-      "kind": "ConceptQualifier",
       "type": "SMT/Cardinality",
       "valueType": "xs:string",
       "value": "One"
     }
   ],
-  "orderRelevant": false,
   "semanticIdListElement": {
     "type": "ExternalReference",
     "keys": [
@@ -73,7 +71,6 @@
       },
       "qualifiers": [
         {
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -113,13 +110,11 @@
           },
           "qualifiers": [
             {
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "One"
             }
           ],
-          "orderRelevant": false,
           "semanticIdListElement": {
             "type": "ExternalReference",
             "keys": [
@@ -165,7 +160,6 @@
               },
               "qualifiers": [
                 {
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
@@ -177,6 +171,123 @@
             }
           ],
           "modelType": "SubmodelElementList"
+        },
+        {
+          "category": "PARAMETER",
+          "idShort": "PcfCO2eq",
+          "displayName": [
+            {
+              "language": "de",
+              "text": "CO2-Äquivalent"
+            },
+            {
+              "language": "en",
+              "text": "CO2 equivalent"
+            }
+          ],
+          "description": [
+            {
+              "language": "en",
+              "text": "Sum of all greenhouse gas emissions of a product according to the quantification requirements of the standard."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABG855#003"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:decimal",
+          "value": "17.2",
+          "modelType": "Property"
+        },
+        {
+          "category": "PARAMETER",
+          "idShort": "ReferenceImpactUnitForCalculation",
+          "displayName": [
+            {
+              "language": "de",
+              "text": "Referenzeinheit für die Berechnung"
+            },
+            {
+              "language": "en",
+              "text": "Reference value for calculation"
+            }
+          ],
+          "description": [
+            {
+              "language": "en",
+              "text": "Quantity unit of the product to which the PCF information on the CO2 footprint refers."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABG856#003"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "ml",
+          "modelType": "Property"
+        },
+        {
+          "category": "PARAMETER",
+          "idShort": "QuantityOfMeasureForCalculation",
+          "displayName": [
+            {
+              "language": "de",
+              "text": "Mengenangabe für die Berechnung"
+            },
+            {
+              "language": "en",
+              "text": "quantity of measure for calculation"
+            }
+          ],
+          "description": [
+            {
+              "language": "en",
+              "text": "provides the quantity number of pieces or mass or volume to compute the impact of climate change or product carbon footprint."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABG857#003"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:double",
+          "value": "5",
+          "modelType": "Property"
         },
         {
           "idShort": "LifeCyclePhases",
@@ -207,13 +318,11 @@
           },
           "qualifiers": [
             {
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "One"
             }
           ],
-          "orderRelevant": false,
           "semanticIdListElement": {
             "type": "ExternalReference",
             "keys": [
@@ -255,7 +364,6 @@
               },
               "qualifiers": [
                 {
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
@@ -267,206 +375,6 @@
             }
           ],
           "modelType": "SubmodelElementList"
-        },
-        {
-          "category": "PARAMETER",
-          "idShort": "PcfCO2eq",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "CO2-Äquivalent"
-            },
-            {
-              "language": "en",
-              "text": "CO2 equivalent"
-            }
-          ],
-          "description": [
-            {
-              "language": "en",
-              "text": "Sum of all greenhouse gas emissions of a product according to the quantification requirements of the standard."
-            }
-          ],
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "0173-1#02-ABG855#003"
-              }
-            ]
-          },
-          "qualifiers": [
-            {
-              "kind": "ConceptQualifier",
-              "type": "SMT/Cardinality",
-              "valueType": "xs:string",
-              "value": "One"
-            }
-          ],
-          "valueType": "xs:decimal",
-          "value": "17.2",
-          "modelType": "Property"
-        },
-        {
-          "category": "PARAMETER",
-          "idShort": "ReferenceImpactUnitForCalculation",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "Referenzeinheit für die Berechnung"
-            },
-            {
-              "language": "en",
-              "text": "Reference value for calculation"
-            }
-          ],
-          "description": [
-            {
-              "language": "en",
-              "text": "Quantity unit of the product to which the PCF information on the CO2 footprint refers."
-            }
-          ],
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "0173-1#02-ABG856#003"
-              }
-            ]
-          },
-          "qualifiers": [
-            {
-              "kind": "ConceptQualifier",
-              "type": "SMT/Cardinality",
-              "valueType": "xs:string",
-              "value": "One"
-            }
-          ],
-          "valueType": "xs:string",
-          "value": "ml",
-          "modelType": "Property"
-        },
-        {
-          "category": "PARAMETER",
-          "idShort": "QuantityOfMeasureForCalculation",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "Mengenangabe für die Berechnung"
-            },
-            {
-              "language": "en",
-              "text": "quantity of measure for calculation"
-            }
-          ],
-          "description": [
-            {
-              "language": "en",
-              "text": "provides the quantity number of pieces or mass or volume to compute the impact of climate change or product carbon footprint."
-            }
-          ],
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "0173-1#02-ABG857#003"
-              }
-            ]
-          },
-          "qualifiers": [
-            {
-              "kind": "ConceptQualifier",
-              "type": "SMT/Cardinality",
-              "valueType": "xs:string",
-              "value": "One"
-            }
-          ],
-          "valueType": "xs:double",
-          "value": "5",
-          "modelType": "Property"
-        },
-        {
-          "category": "PARAMETER",
-          "idShort": "PublicationDate",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "Veröffentlichungsdatum"
-            },
-            {
-              "language": "en",
-              "text": "Publication date"
-            }
-          ],
-          "description": [
-            {
-              "language": "en",
-              "text": "The UTC timestamp on which a Product Carbon Footprint (PCF) - a calculation of a product's total greenhouse gas emissions - was created and published"
-            }
-          ],
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/idta/CarbonFootprint/PublicationDate/1/0"
-              }
-            ]
-          },
-          "qualifiers": [
-            {
-              "kind": "ConceptQualifier",
-              "type": "SMT/Cardinality",
-              "valueType": "xs:string",
-              "value": "One"
-            }
-          ],
-          "valueType": "xs:dateTime",
-          "value": "2025-12-24T14:30:00",
-          "modelType": "Property"
-        },
-        {
-          "category": "PARAMETER",
-          "idShort": "ExpirationDate",
-          "displayName": [
-            {
-              "language": "de",
-              "text": "Ablaufdatum"
-            },
-            {
-              "language": "en",
-              "text": "Expiration date"
-            }
-          ],
-          "description": [
-            {
-              "language": "en",
-              "text": "End date up to which a study or data collection for calculating an ecological footprint is considered current and valid before an update or new calculation is required."
-            }
-          ],
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/idta/CarbonFootprint/ExpirationDate/1/0"
-              }
-            ]
-          },
-          "qualifiers": [
-            {
-              "kind": "ConceptQualifier",
-              "type": "SMT/Cardinality",
-              "valueType": "xs:string",
-              "value": "ZeroToOne"
-            }
-          ],
-          "valueType": "xs:dateTime",
-          "value": "2035-12-24T14:30:00",
-          "modelType": "Property"
         },
         {
           "category": "PARAMETER",
@@ -498,7 +406,6 @@
           },
           "qualifiers": [
             {
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToOne"
@@ -566,13 +473,90 @@
           ],
           "qualifiers": [
             {
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToOne"
             }
           ],
           "modelType": "SubmodelElementCollection"
+        },
+        {
+          "category": "PARAMETER",
+          "idShort": "PublicationDate",
+          "displayName": [
+            {
+              "language": "de",
+              "text": "Veröffentlichungsdatum"
+            },
+            {
+              "language": "en",
+              "text": "Publication date"
+            }
+          ],
+          "description": [
+            {
+              "language": "en",
+              "text": "The UTC timestamp on which a Product Carbon Footprint (PCF) - a calculation of a product's total greenhouse gas emissions - was created and published"
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/CarbonFootprint/PublicationDate/1/0"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:dateTime",
+          "value": "2025-12-24T14:30:00",
+          "modelType": "Property"
+        },
+        {
+          "category": "PARAMETER",
+          "idShort": "ExpirationDate",
+          "displayName": [
+            {
+              "language": "de",
+              "text": "Ablaufdatum"
+            },
+            {
+              "language": "en",
+              "text": "Expiration date"
+            }
+          ],
+          "description": [
+            {
+              "language": "en",
+              "text": "End date up to which a study or data collection for calculating an ecological footprint is considered current and valid before an update or new calculation is required."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/CarbonFootprint/ExpirationDate/1/0"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "ZeroToOne"
+            }
+          ],
+          "valueType": "xs:dateTime",
+          "value": "2035-12-24T14:30:00",
+          "modelType": "Property"
         }
       ],
       "modelType": "SubmodelElementCollection"

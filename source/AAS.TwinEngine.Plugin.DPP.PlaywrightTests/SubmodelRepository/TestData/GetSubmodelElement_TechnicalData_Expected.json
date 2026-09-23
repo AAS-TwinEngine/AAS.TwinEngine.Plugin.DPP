@@ -41,7 +41,6 @@
           }
         ]
       },
-      "kind": "ConceptQualifier",
       "type": "SMT/Cardinality",
       "valueType": "xs:string",
       "value": "One"
@@ -92,7 +91,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -100,114 +98,6 @@
       ],
       "valueType": "xs:string",
       "value": "M&M Germany",
-      "modelType": "Property"
-    },
-    {
-      "category": "PARAMETER",
-      "idShort": "ManufacturerArticleNumber",
-      "displayName": [
-        {
-          "language": "en",
-          "text": "Manufacturer article number"
-        },
-        {
-          "language": "de",
-          "text": "Herstellerartikelnummer"
-        }
-      ],
-      "semanticId": {
-        "type": "ExternalReference",
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "0173-1#02-AAO676#005"
-          }
-        ]
-      },
-      "supplementalSemanticIds": [
-        {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "https://api.eclass-cdp.com/0173-1-02-AAO676-005"
-            }
-          ]
-        }
-      ],
-      "qualifiers": [
-        {
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
-              }
-            ]
-          },
-          "kind": "ConceptQualifier",
-          "type": "SMT/Cardinality",
-          "valueType": "xs:string",
-          "value": "One"
-        }
-      ],
-      "valueType": "xs:string",
-      "value": "123456",
-      "modelType": "Property"
-    },
-    {
-      "category": "PARAMETER",
-      "idShort": "ManufacturerOrderCode",
-      "displayName": [
-        {
-          "language": "en",
-          "text": "Manufacturer order code"
-        },
-        {
-          "language": "de",
-          "text": "Bestellcode des Herstellers"
-        }
-      ],
-      "semanticId": {
-        "type": "ExternalReference",
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "0173-1#02-AAO227#004"
-          }
-        ]
-      },
-      "supplementalSemanticIds": [
-        {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "https://api.eclass-cdp.com/0173-1-02-AAO227-004"
-            }
-          ]
-        }
-      ],
-      "qualifiers": [
-        {
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
-              }
-            ]
-          },
-          "kind": "ConceptQualifier",
-          "type": "SMT/Cardinality",
-          "valueType": "xs:string",
-          "value": "One"
-        }
-      ],
-      "valueType": "xs:string",
-      "value": "EEA-EX-200-S/47-Q3",
       "modelType": "Property"
     },
     {
@@ -253,7 +143,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "ZeroToOne"
@@ -307,7 +196,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -324,6 +212,112 @@
         }
       ],
       "modelType": "MultiLanguageProperty"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerArticleNumber",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer article number"
+        },
+        {
+          "language": "de",
+          "text": "Herstellerartikelnummer"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO676#005"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAO676-005"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "123456",
+      "modelType": "Property"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerOrderCode",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer order code"
+        },
+        {
+          "language": "de",
+          "text": "Bestellcode des Herstellers"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO227#004"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAO227-004"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "EEA-EX-200-S/47-Q3",
+      "modelType": "Property"
     },
     {
       "idShort": "ProductImages",
@@ -374,7 +368,6 @@
           "value": "ZeroToMany"
         }
       ],
-      "orderRelevant": false,
       "semanticIdListElement": {
         "type": "ExternalReference",
         "keys": [
@@ -432,7 +425,6 @@
                   }
                 ]
               },
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToMany"
@@ -471,7 +463,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
@@ -524,7 +515,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToOne"
@@ -591,7 +581,6 @@
                   }
                 ]
               },
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToMany"
@@ -630,7 +619,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
@@ -683,7 +671,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToOne"

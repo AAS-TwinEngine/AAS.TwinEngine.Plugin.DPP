@@ -1,30 +1,19 @@
 {
   "paging_metadata": {
-    "cursor": "TWFudWZhY3R1cmVyUHJvZHVjdFR5cGU"
+    "cursor": "QXNzZXRTcGVjaWZpY1Byb3BlcnRpZXM"
   },
   "result": [
     {
-      "idShort": "ManufacturerProductType",
+      "idShort": "AssetSpecificProperties",
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
           {
             "type": "GlobalReference",
-            "value": "0112/2///61987#ABA300#008"
+            "value": "0173-1#02-ABI218#003/0173-1#01-AGZ672#004"
           }
         ]
       },
-      "supplementalSemanticIds": [
-        {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "0173-1#02-AAO057#004"
-            }
-          ]
-        }
-      ],
       "qualifiers": [
         {
           "semanticId": {
@@ -42,9 +31,71 @@
           "value": "ZeroToOne"
         }
       ],
-      "valueType": "xs:string",
-      "value": "FM-ABC-1234",
-      "modelType": "Property"
+      "value": [
+        {
+          "idShort": "GuidelineSpecificProperties",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-ABI219#003/0173-1#01-AHD205#004"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "kind": "TemplateQualifier",
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "ZeroToOne"
+            }
+          ],
+          "typeValueListElement": "SubmodelElementCollection",
+          "value": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#01-AHD205#004"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "kind": "TemplateQualifier",
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "modelType": "SubmodelElementCollection"
+            }
+          ],
+          "modelType": "SubmodelElementList"
+        }
+      ],
+      "modelType": "SubmodelElementCollection"
     }
   ]
 }
