@@ -37,17 +37,18 @@ public class SubmodelDataProviderTests
     {
         const string Sql = "SELECT * FROM table";
         const string ProductId = "PROD-001";
-        const string Json = "{ \"key\": \"value\" }";
+        const string InnerJson = "{ \"key\": \"value\" }";
+        var json = $"{{ \"{ProductId}\": {InnerJson} }}";
         var expectedNode = new SemanticLeafNode("semanticId", DataType.String, "value");
-        _queryExecutor.ExecuteQueryAsync(Sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(Json);
-        _jsonResponseParser.ParseJson(Json).Returns(expectedNode);
+        _queryExecutor.ExecuteQueryAsync(Sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        _jsonResponseParser.ParseJson(InnerJson).Returns(expectedNode);
 
         var result = await _sut.GetSubmodelValuesAsync(Sql, ProductId, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Equal(expectedNode, result);
         await _queryExecutor.Received(1).ExecuteQueryAsync(Sql, Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>());
-        _jsonResponseParser.Received(1).ParseJson(Json);
+        _jsonResponseParser.Received(1).ParseJson(InnerJson);
     }
 
     [Theory]
@@ -65,14 +66,15 @@ public class SubmodelDataProviderTests
     public async Task GetSubmodelValuesAsync_ShouldPassProductIdAsSqlParameter()
     {
         const string ProductId = "PROD-XYZ";
-        const string Json = "{ }";
-        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(Json);
-        _jsonResponseParser.ParseJson(Json).Returns(new SemanticLeafNode("id", DataType.String, "value"));
+        const string InnerJson = "{ }";
+        var json = $"{{ \"{ProductId}\": {InnerJson} }}";
+        _queryExecutor.ExecuteQueryAsync(Arg.Any<string>(), Arg.Any<IEnumerable<DbParameter>>(), Arg.Any<CancellationToken>()).Returns(json);
+        _jsonResponseParser.ParseJson(InnerJson).Returns(new SemanticLeafNode("id", DataType.String, "value"));
 
         await _sut.GetSubmodelValuesAsync("sql", ProductId, CancellationToken.None);
 
         await _queryExecutor.Received(1).ExecuteQueryAsync(Arg.Any<string>(), Arg.Is<IEnumerable<DbParameter>>(parameters => parameters.Any(p =>
-                        p.ParameterName == "@ProductId" && (string?)p.Value == ProductId)), Arg.Any<CancellationToken>());
+                        p.ParameterName == "@ProductIds" && ((string[]?)p.Value)!.Contains(ProductId))), Arg.Any<CancellationToken>());
     }
 
     [Fact]

@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Responses;
 
 using Asp.Versioning;
 
@@ -18,6 +19,20 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 [ApiVersion(1)]
 public class SubmodelDataController(ISubmodelDataHandler submodelDataHandler) : ControllerBase
 {
+    [HttpPost("data/batch")]
+    [ProducesResponseType(typeof(IReadOnlyList<GetSubmodelDataBatchResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IReadOnlyList<GetSubmodelDataBatchResponse>>> RetrieveBatchDataAsync([FromBody] IReadOnlyCollection<GetSubmodelDataBatchRequest> requests, CancellationToken cancellationToken)
+    {
+        var result = await submodelDataHandler
+            .GetSubmodelDataAsync(requests, cancellationToken)
+            .ConfigureAwait(false);
+
+        return Ok(result);
+    }
+
     [HttpPost("data/{submodelId}")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]

@@ -20,7 +20,7 @@ public class ManifestServiceTests
     {
         _manifestProvider = Substitute.For<IManifestProvider>();
         _options = Substitute.For<IOptions<Capabilities>>();
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true, HasAssetKindTypeFilter = true });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true, HasAssetKindTypeFilter = true, HasSubmodelBatch = true });
         _manifestProvider.GetSupportedSemanticIds().Returns(supportedSemanticIds);
         _sut = new ManifestService(_manifestProvider, _options);
     }
@@ -40,21 +40,22 @@ public class ManifestServiceTests
         Assert.True(result.Capabilities.HasAssetInformation);
         Assert.True(result.Capabilities.HasAssetIdSearch);
         Assert.True(result.Capabilities.HasAssetKindTypeFilter);
+        Assert.True(result.Capabilities.HasSubmodelBatch);
     }
 
     [Theory]
-    [InlineData(true, true, true, true)]
-    [InlineData(true, false, true, true)]
-    [InlineData(false, true, true, true)]
-    [InlineData(false, false, true, true)]
-    [InlineData(true, true, false, false)]
-    [InlineData(true, false, false, false)]
-    [InlineData(false, true, false, false)]
-    [InlineData(false, false, false, false)]
-    public void GetManifestData_ReflectsCapabilities_FromOptions(bool hasShellDescriptor, bool hasAssetInformation, bool hasAssetIdSearch, bool hasAssetKindTypeFilter)
+    [InlineData(true, true, true, true, true)]
+    [InlineData(true, false, true, true, false)]
+    [InlineData(false, true, true, true, true)]
+    [InlineData(false, false, true, true, false)]
+    [InlineData(true, true, false, false, true)]
+    [InlineData(true, false, false, false, false)]
+    [InlineData(false, true, false, false, true)]
+    [InlineData(false, false, false, false, false)]
+    public void GetManifestData_ReflectsCapabilities_FromOptions(bool hasShellDescriptor, bool hasAssetInformation, bool hasAssetIdSearch, bool hasAssetKindTypeFilter, bool hasSubmodelBatch)
     {
         _manifestProvider.GetSupportedSemanticIds().Returns(Array.Empty<string>());
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = hasShellDescriptor, HasAssetInformation = hasAssetInformation, HasAssetIdSearch = hasAssetIdSearch, HasAssetKindTypeFilter = hasAssetKindTypeFilter});
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = hasShellDescriptor, HasAssetInformation = hasAssetInformation, HasAssetIdSearch = hasAssetIdSearch, HasAssetKindTypeFilter = hasAssetKindTypeFilter, HasSubmodelBatch = hasSubmodelBatch});
         _sut = new ManifestService(_manifestProvider, _options);
 
         var result = _sut.GetManifestData();
@@ -65,6 +66,7 @@ public class ManifestServiceTests
         Assert.Equal(hasAssetInformation, result.Capabilities.HasAssetInformation);
         Assert.Equal(hasAssetIdSearch, result.Capabilities.HasAssetIdSearch);
         Assert.Equal(hasAssetKindTypeFilter, result.Capabilities.HasAssetKindTypeFilter);
+        Assert.Equal(hasSubmodelBatch, result.Capabilities.HasSubmodelBatch);
         Assert.Empty(result.SupportedSemanticIds);
     }
 
@@ -72,7 +74,7 @@ public class ManifestServiceTests
     public void GetManifestData_WhenProviderReturnsEmpty_ReturnsEmptySemanticIds()
     {
         _manifestProvider.GetSupportedSemanticIds().Returns(Array.Empty<string>());
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false, HasAssetKindTypeFilter = false });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false, HasAssetKindTypeFilter = false, HasSubmodelBatch = false });
         _sut = new ManifestService(_manifestProvider, _options);
 
         var result = _sut.GetManifestData();
@@ -83,6 +85,7 @@ public class ManifestServiceTests
         Assert.False(result.Capabilities.HasAssetInformation);
         Assert.False(result.Capabilities.HasAssetIdSearch);
         Assert.False(result.Capabilities.HasAssetKindTypeFilter);
+        Assert.False(result.Capabilities.HasSubmodelBatch);
     }
 
     [Fact]
@@ -99,10 +102,10 @@ public class ManifestServiceTests
     [Fact]
     public void Capabilities_AreCapturedAtConstructionTime()
     {
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true, HasAssetKindTypeFilter = true });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = true, HasAssetInformation = true, HasAssetIdSearch = true, HasAssetKindTypeFilter = true, HasSubmodelBatch = true });
         _sut = new ManifestService(_manifestProvider, _options);
 
-        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false, HasAssetKindTypeFilter = false });
+        _options.Value.Returns(new Capabilities { HasShellDescriptor = false, HasAssetInformation = false, HasAssetIdSearch = false, HasAssetKindTypeFilter = false, HasSubmodelBatch = false });
 
         var result = _sut.GetManifestData();
 
@@ -110,5 +113,6 @@ public class ManifestServiceTests
         Assert.True(result.Capabilities.HasAssetInformation);
         Assert.True(result.Capabilities.HasAssetIdSearch);
         Assert.True(result.Capabilities.HasAssetKindTypeFilter);
+        Assert.True(result.Capabilities.HasSubmodelBatch);
     }
 }

@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
@@ -15,8 +15,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData;
 [ApiController]
 [Route("metadata")]
 [ApiVersion(1)]
-public class MetaDataController(
-    IMetaDataHandler metaDataHandler) : ControllerBase
+public class MetaDataController(IMetaDataHandler metaDataHandler) : ControllerBase
 {
     [HttpGet("shells")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]

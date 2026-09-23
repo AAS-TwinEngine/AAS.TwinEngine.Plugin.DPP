@@ -102,6 +102,20 @@ public static partial class DbParameterValidator
             case byte[]:
                 break;
 
+            case string[] stringValues:
+                foreach (var stringValue in stringValues)
+                {
+                    if (stringValue is null)
+                    {
+                        logger?.LogError("Null element found in string array parameter {Name}", parameter.ParameterName);
+                        throw new ResourceNotValidException();
+                    }
+
+                    ValidateStringParameter(parameter.ParameterName, stringValue, logger);
+                }
+
+                break;
+
             default:
                 ValidateValueType(valueType, parameter.ParameterName, logger);
                 break;
