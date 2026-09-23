@@ -748,11 +748,11 @@
     "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/toolid/1/0" ]
   },
   {
-    "column": "dbo.MaintenanceTool.OrderCodeOfManufacturer",
+    "column": "dbo.MaintenanceTool.OrderCodeToolOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA950#008" ]
   },
   {
-    "column": "dbo.MaintenanceTool.AddressOfAdditionalLink",
+    "column": "dbo.MaintenanceTool.AddressOfAdditionalLinkTool",
     "semanticId": [ "0173-1#02-AAQ326#004" ]
   },
   {
@@ -796,11 +796,11 @@
     "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/unitmaxquantityofconsumable/1/0" ]
   },
   {
-    "column": "dbo.MaintenanceConsumable.OrderCodeOfManufacturer",
+    "column": "dbo.MaintenanceConsumable.OrderCodeConsumableOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA950#008" ]
   },
   {
-    "column": "dbo.MaintenanceConsumable.AddressOfAdditionalLink",
+    "column": "dbo.MaintenanceConsumable.AddressOfAdditionalLinkConsumable",
     "semanticId": [ "0173-1#02-AAQ326#004" ]
   },
   {
@@ -848,11 +848,11 @@
     "semanticId": [ "https://admin-shell.io/idta/maintenanceinstructions/sparepartid/1/0" ]
   },
   {
-    "column": "dbo.MaintenanceSparePart.OrderCodeOfManufacturer",
+    "column": "dbo.MaintenanceSparePart.OrderCodeSparePartOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA950#008" ]
   },
   {
-    "column": "dbo.MaintenanceSparePart.AddressOfAdditionalLink",
+    "column": "dbo.MaintenanceSparePart.AddressOfAdditionalLinkSparePart",
     "semanticId": [ "0173-1#02-AAQ326#004" ]
   },
   {
