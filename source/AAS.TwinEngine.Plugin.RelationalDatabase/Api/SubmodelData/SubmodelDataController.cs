@@ -19,7 +19,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 [ApiVersion(1)]
 public class SubmodelDataController(ISubmodelDataHandler submodelDataHandler) : ControllerBase
 {
-    [HttpPost("data")]
+    [HttpPost("data/batch")]
     [ProducesResponseType(typeof(IReadOnlyList<GetSubmodelDataBatchResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
