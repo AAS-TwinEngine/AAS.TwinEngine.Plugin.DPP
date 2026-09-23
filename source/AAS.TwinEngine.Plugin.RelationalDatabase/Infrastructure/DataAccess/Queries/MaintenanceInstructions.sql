@@ -27,8 +27,8 @@ spare_part_agg AS (
         json_agg(
             json_build_object(
                 'SparePartID',                         msp."SparePartID",
-                'OrderCodeOfManufacturer',              msp."OrderCodeOfManufacturer",
-                'AddressOfAdditionalLink',               msp."AddressOfAdditionalLink",
+                'OrderCodeOfManufacturer',              msp."OrderCodeSparePartOfManufacturer",
+                'AddressOfAdditionalLink',               msp."AddressOfAdditionalLinkSparePart",
                 'SparePartName_en',                     msp."SparePartName_en",
                 'SparePartName_de',                     msp."SparePartName_de",
                 'CompanyNameSupplierSparePart_en',      msp."CompanyNameSupplierSparePart_en",
@@ -54,8 +54,8 @@ consumable_agg AS (
             json_build_object(
                 'ConsumableID',                          mc."ConsumableID",
                 'UnitMaxQuantityOfConsumable',           mc."UnitMaxQuantityOfConsumable",
-                'OrderCodeOfManufacturer',                mc."OrderCodeOfManufacturer",
-                'AddressOfAdditionalLink',                 mc."AddressOfAdditionalLink",
+                'OrderCodeOfManufacturer',                mc."OrderCodeConsumableOfManufacturer",
+                'AddressOfAdditionalLink',                 mc."AddressOfAdditionalLinkConsumable",
                 'ConsumableName_en',                      mc."ConsumableName_en",
                 'ConsumableName_de',                      mc."ConsumableName_de",
                 'CompanyNameSupplierConsumable_en',       mc."CompanyNameSupplierConsumable_en",
@@ -80,8 +80,8 @@ tool_agg AS (
         json_agg(
             json_build_object(
                 'ToolID',                          mt."ToolID",
-                'OrderCodeOfManufacturer',         mt."OrderCodeOfManufacturer",
-                'AddressOfAdditionalLink',         mt."AddressOfAdditionalLink",
+                'OrderCodeOfManufacturer',         mt."OrderCodeToolOfManufacturer",
+                'AddressOfAdditionalLink',         mt."AddressOfAdditionalLinkTool",
                 'ToolName_en',                     mt."ToolName_en",
                 'ToolName_de',                     mt."ToolName_de",
                 'CompanyNameToolSupplier_en',      mt."CompanyNameToolSupplier_en",
