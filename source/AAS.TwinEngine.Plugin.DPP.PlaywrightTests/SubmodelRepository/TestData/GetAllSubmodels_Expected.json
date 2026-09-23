@@ -1,5 +1,7 @@
 {
-  "paging_metadata": { "cursor": null },
+  "paging_metadata": {
+    "cursor": null
+  },
   "result": [
     {
       "idShort": "Nameplate",
@@ -38793,11 +38795,11 @@
                       "value": [
                         {
                           "language": "de",
-                          "text": "Finance"
+                          "text": "Operations"
                         },
                         {
                           "language": "en",
-                          "text": "Finance"
+                          "text": "Operations"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -38857,11 +38859,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Mr."
+                          "text": "Ms"
                         },
                         {
                           "language": "de",
-                          "text": "Herr"
+                          "text": "Frau"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -38893,11 +38895,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Dr."
+                          "text": "Prof."
                         },
                         {
                           "language": "de",
-                          "text": "Dr."
+                          "text": "Prof."
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -38929,11 +38931,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Lukas Mueller"
+                          "text": "Johann Becker"
                         },
                         {
                           "language": "de",
-                          "text": "Lukas Müller"
+                          "text": "Johann Becker"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -38965,11 +38967,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Lukas"
+                          "text": "Johann"
                         },
                         {
                           "language": "de",
-                          "text": "Lukas"
+                          "text": "Johann"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39001,11 +39003,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Mueller"
+                          "text": "Becker"
                         },
                         {
                           "language": "de",
-                          "text": "Müller"
+                          "text": "Becker"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39060,7 +39062,7 @@
                             }
                           ],
                           "valueType": "xs:string",
-                          "value": "lukas.mueller@example.de",
+                          "value": "johann.becker@example.de",
                           "modelType": "Property"
                         },
                         {
@@ -39252,7 +39254,7 @@
                             }
                           ],
                           "valueType": "xs:string",
-                          "value": "0173-1#07-AAS755#001",
+                          "value": "0173-1#07-AAS759#001",
                           "modelType": "Property"
                         },
                         {
@@ -39282,11 +39284,11 @@
                           "value": [
                             {
                               "language": "de",
-                              "text": "Montag – Donnerstag 09:00 bis 17:00"
+                              "text": "Montag – Freitag 06:00 bis 12:00"
                             },
                             {
                               "language": "en",
-                              "text": "Monday – Thursday 09:00 to 17:00"
+                              "text": "Monday – Friday 06:00 to 12:00"
                             }
                           ],
                           "modelType": "MultiLanguageProperty"
@@ -39593,11 +39595,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Responsible for B2B sales in region-2"
+                          "text": "Responsible for B2B sales in region-6"
                         },
                         {
                           "language": "de",
-                          "text": "Responsible for B2B sales in region-2"
+                          "text": "Responsible for B2B sales in region-6"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39698,11 +39700,11 @@
                       "value": [
                         {
                           "language": "de",
-                          "text": "Operations"
+                          "text": "Finance"
                         },
                         {
                           "language": "en",
-                          "text": "Operations"
+                          "text": "Finance"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39762,11 +39764,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Ms"
+                          "text": "Mr."
                         },
                         {
                           "language": "de",
-                          "text": "Frau"
+                          "text": "Herr"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39798,11 +39800,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Prof."
+                          "text": "Dr."
                         },
                         {
                           "language": "de",
-                          "text": "Prof."
+                          "text": "Dr."
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39834,11 +39836,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Johann Becker"
+                          "text": "Lukas Mueller"
                         },
                         {
                           "language": "de",
-                          "text": "Johann Becker"
+                          "text": "Lukas Müller"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39870,11 +39872,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Johann"
+                          "text": "Lukas"
                         },
                         {
                           "language": "de",
-                          "text": "Johann"
+                          "text": "Lukas"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39906,11 +39908,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Becker"
+                          "text": "Mueller"
                         },
                         {
                           "language": "de",
-                          "text": "Becker"
+                          "text": "Müller"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
@@ -39995,11 +39997,11 @@
                           "value": [
                             {
                               "language": "en",
-                              "text": "D4E5F67890ABCDEF1234567890ABCDEF12345678"
+                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1234"
                             },
                             {
                               "language": "de",
-                              "text": "D4E5F67890ABCDEF1234567890ABCDEF12345679"
+                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1235"
                             }
                           ],
                           "modelType": "MultiLanguageProperty"
@@ -40157,7 +40159,7 @@
                             }
                           ],
                           "valueType": "xs:string",
-                          "value": "0173-1#07-AAS759#001",
+                          "value": "0173-1#07-AAS755#001",
                           "modelType": "Property"
                         },
                         {
@@ -40187,11 +40189,11 @@
                           "value": [
                             {
                               "language": "de",
-                              "text": "Montag – Freitag 06:00 bis 12:00"
+                              "text": "Montag – Donnerstag 09:00 bis 17:00"
                             },
                             {
                               "language": "en",
-                              "text": "Monday – Friday 06:00 to 12:00"
+                              "text": "Monday – Thursday 09:00 to 17:00"
                             }
                           ],
                           "modelType": "MultiLanguageProperty"
@@ -40498,11 +40500,11 @@
                       "value": [
                         {
                           "language": "en",
-                          "text": "Responsible for B2B sales in region-6"
+                          "text": "Responsible for B2B sales in region-2"
                         },
                         {
                           "language": "de",
-                          "text": "Responsible for B2B sales in region-6"
+                          "text": "Responsible for B2B sales in region-2"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
