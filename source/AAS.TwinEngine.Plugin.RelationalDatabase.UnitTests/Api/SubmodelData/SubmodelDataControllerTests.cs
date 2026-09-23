@@ -3,6 +3,7 @@
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Handler;
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Requests;
+using AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Responses;
 
 using Json.Schema;
 
@@ -81,5 +82,76 @@ public class SubmodelDataControllerTests
 
         await Assert.ThrowsAsync<OperationCanceledException>(() =>
             _sut.RetrieveDataAsync(_testSchema, submodelId, cts.Token));
+    }
+
+    [Fact]
+    public async Task RetrieveBatchDataAsync_ShouldReturnOk_WhenDataIsAvailable()
+    {
+        var requests = new List<GetSubmodelDataBatchRequest>
+        {
+            new(["encoded-id-1", "encoded-id-2"], _testSchema)
+        };
+        var expectedResults = new List<GetSubmodelDataBatchResponse>
+        {
+            new("encoded-id-1", _expectedJsonObject),
+            new("encoded-id-2", _expectedJsonObject)
+        };
+        _submodelDataHandler
+            .GetSubmodelDataAsync(Arg.Any<IReadOnlyCollection<GetSubmodelDataBatchRequest>>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<GetSubmodelDataBatchResponse>>(expectedResults));
+
+        var result = await _sut.RetrieveBatchDataAsync(requests, CancellationToken.None);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(expectedResults, okResult.Value);
+    }
+
+    [Fact]
+    public async Task RetrieveBatchDataAsync_ShouldCallHandlerWithProvidedRequests()
+    {
+        var requests = new List<GetSubmodelDataBatchRequest>
+        {
+            new(["encoded-id-1"], _testSchema)
+        };
+        _submodelDataHandler
+            .GetSubmodelDataAsync(Arg.Any<IReadOnlyCollection<GetSubmodelDataBatchRequest>>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<GetSubmodelDataBatchResponse>>([]));
+
+        await _sut.RetrieveBatchDataAsync(requests, CancellationToken.None);
+
+        await _submodelDataHandler.Received(1).GetSubmodelDataAsync(requests, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task RetrieveBatchDataAsync_ShouldThrowException_WhenHandlerThrows()
+    {
+        var requests = new List<GetSubmodelDataBatchRequest>
+        {
+            new(["encoded-id-1"], _testSchema)
+        };
+        _submodelDataHandler
+            .GetSubmodelDataAsync(Arg.Any<IReadOnlyCollection<GetSubmodelDataBatchRequest>>(), Arg.Any<CancellationToken>())
+            .Returns<Task<IReadOnlyList<GetSubmodelDataBatchResponse>>>(_ => throw new InvalidOperationException("Handler error"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _sut.RetrieveBatchDataAsync(requests, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task RetrieveBatchDataAsync_ShouldHandleCancellation_WhenTokenIsCancelled()
+    {
+        var requests = new List<GetSubmodelDataBatchRequest>
+        {
+            new(["encoded-id-1"], _testSchema)
+        };
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync();
+
+        _submodelDataHandler
+            .GetSubmodelDataAsync(Arg.Any<IReadOnlyCollection<GetSubmodelDataBatchRequest>>(), Arg.Any<CancellationToken>())
+            .Returns<Task<IReadOnlyList<GetSubmodelDataBatchResponse>>>(_ => throw new OperationCanceledException());
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() =>
+            _sut.RetrieveBatchDataAsync(requests, cts.Token));
     }
 }

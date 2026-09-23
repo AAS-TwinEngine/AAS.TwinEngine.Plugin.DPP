@@ -109,10 +109,7 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region Single Match Strategy
 
-    private void FillSingleBranchMatch(
-        SemanticBranchNode requestBranch,
-        SemanticBranchNode responseBranch,
-        Dictionary<string, ColumnMapping> columnMapping)
+    private void FillSingleBranchMatch(SemanticBranchNode requestBranch, SemanticBranchNode responseBranch, Dictionary<string, ColumnMapping> columnMapping)
     {
         foreach (var child in requestBranch.Children)
         {

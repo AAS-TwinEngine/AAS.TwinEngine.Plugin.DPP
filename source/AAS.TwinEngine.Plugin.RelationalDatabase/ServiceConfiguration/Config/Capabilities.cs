@@ -17,4 +17,7 @@ public class Capabilities
 
     [Required]
     public bool HasAssetKindTypeFilter { get; set; }
+
+    [Required]
+    public bool HasSubmodelBatch { get; set; }
 }

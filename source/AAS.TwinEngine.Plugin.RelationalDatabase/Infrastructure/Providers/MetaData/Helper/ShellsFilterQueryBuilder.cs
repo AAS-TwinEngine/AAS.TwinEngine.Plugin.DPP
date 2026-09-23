@@ -81,11 +81,7 @@ public static class ShellsFilterQueryBuilder
         return (query, parameters);
     }
 
-    private static string BuildPaginationClause(
-        string query,
-        int? limit,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildPaginationClause(string query, int? limit, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
         parameters.Add(parameterFactory("@p_page_size", pageSize));
@@ -93,11 +89,7 @@ public static class ShellsFilterQueryBuilder
         return query.Replace(PaginationMarker, "ORDER BY A.\"AasId\" LIMIT @p_page_size", StringComparison.Ordinal);
     }
 
-    private static string BuildGlobalAssetIdClause(
-        int index,
-        SpecificAssetIdsData identifier,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildGlobalAssetIdClause(int index, SpecificAssetIdsData identifier, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var parameterName = CreateValueParameterName(index);
 
@@ -105,11 +97,7 @@ public static class ShellsFilterQueryBuilder
 
         return $"A.\"GlobalAssetId\" = {parameterName}";
     }
-    private static string BuildSpecificAssetIdClause(
-        int index,
-        SpecificAssetIdsData identifier,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildSpecificAssetIdClause(int index, SpecificAssetIdsData identifier, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var nameParameter = CreateNameParameterName(index);
         var valueParameter = CreateValueParameterName(index);

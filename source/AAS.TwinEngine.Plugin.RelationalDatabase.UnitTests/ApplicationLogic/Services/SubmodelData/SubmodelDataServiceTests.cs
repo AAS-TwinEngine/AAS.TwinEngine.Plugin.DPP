@@ -263,6 +263,64 @@ public class SubmodelDataServiceTests
         _queryProvider.Received(1).GetQuery(submodelName.ToString());
     }
 
+    [Fact]
+    public async Task GetValuesBySemanticIds_MultipleSubmodelIds_ReturnsResultForEachSubmodel()
+    {
+        var jsonSchema = CreateValidJsonSchema();
+        var submodelIds = new[] { "submodel-1", "submodel-2" };
+        const string sqlQuery = "SELECT * FROM TestTable";
+        var extractionResults = new Dictionary<string, SubmodelIdExtractionResult>
+        {
+            ["submodel-1"] = new("product-1", SubmodelName.Nameplate),
+            ["submodel-2"] = new("product-1", SubmodelName.Nameplate)
+        };
+        var responseNode = new SemanticLeafNode("response", DataType.String, "value");
+        var resultNode = new SemanticLeafNode("result", DataType.String, "finalValue");
+
+        _submodelMetadataExtractor.ExtractSubmodelMetadata(Arg.Any<string>())
+            .Returns(callInfo => extractionResults[callInfo.Arg<string>()]);
+        _submodelMetadataExtractor.ExtractProductId(Arg.Any<string>())
+            .Returns(callInfo => extractionResults[callInfo.Arg<string>()].ProductId);
+        _semanticIdToColumnMapper.GetSemanticIdToColumnMapping(Arg.Any<SemanticTreeNode>())
+            .Returns([]);
+        _queryProvider.GetQuery(SubmodelName.Nameplate.ToString()).Returns(sqlQuery);
+        _submodelDataProvider.GetSubmodelValuesAsync(
+                sqlQuery,
+            Arg.Any<IReadOnlyCollection<string>>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new Dictionary<string, SemanticTreeNode> { ["product-1"] = responseNode });
+        _semanticTreeResponseBuilder.BuildResponse(
+                Arg.Any<SemanticTreeNode>(),
+                responseNode,
+                Arg.Any<Dictionary<string, ColumnMapping>>())
+            .Returns(resultNode);
+
+        var result = await _sut.GetValuesBySemanticIds(jsonSchema, submodelIds, CancellationToken.None);
+
+        Assert.Equal(2, result.Count);
+        Assert.Same(resultNode, result["submodel-1"]);
+        Assert.Same(resultNode, result["submodel-2"]);
+        var providerCall = _submodelDataProvider.ReceivedCalls().Single(call =>
+            call.GetMethodInfo().Name == nameof(ISubmodelDataProvider.GetSubmodelValuesAsync) &&
+            call.GetArguments()[0] is string query && query == sqlQuery &&
+            call.GetArguments()[1] is IReadOnlyCollection<string>);
+        var requestedProductIds = Assert.IsAssignableFrom<IReadOnlyCollection<string>>(providerCall.GetArguments()[1]);
+        Assert.Equal(["product-1"], requestedProductIds);
+        _semanticTreeResponseBuilder.Received(2).BuildResponse(
+            Arg.Any<SemanticTreeNode>(),
+            responseNode,
+            Arg.Any<Dictionary<string, ColumnMapping>>());
+    }
+
+    [Fact]
+    public async Task GetValuesBySemanticIds_EmptySubmodelIds_ThrowsInvalidUserInputException()
+    {
+        var jsonSchema = CreateValidJsonSchema();
+
+        await Assert.ThrowsAsync<InvalidUserInputException>(() =>
+            _sut.GetValuesBySemanticIds(jsonSchema, [], CancellationToken.None));
+    }
+
     private static JsonSchema CreateValidJsonSchema()
     {
         return new JsonSchemaBuilder()

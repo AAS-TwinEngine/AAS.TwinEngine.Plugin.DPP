@@ -18,7 +18,7 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
         [DataType.String] = value => JsonValue.Create(value)!
     };
 
-    public JsonObject GetJson(SemanticTreeNode semanticTreeNodeWithValues, JsonSchema dataQuery)
+    public JsonObject GetJson(SemanticTreeNode semanticTreeNodeWithValues, JsonSchema dataQuery, bool validateResponse = true)
     {
         ArgumentNullException.ThrowIfNull(semanticTreeNodeWithValues);
         ArgumentNullException.ThrowIfNull(dataQuery);
@@ -27,9 +27,12 @@ public class SemanticTreeHandler(IJsonSchemaValidator jsonSchemaValidator) : ISe
         {
             var jsonNode = ConvertTreeNodeToJson(semanticTreeNodeWithValues);
             var wrappedJsonObject = WrapInJsonObject(semanticTreeNodeWithValues.SemanticId, jsonNode);
-            var serializedJson = JsonSerializer.Serialize(wrappedJsonObject);
 
-            jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
+            if (validateResponse)
+            {
+                var serializedJson = JsonSerializer.Serialize(wrappedJsonObject);
+                jsonSchemaValidator.ValidateResponseContent(serializedJson, dataQuery);
+            }
 
             return wrappedJsonObject;
         }

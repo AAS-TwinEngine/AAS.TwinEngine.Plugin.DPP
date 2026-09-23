@@ -38795,911 +38795,6 @@
                       "value": [
                         {
                           "language": "de",
-                          "text": "Finance"
-                        },
-                        {
-                          "language": "en",
-                          "text": "Finance"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "RoleOfContactPerson",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "function of a contact person in a process"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO204#003"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "valueType": "xs:string",
-                      "value": "0173-1#07-AAS928#001",
-                      "modelType": "Property"
-                    },
-                    {
-                      "idShort": "Title",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "common, formal, religious, or other title preceding a contact person's name"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO208#003"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Mr."
-                        },
-                        {
-                          "language": "de",
-                          "text": "Herr"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "AcademicTitle",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "academic title preceding a contact person's name"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO209#003"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Dr."
-                        },
-                        {
-                          "language": "de",
-                          "text": "Dr."
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "NameOfContact",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "surname of a contact person"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO205#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Lukas Mueller"
-                        },
-                        {
-                          "language": "de",
-                          "text": "Lukas Müller"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "FirstName",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "first name of a contact person"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO206#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Lukas"
-                        },
-                        {
-                          "language": "de",
-                          "text": "Lukas"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "MiddleNames",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "middle names of contact person"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO207#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Mueller"
-                        },
-                        {
-                          "language": "de",
-                          "text": "Müller"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "Email",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "E-mail address and encryption method"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAQ836#005"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "idShort": "EmailAddress",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "electronic mail address of a business partner"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO198#002"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "valueType": "xs:string",
-                          "value": "lukas.mueller@example.de",
-                          "modelType": "Property"
-                        },
-                        {
-                          "idShort": "PublicKey",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "public part of an unsymmetrical key pair to sign or encrypt text or messages"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO200#002"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "value": [
-                            {
-                              "language": "en",
-                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1234"
-                            },
-                            {
-                              "language": "de",
-                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1235"
-                            }
-                          ],
-                          "modelType": "MultiLanguageProperty"
-                        },
-                        {
-                          "idShort": "TypeOfEmailAddress",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "characterization of an e-mail address according to its location or usage"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO199#003"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "valueType": "xs:string",
-                          "value": "0173-1#07-AAS756#001",
-                          "modelType": "Property"
-                        },
-                        {
-                          "idShort": "TypeOfPublicKey",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "characterization of a public key according to its encryption process"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO201#002"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "value": [
-                            {
-                              "language": "en",
-                              "text": "ECC Encryption"
-                            },
-                            {
-                              "language": "de",
-                              "text": "ECC-Verschlüsselung"
-                            }
-                          ],
-                          "modelType": "MultiLanguageProperty"
-                        }
-                      ],
-                      "modelType": "SubmodelElementCollection"
-                    },
-                    {
-                      "idShort": "Phone",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "Phone number including type"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Phone"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "idShort": "TelephoneNumber",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "complete telephone number to be called to reach a business partner"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO136#002"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "value": [
-                            {
-                              "language": "en",
-                              "text": "+91 98765 43210"
-                            },
-                            {
-                              "language": "de",
-                              "text": "+91 98765 43211"
-                            }
-                          ],
-                          "modelType": "MultiLanguageProperty"
-                        },
-                        {
-                          "idShort": "TypeOfTelephone",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "characterization of a telephone according to its location or usage"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO137#003"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "valueType": "xs:string",
-                          "value": "0173-1#07-AAS755#001",
-                          "modelType": "Property"
-                        },
-                        {
-                          "idShort": "AvailableTime",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "Specification of the available time window"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "value": [
-                            {
-                              "language": "de",
-                              "text": "Montag – Donnerstag 09:00 bis 17:00"
-                            },
-                            {
-                              "language": "en",
-                              "text": "Monday – Thursday 09:00 to 17:00"
-                            }
-                          ],
-                          "modelType": "MultiLanguageProperty"
-                        }
-                      ],
-                      "modelType": "SubmodelElementCollection"
-                    },
-                    {
-                      "idShort": "Fax",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "Fax number including type"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAQ834#005"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "idShort": "FaxNumber",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "complete telephone number to be called to reach a business partner's fax machine"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO195#002"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "value": [
-                            {
-                              "language": "en",
-                              "text": "+91 98765 43210"
-                            },
-                            {
-                              "language": "de",
-                              "text": "+91 98765 43211"
-                            }
-                          ],
-                          "modelType": "MultiLanguageProperty"
-                        },
-                        {
-                          "idShort": "TypeOfFaxNumber",
-                          "description": [
-                            {
-                              "language": "en",
-                              "text": "characterization of the fax according its location or usage"
-                            }
-                          ],
-                          "semanticId": {
-                            "type": "ExternalReference",
-                            "keys": [
-                              {
-                                "type": "GlobalReference",
-                                "value": "0173-1#02-AAO196#003"
-                              }
-                            ]
-                          },
-                          "qualifiers": [
-                            {
-                              "type": "SMT/Cardinality",
-                              "valueType": "xs:string",
-                              "value": "ZeroToOne"
-                            }
-                          ],
-                          "valueType": "xs:string",
-                          "value": "0173-1#07-AAS756#001",
-                          "modelType": "Property"
-                        }
-                      ],
-                      "modelType": "SubmodelElementCollection"
-                    },
-                    {
-                      "idShort": "Street",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "street name and house number"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO128#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "de",
-                          "text": "Hauptstraße 16"
-                        },
-                        {
-                          "language": "en",
-                          "text": "Hauptstraße 15"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "Zipcode",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "ZIP code of address"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO129#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "de",
-                          "text": "10115"
-                        },
-                        {
-                          "language": "en",
-                          "text": "10115"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "CityTown",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "town or city"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO132#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "de",
-                          "text": "Berlin"
-                        },
-                        {
-                          "language": "en",
-                          "text": "Berlin"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "NationalCode",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": " Note: country codes defined accord. to ISO 3166-1. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO134#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "DE"
-                        },
-                        {
-                          "language": "de",
-                          "text": "DE"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "StateCounty",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "federal state a part of a state"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO133#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "de",
-                          "text": "Berlin"
-                        },
-                        {
-                          "language": "en",
-                          "text": "Berlin"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "FurtherDetailsOfContact",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "additional information of the contact person"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO210#002"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "Responsible for B2B sales in region-2"
-                        },
-                        {
-                          "language": "de",
-                          "text": "Responsible for B2B sales in region-2"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    }
-                  ],
-                  "modelType": "SubmodelElementCollection"
-                },
-                {
-                  "category": "CONSTANT",
-                  "idShort": "ContactForMaintenanceAuthorization1",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sammlung der Kontaktdaten, zwecks Freigabe welche vor einer Wartung  - Beispiel eine Leitwarte in einem Werk"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Collection of contact details for authorization before maintenance - example of a control room in a factory"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "idShort": "Company",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "name of the company"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAW001#001"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "en",
-                          "text": "M&M Germany"
-                        },
-                        {
-                          "language": "de",
-                          "text": "M&M Germany"
-                        }
-                      ],
-                      "modelType": "MultiLanguageProperty"
-                    },
-                    {
-                      "idShort": "Department",
-                      "description": [
-                        {
-                          "language": "en",
-                          "text": "Administrative section within an organisation where a business partner is located"
-                        }
-                      ],
-                      "semanticId": {
-                        "type": "ExternalReference",
-                        "keys": [
-                          {
-                            "type": "GlobalReference",
-                            "value": "0173-1#02-AAO127#003"
-                          }
-                        ]
-                      },
-                      "qualifiers": [
-                        {
-                          "type": "SMT/Cardinality",
-                          "valueType": "xs:string",
-                          "value": "ZeroToOne"
-                        }
-                      ],
-                      "value": [
-                        {
-                          "language": "de",
                           "text": "Operations"
                         },
                         {
@@ -40505,6 +39600,911 @@
                         {
                           "language": "de",
                           "text": "Responsible for B2B sales in region-6"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    }
+                  ],
+                  "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "ContactForMaintenanceAuthorization1",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sammlung der Kontaktdaten, zwecks Freigabe welche vor einer Wartung  - Beispiel eine Leitwarte in einem Werk"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Collection of contact details for authorization before maintenance - example of a control room in a factory"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "idShort": "Company",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "name of the company"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAW001#001"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "M&M Germany"
+                        },
+                        {
+                          "language": "de",
+                          "text": "M&M Germany"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "Department",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "Administrative section within an organisation where a business partner is located"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO127#003"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "de",
+                          "text": "Finance"
+                        },
+                        {
+                          "language": "en",
+                          "text": "Finance"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "RoleOfContactPerson",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "function of a contact person in a process"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO204#003"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "valueType": "xs:string",
+                      "value": "0173-1#07-AAS928#001",
+                      "modelType": "Property"
+                    },
+                    {
+                      "idShort": "Title",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "common, formal, religious, or other title preceding a contact person's name"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO208#003"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Mr."
+                        },
+                        {
+                          "language": "de",
+                          "text": "Herr"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "AcademicTitle",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "academic title preceding a contact person's name"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO209#003"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Dr."
+                        },
+                        {
+                          "language": "de",
+                          "text": "Dr."
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "NameOfContact",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "surname of a contact person"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO205#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Lukas Mueller"
+                        },
+                        {
+                          "language": "de",
+                          "text": "Lukas Müller"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "FirstName",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "first name of a contact person"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO206#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Lukas"
+                        },
+                        {
+                          "language": "de",
+                          "text": "Lukas"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "MiddleNames",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "middle names of contact person"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO207#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Mueller"
+                        },
+                        {
+                          "language": "de",
+                          "text": "Müller"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "Email",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "E-mail address and encryption method"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAQ836#005"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "idShort": "EmailAddress",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "electronic mail address of a business partner"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO198#002"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "valueType": "xs:string",
+                          "value": "lukas.mueller@example.de",
+                          "modelType": "Property"
+                        },
+                        {
+                          "idShort": "PublicKey",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "public part of an unsymmetrical key pair to sign or encrypt text or messages"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO200#002"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "value": [
+                            {
+                              "language": "en",
+                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1234"
+                            },
+                            {
+                              "language": "de",
+                              "text": "B2C3D4E5F67890ABCDEF1234567890ABCDEF1235"
+                            }
+                          ],
+                          "modelType": "MultiLanguageProperty"
+                        },
+                        {
+                          "idShort": "TypeOfEmailAddress",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "characterization of an e-mail address according to its location or usage"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO199#003"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "valueType": "xs:string",
+                          "value": "0173-1#07-AAS756#001",
+                          "modelType": "Property"
+                        },
+                        {
+                          "idShort": "TypeOfPublicKey",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "characterization of a public key according to its encryption process"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO201#002"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "value": [
+                            {
+                              "language": "en",
+                              "text": "ECC Encryption"
+                            },
+                            {
+                              "language": "de",
+                              "text": "ECC-Verschlüsselung"
+                            }
+                          ],
+                          "modelType": "MultiLanguageProperty"
+                        }
+                      ],
+                      "modelType": "SubmodelElementCollection"
+                    },
+                    {
+                      "idShort": "Phone",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "Phone number including type"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Phone"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "idShort": "TelephoneNumber",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "complete telephone number to be called to reach a business partner"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO136#002"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "value": [
+                            {
+                              "language": "en",
+                              "text": "+91 98765 43210"
+                            },
+                            {
+                              "language": "de",
+                              "text": "+91 98765 43211"
+                            }
+                          ],
+                          "modelType": "MultiLanguageProperty"
+                        },
+                        {
+                          "idShort": "TypeOfTelephone",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "characterization of a telephone according to its location or usage"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO137#003"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "valueType": "xs:string",
+                          "value": "0173-1#07-AAS755#001",
+                          "modelType": "Property"
+                        },
+                        {
+                          "idShort": "AvailableTime",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "Specification of the available time window"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "value": [
+                            {
+                              "language": "de",
+                              "text": "Montag – Donnerstag 09:00 bis 17:00"
+                            },
+                            {
+                              "language": "en",
+                              "text": "Monday – Thursday 09:00 to 17:00"
+                            }
+                          ],
+                          "modelType": "MultiLanguageProperty"
+                        }
+                      ],
+                      "modelType": "SubmodelElementCollection"
+                    },
+                    {
+                      "idShort": "Fax",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "Fax number including type"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAQ834#005"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "idShort": "FaxNumber",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "complete telephone number to be called to reach a business partner's fax machine"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO195#002"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "value": [
+                            {
+                              "language": "en",
+                              "text": "+91 98765 43210"
+                            },
+                            {
+                              "language": "de",
+                              "text": "+91 98765 43211"
+                            }
+                          ],
+                          "modelType": "MultiLanguageProperty"
+                        },
+                        {
+                          "idShort": "TypeOfFaxNumber",
+                          "description": [
+                            {
+                              "language": "en",
+                              "text": "characterization of the fax according its location or usage"
+                            }
+                          ],
+                          "semanticId": {
+                            "type": "ExternalReference",
+                            "keys": [
+                              {
+                                "type": "GlobalReference",
+                                "value": "0173-1#02-AAO196#003"
+                              }
+                            ]
+                          },
+                          "qualifiers": [
+                            {
+                              "type": "SMT/Cardinality",
+                              "valueType": "xs:string",
+                              "value": "ZeroToOne"
+                            }
+                          ],
+                          "valueType": "xs:string",
+                          "value": "0173-1#07-AAS756#001",
+                          "modelType": "Property"
+                        }
+                      ],
+                      "modelType": "SubmodelElementCollection"
+                    },
+                    {
+                      "idShort": "Street",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "street name and house number"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO128#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "de",
+                          "text": "Hauptstraße 16"
+                        },
+                        {
+                          "language": "en",
+                          "text": "Hauptstraße 15"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "Zipcode",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "ZIP code of address"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO129#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "de",
+                          "text": "10115"
+                        },
+                        {
+                          "language": "en",
+                          "text": "10115"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "CityTown",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "town or city"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO132#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "de",
+                          "text": "Berlin"
+                        },
+                        {
+                          "language": "en",
+                          "text": "Berlin"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "NationalCode",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": " Note: country codes defined accord. to ISO 3166-1. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO134#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "DE"
+                        },
+                        {
+                          "language": "de",
+                          "text": "DE"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "StateCounty",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "federal state a part of a state"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO133#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "de",
+                          "text": "Berlin"
+                        },
+                        {
+                          "language": "en",
+                          "text": "Berlin"
+                        }
+                      ],
+                      "modelType": "MultiLanguageProperty"
+                    },
+                    {
+                      "idShort": "FurtherDetailsOfContact",
+                      "description": [
+                        {
+                          "language": "en",
+                          "text": "additional information of the contact person"
+                        }
+                      ],
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "0173-1#02-AAO210#002"
+                          }
+                        ]
+                      },
+                      "qualifiers": [
+                        {
+                          "type": "SMT/Cardinality",
+                          "valueType": "xs:string",
+                          "value": "ZeroToOne"
+                        }
+                      ],
+                      "value": [
+                        {
+                          "language": "en",
+                          "text": "Responsible for B2B sales in region-2"
+                        },
+                        {
+                          "language": "de",
+                          "text": "Responsible for B2B sales in region-2"
                         }
                       ],
                       "modelType": "MultiLanguageProperty"
