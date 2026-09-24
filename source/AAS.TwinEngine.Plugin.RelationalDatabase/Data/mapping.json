@@ -12,6 +12,38 @@
     "semanticId": [ "0112/2///61987#ABA950#008" ]
   },
   {
+    "column":"dbo.Asset.AddressInformationStreet_en",
+    "semanticId": [ "0173-1#02-AAO128#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationStreet_de",
+    "semanticId": [ "0173-1#02-AAO128#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationZipcode_en",
+    "semanticId": [ "0173-1#02-AAO129#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationZipcode_de",
+    "semanticId": [ "0173-1#02-AAO129#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationCityTown_en",
+    "semanticId": [ "0173-1#02-AAO132#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationCityTown_de",
+    "semanticId": [ "0173-1#02-AAO132#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationNationalCode_en",
+    "semanticId": [ "0173-1#02-AAO134#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationNationalCode_de",
+    "semanticId": [ "0173-1#02-AAO134#002_de" ]
+  },
+  {
     "column": "dbo.Asset.ProductArticleNumberOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA581#007" ]
   },
@@ -110,6 +142,10 @@
   {
     "column": "dbo.Nameplate",
     "semanticId": [ "https://admin-shell.io/idta/nameplate/3/0/Nameplate" ]
+  },
+  {
+    "column": "dbo.AddressInformation",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation" ]
   },
   {
     "column": "dbo.Marking",
