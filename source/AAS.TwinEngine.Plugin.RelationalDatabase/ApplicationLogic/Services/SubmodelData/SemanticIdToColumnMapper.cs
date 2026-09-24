@@ -56,10 +56,10 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
     private Dictionary<string, ColumnMapping> BuildSemanticIdToColumnMapping(SemanticTreeNode root, IList<MappingItem> mappingData)
     {
         var result = new Dictionary<string, ColumnMapping>();
-        var queue = new Queue<SemanticTreeNode>();
+        var queue = new Queue<(SemanticTreeNode Node, string ParentTableName)>();
         var processedCount = 0;
 
-        queue.Enqueue(root);
+        queue.Enqueue((root, string.Empty));
 
         while (queue.Count > 0)
         {
@@ -69,8 +69,8 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
                 throw new InvalidUserInputException();
             }
 
-            var node = queue.Dequeue();
-            var columnMapping = ResolveColumn(node.SemanticId, mappingData, node);
+            var (node, parentTableName) = queue.Dequeue();
+            var columnMapping = ResolveColumn(node.SemanticId, mappingData, node, parentTableName);
 
             result[node.SemanticId] = columnMapping;
 
@@ -79,23 +79,27 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
                 continue;
             }
 
+            var childParentTableName = string.IsNullOrEmpty(columnMapping.BranchColumn)
+                ? parentTableName
+                : columnMapping.BranchColumn;
+
             foreach (var child in branchNode.Children)
             {
-                queue.Enqueue(child);
+                queue.Enqueue((child, childParentTableName));
             }
         }
 
         return result;
     }
 
-    private ColumnMapping ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node)
+    private ColumnMapping ResolveColumn(string semanticId, IList<MappingItem> mappingData, SemanticTreeNode node, string parentTableName)
     {
         var (baseId, suffix) = SplitSemanticId(semanticId);
         var mappingItems = FindMappings(baseId, mappingData);
 
         if (mappingItems.Count > 0)
         {
-            var baseMapping = CreateColumnMapping(mappingItems);
+            var baseMapping = CreateColumnMapping(mappingItems, parentTableName);
             return AppendSuffix(baseMapping, suffix);
         }
 
@@ -124,15 +128,26 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             .ToList()!;
     }
 
-    private static ColumnMapping CreateColumnMapping(IReadOnlyCollection<MappingItem> mappingItems)
+    private static ColumnMapping CreateColumnMapping(IReadOnlyCollection<MappingItem> mappingItems, string parentTableName)
     {
         var branchColumn = mappingItems
             .Select(item => ExtractBranchColumn(item.Column))
             .FirstOrDefault(column => !string.IsNullOrEmpty(column)) ?? string.Empty;
 
-        var leafColumn = mappingItems
-            .Select(item => ExtractLeafColumn(item.Column))
-            .FirstOrDefault(column => !string.IsNullOrEmpty(column)) ?? string.Empty;
+        var leafMappings = mappingItems
+            .Select(item => new
+            {
+                TableName = ExtractLeafTable(item.Column),
+                ColumnName = ExtractLeafColumn(item.Column)
+            })
+            .Where(mapping => !string.IsNullOrEmpty(mapping.ColumnName))
+            .ToList();
+
+        var leafColumn = leafMappings
+            .FirstOrDefault(mapping => mapping.TableName.Equals(parentTableName, StringComparison.OrdinalIgnoreCase))
+            ?.ColumnName
+            ?? leafMappings.FirstOrDefault()?.ColumnName
+            ?? string.Empty;
 
         return new ColumnMapping(branchColumn, leafColumn);
     }
@@ -163,6 +178,17 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
 
         var segments = column.Split('.', StringSplitOptions.RemoveEmptyEntries);
         return segments.Length >= 3 ? segments[^1] : string.Empty;
+    }
+
+    private static string ExtractLeafTable(string? column)
+    {
+        if (string.IsNullOrEmpty(column))
+        {
+            return string.Empty;
+        }
+
+        var segments = column.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length >= 3 ? segments[^2] : string.Empty;
     }
 
     private static ColumnMapping AppendSuffix(ColumnMapping mapping, string? suffix)

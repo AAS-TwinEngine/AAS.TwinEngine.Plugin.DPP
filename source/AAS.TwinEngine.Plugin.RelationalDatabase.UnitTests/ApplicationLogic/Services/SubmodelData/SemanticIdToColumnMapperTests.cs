@@ -315,6 +315,34 @@ public class SemanticIdToColumnMapperTests
     }
 
     [Fact]
+    public void GetSemanticIdToColumnMapping_DuplicateLeafSemanticId_UsesMappingFromParentTable()
+    {
+        const string StreetSemanticId = "0173-1#02-AAO128#002_en";
+        MappingData.MappingJson = CreateJsonDocument("""
+        [
+            { "Column": "dbo.Asset.AddressInformationStreet_en", "SemanticId": [ "0173-1#02-AAO128#002_en"]},
+            { "Column": "dbo.AddressInformation", "SemanticId": [ "address-information"]},
+            { "Column": "dbo.ContactForMaintenanceAuthorization", "SemanticId": [ "contact-for-maintenance"]},
+            { "Column": "dbo.ContactForMaintenanceAuthorization.Street_en", "SemanticId": [ "0173-1#02-AAO128#002_en"]}
+        ]
+        """);
+        var nameplate = new SemanticBranchNode("nameplate", DataType.Object);
+        var address = new SemanticBranchNode("address-information", DataType.Object);
+        address.AddChild(new SemanticLeafNode(StreetSemanticId, DataType.String, string.Empty));
+        nameplate.AddChild(address);
+        var maintenance = new SemanticBranchNode("maintenance-instructions", DataType.Object);
+        var contact = new SemanticBranchNode("contact-for-maintenance", DataType.Object);
+        contact.AddChild(new SemanticLeafNode(StreetSemanticId, DataType.String, string.Empty));
+        maintenance.AddChild(contact);
+
+        var nameplateResult = _sut.GetSemanticIdToColumnMapping(nameplate);
+        var maintenanceResult = _sut.GetSemanticIdToColumnMapping(maintenance);
+
+        Assert.Equal("AddressInformationStreet_en", nameplateResult[StreetSemanticId].LeafColumn);
+        Assert.Equal("Street_en", maintenanceResult[StreetSemanticId].LeafColumn);
+    }
+
+    [Fact]
     public void GetSemanticIdToColumnMapping_LeafWithUnmappedSemanticId_LogsErrorAndThrows()
     {
         MappingData.MappingJson = CreateJsonDocument("""
