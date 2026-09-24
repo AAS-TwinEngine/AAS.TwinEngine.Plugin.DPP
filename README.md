@@ -78,12 +78,12 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 The table below lists the AAS submodels supported per DPP version. The current version targets **DPP v4.0**.
 
-| *(DPP Plugin v1.0.0)* | *(DPP Plugin v1.1.0 - current)* |
+| *(DPP Plugin v1.0.0)* | *(DPP Plugin v1.2.0 - current)* |
 |---|---|
-| Nameplate v3.0.1 | Nameplate (v3.0.1) |
-| ContactInformation v1.0 | MaintenanceInstructions (v1.0) |
+| Nameplate (v3.0.1) | Nameplate (v3.0.1) |
+| ContactInformation (v1.0) | MaintenanceInstructions (v1.0) |
 | HandoverDocumentation (v2.0.1) | HandoverDocumentation (v2.0.1) |
-| TechnicalData v1.2.1 | TechnicalData (v2.0) |
+| TechnicalData (v1.2.1) | TechnicalData (v2.0) |
 | CarbonFootprint (v1.0.1) | CarbonFootprint (v1.0.1) |
 
 Data is modeled using **AAS Submodels**, and this Plugin provides the **actual values** for those models.
@@ -95,7 +95,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
 1. **Clone or extract this repository:**
    ```bash
    git clone https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine.git
-   cd AAS.TwinEngine.DataEngine\example
+   cd AAS.TwinEngine.DataEngine\examples\AAS.TwinEngine.Minimal
    ```
 
 2. **Start all services:**
@@ -108,7 +108,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
    ```
    http://localhost:8080/aas-ui/
    ```
-- For more info : [TwinEngine Demonstrator Setup WIth DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/develop/example/README.md)
+- For more info : [TwinEngine Demonstrator Setup WIth DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.Minimal/README.md)
 
 ---
 
