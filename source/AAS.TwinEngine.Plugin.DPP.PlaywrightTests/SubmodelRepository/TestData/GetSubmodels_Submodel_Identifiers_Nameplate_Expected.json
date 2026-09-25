@@ -66,6 +66,152 @@
           "value": "One"
         }
       ],
+      "value": [
+        {
+          "idShort": "Street",
+          "description": [
+            {
+              "language": "en",
+              "text": "Note: see also [IRDI] 0112/2///61987#ABA286#001 street. Mandatory property according to EU Machine Directive 2006/42/EC"
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-AAO128#002"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "Multiplicity",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "value": [
+            {
+              "language": "de",
+              "text": "Musterstrasse 1"
+            },
+            {
+              "language": "en",
+              "text": "Main Street 1"
+            }
+          ],
+          "modelType": "MultiLanguageProperty"
+        },
+        {
+          "idShort": "Zipcode",
+          "description": [
+            {
+              "language": "en",
+              "text": "Note: see also [IRDI] 0112/2///61987#ABA281#001 ZIP/Postal code. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-AAO129#002"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "Multiplicity",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "value": [
+            {
+              "language": "de",
+              "text": "10115"
+            },
+            {
+              "language": "en",
+              "text": "10115"
+            }
+          ],
+          "modelType": "MultiLanguageProperty"
+        },
+        {
+          "idShort": "CityTown",
+          "description": [
+            {
+              "language": "en",
+              "text": "Note: see also [IRDI] 0112/2///61987#ABA129#001 city/town. Mandatory property according to EU Machine Directive 2006/42/EC."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-AAO132#002"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "Multiplicity",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "value": [
+            {
+              "language": "de",
+              "text": "Berlin"
+            },
+            {
+              "language": "en",
+              "text": "Berlin"
+            }
+          ],
+          "modelType": "MultiLanguageProperty"
+        },
+        {
+          "idShort": "NationalCode",
+          "description": [
+            {
+              "language": "en",
+              "text": "Note: see also [IRDI] 0112/2///61360_4#ADA005#001 country code. country codes defined accord. to DIN EN ISO 3166-1 alpha-2 codes. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+            }
+          ],
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "0173-1#02-AAO134#002"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "type": "Multiplicity",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "value": [
+            {
+              "language": "en",
+              "text": "DE"
+            },
+            {
+              "language": "de",
+              "text": "DE"
+            }
+          ],
+          "modelType": "MultiLanguageProperty"
+        }
+      ],
       "modelType": "SubmodelElementCollection"
     },
     {

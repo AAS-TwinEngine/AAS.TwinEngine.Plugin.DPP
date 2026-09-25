@@ -480,7 +480,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/loctite",
                   "modelType": "Property"
                 }
               ],
@@ -6255,7 +6255,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/sensor",
                   "modelType": "Property"
                 }
               ],
@@ -6651,7 +6651,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/multimeter",
                   "modelType": "Property"
                 }
               ],
@@ -8121,6 +8121,167 @@
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToMany"
+                }
+              ],
+              "value": [
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Length",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Length"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Länge"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA018#008"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA018-008"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "320",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Width",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Width"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Breite"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAF016#007"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAF016-007"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "220",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Height",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Height"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Höhe"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA020#011"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA020-011"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "18.5",
+                  "modelType": "Property"
                 }
               ],
               "modelType": "SubmodelElementCollection"

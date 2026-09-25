@@ -475,7 +475,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://consumables.example.com/oil",
               "modelType": "Property"
             }
           ],
@@ -898,7 +898,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://consumables.example.com/cloth",
               "modelType": "Property"
             }
           ],
@@ -7480,7 +7480,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://spareparts.example.com/bearing",
               "modelType": "Property"
             }
           ],
@@ -7863,7 +7863,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://spareparts.example.com/seal",
               "modelType": "Property"
             }
           ],
@@ -8259,7 +8259,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://tools.example.com/t20",
               "modelType": "Property"
             }
           ],
@@ -8620,7 +8620,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://tools.example.com/wrench-set",
               "modelType": "Property"
             }
           ],

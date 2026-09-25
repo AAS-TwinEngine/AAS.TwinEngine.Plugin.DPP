@@ -8,8 +8,52 @@
     "semanticId": [ "0112/2///61987#ABA300#008" ]
   },
   {
+    "column": "dbo.TechnicalPropertyArea.Length",
+    "semanticId": [ "0173-1#02-BAA018#008" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyArea.Width",
+    "semanticId": [ "0173-1#02-BAF016#007" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyArea.Height",
+    "semanticId": [ "0173-1#02-BAA020#011" ]
+  },
+  {
     "column": "dbo.Asset.OrderCodeOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA950#008" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationStreet_en",
+    "semanticId": [ "0173-1#02-AAO128#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationStreet_de",
+    "semanticId": [ "0173-1#02-AAO128#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationZipcode_en",
+    "semanticId": [ "0173-1#02-AAO129#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationZipcode_de",
+    "semanticId": [ "0173-1#02-AAO129#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationCityTown_en",
+    "semanticId": [ "0173-1#02-AAO132#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationCityTown_de",
+    "semanticId": [ "0173-1#02-AAO132#002_de" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationNationalCode_en",
+    "semanticId": [ "0173-1#02-AAO134#002_en" ]
+  },
+  {
+    "column":"dbo.Asset.AddressInformationNationalCode_de",
+    "semanticId": [ "0173-1#02-AAO134#002_de" ]
   },
   {
     "column": "dbo.Asset.ProductArticleNumberOfManufacturer",
@@ -112,12 +156,24 @@
     "semanticId": [ "https://admin-shell.io/idta/nameplate/3/0/Nameplate" ]
   },
   {
+    "column": "dbo.AddressInformation",
+    "semanticId": [ "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/AddressInformation" ]
+  },
+  {
     "column": "dbo.Marking",
     "semanticId": [ "0112/2///61360_7#AAS009#001" ]
   },
   {
     "column": "dbo.TechnicalData",
     "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/Submodel/1/2" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyAreas",
+    "semanticId": [ "0173-1#02-ABK163#002" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyAreas",
+    "semanticId": [ "0173-1#02-ABL358#002/0173-1#01-AHX773#002" ]
   },
   {
     "column": "dbo.Asset.ManufacturerArticleNumber",

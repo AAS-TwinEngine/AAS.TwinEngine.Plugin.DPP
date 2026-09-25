@@ -91,6 +91,152 @@
               "value": "One"
             }
           ],
+          "value": [
+            {
+              "idShort": "Street",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA286#001 street. Mandatory property according to EU Machine Directive 2006/42/EC"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO128#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "Musterstrasse 1"
+                },
+                {
+                  "language": "en",
+                  "text": "Main Street 1"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "Zipcode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA281#001 ZIP/Postal code. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO129#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "10115"
+                },
+                {
+                  "language": "en",
+                  "text": "10115"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "CityTown",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA129#001 city/town. Mandatory property according to EU Machine Directive 2006/42/EC."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO132#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "Berlin"
+                },
+                {
+                  "language": "en",
+                  "text": "Berlin"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "NationalCode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61360_4#ADA005#001 country code. country codes defined accord. to DIN EN ISO 3166-1 alpha-2 codes. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO134#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "DE"
+                },
+                {
+                  "language": "de",
+                  "text": "DE"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            }
+          ],
           "modelType": "SubmodelElementCollection"
         },
         {
@@ -2132,7 +2278,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/oil",
                   "modelType": "Property"
                 }
               ],
@@ -2555,7 +2701,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/cloth",
                   "modelType": "Property"
                 }
               ],
@@ -9137,7 +9283,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/bearing",
                   "modelType": "Property"
                 }
               ],
@@ -9520,7 +9666,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/seal",
                   "modelType": "Property"
                 }
               ],
@@ -9916,7 +10062,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/t20",
                   "modelType": "Property"
                 }
               ],
@@ -10277,7 +10423,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/wrench-set",
                   "modelType": "Property"
                 }
               ],
@@ -12857,6 +13003,167 @@
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToMany"
+                }
+              ],
+              "value": [
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Length",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Length"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Länge"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA018#008"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA018-008"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "120.5",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Width",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Width"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Breite"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAF016#007"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAF016-007"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "75",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Height",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Height"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Höhe"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA020#011"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA020-011"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "65",
+                  "modelType": "Property"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -21053,6 +21360,152 @@
               "value": "One"
             }
           ],
+          "value": [
+            {
+              "idShort": "Street",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA286#001 street. Mandatory property according to EU Machine Directive 2006/42/EC"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO128#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "MG Road 42"
+                },
+                {
+                  "language": "en",
+                  "text": "MG Road 42"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "Zipcode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA281#001 ZIP/Postal code. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO129#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "560001"
+                },
+                {
+                  "language": "en",
+                  "text": "560001"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "CityTown",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA129#001 city/town. Mandatory property according to EU Machine Directive 2006/42/EC."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO132#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "Bengaluru"
+                },
+                {
+                  "language": "en",
+                  "text": "Bengaluru"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "NationalCode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61360_4#ADA005#001 country code. country codes defined accord. to DIN EN ISO 3166-1 alpha-2 codes. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO134#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "IN"
+                },
+                {
+                  "language": "de",
+                  "text": "IN"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            }
+          ],
           "modelType": "SubmodelElementCollection"
         },
         {
@@ -23094,7 +23547,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/loctite",
                   "modelType": "Property"
                 }
               ],
@@ -28869,7 +29322,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/sensor",
                   "modelType": "Property"
                 }
               ],
@@ -29265,7 +29718,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/multimeter",
                   "modelType": "Property"
                 }
               ],
@@ -30735,6 +31188,167 @@
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToMany"
+                }
+              ],
+              "value": [
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Length",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Length"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Länge"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA018#008"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA018-008"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "320",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Width",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Width"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Breite"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAF016#007"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAF016-007"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "220",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Height",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Height"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Höhe"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA020#011"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA020-011"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "18.5",
+                  "modelType": "Property"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -35634,6 +36248,152 @@
               "value": "One"
             }
           ],
+          "value": [
+            {
+              "idShort": "Street",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA286#001 street. Mandatory property according to EU Machine Directive 2006/42/EC"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO128#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "Century Avenue 88"
+                },
+                {
+                  "language": "en",
+                  "text": "Century Avenue 88"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "Zipcode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA281#001 ZIP/Postal code. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO129#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "200120"
+                },
+                {
+                  "language": "en",
+                  "text": "200120"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "CityTown",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61987#ABA129#001 city/town. Mandatory property according to EU Machine Directive 2006/42/EC."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO132#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "de",
+                  "text": "Shanghai"
+                },
+                {
+                  "language": "en",
+                  "text": "Shanghai"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            },
+            {
+              "idShort": "NationalCode",
+              "description": [
+                {
+                  "language": "en",
+                  "text": "Note: see also [IRDI] 0112/2///61360_4#ADA005#001 country code. country codes defined accord. to DIN EN ISO 3166-1 alpha-2 codes. Mandatory property according to EU Machine Directive 2006/42/EC. Recommendation: property declaration as MLP is required by its semantic definition. As the property value is language independent, users are recommended to provide maximal 1 string in any language of the user’s choice."
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "0173-1#02-AAO134#002"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "Multiplicity",
+                  "valueType": "xs:string",
+                  "value": "One"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "CN"
+                },
+                {
+                  "language": "de",
+                  "text": "CN"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
+            }
+          ],
           "modelType": "SubmodelElementCollection"
         },
         {
@@ -37675,7 +38435,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/grease",
                   "modelType": "Property"
                 }
               ],
@@ -38098,7 +38858,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/water",
                   "modelType": "Property"
                 }
               ],
@@ -46186,7 +46946,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/battery",
                   "modelType": "Property"
                 }
               ],
@@ -46582,7 +47342,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/pliers",
                   "modelType": "Property"
                 }
               ],
@@ -46943,7 +47703,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/drill",
                   "modelType": "Property"
                 }
               ],
@@ -47304,7 +48064,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/torque-wrench",
                   "modelType": "Property"
                 }
               ],
@@ -49407,6 +50167,167 @@
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToMany"
+                }
+              ],
+              "value": [
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Length",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Length"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Länge"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA018#008"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA018-008"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "50",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Width",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Width"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Breite"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAF016#007"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAF016-007"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "30",
+                  "modelType": "Property"
+                },
+                {
+                  "category": "PARAMETER",
+                  "idShort": "Height",
+                  "displayName": [
+                    {
+                      "language": "en",
+                      "text": "Height"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Höhe"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "0173-1#02-BAA020#011"
+                      }
+                    ]
+                  },
+                  "supplementalSemanticIds": [
+                    {
+                      "type": "ExternalReference",
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "https://api.eclass-cdp.com/0173-1-02-BAA020-011"
+                        }
+                      ]
+                    }
+                  ],
+                  "qualifiers": [
+                    {
+                      "semanticId": {
+                        "type": "ExternalReference",
+                        "keys": [
+                          {
+                            "type": "GlobalReference",
+                            "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+                          }
+                        ]
+                      },
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToOne"
+                    }
+                  ],
+                  "valueType": "xs:float",
+                  "value": "110",
+                  "modelType": "Property"
                 }
               ],
               "modelType": "SubmodelElementCollection"
