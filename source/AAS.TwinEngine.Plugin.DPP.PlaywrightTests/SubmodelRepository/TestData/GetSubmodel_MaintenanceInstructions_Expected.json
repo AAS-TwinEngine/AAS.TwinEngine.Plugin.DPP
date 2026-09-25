@@ -364,7 +364,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "CASTROL-OIL-80W",
+              "value": "",
               "modelType": "Property"
             },
             {
@@ -787,7 +787,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "KIMBERLY-CLOTH-BLUE",
+              "value": "",
               "modelType": "Property"
             },
             {
@@ -7369,7 +7369,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "BOSCH-BEARING-6205",
+              "value": "",
               "modelType": "Property"
             },
             {
@@ -7752,7 +7752,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "SKF-SEAL-RING-45",
+              "value": "",
               "modelType": "Property"
             },
             {
@@ -8259,7 +8259,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://tools.example.com/t20",
               "modelType": "Property"
             }
           ],
@@ -8620,7 +8620,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://tools.example.com/wrench-set",
               "modelType": "Property"
             }
           ],

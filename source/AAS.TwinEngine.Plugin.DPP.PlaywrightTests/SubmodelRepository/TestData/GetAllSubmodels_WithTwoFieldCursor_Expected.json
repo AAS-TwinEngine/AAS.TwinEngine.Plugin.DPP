@@ -369,7 +369,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "LOCTITE-THREADLOCK-243",
+                  "value": "",
                   "modelType": "Property"
                 },
                 {
@@ -6144,7 +6144,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "SIEMENS-SENSOR-TEMP",
+                  "value": "",
                   "modelType": "Property"
                 },
                 {
@@ -6651,7 +6651,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://tools.example.com/multimeter",
                   "modelType": "Property"
                 }
               ],
@@ -8174,7 +8174,7 @@
                     }
                   ],
                   "valueType": "xs:float",
-                  "value": "320.0",
+                  "value": "320",
                   "modelType": "Property"
                 },
                 {
@@ -8227,7 +8227,7 @@
                     }
                   ],
                   "valueType": "xs:float",
-                  "value": "220.0",
+                  "value": "220",
                   "modelType": "Property"
                 },
                 {

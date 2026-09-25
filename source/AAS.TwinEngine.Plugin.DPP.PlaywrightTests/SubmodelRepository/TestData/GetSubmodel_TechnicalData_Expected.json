@@ -2672,7 +2672,7 @@
                 }
               ],
               "valueType": "xs:float",
-              "value": "75.0",
+              "value": "75",
               "modelType": "Property"
             },
             {
@@ -2725,7 +2725,7 @@
                 }
               ],
               "valueType": "xs:float",
-              "value": "65.0",
+              "value": "65",
               "modelType": "Property"
             }
           ],
