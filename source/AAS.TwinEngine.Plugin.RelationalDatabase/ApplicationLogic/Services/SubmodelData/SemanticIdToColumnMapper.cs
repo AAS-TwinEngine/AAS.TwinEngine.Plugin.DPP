@@ -149,9 +149,6 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             ?? leafMappings.FirstOrDefault()?.ColumnName
             ?? string.Empty;
 
-        // Same semanticId can map to differently named columns in other tables; keep them as
-        // fallbacks since the parentTableName guess above isn't always correct (e.g. reused
-        // request subtrees, or lookups performed outside of the original traversal context).
         var alternateLeafColumns = leafMappings
             .Select(mapping => mapping.ColumnName)
             .Where(columnName => !string.Equals(columnName, leafColumn, StringComparison.OrdinalIgnoreCase))

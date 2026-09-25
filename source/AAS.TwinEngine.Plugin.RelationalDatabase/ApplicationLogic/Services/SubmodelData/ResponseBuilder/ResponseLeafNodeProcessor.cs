@@ -25,8 +25,6 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
         requestLeaf.Value = string.Empty;
     }
 
-    // Tries the preferred column first, then falls back to alternates so a semanticId shared
-    // across multiple tables still resolves to whichever column actually exists in this branch.
     private static IEnumerable<string> GetLeafColumnCandidates(ColumnMapping? mapping)
     {
         if (mapping is null)
