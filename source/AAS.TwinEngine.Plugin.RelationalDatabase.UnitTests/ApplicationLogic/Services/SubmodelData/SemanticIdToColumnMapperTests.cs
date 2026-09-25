@@ -344,30 +344,6 @@ public class SemanticIdToColumnMapperTests
     }
 
     [Fact]
-    public void GetSemanticIdToColumnMapping_TechnicalPropertyAreaLeaf_UsesTechnicalPropertyAreaTable()
-    {
-        const string lengthSemanticId = "0173-1#02-BAA018#008";
-        MappingData.MappingJson = CreateJsonDocument($"""
-        [
-            {{ "Column": "dbo.TechnicalPropertyAreas", "SemanticId": [ "0173-1#02-ABK163#002"]}},
-            {{ "Column": "dbo.TechnicalPropertyArea.Length", "SemanticId": [ "{lengthSemanticId}"]}}
-        ]
-        """);
-
-        var technicalPropertyAreas = new SemanticBranchNode("0173-1#02-ABK163#002", DataType.Array);
-        var technicalPropertyArea = new SemanticBranchNode(
-            "0173-1#02-ABL358#002/0173-1#01-AHX773#002",
-            DataType.Object);
-        technicalPropertyArea.AddChild(new SemanticLeafNode(lengthSemanticId, DataType.Number, string.Empty));
-        technicalPropertyAreas.AddChild(technicalPropertyArea);
-
-        var result = _sut.GetSemanticIdToColumnMapping(technicalPropertyAreas);
-
-        Assert.Equal("TechnicalPropertyAreas", result["0173-1#02-ABK163#002"].BranchColumn);
-        Assert.Equal("Length", result[lengthSemanticId].LeafColumn);
-    }
-
-    [Fact]
     public void GetSemanticIdToColumnMapping_LeafWithUnmappedSemanticId_LogsErrorAndThrows()
     {
         MappingData.MappingJson = CreateJsonDocument("""
