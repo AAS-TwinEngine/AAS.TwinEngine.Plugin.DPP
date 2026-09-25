@@ -7,18 +7,44 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
     public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestLeaf);
-        var columnName = responseSemanticTreeNodeResolver.GetColumnMapping(requestLeaf.SemanticId, columnMapping)?.LeafColumn;
+        var mapping = responseSemanticTreeNodeResolver.GetColumnMapping(requestLeaf.SemanticId, columnMapping);
 
-        if (string.IsNullOrEmpty(columnName))
+        foreach (var columnName in GetLeafColumnCandidates(mapping))
         {
-            requestLeaf.Value = string.Empty;
-            return;
+            var matchingLeaf = responseSemanticTreeNodeResolver
+                .FindMatchingLeafNodes(responseTree, columnName)
+                .FirstOrDefault();
+
+            if (matchingLeaf is not null)
+            {
+                requestLeaf.Value = matchingLeaf.Value ?? string.Empty;
+                return;
+            }
         }
 
-        var matchingLeaf = responseSemanticTreeNodeResolver
-            .FindMatchingLeafNodes(responseTree, columnName)
-            .FirstOrDefault();
+        requestLeaf.Value = string.Empty;
+    }
 
-        requestLeaf.Value = matchingLeaf?.Value ?? string.Empty;
+    // Tries the preferred column first, then falls back to alternates so a semanticId shared
+    // across multiple tables still resolves to whichever column actually exists in this branch.
+    private static IEnumerable<string> GetLeafColumnCandidates(ColumnMapping? mapping)
+    {
+        if (mapping is null)
+        {
+            yield break;
+        }
+
+        if (!string.IsNullOrEmpty(mapping.LeafColumn))
+        {
+            yield return mapping.LeafColumn;
+        }
+
+        foreach (var alternate in mapping.AlternateLeafColumns ?? [])
+        {
+            if (!string.IsNullOrEmpty(alternate))
+            {
+                yield return alternate;
+            }
+        }
     }
 }

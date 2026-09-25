@@ -149,7 +149,16 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             ?? leafMappings.FirstOrDefault()?.ColumnName
             ?? string.Empty;
 
-        return new ColumnMapping(branchColumn, leafColumn);
+        // Same semanticId can map to differently named columns in other tables; keep them as
+        // fallbacks since the parentTableName guess above isn't always correct (e.g. reused
+        // request subtrees, or lookups performed outside of the original traversal context).
+        var alternateLeafColumns = leafMappings
+            .Select(mapping => mapping.ColumnName)
+            .Where(columnName => !string.Equals(columnName, leafColumn, StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        return new ColumnMapping(branchColumn, leafColumn, alternateLeafColumns);
     }
 
     private static string ExtractBranchColumn(string? column)
@@ -200,6 +209,7 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
 
         return new ColumnMapping(
             BranchColumn: string.IsNullOrEmpty(mapping.BranchColumn) ? string.Empty : mapping.BranchColumn + suffix,
-            LeafColumn: string.IsNullOrEmpty(mapping.LeafColumn) ? string.Empty : mapping.LeafColumn + suffix);
+            LeafColumn: string.IsNullOrEmpty(mapping.LeafColumn) ? string.Empty : mapping.LeafColumn + suffix,
+            AlternateLeafColumns: mapping.AlternateLeafColumns?.Select(column => column + suffix).ToList());
     }
 }
