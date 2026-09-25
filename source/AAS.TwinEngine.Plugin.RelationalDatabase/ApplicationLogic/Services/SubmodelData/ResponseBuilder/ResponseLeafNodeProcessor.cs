@@ -32,17 +32,11 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
             yield break;
         }
 
-        if (!string.IsNullOrEmpty(mapping.LeafColumn))
+        foreach (var column in new[] { mapping.LeafColumn }
+            .Concat(mapping.AlternateLeafColumns ?? [])
+            .Where(x => !string.IsNullOrEmpty(x)))
         {
-            yield return mapping.LeafColumn;
-        }
-
-        foreach (var alternate in mapping.AlternateLeafColumns ?? [])
-        {
-            if (!string.IsNullOrEmpty(alternate))
-            {
-                yield return alternate;
-            }
+            yield return column;
         }
     }
 }
