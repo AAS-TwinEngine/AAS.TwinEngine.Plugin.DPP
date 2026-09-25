@@ -4,12 +4,11 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver responseSemanticTreeNodeResolver) : IResponseLeafNodeProcessor
 {
-    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
+    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, List<ColumnMapping>> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestLeaf);
-        var mapping = responseSemanticTreeNodeResolver.GetColumnMapping(requestLeaf.SemanticId, columnMapping);
 
-        foreach (var columnName in GetLeafColumnCandidates(mapping))
+        foreach (var columnName in GetLeafColumnCandidates(requestLeaf.SemanticId, columnMapping))
         {
             var matchingLeaf = responseSemanticTreeNodeResolver
                 .FindMatchingLeafNodes(responseTree, columnName)
@@ -25,18 +24,14 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
         requestLeaf.Value = string.Empty;
     }
 
-    private static IEnumerable<string> GetLeafColumnCandidates(ColumnMapping? mapping)
+    // A semanticId can map to several tables (e.g. shared IDTA properties reused across
+    // MaintenanceTool/Consumable/SparePart); try each known column name and keep whichever
+    // one actually exists in this branch of the response tree.
+    private IEnumerable<string> GetLeafColumnCandidates(string semanticId, Dictionary<string, List<ColumnMapping>> columnMapping)
     {
-        if (mapping is null)
-        {
-            yield break;
-        }
-
-        foreach (var column in new[] { mapping.LeafColumn }
-            .Concat(mapping.AlternateLeafColumns ?? [])
-            .Where(x => !string.IsNullOrEmpty(x)))
-        {
-            yield return column;
-        }
+        return responseSemanticTreeNodeResolver.GetColumnMapping(semanticId, columnMapping)
+            .Select(mapping => mapping.LeafColumn)
+            .Where(column => !string.IsNullOrEmpty(column))
+            .Distinct(StringComparer.OrdinalIgnoreCase);
     }
 }
