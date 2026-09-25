@@ -68,11 +68,15 @@ product_results AS (
                         WHERE "ProductId" = d."ProductId" AND "ProductClassificationId" IS NOT NULL
                     ) x
                 ), '[]'::json),
-                'TechnicalPropertyAreas', json_build_array(json_build_object(
-                    'Length', d."Length",
-                    'Width', d."Width",
-                    'Height', d."Height"
-                )),
+                'TechnicalPropertyAreas', COALESCE((
+                    SELECT json_agg(json_build_object(
+                        'Length', tpa."Length",
+                        'Width', tpa."Width",
+                        'Height', tpa."Height"
+                    ) ORDER BY tpa."Index")
+                    FROM "TechnicalPropertyArea" tpa
+                    WHERE tpa."AssetId" = d."Id"
+                ), '[]'::json),
                 'FurtherInformation', json_build_object(
                     'TextStatement_en', d."TextStatement_en",
                     'TextStatement_de', d."TextStatement_de",

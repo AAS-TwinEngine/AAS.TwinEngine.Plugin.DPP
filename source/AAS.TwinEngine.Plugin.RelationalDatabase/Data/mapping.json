@@ -8,15 +8,15 @@
     "semanticId": [ "0112/2///61987#ABA300#008" ]
   },
   {
-    "column": "dbo.Asset.Length",
+    "column": "dbo.TechnicalPropertyArea.Length",
     "semanticId": [ "0173-1#02-BAA018#008" ]
   },
   {
-    "column": "dbo.Asset.Width",
+    "column": "dbo.TechnicalPropertyArea.Width",
     "semanticId": [ "0173-1#02-BAF016#007" ]
   },
   {
-    "column": "dbo.Asset.Height",
+    "column": "dbo.TechnicalPropertyArea.Height",
     "semanticId": [ "0173-1#02-BAA020#011" ]
   },
   {
@@ -166,6 +166,14 @@
   {
     "column": "dbo.TechnicalData",
     "semanticId": [ "https://admin-shell.io/ZVEI/TechnicalData/Submodel/1/2" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyAreas",
+    "semanticId": [ "0173-1#02-ABK163#002" ]
+  },
+  {
+    "column": "dbo.TechnicalPropertyAreas",
+    "semanticId": [ "0173-1#02-ABL358#002/0173-1#01-AHX773#002" ]
   },
   {
     "column": "dbo.Asset.ManufacturerArticleNumber",
