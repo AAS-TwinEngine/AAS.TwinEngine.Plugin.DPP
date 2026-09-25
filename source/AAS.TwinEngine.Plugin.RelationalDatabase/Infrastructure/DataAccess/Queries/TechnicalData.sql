@@ -68,6 +68,11 @@ product_results AS (
                         WHERE "ProductId" = d."ProductId" AND "ProductClassificationId" IS NOT NULL
                     ) x
                 ), '[]'::json),
+                'TechnicalPropertyAreas', json_build_array(json_build_object(
+                    'Length', d."Length",
+                    'Width', d."Width",
+                    'Height', d."Height"
+                )),
                 'FurtherInformation', json_build_object(
                     'TextStatement_en', d."TextStatement_en",
                     'TextStatement_de', d."TextStatement_de",

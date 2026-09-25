@@ -8,6 +8,18 @@
     "semanticId": [ "0112/2///61987#ABA300#008" ]
   },
   {
+    "column": "dbo.Asset.Length",
+    "semanticId": [ "0173-1#02-BAA018#008" ]
+  },
+  {
+    "column": "dbo.Asset.Width",
+    "semanticId": [ "0173-1#02-BAF016#007" ]
+  },
+  {
+    "column": "dbo.Asset.Height",
+    "semanticId": [ "0173-1#02-BAA020#011" ]
+  },
+  {
     "column": "dbo.Asset.OrderCodeOfManufacturer",
     "semanticId": [ "0112/2///61987#ABA950#008" ]
   },
