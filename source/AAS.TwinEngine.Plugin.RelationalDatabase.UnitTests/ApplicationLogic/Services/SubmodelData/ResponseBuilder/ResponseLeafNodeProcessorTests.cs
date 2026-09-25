@@ -86,6 +86,32 @@ public class ResponseLeafNodeProcessorTests
     }
 
     [Fact]
+    public void FillLeafNode_WithNoPrimaryMatch_UsesAlternateColumn()
+    {
+        var requestLeaf = new SemanticLeafNode("TechnicalData.Length", DataType.Number, string.Empty);
+        var responseLeaf = new SemanticLeafNode("Length", DataType.Number, "120.5");
+        var responseTree = new SemanticBranchNode("TechnicalPropertyAreas", DataType.Array);
+        responseTree.AddChild(responseLeaf);
+        var columnMapping = new Dictionary<string, ColumnMapping>
+        {
+            {
+                "TechnicalData.Length",
+                new ColumnMapping("TechnicalPropertyAreas", "TechnicalPropertyAreaLength", ["Length"])
+            }
+        };
+        _responseSemanticTreeNodeResolver.GetColumnMapping("TechnicalData.Length", columnMapping)
+            .Returns(columnMapping["TechnicalData.Length"]);
+        _responseSemanticTreeNodeResolver.FindMatchingLeafNodes(responseTree, "TechnicalPropertyAreaLength")
+            .Returns([]);
+        _responseSemanticTreeNodeResolver.FindMatchingLeafNodes(responseTree, "Length")
+            .Returns([responseLeaf]);
+
+        _sut.FillLeafNode(requestLeaf, responseTree, columnMapping);
+
+        Assert.Equal("120.5", requestLeaf.Value);
+    }
+
+    [Fact]
     public void FillLeafNode_WithMultipleMatches_UsesFirstMatch()
     {
         var requestLeaf = new SemanticLeafNode("Product.Name", DataType.String, string.Empty);
