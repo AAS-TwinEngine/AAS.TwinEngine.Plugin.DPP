@@ -215,10 +215,6 @@ public class ResponseBranchNodeProcessor(IResponseSemanticTreeNodeResolver respo
 
     #region Helper Methods
 
-    // A semanticId can map to several tables; try each known branch column and keep whichever
-    // one actually has matches in this response subtree. hasBranchColumn distinguishes "no
-    // mapping at all" (pass-through node, descend child by child) from "mapped but no data"
-    // (zero matches, which the 0-count case in the match-count switches handles as empty).
     private IList<SemanticBranchNode> ResolveMatchingBranches(string semanticId, SemanticTreeNode responseTree, Dictionary<string, List<ColumnMapping>> columnMapping, out bool hasBranchColumn)
     {
         var candidates = responseSemanticTreeNodeResolver.GetColumnMapping(semanticId, columnMapping)

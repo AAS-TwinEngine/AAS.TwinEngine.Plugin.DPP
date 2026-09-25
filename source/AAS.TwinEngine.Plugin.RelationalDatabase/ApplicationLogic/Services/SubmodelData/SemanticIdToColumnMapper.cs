@@ -148,9 +148,6 @@ public class SemanticIdToColumnMapper : ISemanticIdToColumnMapper
             return [new ColumnMapping(branchColumn, string.Empty)];
         }
 
-        // The same semanticId can be reused across tables (e.g. shared IDTA properties on
-        // MaintenanceTool/Consumable/SparePart); keep one candidate per table, with the
-        // parentTableName match ordered first, so callers can pick whichever fits.
         return [.. leafMappings
             .OrderByDescending(mapping => mapping.TableName.Equals(parentTableName, StringComparison.OrdinalIgnoreCase))
             .Select(mapping => new ColumnMapping(branchColumn, mapping.ColumnName))];

@@ -8,7 +8,9 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
     {
         ArgumentNullException.ThrowIfNull(requestLeaf);
 
-        foreach (var columnName in GetLeafColumnCandidates(requestLeaf.SemanticId, columnMapping))
+        var leafColumnCandidates = GetLeafColumnCandidates(requestLeaf.SemanticId, columnMapping);
+
+        foreach (var columnName in leafColumnCandidates)
         {
             var matchingLeaf = responseSemanticTreeNodeResolver
                 .FindMatchingLeafNodes(responseTree, columnName)
@@ -24,9 +26,6 @@ public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver respons
         requestLeaf.Value = string.Empty;
     }
 
-    // A semanticId can map to several tables (e.g. shared IDTA properties reused across
-    // MaintenanceTool/Consumable/SparePart); try each known column name and keep whichever
-    // one actually exists in this branch of the response tree.
     private IEnumerable<string> GetLeafColumnCandidates(string semanticId, Dictionary<string, List<ColumnMapping>> columnMapping)
     {
         return responseSemanticTreeNodeResolver.GetColumnMapping(semanticId, columnMapping)
