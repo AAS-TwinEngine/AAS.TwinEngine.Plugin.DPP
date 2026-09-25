@@ -364,7 +364,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "CASTROL-OIL-80W",
               "modelType": "Property"
             },
             {
@@ -475,7 +475,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://consumables.example.com/oil",
               "modelType": "Property"
             }
           ],
@@ -787,7 +787,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "KIMBERLY-CLOTH-BLUE",
               "modelType": "Property"
             },
             {
@@ -898,7 +898,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://consumables.example.com/cloth",
               "modelType": "Property"
             }
           ],
@@ -7369,7 +7369,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "BOSCH-BEARING-6205",
               "modelType": "Property"
             },
             {
@@ -7480,7 +7480,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://spareparts.example.com/bearing",
               "modelType": "Property"
             }
           ],
@@ -7752,7 +7752,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "SKF-SEAL-RING-45",
               "modelType": "Property"
             },
             {
@@ -7863,7 +7863,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "",
+              "value": "https://spareparts.example.com/seal",
               "modelType": "Property"
             }
           ],

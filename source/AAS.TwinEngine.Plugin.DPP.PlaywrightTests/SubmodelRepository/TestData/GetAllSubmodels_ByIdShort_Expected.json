@@ -2167,7 +2167,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "LOCTITE-THREADLOCK-243",
                   "modelType": "Property"
                 },
                 {
@@ -2278,7 +2278,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/loctite",
                   "modelType": "Property"
                 }
               ],
@@ -7942,7 +7942,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "SIEMENS-SENSOR-TEMP",
                   "modelType": "Property"
                 },
                 {
@@ -8053,7 +8053,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/sensor",
                   "modelType": "Property"
                 }
               ],

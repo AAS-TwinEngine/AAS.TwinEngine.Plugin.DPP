@@ -2167,7 +2167,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "CASTROL-OIL-80W",
                   "modelType": "Property"
                 },
                 {
@@ -2278,7 +2278,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/oil",
                   "modelType": "Property"
                 }
               ],
@@ -2590,7 +2590,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "KIMBERLY-CLOTH-BLUE",
                   "modelType": "Property"
                 },
                 {
@@ -2701,7 +2701,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/cloth",
                   "modelType": "Property"
                 }
               ],
@@ -9172,7 +9172,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "BOSCH-BEARING-6205",
                   "modelType": "Property"
                 },
                 {
@@ -9283,7 +9283,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/bearing",
                   "modelType": "Property"
                 }
               ],
@@ -9555,7 +9555,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "SKF-SEAL-RING-45",
                   "modelType": "Property"
                 },
                 {
@@ -9666,7 +9666,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/seal",
                   "modelType": "Property"
                 }
               ],
@@ -23436,7 +23436,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "LOCTITE-THREADLOCK-243",
                   "modelType": "Property"
                 },
                 {
@@ -23547,7 +23547,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/loctite",
                   "modelType": "Property"
                 }
               ],
@@ -29211,7 +29211,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "SIEMENS-SENSOR-TEMP",
                   "modelType": "Property"
                 },
                 {
@@ -29322,7 +29322,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/sensor",
                   "modelType": "Property"
                 }
               ],
@@ -38324,7 +38324,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "MOLYKOTE-GREASE-HP",
                   "modelType": "Property"
                 },
                 {
@@ -38435,7 +38435,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/grease",
                   "modelType": "Property"
                 }
               ],
@@ -38747,7 +38747,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "DISTILLED-WATER-5L",
                   "modelType": "Property"
                 },
                 {
@@ -38858,7 +38858,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://consumables.example.com/water",
                   "modelType": "Property"
                 }
               ],
@@ -46835,7 +46835,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "PANASONIC-BATTERY-CR2032",
                   "modelType": "Property"
                 },
                 {
@@ -46946,7 +46946,7 @@
                     }
                   ],
                   "valueType": "xs:string",
-                  "value": "",
+                  "value": "https://spareparts.example.com/battery",
                   "modelType": "Property"
                 }
               ],
