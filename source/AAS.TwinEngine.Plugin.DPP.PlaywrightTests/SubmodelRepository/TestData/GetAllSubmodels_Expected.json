@@ -1131,7 +1131,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -1455,7 +1455,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -1720,7 +1720,7 @@
             }
           ],
           "valueType": "xs:anyURI",
-          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product1.jpg",
           "modelType": "Property"
         },
         {
@@ -3219,7 +3219,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -5569,7 +5569,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -6170,7 +6170,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -7038,7 +7038,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -8483,7 +8483,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -11111,7 +11111,7 @@
                           "value": "One"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product1.jpg",
                       "contentType": "image/png",
                       "modelType": "File"
                     },
@@ -11267,7 +11267,7 @@
                           "value": "One"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/example/data/product1-1.png",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/examples/shared/data/product1-1.png",
                       "contentType": "image/png",
                       "modelType": "File"
                     },
@@ -13622,7 +13622,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -16607,7 +16607,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -16691,7 +16691,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -17605,7 +17605,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -17689,7 +17689,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -19372,7 +19372,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -19456,7 +19456,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -21139,7 +21139,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -21223,7 +21223,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -22400,7 +22400,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -22724,7 +22724,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -22989,7 +22989,7 @@
             }
           ],
           "valueType": "xs:anyURI",
-          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product2.jpg",
+          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product2.jpg",
           "modelType": "Property"
         },
         {
@@ -24065,7 +24065,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -27320,7 +27320,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -27921,7 +27921,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -28522,7 +28522,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -30406,7 +30406,7 @@
                           "value": "One"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product2.jpg",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product2.jpg",
                       "contentType": "image/png",
                       "modelType": "File"
                     },
@@ -31807,7 +31807,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -34260,7 +34260,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -34344,7 +34344,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -36027,7 +36027,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -36111,7 +36111,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -37288,7 +37288,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -37612,7 +37612,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -37877,7 +37877,7 @@
             }
           ],
           "valueType": "xs:anyURI",
-          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product3.jpg",
+          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product3.jpg",
           "modelType": "Property"
         },
         {
@@ -39376,7 +39376,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -41726,7 +41726,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -42327,7 +42327,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -43195,7 +43195,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -45545,7 +45545,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -46146,7 +46146,7 @@
                           "value": "ZeroToMany"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                       "contentType": "application/pdf",
                       "modelType": "File"
                     },
@@ -48752,7 +48752,7 @@
                           "value": "One"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product3.jpg",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product3.jpg",
                       "contentType": "image/png",
                       "modelType": "File"
                     },
@@ -48908,7 +48908,7 @@
                           "value": "One"
                         }
                       ],
-                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/example/data/product3-1.png",
+                      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/examples/shared/data/product3-1.png",
                       "contentType": "image/png",
                       "modelType": "File"
                     },
@@ -50786,7 +50786,7 @@
                       "value": "ZeroToOne"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                   "contentType": "application/pdf",
                   "modelType": "File"
                 },
@@ -53239,7 +53239,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -53323,7 +53323,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -56070,7 +56070,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -56154,7 +56154,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -57068,7 +57068,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -57152,7 +57152,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }
@@ -58066,7 +58066,7 @@
                                   "value": "DigitalFile[\\d{2,3}]"
                                 }
                               ],
-                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.pdf",
+                              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf",
                               "contentType": "application/pdf",
                               "modelType": "File"
                             }
@@ -58150,7 +58150,7 @@
                               "value": "PreviewFile[\\d{2,3}]"
                             }
                           ],
-                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/dummy_document.jpg",
+                          "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg",
                           "contentType": "image/jpeg",
                           "modelType": "File"
                         }

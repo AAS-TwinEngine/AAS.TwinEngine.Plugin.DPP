@@ -1126,7 +1126,7 @@
                   "value": "One"
                 }
               ],
-              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
               "contentType": "image/png",
               "modelType": "File"
             },
@@ -1450,7 +1450,7 @@
                   "value": "One"
                 }
               ],
-              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/checkmark.png",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/checkmark.png",
               "contentType": "image/png",
               "modelType": "File"
             },
@@ -1715,7 +1715,7 @@
         }
       ],
       "valueType": "xs:anyURI",
-      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product1.jpg",
       "modelType": "Property"
     },
     {

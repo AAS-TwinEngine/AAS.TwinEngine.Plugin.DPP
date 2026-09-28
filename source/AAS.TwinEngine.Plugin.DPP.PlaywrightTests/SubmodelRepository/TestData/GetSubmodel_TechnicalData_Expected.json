@@ -674,7 +674,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product1.jpg",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
@@ -830,7 +830,7 @@
                       "value": "One"
                     }
                   ],
-                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/example/data/product1-1.png",
+                  "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/examples/shared/data/product1-1.png",
                   "contentType": "image/png",
                   "modelType": "File"
                 },
