@@ -9,18 +9,16 @@ public class ResponseSemanticTreeNodeResolver(IOptions<Semantics> semanticsOptio
 {
     private readonly string _indexPrefix = semanticsOptions.Value.IndexContextPrefix;
 
-    public ColumnMapping? GetColumnMapping(string semanticId, Dictionary<string, ColumnMapping> columnMapping)
+    public IReadOnlyList<ColumnMapping> GetColumnMapping(string semanticId, Dictionary<string, List<ColumnMapping>> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(columnMapping);
 
         if (string.IsNullOrEmpty(semanticId))
         {
-            return null;
+            return [];
         }
 
-        _ = columnMapping.TryGetValue(semanticId, out var mapping);
-
-        return mapping;
+        return columnMapping.TryGetValue(semanticId, out var mappings) ? mappings : [];
     }
 
     public IList<SemanticLeafNode> FindMatchingLeafNodes(SemanticTreeNode root, string semanticId)
