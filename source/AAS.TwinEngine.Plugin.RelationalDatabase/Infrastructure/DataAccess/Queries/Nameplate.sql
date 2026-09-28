@@ -35,6 +35,16 @@ product_results AS (
                 'SoftwareVersion', d."SoftwareVersion",
                 'CountryOfOrigin', d."CountryOfOrigin",
                 'UniqueFacilityIdentifier', d."UniqueFacilityIdentifier",
+                'AddressInformation', json_build_object(
+                    'AddressInformationStreet_en', d."AddressInformationStreet_en",
+                    'AddressInformationStreet_de', d."AddressInformationStreet_de",
+                    'AddressInformationZipcode_en', d."AddressInformationZipcode_en",
+                    'AddressInformationZipcode_de', d."AddressInformationZipcode_de",
+                    'AddressInformationCityTown_en', d."AddressInformationCityTown_en",
+                    'AddressInformationCityTown_de', d."AddressInformationCityTown_de",
+                    'AddressInformationNationalCode_en', d."AddressInformationNationalCode_en",
+                    'AddressInformationNationalCode_de', d."AddressInformationNationalCode_de"
+                ),
                 'ManufacturerName', d."ManufacturerName",
                 'ManufacturerProductDesignation_en', d."ManufacturerProductDesignation_en",
                 'ManufacturerProductDesignation_de', d."ManufacturerProductDesignation_de",
