@@ -15,6 +15,11 @@ public class ShellDescriptorProfileTests
             IdShort = "Shell001",
             AssetKind = "Instance",
             AssetType = "SomeType",
+            DefaultThumbnail = new DefaultThumbnailData
+            {
+                Path = "/images/thumb.png",
+                ContentType = "image/png"
+            },
             SpecificAssetIds =
             [
                 new SpecificAssetIdsData { Name = "SerialNumber", Value = "SN001" },
@@ -30,9 +35,29 @@ public class ShellDescriptorProfileTests
         Assert.Equal("Shell001", result.IdShort);
         Assert.Equal("Instance", result.AssetKind);
         Assert.Equal("SomeType", result.AssetType);
+        Assert.NotNull(result.DefaultThumbnail);
+        Assert.Equal("/images/thumb.png", result.DefaultThumbnail.Path);
+        Assert.Equal("image/png", result.DefaultThumbnail.ContentType);
         Assert.Equal(2, result.SpecificAssetIds!.Count);
         Assert.Equal("SerialNumber", result.SpecificAssetIds[0].Name);
         Assert.Equal("SN001", result.SpecificAssetIds[0].Value);
+    }
+
+    [Fact]
+    public void ToDto_SetsDefaultThumbnailToNull_WhenThumbnailIsMissing()
+    {
+        var shellDescriptorData = new ShellDescriptorData
+        {
+            Id = "shell-004",
+            GlobalAssetId = "asset-004",
+            IdShort = "Shell004",
+            DefaultThumbnail = null
+        };
+
+        var result = shellDescriptorData.ToDto();
+
+        Assert.NotNull(result);
+        Assert.Null(result.DefaultThumbnail);
     }
 
     [Fact]
