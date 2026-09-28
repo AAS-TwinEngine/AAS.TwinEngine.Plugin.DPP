@@ -6,7 +6,9 @@ WITH filtered_assets AS (
         A."AasId",
         A."ProductId",
         A."AssetKind",
-        A."AssetType"
+        A."AssetType",
+        A."ThumbnailPath",
+        A."ThumbnailContentType"
     FROM "Asset" A
     {{__ASSET_FILTER__}}
     {{__PAGINATION__}}
@@ -32,6 +34,10 @@ SELECT json_agg(
         'Id',               fa."AasId",
         'AssetKind',        fa."AssetKind",
         'AssetType',        fa."AssetType",
+        'DefaultThumbnail',     json_build_object(
+                                'Path',        fa."ThumbnailPath",
+                                'ContentType', fa."ThumbnailContentType"
+                            ),
         'SpecificAssetIds', COALESCE(sai."SpecificAssetIds", '[]'::json)
     )
     ORDER BY fa."AasId"
