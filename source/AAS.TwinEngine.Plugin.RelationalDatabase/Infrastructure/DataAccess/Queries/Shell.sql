@@ -5,6 +5,10 @@ SELECT json_build_object(
     'ProductId',            A."ProductId",
     'AssetKind',            A."AssetKind",
     'AssetType',            A."AssetType",
+    'DefaultThumbnail',     json_build_object(
+                                'Path',        A."ThumbnailPath",
+                                'ContentType', A."ThumbnailContentType"
+                            ),
     'SpecificAssetIds',     COALESCE(
                                 (SELECT json_agg(json_build_object(
                                             'Name',  sai."Name",
