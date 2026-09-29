@@ -31,9 +31,9 @@
       },
       "Microsoft.Playwright": {
         "type": "Direct",
-        "requested": "[1.62.0, 1.62.0]",
-        "resolved": "1.62.0",
-        "contentHash": "cos6dmHPcMpS6bXw2WEgoXb8KXwMhs3c5L0P/cUf2rdUpjVA3g3u+KiSpVp2VCzsXymRpy2tFHqm+Wnz7s5VhQ==",
+        "requested": "[1.63.0, 1.63.0]",
+        "resolved": "1.63.0",
+        "contentHash": "O9F45Tt5vjauIo7mTTgQtahigL7cfRLvBMpErLJfdvgCnQ14yue5BmRASNnfNBWRBni4Mqp2YiD1eFGIO4nUUw==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
           "System.ComponentModel.Annotations": "5.0.0"
@@ -41,13 +41,13 @@
       },
       "Microsoft.Playwright.NUnit": {
         "type": "Direct",
-        "requested": "[1.62.0, 1.62.0]",
-        "resolved": "1.62.0",
-        "contentHash": "LyAc/yjDlwTU2jo+UmmSxm3z6LH9lrRxZ5ZCD0bxvLHBEjUp+hu+CgH/P/7fvxvflTJNRDqISQVzjZLZjCbVlw==",
+        "requested": "[1.63.0, 1.63.0]",
+        "resolved": "1.63.0",
+        "contentHash": "i3ZStpoVY2kSyzWk3jfF4KbN9Kbvd/0wIpLdheQpkXKZk17eXW9c7+UzTkPIg3K8kl5XuOK5p9jsfm0oNz/NrA==",
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "17.8.0",
-          "Microsoft.Playwright": "1.62.0",
-          "Microsoft.Playwright.TestAdapter": "1.62.0",
+          "Microsoft.Playwright": "1.63.0",
+          "Microsoft.Playwright.TestAdapter": "1.63.0",
           "NUnit": "3.13.2",
           "NUnit3TestAdapter": "4.0.0"
         }
@@ -375,10 +375,10 @@
       },
       "Microsoft.Playwright.TestAdapter": {
         "type": "Transitive",
-        "resolved": "1.62.0",
-        "contentHash": "sfBf7a9fJwsrYuYPyF/JoTUSExKHaQvtBbckVnoYGOuf6UwMRzg2h4txlGCqM+JudytTis+LavyWW6C43iAZ+A==",
+        "resolved": "1.63.0",
+        "contentHash": "UnQJfSC7w/wWNBs5fIwHV8yUKBz4rTrpNRHRMWK5BxRHG++EE+TufKpjlPkZ1bm/BPaPi470NG1fHMFmWNKjOA==",
         "dependencies": {
-          "Microsoft.Playwright": "1.62.0",
+          "Microsoft.Playwright": "1.63.0",
           "Microsoft.TestPlatform.ObjectModel": "17.3.0"
         }
       },
