@@ -123,7 +123,7 @@ public class AasRegistryTests : ApiTestBase
     }
 
     [Fact]
-    public async Task GetAllSubmodelDescriptorsByAasId_ShouldReturnSuccess_ContentAsExpected()
+    public async Task GetSubmodelDescriptorsByAasId_ShouldReturnSuccess_ContentAsExpected()
     {
         // Arrange
         var url = $"/shell-descriptors/{AasIdentifier1}/submodel-descriptors";
