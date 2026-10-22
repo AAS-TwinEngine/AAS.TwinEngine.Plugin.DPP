@@ -1,7 +1,5 @@
 {
-  "paging_metadata": {
-    "cursor": "aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9UZWNobmljYWxEYXRhfGh0dHBzOi8vbW0tc29mdHdhcmUuY29tL2lkcy9hYXMvMDAwLTAwMQ"
-  },
+  "paging_metadata": { "cursor": "aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9UZWNobmljYWxEYXRhfGh0dHBzOi8vbW0tc29mdHdhcmUuY29tL2lkcy9hYXMvMDAwLTAwMQ" },
   "result": [
     {
       "idShort": "MaintenanceInstructions",
@@ -1039,47 +1037,6 @@
                     {
                       "language": "de",
                       "text": "TRBS 1112 Teil 1 Explosionsgefährdung"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Secure vehicle; Use safety stands; Wear goggles"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
                     }
                   ],
                   "modelType": "MultiLanguageProperty"
@@ -3798,6 +3755,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Secure vehicle; Use safety stands; Wear goggles"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -6968,7 +6966,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "M&M India",
+              "value": "M&M Software",
               "modelType": "Property"
             },
             {
