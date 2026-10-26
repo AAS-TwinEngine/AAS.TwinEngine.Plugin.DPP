@@ -5,8 +5,7 @@ using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Manifes
 
 namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.Manifest.Handler;
 
-public class ManifestHandler(ILogger<ManifestHandler> logger,
-                             IManifestService manifestService) : IManifestHandler
+public class ManifestHandler(ILogger<ManifestHandler> logger, IManifestService manifestService) : IManifestHandler
 {
     public Task<ManifestDto> GetManifestData()
         => GetResource(
@@ -15,10 +14,7 @@ public class ManifestHandler(ILogger<ManifestHandler> logger,
                             manifest => manifest.ToDto()
                            );
 
-    private Task<TDto> GetResource<TModel, TDto>(
-        string resourceName,
-        Func<TModel?> fetchFunc,
-        Func<TModel, TDto> mapFunc)
+    private Task<TDto> GetResource<TModel, TDto>(string resourceName, Func<TModel?> fetchFunc, Func<TModel, TDto> mapFunc)
     {
         logger.LogInformation("Start executing get request for {ResourceName}", resourceName);
 

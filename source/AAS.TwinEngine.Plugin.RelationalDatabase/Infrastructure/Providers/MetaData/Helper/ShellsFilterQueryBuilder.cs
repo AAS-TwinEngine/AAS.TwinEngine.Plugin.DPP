@@ -15,6 +15,8 @@ public static class ShellsFilterQueryBuilder
         string baseQuery,
         AssetIdFilterHeader? filter,
         string? idShort,
+        string? assetKind,
+        string? assetType,
         Func<string, object?, DbParameter> parameterFactory,
         string? cursor = null,
         int? limit = null)
@@ -24,6 +26,8 @@ public static class ShellsFilterQueryBuilder
 
         var hasIdShort = !string.IsNullOrEmpty(idShort);
         var hasCursor = !string.IsNullOrEmpty(cursor);
+        var hasAssetKind = !string.IsNullOrEmpty(assetKind);
+        var hasAssetType = !string.IsNullOrEmpty(assetType);
 
         var whereClauses = new List<string>();
         var parameters = new List<DbParameter>();
@@ -47,6 +51,18 @@ public static class ShellsFilterQueryBuilder
             parameters.Add(parameterFactory("@idShort", idShort));
         }
 
+        if (hasAssetKind)
+        {
+            whereClauses.Add("A.\"AssetKind\" = @assetKind");
+            parameters.Add(parameterFactory("@assetKind", assetKind));
+        }
+
+        if (hasAssetType)
+        {
+            whereClauses.Add("A.\"AssetType\" = @assetType");
+            parameters.Add(parameterFactory("@assetType", assetType));
+        }
+
         if (hasCursor)
         {
             var decodedCursor = cursor.DecodeBase64();
@@ -65,11 +81,7 @@ public static class ShellsFilterQueryBuilder
         return (query, parameters);
     }
 
-    private static string BuildPaginationClause(
-        string query,
-        int? limit,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildPaginationClause(string query, int? limit, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var pageSize = (limit ?? 100) + 1; // Fetch +1 to detect whether a next page exists
         parameters.Add(parameterFactory("@p_page_size", pageSize));
@@ -77,11 +89,7 @@ public static class ShellsFilterQueryBuilder
         return query.Replace(PaginationMarker, "ORDER BY A.\"AasId\" LIMIT @p_page_size", StringComparison.Ordinal);
     }
 
-    private static string BuildGlobalAssetIdClause(
-        int index,
-        SpecificAssetIdsData identifier,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildGlobalAssetIdClause(int index, SpecificAssetIdsData identifier, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var parameterName = CreateValueParameterName(index);
 
@@ -89,11 +97,7 @@ public static class ShellsFilterQueryBuilder
 
         return $"A.\"GlobalAssetId\" = {parameterName}";
     }
-    private static string BuildSpecificAssetIdClause(
-        int index,
-        SpecificAssetIdsData identifier,
-        Func<string, object?, DbParameter> parameterFactory,
-        ICollection<DbParameter> parameters)
+    private static string BuildSpecificAssetIdClause(int index, SpecificAssetIdsData identifier, Func<string, object?, DbParameter> parameterFactory, ICollection<DbParameter> parameters)
     {
         var nameParameter = CreateNameParameterName(index);
         var valueParameter = CreateValueParameterName(index);
@@ -106,7 +110,7 @@ public static class ShellsFilterQueryBuilder
             EXISTS (
                 SELECT 1
                 FROM "SpecificAssetIds" sai
-                WHERE sai."AssetId" = A."Id"
+                WHERE sai."ProductId" = A."ProductId"
                 AND sai."Name" =
             """
             + $"{nameParameter} "

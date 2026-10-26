@@ -13,7 +13,10 @@ public class ManifestMappingProfileTests
             Capabilities = new CapabilitiesData
             {
                 HasAssetInformation = true,
-                HasShellDescriptor = false
+                HasShellDescriptor = false,
+                HasAssetIdSearch = true,
+                HasAssetKindTypeFilter = false,
+                HasSubmodelBatch = true
             },
             SupportedSemanticIds = ["semantic1", "semantic2"]
         };
@@ -24,6 +27,9 @@ public class ManifestMappingProfileTests
         Assert.NotNull(result.Capabilities);
         Assert.Equal(manifestData.Capabilities.HasAssetInformation, result.Capabilities.HasAssetInformation);
         Assert.Equal(manifestData.Capabilities.HasShellDescriptor, result.Capabilities.HasShellDescriptor);
+        Assert.Equal(manifestData.Capabilities.HasAssetIdSearch, result.Capabilities.HasAssetIdSearch);
+        Assert.Equal(manifestData.Capabilities.HasAssetKindTypeFilter, result.Capabilities.HasAssetKindTypeFilter);
+        Assert.Equal(manifestData.Capabilities.HasSubmodelBatch, result.Capabilities.HasSubmodelBatch);
         Assert.Equal(manifestData.SupportedSemanticIds, result.SupportedSemanticIds);
     }
 

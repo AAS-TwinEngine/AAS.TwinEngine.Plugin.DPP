@@ -1,4 +1,6 @@
 SELECT json_build_object(
+    'AssetKind',           A."AssetKind",
+    'AssetType',           A."AssetType",
     'GlobalAssetId',        A."GlobalAssetId",
     'DefaultThumbnail',     json_build_object(
                                 'Path',        A."ThumbnailPath",
@@ -7,9 +9,9 @@ SELECT json_build_object(
     'SpecificAssetIds',     (SELECT json_agg(json_build_object(
                                         'Name',  sai."Name",
                                         'Value', sai."Value"
-                                    ))
+                                    ) ORDER BY sai."Id")
                              FROM "SpecificAssetIds" sai
-                             WHERE sai."AssetId" = A."Id")
+                             WHERE sai."ProductId" = A."ProductId")
 )
 FROM "Asset" A
 WHERE A."AasId" = @AasId;

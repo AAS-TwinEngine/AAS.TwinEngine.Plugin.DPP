@@ -8,5 +8,5 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.SubmodelData.Services;
 
 public interface ISemanticTreeHandler
 {
-    JsonObject GetJson(SemanticTreeNode semanticTreeNodeWithValues, JsonSchema dataQuery);
+    JsonObject GetJson(SemanticTreeNode semanticTreeNodeWithValues, JsonSchema dataQuery, bool validateResponse = true);
 }

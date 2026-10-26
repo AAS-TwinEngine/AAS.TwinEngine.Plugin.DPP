@@ -41,7 +41,6 @@
           }
         ]
       },
-      "kind": "ConceptQualifier",
       "type": "SMT/Cardinality",
       "valueType": "xs:string",
       "value": "One"
@@ -92,7 +91,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -101,6 +99,119 @@
       "valueType": "xs:string",
       "value": "M&M Germany",
       "modelType": "Property"
+    },
+    {
+      "idShort": "CompanyLogo",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Company logo"
+        },
+        {
+          "language": "de",
+          "text": "Firmenlogo"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-ABI776#002"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-ABI776-002"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "ZeroToOne"
+        }
+      ],
+      "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/logo/MM_Logo.svg",
+      "contentType": "image/png",
+      "modelType": "File"
+    },
+    {
+      "category": "PARAMETER",
+      "idShort": "ManufacturerProductDesignation",
+      "displayName": [
+        {
+          "language": "en",
+          "text": "Manufacturer product designation"
+        },
+        {
+          "language": "de",
+          "text": "Herstellerproduktbezeichnung"
+        }
+      ],
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAW338#003"
+          }
+        ]
+      },
+      "supplementalSemanticIds": [
+        {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "https://api.eclass-cdp.com/0173-1-02-AAW338-003"
+            }
+          ]
+        }
+      ],
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "One"
+        }
+      ],
+      "value": [
+        {
+          "language": "en",
+          "text": "FM-ABC-1234"
+        },
+        {
+          "language": "de",
+          "text": "ABC-123"
+        }
+      ],
+      "modelType": "MultiLanguageProperty"
     },
     {
       "category": "PARAMETER",
@@ -146,7 +257,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -200,7 +310,6 @@
               }
             ]
           },
-          "kind": "ConceptQualifier",
           "type": "SMT/Cardinality",
           "valueType": "xs:string",
           "value": "One"
@@ -209,121 +318,6 @@
       "valueType": "xs:string",
       "value": "EEA-EX-200-S/47-Q3",
       "modelType": "Property"
-    },
-    {
-      "idShort": "CompanyLogo",
-      "displayName": [
-        {
-          "language": "en",
-          "text": "Company logo"
-        },
-        {
-          "language": "de",
-          "text": "Firmenlogo"
-        }
-      ],
-      "semanticId": {
-        "type": "ExternalReference",
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "0173-1#02-ABI776#002"
-          }
-        ]
-      },
-      "supplementalSemanticIds": [
-        {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "https://api.eclass-cdp.com/0173-1-02-ABI776-002"
-            }
-          ]
-        }
-      ],
-      "qualifiers": [
-        {
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
-              }
-            ]
-          },
-          "kind": "ConceptQualifier",
-          "type": "SMT/Cardinality",
-          "valueType": "xs:string",
-          "value": "ZeroToOne"
-        }
-      ],
-      "value": "https://mmsoftwaregmbh.sharepoint.com/_api/siteiconmanager/getsitelogo?type=%271%27&hash=638518734598723853",
-      "contentType": "image/png",
-      "modelType": "File"
-    },
-    {
-      "category": "PARAMETER",
-      "idShort": "ManufacturerProductDesignation",
-      "displayName": [
-        {
-          "language": "en",
-          "text": "Manufacturer product designation"
-        },
-        {
-          "language": "de",
-          "text": "Herstellerproduktbezeichnung"
-        }
-      ],
-      "semanticId": {
-        "type": "ExternalReference",
-        "keys": [
-          {
-            "type": "GlobalReference",
-            "value": "0173-1#02-AAW338#003"
-          }
-        ]
-      },
-      "supplementalSemanticIds": [
-        {
-          "type": "ExternalReference",
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "https://api.eclass-cdp.com/0173-1-02-AAW338-003"
-            }
-          ]
-        }
-      ],
-      "qualifiers": [
-        {
-          "semanticId": {
-            "type": "ExternalReference",
-            "keys": [
-              {
-                "type": "GlobalReference",
-                "value": "https://admin-shell.io/SubmodelTemplates/SMT/Cardinality/1/0"
-              }
-            ]
-          },
-          "kind": "ConceptQualifier",
-          "type": "SMT/Cardinality",
-          "valueType": "xs:string",
-          "value": "One"
-        }
-      ],
-      "value": [
-        {
-          "language": "en",
-          "text": "FM-ABC-1234"
-        },
-        {
-          "language": "de",
-          "text": "ABC-123"
-        }
-      ],
-      "modelType": "MultiLanguageProperty"
     },
     {
       "idShort": "ProductImages",
@@ -374,7 +368,6 @@
           "value": "ZeroToMany"
         }
       ],
-      "orderRelevant": false,
       "semanticIdListElement": {
         "type": "ExternalReference",
         "keys": [
@@ -432,7 +425,6 @@
                   }
                 ]
               },
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToMany"
@@ -471,13 +463,12 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
                 }
               ],
-              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/example/data/product1.jpg",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/product1.jpg",
               "contentType": "image/png",
               "modelType": "File"
             },
@@ -524,7 +515,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToOne"
@@ -591,7 +581,6 @@
                   }
                 ]
               },
-              "kind": "ConceptQualifier",
               "type": "SMT/Cardinality",
               "valueType": "xs:string",
               "value": "ZeroToMany"
@@ -630,13 +619,12 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "One"
                 }
               ],
-              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/example/data/product1-1.png",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/develop/examples/shared/data/product1-1.png",
               "contentType": "image/png",
               "modelType": "File"
             },
@@ -683,7 +671,6 @@
                       }
                     ]
                   },
-                  "kind": "ConceptQualifier",
                   "type": "SMT/Cardinality",
                   "valueType": "xs:string",
                   "value": "ZeroToOne"

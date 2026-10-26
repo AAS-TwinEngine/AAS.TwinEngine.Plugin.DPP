@@ -74,7 +74,7 @@ public class MetaDataControllerTests
             Arg.Any<CancellationToken>())
             .Returns(expectedShells);
 
-        var result = await _sut.GetShellDescriptorsAsync(null, null, header, null, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(null, null, header, null, null, null, CancellationToken.None);
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.IsType<ShellDescriptorsDto>(okResult.Value);
@@ -91,7 +91,7 @@ public class MetaDataControllerTests
             Arg.Any<CancellationToken>())
             .Returns(expectedShells);
 
-        var result = await _sut.GetShellDescriptorsAsync(null, null, null, idShort, CancellationToken.None);
+        var result = await _sut.GetShellDescriptorsAsync(null, null, null, idShort, null, null, CancellationToken.None);
 
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.IsType<ShellDescriptorsDto>(okResult.Value);
@@ -177,5 +177,39 @@ public class MetaDataControllerTests
                 .Throws(new Exception("Unexpected error"));
 
         await Assert.ThrowsAsync<Exception>(() => _sut.GetAssetAsync(AasIdentifier, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WithAssetKindHeader_BuildsRequestWithAssetKind()
+    {
+        const string assetKind = "Instance";
+        var expectedShells = new ShellDescriptorsDto();
+
+        _handler.GetShellDescriptors(
+            Arg.Is<GetShellDescriptorsRequest>(r => r.AssetKindFilter == assetKind),
+            Arg.Any<CancellationToken>())
+            .Returns(expectedShells);
+
+        var result = await _sut.GetShellDescriptorsAsync(null, null, null, null, assetKind, null, CancellationToken.None);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<ShellDescriptorsDto>(okResult.Value);
+    }
+
+    [Fact]
+    public async Task GetShellDescriptorsAsync_WithAssetTypeHeader_BuildsRequestWithAssetType()
+    {
+        const string assetType = "SomeType";
+        var expectedShells = new ShellDescriptorsDto();
+
+        _handler.GetShellDescriptors(
+            Arg.Is<GetShellDescriptorsRequest>(r => r.AssetTypeFilter == assetType),
+            Arg.Any<CancellationToken>())
+            .Returns(expectedShells);
+
+        var result = await _sut.GetShellDescriptorsAsync(null, null, null, null, null, assetType, CancellationToken.None);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<ShellDescriptorsDto>(okResult.Value);
     }
 }

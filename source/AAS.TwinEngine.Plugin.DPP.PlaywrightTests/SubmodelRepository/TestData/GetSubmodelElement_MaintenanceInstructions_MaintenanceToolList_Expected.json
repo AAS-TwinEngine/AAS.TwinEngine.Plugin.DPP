@@ -33,7 +33,6 @@
   ],
   "qualifiers": [
     {
-      "kind": "ConceptQualifier",
       "type": "SMT/Cardinality",
       "valueType": "xs:string",
       "value": "ZeroToOne"

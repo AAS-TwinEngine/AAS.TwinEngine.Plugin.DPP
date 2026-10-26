@@ -22,80 +22,80 @@ public class ResponseSemanticTreeNodeResolverTests
     [Fact]
     public void GetColumnMapping_WithExistingMapping_ReturnsColumnMapping()
     {
-        var mapping = new Dictionary<string, ColumnMapping>
+        var mapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Product.Name", new ColumnMapping("Product", "ProductName") }
+            { "Product.Name", [new ColumnMapping("Product", "ProductName")] }
         };
 
         var result = _sut.GetColumnMapping("Product.Name", mapping);
 
-        Assert.NotNull(result);
-        Assert.Equal("Product", result.BranchColumn);
-        Assert.Equal("ProductName", result.LeafColumn);
+        Assert.Single(result);
+        Assert.Equal("Product", result[0].BranchColumn);
+        Assert.Equal("ProductName", result[0].LeafColumn);
     }
 
     [Fact]
     public void GetColumnMapping_WithNonExistingMapping_ReturnsNull()
     {
-        var mapping = new Dictionary<string, ColumnMapping>
+        var mapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Product.Name", new ColumnMapping("Product", "ProductName") }
+            { "Product.Name", [new ColumnMapping("Product", "ProductName")] }
         };
 
         var result = _sut.GetColumnMapping("Product.Price", mapping);
 
-        Assert.Null(result);
+        Assert.Empty(result);
     }
 
     [Fact]
     public void GetColumnMapping_WithEmptyMapping_ReturnsNull()
     {
-        var mapping = new Dictionary<string, ColumnMapping>();
+        var mapping = new Dictionary<string, List<ColumnMapping>>();
 
         var result = _sut.GetColumnMapping("Product.Name", mapping);
 
-        Assert.Null(result);
+        Assert.Empty(result);
     }
 
     [Fact]
     public void GetColumnMapping_WithNullSemanticId_ReturnsNull()
     {
-        var mapping = new Dictionary<string, ColumnMapping>
+        var mapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Product.Name", new ColumnMapping("Product", "ProductName") }
+            { "Product.Name", [new ColumnMapping("Product", "ProductName")] }
         };
 
         var result = _sut.GetColumnMapping(null!, mapping);
 
-        Assert.Null(result);
+        Assert.Empty(result);
     }
 
     [Fact]
     public void GetColumnMapping_WithEmptySemanticId_ReturnsNull()
     {
-        var mapping = new Dictionary<string, ColumnMapping>
+        var mapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Product.Name", new ColumnMapping("Product", "ProductName") }
+            { "Product.Name", [new ColumnMapping("Product", "ProductName")] }
         };
 
         var result = _sut.GetColumnMapping(string.Empty, mapping);
 
-        Assert.Null(result);
+        Assert.Empty(result);
     }
 
     [Fact]
     public void GetColumnMapping_WithSpecialCharacters_HandlesCorrectly()
     {
-        var mapping = new Dictionary<string, ColumnMapping>
+        var mapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Product@Name#123", new ColumnMapping("Product", "ProductName") }
+            { "Product@Name#123", [new ColumnMapping("Product", "ProductName")] }
         };
 
         var result = _sut.GetColumnMapping("Product@Name#123", mapping);
 
-        Assert.NotNull(result);
-        Assert.Equal("Product", result.BranchColumn);
-        Assert.Equal("ProductName", result.LeafColumn);
+        Assert.Single(result);
+        Assert.Equal("Product", result[0].BranchColumn);
+        Assert.Equal("ProductName", result[0].LeafColumn);
     }
 
     #endregion

@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Nodes;
 
 using AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData.Handler;
@@ -15,8 +15,7 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.Api.MetaData;
 [ApiController]
 [Route("metadata")]
 [ApiVersion(1)]
-public class MetaDataController(
-    IMetaDataHandler metaDataHandler) : ControllerBase
+public class MetaDataController(IMetaDataHandler metaDataHandler) : ControllerBase
 {
     [HttpGet("shells")]
     [ProducesResponseType(typeof(JsonObject), StatusCodes.Status200OK)]
@@ -28,9 +27,11 @@ public class MetaDataController(
         [FromQuery] string? cursor,
         [FromHeader(Name = "aastwinengine-assetids")] string? assetIdsFilter = null,
         [FromHeader(Name = "aastwinengine-idshort")] string? idShortFilter = null,
+        [FromHeader(Name = "aastwinengine-assetkind")] string? assetKindFilter = null,
+        [FromHeader(Name = "aastwinengine-assettype")] string? assetTypeFilter = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter, idShortFilter);
+        var request = new GetShellDescriptorsRequest(limit, cursor, assetIdsFilter, idShortFilter, assetKindFilter, assetTypeFilter);
 
         var response = await metaDataHandler.GetShellDescriptors(request, cancellationToken).ConfigureAwait(false);
 

@@ -1,4 +1,4 @@
-﻿using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
+using AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.SubmodelData.ResponseBuilder;
 using AAS.TwinEngine.Plugin.RelationalDatabase.DomainModel.SubmodelData;
 
 using NSubstitute;
@@ -28,11 +28,11 @@ public class ResponseBranchNodeProcessorTests
         var nameLeaf = new SemanticLeafNode("Name", DataType.String, "OldValue");
         requestBranch.AddChild(nameLeaf);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Customer", new ColumnMapping("CustomerData", string.Empty) }
+            { "Customer", [new ColumnMapping("CustomerData", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns(new ColumnMapping("CustomerData", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns([new ColumnMapping("CustomerData", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "CustomerData")
             .Returns([]);
 
@@ -50,11 +50,11 @@ public class ResponseBranchNodeProcessorTests
         customerBranch.AddChild(nameLeaf);
         requestBranch.AddChild(customerBranch);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping("OrderData", string.Empty) }
+            { "Order", [new ColumnMapping("OrderData", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping("OrderData", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping("OrderData", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "OrderData")
             .Returns([]);
 
@@ -68,11 +68,11 @@ public class ResponseBranchNodeProcessorTests
     {
         var requestBranch = new SemanticBranchNode("Customer", DataType.Object);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Customer", new ColumnMapping("CustomerData", string.Empty) }
+            { "Customer", [new ColumnMapping("CustomerData", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns(new ColumnMapping("CustomerData", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns([new ColumnMapping("CustomerData", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "CustomerData")
             .Returns([]);
 
@@ -96,12 +96,12 @@ public class ResponseBranchNodeProcessorTests
         responseBranch.AddChild(responseLeaf);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Customer", new ColumnMapping("Customer", string.Empty) },
-            { "Customer.Name", new ColumnMapping(string.Empty, "CustomerName") }
+            { "Customer", [new ColumnMapping("Customer", string.Empty)] },
+            { "Customer.Name", [new ColumnMapping(string.Empty, "CustomerName")] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns(new ColumnMapping("Customer", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer", columnMapping).Returns([new ColumnMapping("Customer", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Customer")
             .Returns([responseBranch]);
 
@@ -121,14 +121,14 @@ public class ResponseBranchNodeProcessorTests
         var responseBranch = new SemanticBranchNode("Order", DataType.Object);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping("Order", string.Empty) }
+            { "Order", [new ColumnMapping("Order", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping("Order", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping("Order", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Order")
             .Returns([responseBranch]);
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Address", columnMapping).Returns((ColumnMapping?)null);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Address", columnMapping).Returns([]);
 
         _sut.FillBranchNode(requestBranch, responseTree, columnMapping);
 
@@ -150,11 +150,11 @@ public class ResponseBranchNodeProcessorTests
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch1);
         responseTree.AddChild(responseBranch2);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Items", new ColumnMapping("Items", string.Empty) }
+            { "Items", [new ColumnMapping("Items", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping("Items", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping("Items", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Items")
             .Returns([responseBranch1, responseBranch2]);
         _responseSemanticTreeNodeResolver.CreateIndexedSemanticId("Items", 0).Returns($"Items{IndexPrefix}0");
@@ -178,11 +178,11 @@ public class ResponseBranchNodeProcessorTests
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch1);
         responseTree.AddChild(responseBranch2);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Items", new ColumnMapping("Items", string.Empty) }
+            { "Items", [new ColumnMapping("Items", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping("Items", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping("Items", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Items")
             .Returns([responseBranch1, responseBranch2]);
         _responseSemanticTreeNodeResolver.CreateIndexedSemanticId("Items", Arg.Any<int>())
@@ -213,11 +213,11 @@ public class ResponseBranchNodeProcessorTests
             responseTree.AddChild(branch);
         }
 
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Items", new ColumnMapping("Items", string.Empty) }
+            { "Items", [new ColumnMapping("Items", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping("Items", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping("Items", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Items")
             .Returns(responseBranches);
         _responseSemanticTreeNodeResolver.CreateIndexedSemanticId("Items", Arg.Any<int>())
@@ -242,15 +242,15 @@ public class ResponseBranchNodeProcessorTests
         requestBranch.AddChild(totalLeaf);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
 
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping(string.Empty, string.Empty) },
-            { "Customer.Name", new ColumnMapping(string.Empty, "CustomerName") },
-            { "Order.Total", new ColumnMapping(string.Empty, "OrderTotal") }
+            { "Order", [new ColumnMapping(string.Empty, string.Empty)] },
+            { "Customer.Name", [new ColumnMapping(string.Empty, "CustomerName")] },
+            { "Order.Total", [new ColumnMapping(string.Empty, "OrderTotal")] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping(string.Empty, string.Empty));
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer.Name", columnMapping).Returns(new ColumnMapping(string.Empty, "CustomerName"));
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order.Total", columnMapping).Returns(new ColumnMapping(string.Empty, "OrderTotal"));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping(string.Empty, string.Empty)]);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer.Name", columnMapping).Returns([new ColumnMapping(string.Empty, "CustomerName")]);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order.Total", columnMapping).Returns([new ColumnMapping(string.Empty, "OrderTotal")]);
 
         _sut.FillBranchNode(requestBranch, responseTree, columnMapping);
 
@@ -269,13 +269,13 @@ public class ResponseBranchNodeProcessorTests
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch1);
         responseTree.AddChild(responseBranch2);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping(string.Empty, string.Empty) },
-            { "Items", new ColumnMapping("Items", string.Empty) }
+            { "Order", [new ColumnMapping(string.Empty, string.Empty)] },
+            { "Items", [new ColumnMapping("Items", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping(string.Empty, string.Empty));
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping("Items", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping(string.Empty, string.Empty)]);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping("Items", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Items")
             .Returns([responseBranch1, responseBranch2]);
         _responseSemanticTreeNodeResolver.CreateIndexedSemanticId("Items", Arg.Any<int>())
@@ -293,12 +293,12 @@ public class ResponseBranchNodeProcessorTests
         var nameLeaf = new SemanticLeafNode("Customer.Name", DataType.String, string.Empty);
         requestBranch.AddChild(nameLeaf);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping(string.Empty, string.Empty) }
+            { "Order", [new ColumnMapping(string.Empty, string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns((ColumnMapping?)null);
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer.Name", columnMapping).Returns((ColumnMapping?)null);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([]);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Customer.Name", columnMapping).Returns([]);
 
         _sut.FillBranchNode(requestBranch, responseTree, columnMapping);
 
@@ -320,15 +320,15 @@ public class ResponseBranchNodeProcessorTests
         responseBranch.AddChild(responseItems);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping("Order", string.Empty) },
-            { "Items", new ColumnMapping("Items", string.Empty) }
+            { "Order", [new ColumnMapping("Order", string.Empty)] },
+            { "Items", [new ColumnMapping("Items", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping("Order", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping("Order", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Order")
             .Returns([responseBranch]);
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping("Items", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping("Items", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseBranch, "Items")
             .Returns([responseItems]);
 
@@ -350,11 +350,11 @@ public class ResponseBranchNodeProcessorTests
         level2.AddChild(level3);
         level1.AddChild(level2);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Level1", new ColumnMapping("Level1", string.Empty) }
+            { "Level1", [new ColumnMapping("Level1", string.Empty)] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Level1", columnMapping).Returns(new ColumnMapping("Level1", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Level1", columnMapping).Returns([new ColumnMapping("Level1", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Level1")
             .Returns([]);
 
@@ -375,17 +375,17 @@ public class ResponseBranchNodeProcessorTests
         var responseBranch = new SemanticBranchNode("Order", DataType.Object);
         var responseTree = new SemanticBranchNode("Response", DataType.Object);
         responseTree.AddChild(responseBranch);
-        var columnMapping = new Dictionary<string, ColumnMapping>
+        var columnMapping = new Dictionary<string, List<ColumnMapping>>
         {
-            { "Order", new ColumnMapping("Order", string.Empty) },
-            { "Items", new ColumnMapping(string.Empty, string.Empty) },
-            { "Total", new ColumnMapping(string.Empty, "OrderTotal") }
+            { "Order", [new ColumnMapping("Order", string.Empty)] },
+            { "Items", [new ColumnMapping(string.Empty, string.Empty)] },
+            { "Total", [new ColumnMapping(string.Empty, "OrderTotal")] }
         };
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns(new ColumnMapping("Order", string.Empty));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Order", columnMapping).Returns([new ColumnMapping("Order", string.Empty)]);
         _responseSemanticTreeNodeResolver.FindMatchingBranchNodes(responseTree, "Order")
             .Returns([responseBranch]);
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns(new ColumnMapping(string.Empty, string.Empty));
-        _responseSemanticTreeNodeResolver.GetColumnMapping("Total", columnMapping).Returns(new ColumnMapping(string.Empty, "OrderTotal"));
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Items", columnMapping).Returns([new ColumnMapping(string.Empty, string.Empty)]);
+        _responseSemanticTreeNodeResolver.GetColumnMapping("Total", columnMapping).Returns([new ColumnMapping(string.Empty, "OrderTotal")]);
 
         var exception = Record.Exception(() => _sut.FillBranchNode(requestBranch, responseTree, columnMapping));
 

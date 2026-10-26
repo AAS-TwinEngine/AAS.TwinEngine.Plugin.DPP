@@ -4,21 +4,33 @@ namespace AAS.TwinEngine.Plugin.RelationalDatabase.ApplicationLogic.Services.Sub
 
 public class ResponseLeafNodeProcessor(IResponseSemanticTreeNodeResolver responseSemanticTreeNodeResolver) : IResponseLeafNodeProcessor
 {
-    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, ColumnMapping> columnMapping)
+    public void FillLeafNode(SemanticLeafNode requestLeaf, SemanticTreeNode responseTree, Dictionary<string, List<ColumnMapping>> columnMapping)
     {
         ArgumentNullException.ThrowIfNull(requestLeaf);
-        var columnName = responseSemanticTreeNodeResolver.GetColumnMapping(requestLeaf.SemanticId, columnMapping)?.LeafColumn;
 
-        if (string.IsNullOrEmpty(columnName))
+        var leafColumnCandidates = GetLeafColumnCandidates(requestLeaf.SemanticId, columnMapping);
+
+        foreach (var columnName in leafColumnCandidates)
         {
-            requestLeaf.Value = string.Empty;
-            return;
+            var matchingLeaf = responseSemanticTreeNodeResolver
+                .FindMatchingLeafNodes(responseTree, columnName)
+                .FirstOrDefault();
+
+            if (matchingLeaf is not null)
+            {
+                requestLeaf.Value = matchingLeaf.Value ?? string.Empty;
+                return;
+            }
         }
 
-        var matchingLeaf = responseSemanticTreeNodeResolver
-            .FindMatchingLeafNodes(responseTree, columnName)
-            .FirstOrDefault();
+        requestLeaf.Value = string.Empty;
+    }
 
-        requestLeaf.Value = matchingLeaf?.Value ?? string.Empty;
+    private IEnumerable<string> GetLeafColumnCandidates(string semanticId, Dictionary<string, List<ColumnMapping>> columnMapping)
+    {
+        return responseSemanticTreeNodeResolver.GetColumnMapping(semanticId, columnMapping)
+            .Select(mapping => mapping.LeafColumn)
+            .Where(column => !string.IsNullOrEmpty(column))
+            .Distinct(StringComparer.OrdinalIgnoreCase);
     }
 }
