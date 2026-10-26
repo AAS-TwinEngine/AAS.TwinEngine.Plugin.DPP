@@ -1463,47 +1463,6 @@
             },
             {
               "category": "CONSTANT",
-              "idShort": "SafetyRegulationsToBeObserved",
-              "description": [
-                {
-                  "language": "de",
-                  "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                },
-                {
-                  "language": "en",
-                  "text": "Safety instructions and regulations that must be observed during maintenance"
-                }
-              ],
-              "semanticId": {
-                "type": "ExternalReference",
-                "keys": [
-                  {
-                    "type": "GlobalReference",
-                    "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                  }
-                ]
-              },
-              "qualifiers": [
-                {
-                  "type": "SMT/Cardinality",
-                  "valueType": "xs:string",
-                  "value": "ZeroToMany"
-                }
-              ],
-              "value": [
-                {
-                  "language": "en",
-                  "text": "Disconnect power; Secure against restart; Check no voltage"
-                },
-                {
-                  "language": "de",
-                  "text": "Stromversorgung trennen; Gegen Wiedereinschalten sichern; Spannungsfreiheit prüfen"
-                }
-              ],
-              "modelType": "MultiLanguageProperty"
-            },
-            {
-              "category": "CONSTANT",
               "idShort": "ContactForMaintenanceAuthorization0",
               "description": [
                 {
@@ -3311,6 +3270,47 @@
                 }
               ],
               "modelType": "SubmodelElementCollection"
+            },
+            {
+              "category": "CONSTANT",
+              "idShort": "SafetyRegulationsToBeObserved",
+              "description": [
+                {
+                  "language": "de",
+                  "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                },
+                {
+                  "language": "en",
+                  "text": "Safety instructions and regulations that must be observed during maintenance"
+                }
+              ],
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "ZeroToMany"
+                }
+              ],
+              "value": [
+                {
+                  "language": "en",
+                  "text": "Disconnect power; Secure against restart; Check no voltage"
+                },
+                {
+                  "language": "de",
+                  "text": "Stromversorgung trennen; Gegen Wiedereinschalten sichern; Spannungsfreiheit prüfen"
+                }
+              ],
+              "modelType": "MultiLanguageProperty"
             }
           ],
           "modelType": "SubmodelElementCollection"
