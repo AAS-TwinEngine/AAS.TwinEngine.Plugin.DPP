@@ -978,9 +978,5 @@
   {
     "column": "dbo.Asset.lastUpdate",
     "semanticId": [ "https://admin-shell.io/idta/cds/lastUpdate/1" ]
-  },
-  {
-    "column": "dbo.Asset.ContentSpecificationId",
-    "semanticId": [ "https://admin-shell.io/idta/cds/contentSpecificationId/1" ]
   }
 ]
