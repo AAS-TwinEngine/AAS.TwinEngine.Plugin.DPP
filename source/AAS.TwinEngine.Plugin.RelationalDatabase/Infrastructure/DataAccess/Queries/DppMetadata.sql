@@ -6,12 +6,6 @@ WITH asset_cte AS (
 SELECT COALESCE(
     json_build_object(
         'DppMetadata',      json_build_object(
-                                'ContentSpecificationIds', json_build_object('ContentSpecificationId', 'https://admin-shell-io/idta/digitalproductpassport/Nameplate/1',
-                                                                             'ContentSpecificationId', 'https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0',
-                                                                             'ContentSpecificationId', '0173-1#01-AHF578#003',
-                                                                             'ContentSpecificationId', '0173-1#01-AHX837#002',
-                                                                            'ContentSpecificationId', 'https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0'
-                            ),
                                 'GlobalAssetId',            a."GlobalAssetId",
                                 'AasId',                    a."AasId",
                                 'dppSchemaVersion',         a."dppSchemaVersion",
