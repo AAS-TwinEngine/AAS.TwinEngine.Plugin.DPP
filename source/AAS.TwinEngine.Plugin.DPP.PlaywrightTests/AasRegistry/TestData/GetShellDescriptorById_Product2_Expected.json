@@ -81,7 +81,7 @@
       "idShort": null,
       "id": "https://mm-software.com/submodel/000-002/Nameplate",
       "semanticId": null,
-      "supplementalSemanticId": null,
+      "supplementalSemanticIds": null,
       "endpoints": [
         {
           "interface": "SUBMODEL-3.0",
@@ -105,7 +105,7 @@
       "idShort": null,
       "id": "https://mm-software.com/submodel/000-002/MaintenanceInstructions",
       "semanticId": null,
-      "supplementalSemanticId": null,
+      "supplementalSemanticIds": null,
       "endpoints": [
         {
           "interface": "SUBMODEL-3.0",
@@ -129,7 +129,7 @@
       "idShort": null,
       "id": "https://mm-software.com/submodel/000-002/TechnicalData",
       "semanticId": null,
-      "supplementalSemanticId": null,
+      "supplementalSemanticIds": null,
       "endpoints": [
         {
           "interface": "SUBMODEL-3.0",
@@ -153,7 +153,7 @@
       "idShort": null,
       "id": "https://mm-software.com/submodel/000-002/CarbonFootprint",
       "semanticId": null,
-      "supplementalSemanticId": null,
+      "supplementalSemanticIds": null,
       "endpoints": [
         {
           "interface": "SUBMODEL-3.0",
@@ -177,7 +177,7 @@
       "idShort": null,
       "id": "https://mm-software.com/submodel/000-002/HandoverDocumentation",
       "semanticId": null,
-      "supplementalSemanticId": null,
+      "supplementalSemanticIds": null,
       "endpoints": [
         {
           "interface": "SUBMODEL-3.0",
