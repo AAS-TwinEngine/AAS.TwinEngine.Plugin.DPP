@@ -30,7 +30,18 @@
       }
     ]
   },
-  "supplementalSemanticId": null,
+  "supplementalSemanticIds": [
+    {
+      "type": "ExternalReference",
+      "referredSemanticId": null,
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "https://api.eclass-cdp.com/0173-1-01-AHX837-002"
+        }
+      ]
+    }
+  ],
   "endpoints": [
     {
       "interface": "SUBMODEL-3.0",
