@@ -591,11 +591,11 @@
       "value": [
         {
           "language": "de",
-          "text": "M&M Germany"
+          "text": "M&M Software"
         },
         {
           "language": "en",
-          "text": "M&M Germany"
+          "text": "M&M Software"
         }
       ],
       "modelType": "MultiLanguageProperty"

@@ -1,7 +1,5 @@
 {
-  "paging_metadata": {
-    "cursor": null
-  },
+  "paging_metadata": { "cursor": null },
   "result": [
     {
       "idShort": "Nameplate",
@@ -596,11 +594,11 @@
           "value": [
             {
               "language": "de",
-              "text": "M&M Germany"
+              "text": "M&M Software"
             },
             {
               "language": "en",
-              "text": "M&M Germany"
+              "text": "M&M Software"
             }
           ],
           "modelType": "MultiLanguageProperty"
@@ -3266,47 +3264,6 @@
                 },
                 {
                   "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Disconnect power; Secure against restart; Check no voltage"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Stromversorgung trennen; Gegen Wiedereinschalten sichern; Spannungsfreiheit prüfen"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
                   "idShort": "ContactForMaintenanceAuthorization0",
                   "description": [
                     {
@@ -5114,6 +5071,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Disconnect power; Secure against restart; Check no voltage"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Stromversorgung trennen; Gegen Wiedereinschalten sichern; Spannungsfreiheit prüfen"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -10740,7 +10738,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "M&M Germany",
+              "value": "M&M Software",
               "modelType": "Property"
             },
             {
@@ -16852,7 +16850,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "de",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
@@ -20386,7 +20384,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "de",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
@@ -21777,7 +21775,7 @@
             }
           ],
           "valueType": "xs:string",
-          "value": "1.0.1",
+          "value": "1.0.0",
           "modelType": "Property"
         },
         {
@@ -21865,11 +21863,11 @@
           "value": [
             {
               "language": "de",
-              "text": "M&M India"
+              "text": "M&M Software"
             },
             {
               "language": "en",
-              "text": "M&M India"
+              "text": "M&M Software"
             }
           ],
           "modelType": "MultiLanguageProperty"
@@ -24106,47 +24104,6 @@
                     {
                       "language": "de",
                       "text": "TRBS 1112 Teil 1 Explosionsgefährdung"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Secure vehicle; Use safety stands; Wear goggles"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
                     }
                   ],
                   "modelType": "MultiLanguageProperty"
@@ -26865,6 +26822,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Secure vehicle; Use safety stands; Wear goggles"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -30035,7 +30033,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "M&M India",
+              "value": "M&M Software",
               "modelType": "Property"
             },
             {
@@ -33507,7 +33505,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "de",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
@@ -36753,11 +36751,11 @@
           "value": [
             {
               "language": "de",
-              "text": "M&M China"
+              "text": "M&M Software"
             },
             {
               "language": "en",
-              "text": "M&M China"
+              "text": "M&M Software"
             }
           ],
           "modelType": "MultiLanguageProperty"
@@ -39423,47 +39421,6 @@
                 },
                 {
                   "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Allow cooling; Open cap slowly; Avoid contact"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Motor abkühlen lassen; Deckel langsam öffnen; Kontakt vermeiden"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
                   "idShort": "ContactForMaintenanceAuthorization0",
                   "description": [
                     {
@@ -41271,6 +41228,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Allow cooling; Open cap slowly; Avoid contact"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Motor abkühlen lassen; Deckel langsam öffnen; Kontakt vermeiden"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -43242,47 +43240,6 @@
                 },
                 {
                   "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Disconnect battery; Avoid sparks; Wear gloves"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Batterie trennen; Funken vermeiden; Handschuhe tragen"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
                   "idShort": "ContactForMaintenanceAuthorization0",
                   "description": [
                     {
@@ -45090,6 +45047,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Disconnect battery; Avoid sparks; Wear gloves"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Batterie trennen; Funken vermeiden; Handschuhe tragen"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -48381,7 +48379,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "M&M China",
+              "value": "M&M Software",
               "modelType": "Property"
             },
             {
@@ -56315,7 +56313,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "de",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
@@ -57313,7 +57311,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "hi",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
