@@ -949,11 +949,11 @@
   },
   {
     "column": "dbo.Asset.GlobalAssetId",
-    "semanticId": [ "https://admin-shell.io/idta/cds/digitalProductPassportId/1" ]
+    "semanticId": [ "https://admin-shell.io/idta/cds/uniqueProductIdentifier/1" ]
   },
   {
     "column": "dbo.Asset.AasId",
-    "semanticId": [ "https://admin-shell.io/idta/cds/uniqueProductIdentifier/1" ]
+    "semanticId": [ "https://admin-shell.io/idta/cds/digitalProductPassportId/1" ]
   },
   {
     "column": "dbo.Asset.dppSchemaVersion",
