@@ -239,7 +239,7 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "https://mm-software.com/ids/assets/000-001",
+      "value": "https://mm-software.com/ids/aas/000-001",
       "modelType": "Property"
     },
     {
@@ -270,7 +270,7 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "ENXXX:v1.0",
+      "value": "EN18223:2026",
       "modelType": "Property"
     },
     {
@@ -332,7 +332,7 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "gxx:ppp456789",
+      "value": "mm-germany",
       "modelType": "Property"
     },
     {
@@ -363,7 +363,7 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "gxx:xxx987654",
+      "value": "mm:facility-de-987654321",
       "modelType": "Property"
     },
     {
@@ -447,7 +447,7 @@
         }
       ],
       "valueType": "xs:dateTime",
-      "value": "2026-06-11T12:00:00+00:00",
+      "value": "2026-01-15T14:30:00",
       "modelType": "Property"
     },
     {
@@ -478,7 +478,7 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "https://mm-software.com/ids/aas/000-001",
+      "value": "https://mm-software.com/ids/assets/000-001",
       "modelType": "Property"
     }
   ],
