@@ -46,4 +46,45 @@ public class SubmodelDataController(ISubmodelDataHandler submodelDataHandler) : 
 
         return Ok(aasData);
     }
+
+    [HttpDelete("submodel-data/products/{productId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteProductAsync([FromRoute] string productId, [FromServices] IProductHandler productHandler, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(productHandler);
+
+        await productHandler.DeleteProductAsync(productId, cancellationToken).ConfigureAwait(false);
+        return NoContent();
+    }
+
+    [HttpPut("submodel-data/products/{productId}")]
+    [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<UpdateProductResponse>> UpdateProductAsync([FromRoute] string productId, [FromBody] UpdateProductRequest request, [FromServices] IProductHandler productHandler, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(productHandler);
+
+        var response = await productHandler.UpdateProductAsync(productId, request, cancellationToken).ConfigureAwait(false);
+        return Ok(response);
+    }
+
+    [HttpPost("submodel-data/products")]
+    [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ActionResult), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<CreateProductResponse>> CreateProductAsync([FromBody] CreateProductRequest request, [FromServices] IProductHandler productHandler, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(productHandler);
+
+        var response = await productHandler.CreateProductAsync(request, cancellationToken).ConfigureAwait(false);
+
+        return StatusCode(StatusCodes.Status201Created, response);
+    }
 }

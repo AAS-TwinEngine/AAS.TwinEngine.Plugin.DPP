@@ -25,6 +25,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             BadRequestException => StatusCodes.Status400BadRequest,
             ForbiddenException => StatusCodes.Status403Forbidden,
             NotFoundException => StatusCodes.Status404NotFound,
+            ConflictException => StatusCodes.Status409Conflict,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             TimeoutException => StatusCodes.Status408RequestTimeout,
             ServiceUnavailableException => StatusCodes.Status503ServiceUnavailable,

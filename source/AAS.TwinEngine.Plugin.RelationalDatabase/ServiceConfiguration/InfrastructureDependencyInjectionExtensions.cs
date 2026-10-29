@@ -45,6 +45,7 @@ public static class InfrastructureDependencyInjectionExtensions
         _ = services.AddScoped<IMetaDataProvider, MetaDataProvider>();
 
         _ = services.AddScoped<ISubmodelDataProvider, SubmodelDataProvider>();
+        _ = services.AddScoped<IProductProvider, ProductProvider>();
         _ = services.AddScoped<IJsonResponseParser, JsonResponseParser>();
     }
 }

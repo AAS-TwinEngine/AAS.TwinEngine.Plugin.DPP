@@ -41,5 +41,7 @@ public static class ApplicationDependencyInjectionExtensions
         _ = services.AddScoped<IJsonSchemaSecurityValidator, JsonSchemaSecurityValidator>();
         _ = services.AddScoped<IJsonSchemaValidator, JsonSchemaValidator>();
         _ = services.AddScoped<ISubmodelDataService, SubmodelDataService>();
+        _ = services.AddScoped<IProductHandler, ProductHandler>();
+        _ = services.AddScoped<IProductService, ProductService>();
     }
 }
