@@ -169,6 +169,26 @@ public class SubmodelRegistryTests : ApiTestBase
     }
 
     [Fact]
+    public async Task GetSubmodelDescriptorById_DppMetadata_ShouldReturnSuccess_ContentAsExpected()
+    {
+        // Arrange
+        var url = $"/submodel-descriptors/{SubmodelIdentifierDppMetadata}";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRegistry", "TestData", "GetSubmodelDescriptorById_DppMetadata_Expected.json"));
+    }
+
+    [Fact]
 
     public async Task GetAllSubmodelDescriptors_WithTwoFieldCursor_ShouldReturnSuccess_ContentAsExpected()
     {

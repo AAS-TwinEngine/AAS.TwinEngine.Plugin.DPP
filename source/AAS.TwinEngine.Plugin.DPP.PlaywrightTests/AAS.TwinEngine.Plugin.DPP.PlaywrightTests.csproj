@@ -97,9 +97,12 @@
     <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_TechnicalData_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SubmodelRegistry\TestData\GetSubmodelDescriptorById_DppMetadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithTwoFieldCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None> 
+    </None>
     <None Update="SubmodelRepository\TestData\GetSubmodelElement_MaintenanceInstructions_MaintenanceToolList_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -125,6 +128,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_DppMetadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_DppMetadata_ContentSpecificationIds_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SubmodelRepository\TestData\GetSubmodel_TechnicalData_Expected.json">
@@ -159,7 +168,7 @@
     </None>
     <None Update="SubmodelRegistry\TestData\GetAllSubmodelDescriptors_WithCursor_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>  
+    </None>
     <None Update="SubmodelRepository\TestData\GetAllSubmodels_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

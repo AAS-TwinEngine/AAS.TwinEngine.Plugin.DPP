@@ -192,6 +192,30 @@
           }
         }
       ]
+    },
+    {
+      "description": null,
+      "displayName": null,
+      "extensions": null,
+      "administration": null,
+      "idShort": null,
+      "id": "https://mm-software.com/submodel/000-002/DppMetadata",
+      "semanticId": null,
+      "supplementalSemanticIds": null,
+      "endpoints": [
+        {
+          "interface": "SUBMODEL-3.0",
+          "protocolInformation": {
+            "href": "http://localhost:8080/submodels/aHR0cHM6Ly9tbS1zb2Z0d2FyZS5jb20vc3VibW9kZWwvMDAwLTAwMi9EcHBNZXRhZGF0YQ",
+            "endpointProtocol": "http",
+            "endpointProtocolVersion": null,
+            "subprotocol": null,
+            "subprotocolBody": null,
+            "subprotocolBodyEncoding": null,
+            "securityAttributes": null
+          }
+        }
+      ]
     }
   ]
 }

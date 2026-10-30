@@ -1,0 +1,198 @@
+{
+  "idShort": "contentSpecificationIds",
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/idta/cds/contentSpecificationIds/1"
+      }
+    ]
+  },
+  "qualifiers": [
+    {
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+          }
+        ]
+      },
+      "type": "SMT/Cardinality",
+      "valueType": "xs:string",
+      "value": "One"
+    }
+  ],
+  "orderRelevant": false,
+  "semanticIdListElement": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+      }
+    ]
+  },
+  "typeValueListElement": "Property",
+  "valueTypeListElement": "xs:string",
+  "value": [
+    {
+      "idShort": "contentSpecificationId",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "OneToMany"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "https://admin-shell-io/idta/digitalproductpassport/Nameplate/1",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "contentSpecificationId---10E12140",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "OneToMany"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "contentSpecificationId---0DD7DE3D",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "OneToMany"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "0173-1#01-AHF578#003",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "contentSpecificationId---3A935A69",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "OneToMany"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "0173-1#01-AHX837#002",
+      "modelType": "Property"
+    },
+    {
+      "idShort": "contentSpecificationId---7F22713F",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+          }
+        ]
+      },
+      "qualifiers": [
+        {
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+              }
+            ]
+          },
+          "type": "SMT/Cardinality",
+          "valueType": "xs:string",
+          "value": "OneToMany"
+        }
+      ],
+      "valueType": "xs:string",
+      "value": "https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0",
+      "modelType": "Property"
+    }
+  ],
+  "modelType": "SubmodelElementList"
+}
