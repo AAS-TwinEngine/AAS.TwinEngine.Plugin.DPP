@@ -63,6 +63,7 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 - **Asset Metadata Retrieval**: Fetch shell descriptors and asset information from PostgreSQL databases
 - **Submodel Data Access**: Query specific submodel data using JSON Schema-based filters
+- **DPP Metadata**: Provide passport-level metadata (passport ID, schema version, status, facility and economic operator)
 - **Manifest Management**: Access plugin capabilities and configuration details
 
 ## Key Technical Features
@@ -76,15 +77,17 @@ The DPP Plugin uses a **relational database** (for example PostgreSQL) as its pr
 
 ### Supported DPP Submodels
 
-The table below lists the AAS submodels supported per DPP version. The current version targets **DPP v4.0**.
+The table below lists the AAS submodels (and their versions) supported by each plugin release.
 
-| *(DPP Plugin v1.0.0)* | *(DPP Plugin v1.2.0 - current)* |
-|---|---|
-| Nameplate (v3.0.1) | Nameplate (v3.0.1) |
-| ContactInformation (v1.0) | MaintenanceInstructions (v1.0) |
-| HandoverDocumentation (v2.0.1) | HandoverDocumentation (v2.0.1) |
-| TechnicalData (v1.2.1) | TechnicalData (v2.0) |
-| CarbonFootprint (v1.0.1) | CarbonFootprint (v1.0.1) |
+| Submodel | DPP Plugin v1.0.0 | DPP Plugin v1.2.0 | DPP Plugin v1.3.0 *(current)* |
+|---|---|---|---|
+| Nameplate | v3.0.1 | v3.0.1 | v3.0.1 |
+| ContactInformation | v1.0 | – | – |
+| MaintenanceInstructions | – | v1.0 | v1.0 |
+| HandoverDocumentation | v2.0.1 | v2.0.1 | v2.0.1 |
+| TechnicalData | v1.2.1 | v2.0 | v2.0 |
+| CarbonFootprint | v1.0.1 | v1.0.1 | v1.0.1 |
+| DPP Metadata | – | – | **v1.0.2** |
 
 Data is modeled using **AAS Submodels**, and this Plugin provides the **actual values** for those models.
 
@@ -108,7 +111,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
    ```
    http://localhost:8080/aas-ui/
    ```
-- For more info : [TwinEngine Demonstrator Setup WIth DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.Minimal/README.md)
+- For more info : [TwinEngine Demonstrator Setup With DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.Minimal/README.md)
 
 ---
 
@@ -120,7 +123,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
 
 ```bash
 git clone https://github.com/AAS-TwinEngine/AAS.TwinEngine.Plugin.DPP.git
-cd source/Aas.TwinEngine.Plugin.RelationalDatabase
+cd source/AAS.TwinEngine.Plugin.RelationalDatabase
 ```
 
 #### 2. Restore Dependencies
@@ -167,7 +170,9 @@ Access the Swagger documentation: `https://localhost:5058/swagger`
 
 ### Semantic ID Mapping
 
-The file `Data/mapping.json` contains mappings from database columns to AAS semantic IDs:
+The file `Data/mapping.json` contains mappings from database columns to AAS semantic IDs. It is loaded at startup, so restart the plugin after changing it. DataEngine reads the plugin's supported Semantic IDs at startup as well, so restart DataEngine after the plugin changes.
+
+Example entry:
 
 ```json
 [
