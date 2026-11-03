@@ -112,7 +112,7 @@ Data is modeled using **AAS Submodels**, and this Plugin provides the **actual v
    http://localhost:8080/aas-ui/
    ```
 - For more info : [TwinEngine Demonstrator Setup With DPP Plugin](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.Minimal/README.md)
-- To retrieve Digital Product Passports through a DPP API, see the [DPP API example](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.DPPAPI/README.md)
+- To retrieve Digital Product Passports through a DPP API (with the Export Service), see the [DPP API example](https://github.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/blob/main/examples/AAS.TwinEngine.DPP-API/README.md)
 
 ---
 
