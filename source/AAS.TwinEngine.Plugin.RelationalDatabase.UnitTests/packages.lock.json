@@ -29,11 +29,11 @@
       },
       "TngTech.ArchUnitNET.xUnit": {
         "type": "Direct",
-        "requested": "[0.13.4, 0.13.4]",
-        "resolved": "0.13.4",
-        "contentHash": "I8BxopDSsnlf2ydgsPYfwLolZaG//8qdWc3JKl3K3vFKfWtP5e3snq/4OHTW1n1+qGA25HMHAmnX6YhnuCtxMg==",
+        "requested": "[0.13.5, 0.13.5]",
+        "resolved": "0.13.5",
+        "contentHash": "TyiBvmsB4BlqewG4vUiWaR65OaAWuUiF8YhMgzfIXC7c5fgr+0AglhgYZvlhVYA6f+EOZf5DYeme4zRGRoSZQQ==",
         "dependencies": {
-          "TngTech.ArchUnitNET": "0.13.4",
+          "TngTech.ArchUnitNET": "0.13.5",
           "xunit.assert": "2.4.1"
         }
       },
@@ -101,8 +101,8 @@
       },
       "Humanizer.Core": {
         "type": "Transitive",
-        "resolved": "2.14.1",
-        "contentHash": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw=="
+        "resolved": "3.0.10",
+        "contentHash": "yZIhtw8sYuvsONzQbZxWpR60tMWYHXoo0DL6nyOqSFiU5POjBTSEyWFpTQtJEZuy+oqiYTXKXY/Mjx7KnqIQFw=="
       },
       "JetBrains.Annotations": {
         "type": "Transitive",
@@ -111,24 +111,24 @@
       },
       "Json.More.Net": {
         "type": "Transitive",
-        "resolved": "2.1.1",
-        "contentHash": "ZXAKl2VsdnIZeUo1PFII3Oi1m1L4YQjEyDjygHfHln5vgsjgIo749X6xWkv7qFYp8RROES+vOEfDcvvoVgs8kA=="
+        "resolved": "3.0.1",
+        "contentHash": "fRctF2J2SILYG6wqP21drmeEODmCVkVQ/b3MndDu2fT1swfySyUgq7ePCk+aENGlDcIm05fyfjh9vcuqDEfv3w=="
       },
       "JsonPointer.Net": {
         "type": "Transitive",
-        "resolved": "5.3.1",
-        "contentHash": "3e2OJjU0OaE26XC/klgxbJuXvteFWTDJIJv0ITYWcJEoskq7jzUwPSC1s0iz4wPPQnfN7vwwFmg2gJfwRAPwgw==",
+        "resolved": "7.0.3",
+        "contentHash": "It/10weZ3oA+BGL+Gqyw9M6wsi4Tc16vWwU+u7x6LBwty57Y3aUh7bfcn2VWAzgVTAfGuCPb5KUpsH6IFjR08A==",
         "dependencies": {
-          "Humanizer.Core": "2.14.1",
-          "Json.More.Net": "2.1.1"
+          "Humanizer.Core": "3.0.10",
+          "Json.More.Net": "3.0.1"
         }
       },
       "JsonSchema.Net": {
         "type": "Transitive",
-        "resolved": "7.3.4",
-        "contentHash": "7GggWrdzKrtGWETRn3dcMnmuLSyWaDkBK94TK80LEHQEVz4bmsQc7FYO7qL40RDdZU2YPz5d98aT9lW5OYExuA==",
+        "resolved": "9.5.0",
+        "contentHash": "yCohYtv0mi0oU+n3rpPBhoP/6OKkmxxwkGfprohst5DywbKoHaf9yJtFR8CYasKUUO5KfIR3gm43vsqxgT0nzA==",
         "dependencies": {
-          "JsonPointer.Net": "5.3.1"
+          "JsonPointer.Net": "7.0.3"
         }
       },
       "Microsoft.CodeCoverage": {
@@ -608,8 +608,8 @@
       },
       "TngTech.ArchUnitNET": {
         "type": "Transitive",
-        "resolved": "0.13.4",
-        "contentHash": "SBWeZamopaqNOe1BlM57kATJ9vho10gwaLQYmC6BilwGRtHs1qWvuYbwYnncVJeKiB9X/B14h96rlcUTo3C9EQ==",
+        "resolved": "0.13.5",
+        "contentHash": "ajzTX2DjrXhVJdxa0YxhpTEue8NGxGbpkoZbgQhWBKqUZH8UZGwbR3dJg0a00T6YDBYh0lHl3GBf6jAc5VXhlg==",
         "dependencies": {
           "CycleDetection": "2.0.0",
           "JetBrains.Annotations": "2026.2.0",
@@ -669,7 +669,7 @@
           "Asp.Versioning.Http": "[10.2.3, 10.2.3]",
           "Asp.Versioning.Mvc": "[10.2.1, 10.2.1]",
           "Asp.Versioning.Mvc.ApiExplorer": "[10.2.1, 10.2.1]",
-          "JsonSchema.Net": "[7.3.4, 7.3.4]",
+          "JsonSchema.Net": "[9.5.0, 9.5.0]",
           "Microsoft.Extensions.DependencyInjection": "[10.0.14, 10.0.14]",
           "NSwag.AspNetCore": "[14.7.1, 14.7.1]",
           "Npgsql": "[10.0.3, 10.0.3]",
