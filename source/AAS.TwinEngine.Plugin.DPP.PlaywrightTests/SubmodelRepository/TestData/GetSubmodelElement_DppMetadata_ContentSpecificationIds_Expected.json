@@ -66,11 +66,11 @@
         }
       ],
       "valueType": "xs:string",
-      "value": "https://admin-shell-io/idta/digitalproductpassport/Nameplate/1",
+      "value": "https://admin-shell.io/idta/nameplate/3/0/Nameplate",
       "modelType": "Property"
     },
     {
-      "idShort": "contentSpecificationId---10E12140",
+      "idShort": "contentSpecificationId",
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
@@ -101,7 +101,7 @@
       "modelType": "Property"
     },
     {
-      "idShort": "contentSpecificationId---0DD7DE3D",
+      "idShort": "contentSpecificationId",
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
@@ -132,7 +132,7 @@
       "modelType": "Property"
     },
     {
-      "idShort": "contentSpecificationId---3A935A69",
+      "idShort": "contentSpecificationId",
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
@@ -163,7 +163,7 @@
       "modelType": "Property"
     },
     {
-      "idShort": "contentSpecificationId---7F22713F",
+      "idShort": "contentSpecificationId",
       "semanticId": {
         "type": "ExternalReference",
         "keys": [
