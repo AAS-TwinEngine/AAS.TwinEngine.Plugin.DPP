@@ -101,6 +101,15 @@
               "value": "https://mm-software.com/submodel/000-002/HandoverDocumentation"
             }
           ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            {
+              "type": "Submodel",
+              "value": "https://mm-software.com/submodel/000-002/DppMetadata"
+            }
+          ]
         }
       ],
       "modelType": "AssetAdministrationShell"

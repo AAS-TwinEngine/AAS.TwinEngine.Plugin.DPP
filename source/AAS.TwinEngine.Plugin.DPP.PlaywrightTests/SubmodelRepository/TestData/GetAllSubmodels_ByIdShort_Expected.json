@@ -508,7 +508,7 @@
             }
           ],
           "valueType": "xs:string",
-          "value": "1.0.1",
+          "value": "1.0.0",
           "modelType": "Property"
         },
         {
@@ -596,11 +596,11 @@
           "value": [
             {
               "language": "de",
-              "text": "M&M India"
+              "text": "M&M Software"
             },
             {
               "language": "en",
-              "text": "M&M India"
+              "text": "M&M Software"
             }
           ],
           "modelType": "MultiLanguageProperty"
@@ -2317,7 +2317,7 @@
             }
           ],
           "valueType": "xs:boolean",
-          "value": "False",
+          "value": "false",
           "modelType": "Property"
         },
         {
@@ -2837,47 +2837,6 @@
                     {
                       "language": "de",
                       "text": "TRBS 1112 Teil 1 Explosionsgefährdung"
-                    }
-                  ],
-                  "modelType": "MultiLanguageProperty"
-                },
-                {
-                  "category": "CONSTANT",
-                  "idShort": "SafetyRegulationsToBeObserved",
-                  "description": [
-                    {
-                      "language": "de",
-                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
-                    },
-                    {
-                      "language": "en",
-                      "text": "Safety instructions and regulations that must be observed during maintenance"
-                    }
-                  ],
-                  "semanticId": {
-                    "type": "ExternalReference",
-                    "keys": [
-                      {
-                        "type": "GlobalReference",
-                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
-                      }
-                    ]
-                  },
-                  "qualifiers": [
-                    {
-                      "type": "SMT/Cardinality",
-                      "valueType": "xs:string",
-                      "value": "ZeroToMany"
-                    }
-                  ],
-                  "value": [
-                    {
-                      "language": "en",
-                      "text": "Secure vehicle; Use safety stands; Wear goggles"
-                    },
-                    {
-                      "language": "de",
-                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
                     }
                   ],
                   "modelType": "MultiLanguageProperty"
@@ -5596,6 +5555,47 @@
                     }
                   ],
                   "modelType": "SubmodelElementCollection"
+                },
+                {
+                  "category": "CONSTANT",
+                  "idShort": "SafetyRegulationsToBeObserved",
+                  "description": [
+                    {
+                      "language": "de",
+                      "text": "Sicherheitshinweise und Vorschriften, die bei der Wartung beachtet werden müssen"
+                    },
+                    {
+                      "language": "en",
+                      "text": "Safety instructions and regulations that must be observed during maintenance"
+                    }
+                  ],
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/idta/maintenanceinstructions/safetyregulationstobeobserved/1/0"
+                      }
+                    ]
+                  },
+                  "qualifiers": [
+                    {
+                      "type": "SMT/Cardinality",
+                      "valueType": "xs:string",
+                      "value": "ZeroToMany"
+                    }
+                  ],
+                  "value": [
+                    {
+                      "language": "en",
+                      "text": "Secure vehicle; Use safety stands; Wear goggles"
+                    },
+                    {
+                      "language": "de",
+                      "text": "Fahrzeug sichern; Unterstellböcke verwenden; Schutzbrille tragen"
+                    }
+                  ],
+                  "modelType": "MultiLanguageProperty"
                 }
               ],
               "modelType": "SubmodelElementCollection"
@@ -6217,7 +6217,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "True",
+                      "value": "true",
                       "modelType": "Property"
                     },
                     {
@@ -6431,7 +6431,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "False",
+                      "value": "false",
                       "modelType": "Property"
                     }
                   ],
@@ -6818,7 +6818,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "True",
+                      "value": "true",
                       "modelType": "Property"
                     },
                     {
@@ -7032,7 +7032,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "False",
+                      "value": "false",
                       "modelType": "Property"
                     }
                   ],
@@ -7419,7 +7419,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "True",
+                      "value": "true",
                       "modelType": "Property"
                     },
                     {
@@ -7633,7 +7633,7 @@
                         }
                       ],
                       "valueType": "xs:boolean",
-                      "value": "False",
+                      "value": "false",
                       "modelType": "Property"
                     }
                   ],
@@ -8766,7 +8766,7 @@
                 }
               ],
               "valueType": "xs:string",
-              "value": "M&M India",
+              "value": "M&M Software",
               "modelType": "Property"
             },
             {
@@ -11684,7 +11684,7 @@
                             }
                           ],
                           "valueType": "xs:boolean",
-                          "value": "True",
+                          "value": "true",
                           "modelType": "Property"
                         }
                       ],
@@ -12238,7 +12238,7 @@
                                 }
                               ],
                               "valueType": "xs:string",
-                              "value": "de",
+                              "value": "en",
                               "valueId": {
                                 "type": "ExternalReference",
                                 "keys": [
@@ -13451,7 +13451,7 @@
                             }
                           ],
                           "valueType": "xs:boolean",
-                          "value": "True",
+                          "value": "true",
                           "modelType": "Property"
                         }
                       ],
@@ -14887,6 +14887,492 @@
           ],
           "typeValueListElement": "Entity",
           "modelType": "SubmodelElementList"
+        }
+      ],
+      "modelType": "Submodel"
+    },
+    {
+      "idShort": "DppMetadata",
+      "administration": {},
+      "id": "https://mm-software.com/submodel/000-002/DppMetadata",
+      "kind": "Instance",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/cds/dppMetadata/1"
+          }
+        ]
+      },
+      "submodelElements": [
+        {
+          "idShort": "contentSpecificationIds",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/contentSpecificationIds/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/ExampleValue/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "orderRelevant": false,
+          "semanticIdListElement": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+              }
+            ]
+          },
+          "typeValueListElement": "Property",
+          "valueTypeListElement": "xs:string",
+          "value": [
+            {
+              "idShort": "contentSpecificationId",
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "valueType": "xs:string",
+              "value": "https://admin-shell.io/idta/nameplate/3/0/Nameplate",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "contentSpecificationId",
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "valueType": "xs:string",
+              "value": "https://admin-shell.io/idta/SubmodelTemplate/MaintenanceInstructions/1/0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "contentSpecificationId",
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "valueType": "xs:string",
+              "value": "0173-1#01-AHF578#003",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "contentSpecificationId",
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "valueType": "xs:string",
+              "value": "0173-1#01-AHX837#002",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "contentSpecificationId",
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/idta/cds/contentSpecificationId/1"
+                  }
+                ]
+              },
+              "qualifiers": [
+                {
+                  "semanticId": {
+                    "type": "ExternalReference",
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                      }
+                    ]
+                  },
+                  "type": "SMT/Cardinality",
+                  "valueType": "xs:string",
+                  "value": "OneToMany"
+                }
+              ],
+              "valueType": "xs:string",
+              "value": "https://admin-shell.io/idta/CarbonFootprint/CarbonFootprint/1/0",
+              "modelType": "Property"
+            }
+          ],
+          "modelType": "SubmodelElementList"
+        },
+        {
+          "idShort": "digitalProductPassportId",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/digitalProductPassportId/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "https://mm-software.com/ids/aas/000-002",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "dppSchemaVersion",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/dppSchemaVersion/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "EN18223:2026",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "dppStatus",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/dppStatus/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "Active",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "economicOperatorId",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/economicOperatorId/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "mm-india",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "facilityId",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/facilityId/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "facility-in-123567890",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "granularity",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/granularity/1"
+              }
+            ]
+          },
+          "supplementalSemanticIds": [
+            {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://admin-shell.io/aas/3/2/AssetKind"
+                }
+              ]
+            }
+          ],
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "Item",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "lastUpdate",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/lastUpdate/1"
+              }
+            ]
+          },
+          "supplementalSemanticIds": [
+            {
+              "type": "ExternalReference",
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "https://admin-shell.io/aas/3/2/AdministrativeInformation/updatedAt"
+                }
+              ]
+            }
+          ],
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:dateTime",
+          "value": "2026-02-15T09:15:00",
+          "modelType": "Property"
+        },
+        {
+          "idShort": "uniqueProductIdentifier",
+          "semanticId": {
+            "type": "ExternalReference",
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "https://admin-shell.io/idta/cds/uniqueProductIdentifier/1"
+              }
+            ]
+          },
+          "qualifiers": [
+            {
+              "semanticId": {
+                "type": "ExternalReference",
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+                  }
+                ]
+              },
+              "type": "SMT/Cardinality",
+              "valueType": "xs:string",
+              "value": "One"
+            }
+          ],
+          "valueType": "xs:string",
+          "value": "https://mm-software.com/ids/assets/000-002",
+          "modelType": "Property"
         }
       ],
       "modelType": "Submodel"

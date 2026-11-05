@@ -1,7 +1,5 @@
 {
-  "paging_metadata": {
-    "cursor": null
-  },
+  "paging_metadata": { "cursor": null },
   "result": [
     {
       "idShort": "AddressInformation",
@@ -571,11 +569,11 @@
       "value": [
         {
           "language": "de",
-          "text": "M&M Germany"
+          "text": "M&M Software"
         },
         {
           "language": "en",
-          "text": "M&M Germany"
+          "text": "M&M Software"
         }
       ],
       "modelType": "MultiLanguageProperty"

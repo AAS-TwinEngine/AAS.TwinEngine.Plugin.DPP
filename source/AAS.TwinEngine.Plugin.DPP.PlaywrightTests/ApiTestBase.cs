@@ -26,6 +26,7 @@ public abstract class ApiTestBase : IAsyncLifetime
     protected string SubmodelIdentifierNameplate { get; private set; } = null!;
     protected string SubmodelIdentifierCarbonFootprint { get; private set; } = null!;
     protected string SubmodelIdentifierTechnicalData { get; private set; } = null!;
+    protected string SubmodelIdentifierDppMetadata { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
@@ -52,6 +53,7 @@ public abstract class ApiTestBase : IAsyncLifetime
         SubmodelIdentifierNameplate = Base64EncodeUrl("https://mm-software.com/submodel/000-001/Nameplate");
         SubmodelIdentifierCarbonFootprint = Base64EncodeUrl("https://mm-software.com/submodel/000-001/CarbonFootprint");
         SubmodelIdentifierTechnicalData = Base64EncodeUrl("https://mm-software.com/submodel/000-001/TechnicalData");
+        SubmodelIdentifierDppMetadata = Base64EncodeUrl("https://mm-software.com/submodel/000-001/DppMetadata");
 
     }
 

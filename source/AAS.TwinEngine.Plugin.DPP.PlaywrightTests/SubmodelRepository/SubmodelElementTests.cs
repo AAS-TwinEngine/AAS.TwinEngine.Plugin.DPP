@@ -102,6 +102,26 @@ public class SubmodelElementTests : ApiTestBase
     }
 
     [Fact]
+    public async Task GetSubmodelElement_DppMetadata_ContentSpecificationIds_ShouldReturnExpectedList()
+    {
+        // Arrange
+        var url = $"/submodels/{SubmodelIdentifierDppMetadata}/submodel-elements/contentSpecificationIds";
+
+        // Act
+        var response = await ApiContext.GetAsync(url);
+
+        // Assert
+        AssertSuccessResponse(response);
+        var content = await response.TextAsync();
+        Assert.False(string.IsNullOrEmpty(content));
+
+        var json = JsonDocument.Parse(content);
+        Assert.NotNull(json);
+
+        await CompareJsonAsync(json, Path.Combine(Directory.GetCurrentDirectory(), "SubmodelRepository", "TestData", "GetSubmodelElement_DppMetadata_ContentSpecificationIds_Expected.json"));
+    }
+
+    [Fact]
     public async Task GetAllSubmodelElements_Nameplate_WithQueryParameters_ShouldReturnSuccess_AndContainExpectedElements()
     {
         // Arrange
@@ -214,6 +234,6 @@ public class SubmodelElementTests : ApiTestBase
         var countLimit3 = resultLimit3.GetArrayLength();
 
         Assert.Equal(countLimit2 + 1, countLimit3);
-        
+
     }
 }
