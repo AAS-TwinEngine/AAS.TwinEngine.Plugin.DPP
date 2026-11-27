@@ -1,0 +1,48 @@
+{
+  "idShort": "CountryOfOrigin",
+  "description": [
+    {
+      "language": "en",
+      "text": "Note: Country codes defined accord. to DIN EN ISO 3166-1 alpha-2 codes"
+    }
+  ],
+  "semanticId": {
+    "type": "ExternalReference",
+    "keys": [
+      {
+        "type": "GlobalReference",
+        "value": "0112/2///61987#ABP462#001"
+      }
+    ]
+  },
+  "supplementalSemanticIds": [
+    {
+      "type": "ExternalReference",
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "0173-1#02-AAO259#007"
+        }
+      ]
+    }
+  ],
+  "qualifiers": [
+    {
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+          }
+        ]
+      },
+      "kind": "TemplateQualifier",
+      "type": "SMT/Cardinality",
+      "valueType": "xs:string",
+      "value": "ZeroToOne"
+    }
+  ],
+  "valueType": "xs:string",
+  "modelType": "Property"
+}

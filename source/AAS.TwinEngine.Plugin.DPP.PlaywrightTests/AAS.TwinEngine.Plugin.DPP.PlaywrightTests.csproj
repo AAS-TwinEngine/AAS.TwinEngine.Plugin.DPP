@@ -202,6 +202,252 @@
     <None Update="Discovery\TestData\SearchShellByAssetLinksMultipleFilters_Expected.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="AasRepository\TestData\GetAllShells_Reference_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\GetShell_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Metadata_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Path_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Reference_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetAllSubmodelElements_Nameplate_Value_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_HandoverDocumentation_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_HandoverDocumentation_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_HandoverDocumentation_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_HandoverDocumentation_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Path_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Reference_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Value_ExtentWithBlobValue_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodel_Nameplate_Value_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_DocumentIds1_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_DocumentIds1_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_HandoverDocumentation_Documents0_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Reference_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_AddressInformation_Value_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_CountryOfOrigin_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_CountryOfOrigin_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_CountryOfOrigin_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_ManufacturerName_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_ManufacturerName_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AasRepository\TestData\Shell_GetSubmodelElement_Nameplate_ManufacturerName_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Metadata_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Path_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Reference_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodelElements_Nameplate_Value_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Metadata_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Path_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Reference_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetAllSubmodels_Value_WithLimit1_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_HandoverDocumentation_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Path_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Reference_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Value_ExtentWithBlobValue_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodel_Nameplate_Value_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_DocumentIds1_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_DocumentIds1_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_HandoverDocumentation_Documents0_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Path_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Reference_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_AddressInformation_Value_LevelCore_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_CountryOfOrigin_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_CountryOfOrigin_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_CountryOfOrigin_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_ManufacturerName_Metadata_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_ManufacturerName_Reference_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SubmodelRepository\TestData\GetSubmodelElement_Nameplate_ManufacturerName_Value_Expected.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
 
   </ItemGroup>
 

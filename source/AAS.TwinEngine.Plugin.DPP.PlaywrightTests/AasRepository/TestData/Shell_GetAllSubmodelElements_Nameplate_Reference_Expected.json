@@ -1,0 +1,267 @@
+{
+  "paging_metadata": {
+    "cursor": null
+  },
+  "result": [
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "SubmodelElementCollection",
+          "value": "AddressInformation"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "SubmodelElementCollection",
+          "value": "AssetSpecificProperties"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "File",
+          "value": "CompanyLogo"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "CountryOfOrigin"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "DateOfManufacture"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "FirmwareVersion"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "HardwareVersion"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "MultiLanguageProperty",
+          "value": "ManufacturerName"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "MultiLanguageProperty",
+          "value": "ManufacturerProductDesignation"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "MultiLanguageProperty",
+          "value": "ManufacturerProductFamily"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "MultiLanguageProperty",
+          "value": "ManufacturerProductRoot"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "ManufacturerProductType"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "SubmodelElementList",
+          "value": "Markings"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "OrderCodeOfManufacturer"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "ProductArticleNumberOfManufacturer"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "SerialNumber"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "SoftwareVersion"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "URIOfTheProduct"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "UniqueFacilityIdentifier"
+        }
+      ]
+    },
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "Property",
+          "value": "YearOfConstruction"
+        }
+      ]
+    }
+  ]
+}

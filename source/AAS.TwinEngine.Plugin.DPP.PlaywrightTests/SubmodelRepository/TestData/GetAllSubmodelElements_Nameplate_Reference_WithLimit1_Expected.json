@@ -1,0 +1,20 @@
+{
+  "paging_metadata": {
+    "cursor": "QWRkcmVzc0luZm9ybWF0aW9u"
+  },
+  "result": [
+    {
+      "type": "ModelReference",
+      "keys": [
+        {
+          "type": "Submodel",
+          "value": "https://mm-software.com/submodel/000-001/Nameplate"
+        },
+        {
+          "type": "SubmodelElementCollection",
+          "value": "AddressInformation"
+        }
+      ]
+    }
+  ]
+}

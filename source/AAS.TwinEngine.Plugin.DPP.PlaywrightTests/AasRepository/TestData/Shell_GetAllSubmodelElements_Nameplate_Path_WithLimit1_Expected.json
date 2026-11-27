@@ -1,0 +1,12 @@
+{
+  "paging_metadata": {
+    "cursor": "QWRkcmVzc0luZm9ybWF0aW9u"
+  },
+  "result": [
+    "AddressInformation",
+    "AddressInformation.CityTown",
+    "AddressInformation.NationalCode",
+    "AddressInformation.Street",
+    "AddressInformation.Zipcode"
+  ]
+}

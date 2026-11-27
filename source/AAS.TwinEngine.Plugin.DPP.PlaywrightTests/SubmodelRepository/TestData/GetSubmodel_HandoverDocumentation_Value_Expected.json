@@ -1,0 +1,305 @@
+{
+  "Documents": [
+    {
+      "DocumentClassifications": [
+        {
+          "ClassId": "CLS-001",
+          "ClassName": [
+            {
+              "de": "Elektrische Bauteile"
+            },
+            {
+              "en": "Electrical Components"
+            }
+          ],
+          "ClassificationSystem": "IEC-61360"
+        },
+        {
+          "ClassId": "CLS-002",
+          "ClassName": [
+            {
+              "de": "Hydraulikpumpen"
+            },
+            {
+              "en": "Hydraulic Pumps"
+            }
+          ],
+          "ClassificationSystem": "ISO-13584"
+        }
+      ],
+      "DocumentIds": [
+        {
+          "DocumentDomainId": "a3f1c2b4-9d81-4e5a-b6f2-01ac9e11d001",
+          "DocumentIdentifier": "DOC2025A001",
+          "DocumentIsPrimary": true
+        },
+        {
+          "DocumentDomainId": "b7e92d10-3c45-4a8f-9f21-02bc9e11d002",
+          "DocumentIdentifier": "CERTX94B21",
+          "DocumentIsPrimary": false
+        }
+      ],
+      "DocumentVersions": [
+        {
+          "Description": [
+            {
+              "de": "Detaillierte Anweisungen zur Bedienung der DSLR-Kamera X100, einschließlich Einrichtung und Fehlerbehebung"
+            },
+            {
+              "en": "Detailed instructions for operating the X100 DSLR camera, including setup and troubleshooting."
+            }
+          ],
+          "DigitalFiles": [
+            {
+              "contentType": "application/pdf",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf"
+            }
+          ],
+          "KeyWords": [
+            {
+              "de": "DSLR, Kamera, Fotografie, Benutzerhandbuch, Einrichtung"
+            },
+            {
+              "en": "DSLR, Camera, Photography, User Guide, Setup"
+            }
+          ],
+          "Language": [
+            "en"
+          ],
+          "OrganizationOfficialName": "M&M Germany",
+          "OrganizationShortName": "M&M",
+          "PreviewFile": {
+            "contentType": "image/jpeg",
+            "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg"
+          },
+          "StatusSetDate": "2023-01-01",
+          "StatusValue": "Released",
+          "Subtitle": [
+            {
+              "de": "Vollständige Anleitung für professionelle Fotografie"
+            },
+            {
+              "en": "Complete Instructions for Professional Photography"
+            }
+          ],
+          "Title": [
+            {
+              "de": "Benutzerhandbuch – DSLR-Kamera Modell X100"
+            },
+            {
+              "en": "User Guide – DSLR Camera Model X100"
+            }
+          ],
+          "Version": "1"
+        },
+        {
+          "Description": [
+            {
+              "de": "Umfassende technische Details der spiegellosen Kamera Z-Serie, einschließlich Sensor und Leistung."
+            },
+            {
+              "en": "Comprehensive technical details of the Z-Series mirrorless camera, covering sensor and performance."
+            }
+          ],
+          "DigitalFiles": [
+            {
+              "contentType": "application/pdf",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf"
+            }
+          ],
+          "KeyWords": [
+            {
+              "de": "Spiegellos, Kamera, Spezifikationen, Bildgebung, Leistung"
+            },
+            {
+              "en": "Mirrorless, Camera, Specs, Imaging, Performance"
+            }
+          ],
+          "Language": [
+            "en"
+          ],
+          "OrganizationOfficialName": "M&M India",
+          "OrganizationShortName": "M&M",
+          "PreviewFile": {
+            "contentType": "image/jpeg",
+            "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg"
+          },
+          "StatusSetDate": "2024-05-05",
+          "StatusValue": "InReview",
+          "Subtitle": [
+            {
+              "de": "Detaillierte Spezifikationen für fortschrittliche Bildgebung"
+            },
+            {
+              "en": "Detailed Specs for Advanced Imaging"
+            }
+          ],
+          "Title": [
+            {
+              "de": "Technische Spezifikation – Systemkamera der Z-Serie"
+            },
+            {
+              "en": "Technical Specification – Mirrorless Camera Z-Series"
+            }
+          ],
+          "Version": "1.1"
+        }
+      ]
+    },
+    {
+      "DocumentClassifications": [
+        {
+          "ClassId": "CLS-003",
+          "ClassName": [
+            {
+              "de": "Industrielle Sensoren"
+            },
+            {
+              "en": "Industrial Sensors"
+            }
+          ],
+          "ClassificationSystem": "ECLASS-13.0"
+        }
+      ],
+      "DocumentIds": [
+        {
+          "DocumentDomainId": "c81a4f22-6d91-43bb-a812-03cd9e11d003",
+          "DocumentIdentifier": "MANUAL8F2Q7",
+          "DocumentIsPrimary": true
+        }
+      ],
+      "DocumentVersions": [
+        {
+          "Description": [
+            {
+              "de": "Richtlinien zur Reinigung und Wartung des professionellen 50-mm-Objektivs für optimale Leistung."
+            },
+            {
+              "en": "Guidelines for cleaning and maintaining the 50mm professional lens for optimal performance."
+            }
+          ],
+          "DigitalFiles": [
+            {
+              "contentType": "application/pdf",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf"
+            }
+          ],
+          "KeyWords": [
+            {
+              "de": "Objektiv, Wartung, Reinigung, Professionell, Pflege"
+            },
+            {
+              "en": "Lens, Maintenance, Cleaning, Professional, Care"
+            }
+          ],
+          "Language": [
+            "en"
+          ],
+          "OrganizationOfficialName": "M&M China",
+          "OrganizationShortName": "M&M",
+          "PreviewFile": {
+            "contentType": "image/jpeg",
+            "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg"
+          },
+          "StatusSetDate": "2026-01-01",
+          "StatusValue": "Released",
+          "Subtitle": [
+            {
+              "de": "Pflege und Reinigungsverfahren"
+            },
+            {
+              "en": "Care and Cleaning Procedures"
+            }
+          ],
+          "Title": [
+            {
+              "de": "Wartungshandbuch – Professionelles Kameraobjektiv 50 mm"
+            },
+            {
+              "en": "Maintenance Manual – Professional Camera Lens 50mm"
+            }
+          ],
+          "Version": "2.1"
+        }
+      ]
+    },
+    {
+      "DocumentClassifications": [
+        {
+          "ClassId": "CLS-004",
+          "ClassName": [
+            {
+              "de": "Befestigungselemente"
+            },
+            {
+              "en": "Fasteners"
+            }
+          ],
+          "ClassificationSystem": "UNSPSC"
+        }
+      ],
+      "DocumentIds": [
+        {
+          "DocumentDomainId": "a3f1c2b4-9d81-4e5a-b6f2-01ac9e11d002",
+          "DocumentIdentifier": "DOC2025A002",
+          "DocumentIsPrimary": true
+        }
+      ],
+      "DocumentVersions": [
+        {
+          "Description": [
+            {
+              "de": "Schritt-für-Schritt-Anleitung zur Installation und Konfiguration des Weitwinkel-Objektivsets."
+            },
+            {
+              "en": "Step-by-step instructions for installing and configuring the wide-angle lens kit."
+            }
+          ],
+          "DigitalFiles": [
+            {
+              "contentType": "application/pdf",
+              "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.pdf"
+            }
+          ],
+          "KeyWords": [
+            {
+              "de": "Weitwinkel, Objektiv, Installation, Einrichtung, Set"
+            },
+            {
+              "en": "Wide-Angle, Lens, Installation, Setup, Kit"
+            }
+          ],
+          "Language": [
+            "en"
+          ],
+          "OrganizationOfficialName": "M&M Germany",
+          "OrganizationShortName": "M&M",
+          "PreviewFile": {
+            "contentType": "image/jpeg",
+            "value": "https://raw.githubusercontent.com/AAS-TwinEngine/AAS.TwinEngine.DataEngine/refs/heads/main/examples/shared/data/dummy_document.jpg"
+          },
+          "StatusSetDate": "2025-10-10",
+          "StatusValue": "InReview",
+          "Subtitle": [
+            {
+              "de": "Schritt-für-Schritt-Installationsanleitung"
+            },
+            {
+              "en": "Step-by-Step Setup Instructions"
+            }
+          ],
+          "Title": [
+            {
+              "de": "Installationsanleitung – Weitwinkel-Objektiv-Kit"
+            },
+            {
+              "en": "Installation Guide – Wide-Angle Lens Kit"
+            }
+          ],
+          "Version": "2.3"
+        }
+      ]
+    }
+  ],
+  "Entities": []
+}

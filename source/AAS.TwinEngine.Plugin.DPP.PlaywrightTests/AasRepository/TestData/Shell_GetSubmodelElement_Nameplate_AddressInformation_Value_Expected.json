@@ -1,0 +1,34 @@
+{
+  "CityTown": [
+    {
+      "de": "Berlin"
+    },
+    {
+      "en": "Berlin"
+    }
+  ],
+  "NationalCode": [
+    {
+      "de": "DE"
+    },
+    {
+      "en": "DE"
+    }
+  ],
+  "Street": [
+    {
+      "de": "Musterstrasse 1"
+    },
+    {
+      "en": "Main Street 1"
+    }
+  ],
+  "Zipcode": [
+    {
+      "de": "10115"
+    },
+    {
+      "en": "10115"
+    }
+  ]
+}

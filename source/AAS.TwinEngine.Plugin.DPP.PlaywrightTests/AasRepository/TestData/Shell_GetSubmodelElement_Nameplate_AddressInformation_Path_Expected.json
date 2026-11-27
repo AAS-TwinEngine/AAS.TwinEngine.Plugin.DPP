@@ -1,0 +1,7 @@
+[
+  "AddressInformation",
+  "AddressInformation.CityTown",
+  "AddressInformation.NationalCode",
+  "AddressInformation.Street",
+  "AddressInformation.Zipcode"
+]
