@@ -12,6 +12,8 @@ public abstract class ApiTestBase : IAsyncLifetime
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new() { WriteIndented = false };
 
+    private IPlaywright _playwright = null!;
+
     protected IAPIRequestContext ApiContext { get; private set; } = null!;
     protected string BaseUrl { get; private set; } = Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost:8080";
 
@@ -31,10 +33,10 @@ public abstract class ApiTestBase : IAsyncLifetime
     public async Task InitializeAsync()
     {
         // Initialize Playwright
-        var playwright = await Playwright.CreateAsync();
+        _playwright = await Playwright.CreateAsync();
 
         // Create API request context
-        ApiContext = await playwright.APIRequest.NewContextAsync(new()
+        ApiContext = await _playwright.APIRequest.NewContextAsync(new()
         {
             BaseURL = BaseUrl,
             IgnoreHTTPSErrors = true,
@@ -57,7 +59,11 @@ public abstract class ApiTestBase : IAsyncLifetime
 
     }
 
-    public async Task DisposeAsync() => await ApiContext.DisposeAsync();
+    public async Task DisposeAsync()
+    {
+        await ApiContext.DisposeAsync();
+        _playwright.Dispose();
+    }
 
     /// <summary>
     /// Base64 URL encodes a string
